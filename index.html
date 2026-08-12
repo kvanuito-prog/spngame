@@ -139,12 +139,15 @@ border-radius: 4px;
 </div>
 
 <script>
-// Заполняем список 1200 ракетами при загрузке через DOM
-window.onload = function() {
+// Безопасная генерация 1200 элементов для Chrome 109
+document.addEventListener("DOMContentLoaded", function() {
 const select = document.getElementById('missileSelect');
 const ranks = ['Полковник', 'Генерал-майор', 'Генерал-лейтенант', 'Генерал-полковник'];
 const surnames = ['Иванов', 'Петров', 'Смирнов', 'Кузнецов', 'Попов', 'Васильев', 'Соколов', 'Михайлов', 'Новиков', 'Федоров', 'Морозов', 'Волков', 'Алексеев', 'Лебедев', 'Семенов', 'Егоров', 'Павлов', 'Козлов', 'Степанов'];
 const initials = ['А.В.', 'Б.М.', 'В.П.', 'Д.Н.', 'Е.А.', 'И.И.', 'К.С.', 'М.О.', 'Н.Л.', 'П.Р.', 'С.Ю.', 'Ю.А.'];
+
+// Используем DocumentFragment для быстрой вставки в DOM в Chrome
+const fragment = document.createDocumentFragment();
 
 for (let i = 1; i <= 1200; i++) {
 const rank = ranks[(i * 7) % ranks.length];
@@ -154,9 +157,10 @@ const initial = initials[(i * 3) % initials.length];
 const opt = document.createElement('option');
 opt.value = i;
 opt.textContent = `Шахта №${i} | ${rank} ${surname} ${initial}`;
-select.appendChild(opt);
+fragment.appendChild(opt);
 }
-};
+select.appendChild(fragment);
+});
 
 function log(message) {
 const logBox = document.getElementById('log');
@@ -165,7 +169,6 @@ logBox.innerHTML += message + '
 logBox.scrollTop = logBox.scrollHeight;
 }
 
-// Обработчик выбора ракеты
 function onMissileSelect() {
 const select = document.getElementById('missileSelect');
 const targetMenu = document.getElementById('targetMenu');
