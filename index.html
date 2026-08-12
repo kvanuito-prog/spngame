@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ядерный Шторм: Баллистический Симулятор</title>
+<title>Ядерный Шторм: Шахтный Комплекс САРМАТ</title>
 <style>
 body {
 font-family: 'Courier New', Courier, monospace;
@@ -19,7 +19,7 @@ h1 { color: #58a6ff; text-shadow: 0 0 10px rgba(88, 166, 255, 0.3); }
 .container {
 display: flex;
 gap: 20px;
-max-width: 900px;
+max-width: 1000px;
 width: 100%;
 flex-wrap: wrap;
 }
@@ -29,7 +29,7 @@ border: 1px solid #30363d;
 border-radius: 6px;
 padding: 20px;
 flex: 1;
-min-width: 300px;
+min-width: 320px;
 }
 .form-group {
 margin-bottom: 15px;
@@ -40,7 +40,7 @@ margin-bottom: 5px;
 font-size: 14px;
 color: #8b949e;
 }
-input {
+select, input {
 width: 100%;
 padding: 8px;
 background-color: #0d1117;
@@ -66,7 +66,7 @@ background-color: #010409;
 border: 1px solid #30363d;
 border-radius: 4px;
 padding: 15px;
-height: 250px;
+height: 300px;
 overflow-y: auto;
 font-size: 13px;
 line-height: 1.4;
@@ -75,56 +75,75 @@ line-height: 1.4;
 border-left: 3px solid #f85149;
 padding-left: 10px;
 margin-bottom: 15px;
+font-size: 13px;
 }
+.hidden { display: none; }
 </style>
 </head>
 <body>
 
-<h1>🚀 БАЛЛИСТИЧЕСКАЯ ШАХТА</h1>
+<h1>🚀 СТРАТЕГИЧЕСКИЙ КОМПЛЕКС «САРМАТ»</h1>
 
 <div class="container">
 <!— Панель управления —>
 <div class="panel">
-<h3>Параметры пуска</h3>
+<h3>Выбор носителя</h3>
 <div class="target-info">
-<strong>Цель:</strong> Вражеская шахта
+<strong>Арсенал:</strong> 120 шахтных установок
 
-<strong>Расстояние:</strong> ~7 500 км
+<strong>Тип ракеты:</strong> РС-28 «Сармат» (3 ступени, жидкостная)
 
-<strong>Требуемый азимут:</strong> ~74.5°
-
-<strong>Оптимальное топливо:</strong> ~42 000 кг (при боеголовке 1000 кг)
+<strong>Масса боевой части:</strong> 10 000 кг (Термоядерный блок)
 </div>
 
 <div class="form-group">
-<label for="warhead">Масса боеголовки (кг):</label>
-<input type="text" id="warhead" value="1000">
+<label for="missileSelect">Выберите номер ракеты (1–120):</label>
+<select id="missileSelect" onchange="onMissileSelect()">
+<option value="">— Выберите ракету из шахты —</option>
+</select>
+</div>
+
+<!— Динамическое меню ввода координат цели (появляется при выборе ракеты) —>
+<div id="targetMenu" class="hidden">
+<hr style="border-color: #30363d; margin: 15px 0;">
+<h4>Параметры цели для Ракеты №<span id="selectedId"></span></h4>
+
+<div class="form-group">
+<label for="targetDistance">Дальность до цели (км):</label>
+<input type="text" id="targetDistance" value="11000">
 </div>
 
 <div class="form-group">
-<label for="fuel">Масса твердого топлива (кг):</label>
-<input type="text" id="fuel" value="42000">
+<label for="azimuth">Азимут пуска (градусы 0–360):</label>
+<input type="text" id="azimuth" value="184.2">
 </div>
 
-<div class="form-group">
-<label for="azimuth">Азимут запуска (градусы 0–360):</label>
-<input type="text" id="azimuth" value="74.5">
+<button onclick="launchMissile()">ПРИКАЗ НА ЗАПУСК</button>
 </div>
-
-<button onclick="launchMissile()">ЗАПУСК РАКЕТЫ</button>
 </div>
 
 <!— Лог полета —>
 <div class="panel">
-<h3>Телеметрия и лог полета</h3>
+<h3>Телеметрия и статус пуска</h3>
 <div id="log" class="log-box">
-Система инициализирована. Ожидание параметров пуска...
+Система «Периметр» активна. В ожидании активации пусковых установок...
 
 </div>
 </div>
 </div>
 
 <script>
+// Генерируем список из 120 ракет при загрузке страницы
+window.onload = function() {
+const select = document.getElementById('missileSelect');
+for (let i = 1; i <= 120; i++) {
+const opt = document.createElement('option');
+opt.value = i;
+opt.textContent = `Шахта №${i} — РС-28 «Сармат» (Готова)`;
+select.appendChild(opt);
+}
+};
+
 function log(message) {
 const logBox = document.getElementById('log');
 logBox.innerHTML += message + '
@@ -132,71 +151,82 @@ logBox.innerHTML += message + '
 logBox.scrollTop = logBox.scrollHeight;
 }
 
+// Показываем меню координат при выборе конкретной ракеты
+function onMissileSelect() {
+const select = document.getElementById('missileSelect');
+const targetMenu = document.getElementById('targetMenu');
+const selectedIdSpan = document.getElementById('selectedId');
+
+if (select.value) {
+selectedIdSpan.textContent = select.value;
+targetMenu.classList.remove('hidden');
+log(`> Шахта №${select.value} выбрана. Установлена связь с бортовым компьютером «Сармата».`);
+} else {
+targetMenu.classList.add('hidden');
+}
+}
+
 function launchMissile() {
 try {
-// Безопасное чтение полей с заменой запятой на точку
-const warheadStr = document.getElementById('warhead').value.replace(',', '.');
-const fuelStr = document.getElementById('fuel').value.replace(',', '.');
-const azimuthStr = document.getElementById('azimuth').value.replace(',', '.');
+const missileNum = document.getElementById('missileSelect').value;
+const distStr = document.getElementById('targetDistance').value.replace(',', '.');
+const azStr = document.getElementById('azimuth').value.replace(',', '.');
 
-const warhead = parseFloat(warheadStr);
-const fuel = parseFloat(fuelStr);
-const azimuth = parseFloat(azimuthStr);
+const targetDistance = parseFloat(distStr);
+const azimuth = parseFloat(azStr);
 
-if (isNaN(warhead) || isNaN(fuel) || isNaN(azimuth)) {
-log('❌ ОШИБКА: Проверьте правильность введенных чисел!');
+if (isNaN(targetDistance) || isNaN(azimuth)) {
+log('❌ ОШИБКА: Некорректные параметры цели!');
 return;
 }
 
 log('-----------------------------------');
-log('⚡ Произведено зажигание двигателей!');
+log(`⚡ ВНИМАНИЕ! КЛЮЧ ПУСКА ПОВЕРНУТ ДЛЯ РАКЕТЫ №${missileNum}!`);
+log('🔥 Запуск трехступенчатого двигателя «Сармата»...');
 
-// 1. Расчет массы и уравнения Циолковского
-const dryMass = 3000;
+// Характеристики Сармата: боевая часть 10000 кг
+const warhead = 10000;
+const fuel = 178000; // Примерный запас жидкого топлива тяжелой МБР
+const dryMass = 20000;
 const totalMass = dryMass + warhead + fuel;
-const Isp = 280;
+const Isp = 310; // Жидкостные двигатели имеют высокий удельный импульс
 const g0 = 9.81;
 
 const burnoutMass = dryMass + warhead;
 const deltaV = Isp * g0 * Math.log(totalMass / burnoutMass);
 
-log(`> Стартовая масса: ${totalMass} кг`);
+log(`> Стартовая масса: ${totalMass} кг (БЧ: 10 т)`);
 log(`> Конечная скорость (Δv): ${deltaV.toFixed(1)} м/с`);
 
-// 2. Расчет дальности полета
-const calculatedDistance = (deltaV * deltaV) / 6000;
-const targetDistance = 7500;
+// Расчет баллистики под заданную дальность
+const calculatedDistance = (deltaV * deltaV) / 5500;
 const distanceError = calculatedDistance - targetDistance;
 
-log(`> Расчетная дальность: ${calculatedDistance.toFixed(1)} км (Цель: ${targetDistance} км)`);
+log(`> Расчетная дальность: ${calculatedDistance.toFixed(0)} км (Цель: ${targetDistance} км)`);
 
-// 3. Расчет ошибки по азимуту
-const flightTime = (targetDistance / 7500) * 1200;
-const optimalAzimuth = 74.5;
+// Расчет погрешности азимута
+const optimalAzimuth = 184.2;
 const azimuthError = Math.abs(azimuth - optimalAzimuth);
 const lateralError = azimuthError * 111;
 
-log(`> Полетное время: ${(flightTime / 60).toFixed(1)} мин.`);
-log(`> Учет вращения Земли (Кориолис): учтен.`);
+log('> Ступени 1 и 2 отработали и сброшены. Полет в космическом пространстве...');
 
-// 4. Оценка результатов падения с задержкой
+// Имитация полета по времени с задержкой
 setTimeout(() => {
-log('🎯 РАКЕТА ПОДХОДИТ К ЦЕЛИ...');
+log('🎯 БОЕВОЙ БЛОК ВХОДИТ В АТМОСФЕРУ НАД ЦЕЛЬЮ...');
 
 setTimeout(() => {
 const totalMissDistance = Math.sqrt((distanceError * distanceError) + (lateralError * lateralError));
 
-log(`> Ошибка по дальности: ${Math.abs(distanceError).toFixed(2)} км`);
+log(`> Отклонение по дальности: ${Math.abs(distanceError).toFixed(2)} км`);
 log(`> Боковое отклонение: ${lateralError.toFixed(2)} км`);
-log(`> Общее отклонение: ${totalMissDistance.toFixed(2)} км`);
 
-// Проверка попадания в ячейку 100х100 метров (0.1 км)
-if (totalMissDistance <= 0.1) {
-log('🎉 <strong>ПРЯМОЕ ПОПАДАНИЕ!</strong> Шахта противника уничтожена!');
-} else if (totalMissDistance <= 2.0 && warhead >= 5000) {
-log('💥 <strong>УСПЕХ БОЕГОЛОВКИ!</strong> Близкий разрыв мощного заряда уничтожил шахту!');
+if (totalMissDistance <= 0.5) {
+log(`🎉 <strong>ПРЯМОЕ ПОПАДАНИЕ!</strong> Ракета №${missileNum} стерла цель с лица земли (Мощность 10т БЧ).`);
+} else if (totalMissDistance <= 5.0) {
+log(`💥 <strong>УСПЕХ!</strong> Мощнейший термоядерный заряд ракеты №${missileNum} уничтожил объект в радиусе поражения.`);
 } else {
-log('❌ <strong>ПРОМАХ!</strong> Ракета упала в стороне от цели.');
+log(`❌ <strong>ПРОМАХ!</strong> Ракета №${missileNum} отклонилась на ${totalMissDistance.toFixed(2)} км.`);
 }
 log('-----------------------------------');
 }, 1000);
