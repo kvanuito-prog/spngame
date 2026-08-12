@@ -144,7 +144,6 @@ let attClass = document.getElementById(`class${game.activePlayer}`).value;
 let attName = CLASSES[attClass].name;
 let defName = CLASSES[document.getElementById(`class${game.activePlayer === 1 ? 2 : 1}`).value].name;
 
-// Проверяем бонус Берсерка ТОЛЬКО если атакующая сторона — Берсерк
 let berserkData = { bonus: 0, tier: null };
 if (attClass === 'berserk') {
 berserkData = getBerserkBonus(attacker.hp);
@@ -170,7 +169,6 @@ let isDubl = (d1 === d2);
 
 log(`<b>${attName} (Игрок ${game.activePlayer})</b> бросает кубики: <span class="log-highlight">${roll}</span> ${isDubl ? '<span class="log-ability">(ДУБЛЬ!)</span>' : ''}`);
 
-// Проверка баффа Ассасина
 if (attacker.assassinReady) {
 let dmg = Math.round(roll * 1.7);
 defender.hp = Math.max(0, defender.hp - dmg);
@@ -182,7 +180,6 @@ if (!game.over) switchTurn();
 return;
 }
 
-// Проверка баффа Вампира
 if (attacker.vampireReady) {
 let finalDmg = roll;
 let heal = Math.round(finalDmg * 1.7);
@@ -198,16 +195,16 @@ if (!game.over) switchTurn();
 return;
 }
 
-// Проверка каста Архимага (если он прямо сейчас кастует заклинание)
 if (attacker.archmageCasting) {
 attacker.archmageAccumulated += roll;
 attacker.archmageTurnsLeft--;
 log(`<span class="log-mage">🧙‍♂️ Архимаг читает заклинание:</span> Добавлено бросков: ${roll}. Осталось ходов каста: ${attacker.archmageTurnsLeft}. Накопленная база: ${attacker.archmageAccumulated}.`);
 
 if (attacker.archmageTurnsLeft === 0) {
-let finalDmg = Math.round(attacker.archmageAccumulated * 2.5);
+// Изменено умножение с 2.5 на 2
+let finalDmg = Math.round(attacker.archmageAccumulated * 2);
 defender.hp = Math.max(0, defender.hp - finalDmg);
-log(`<span class="log-mage">✨ Заклинание Архимага завершено!</span> Сумма трех ходов (${attacker.archmageAccumulated}) умножена на 2.5. Врагу нанесено сокрушительно урона: <span class="log-highlight">${finalDmg}</span>!`);
+log(`<span class="log-mage">✨ Заклинание Архимага завершено!</span> Сумма трех ходов (${attacker.archmageAccumulated}) умножена на 2. Врагу нанесено урона: <span class="log-highlight">${finalDmg}</span>!`);
 attacker.archmageCasting = false;
 attacker.archmageAccumulated = 0;
 }
@@ -218,7 +215,6 @@ if (!game.over) switchTurn();
 return;
 }
 
-// Обработка дублей
 if (isDubl) {
 if (attClass === 'barbarian') {
 let finalDmg = roll + berserkData.bonus;
@@ -238,7 +234,7 @@ return;
 } else if (attClass === 'archmage') {
 attacker.archmageCasting = true;
 attacker.archmageTurnsLeft = 3;
-attacker.archmageAccumulated = roll; // Первый бросок идет в копилку каста
+attacker.archmageAccumulated = roll;
 log(`<span class="log-mage">🧙‍♂️ Архимаг выбросил дубль (${roll})!</span> Заклинание начинает формироваться. Урон отложен на 3 хода (этот бросок учтен). Противник продолжает ходить!`);
 updateUI();
 if (!game.over) switchTurn();
