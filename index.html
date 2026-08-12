@@ -98,17 +98,17 @@ margin-bottom: 15px;
 
 <div class="form-group">
 <label for="warhead">Масса боеголовки (кг):</label>
-<input type="number" id="warhead" value="1000" min="100" max="10000">
+<input type="text" id="warhead" value="1000">
 </div>
 
 <div class="form-group">
 <label for="fuel">Масса твердого топлива (кг):</label>
-<input type="number" id="fuel" value="42000" min="1000" max="100000">
+<input type="text" id="fuel" value="42000">
 </div>
 
 <div class="form-group">
 <label for="azimuth">Азимут запуска (градусы 0–360):</label>
-<input type="number" id="azimuth" value="74.5" step="0.1" min="0" max="360">
+<input type="text" id="azimuth" value="74.5">
 </div>
 
 <button onclick="launchMissile()">ЗАПУСК РАКЕТЫ</button>
@@ -133,9 +133,20 @@ logBox.scrollTop = logBox.scrollHeight;
 }
 
 function launchMissile() {
-const warhead = parseFloat(document.getElementById('warhead').value);
-const fuel = parseFloat(document.getElementById('fuel').value);
-const azimuth = parseFloat(document.getElementById('azimuth').value);
+try {
+// Безопасное чтение полей с заменой запятой на точку
+const warheadStr = document.getElementById('warhead').value.replace(',', '.');
+const fuelStr = document.getElementById('fuel').value.replace(',', '.');
+const azimuthStr = document.getElementById('azimuth').value.replace(',', '.');
+
+const warhead = parseFloat(warheadStr);
+const fuel = parseFloat(fuelStr);
+const azimuth = parseFloat(azimuthStr);
+
+if (isNaN(warhead) || isNaN(fuel) || isNaN(azimuth)) {
+log('❌ ОШИБКА: Проверьте правильность введенных чисел!');
+return;
+}
 
 log('-----------------------------------');
 log('⚡ Произведено зажигание двигателей!');
@@ -190,6 +201,10 @@ log('❌ <strong>ПРОМАХ!</strong> Ракета упала в сторон�
 log('-----------------------------------');
 }, 1000);
 }, 1000);
+
+} catch (err) {
+log('❌ СИСТЕМНЫЙ СБОЙ: ' + err.message);
+}
 }
 </script>
 </body>
