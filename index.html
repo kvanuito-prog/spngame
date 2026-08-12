@@ -231,25 +231,37 @@ margin-bottom: 5px;
 
         let game = null;
 
-        window.onload = () => {
+        // Безопасная инициализация выпадающих списков для Chrome 109
+        setTimeout(() => {
             const p1Sel = document.getElementById('p1-class');
             const p2Sel = document.getElementById('p2-class');
             
-            let optionsHTML = '';
+            p1Sel.innerHTML = "";
+            p2Sel.innerHTML = "";
+
             for (let key in CLASSES) {
-                optionsHTML += `<option value="${key}">${CLASSES[key].name}</option>`;
+                let opt1 = document.createElement('option');
+                opt1.value = key;
+                opt1.text = CLASSES[key].name;
+                p1Sel.add(opt1);
+
+                let opt2 = document.createElement('option');
+                opt2.value = key;
+                opt2.text = CLASSES[key].name;
+                p2Sel.add(opt2);
             }
-            
-            p1Sel.innerHTML = optionsHTML;
-            p2Sel.innerHTML = optionsHTML;
-            p2Sel.selectedIndex = 1;
-        };
+            if (p2Sel.options.length > 1) {
+                p2Sel.selectedIndex = 1;
+            }
+        }, 100);
 
         function initFighter(type) {
             const base = CLASSES[type];
             return {
                 type: type,
-                name: base.name,
+
+
+name: base.name,
                 hp: base.hp,
                 maxHp: base.hp,
                 stunned: false,
@@ -261,10 +273,7 @@ margin-bottom: 5px;
             };
         }
 
-        function star
-
-
-tBattle() {
+        function startBattle() {
             let p1Type = document.getElementById('p1-class').value;
             let p2Type = document.getElementById('p2-class').value;
 
@@ -352,13 +361,13 @@ tBattle() {
                         attacker.archmageBuffer.push(roll);
                         attacker.archmageStep++;
                         log(`🧙‍♂️ Архимаг копит буфер заклинания (Шаг ${attacker.archmageStep}/3: +${roll})`);
-                        if (attacker.archmageStep === 3) {
+
+
+if (attacker.archmageStep === 3) {
                             let sum = attacker.archmageBuffer.reduce((a,b)=>a+b, 0);
                             let finalDmg = Math.floor(sum * 2.5);
                             log(`🧙‍♂️ КАСТ ВЕЛИКОГО ЗАКЛИНАНИЯ! Сумма ${sum} x 2.5 = ${finalDmg} урона!`, "danger");
-
-
-applyDamage(attacker, defender, finalDmg);
+                            applyDamage(attacker, defender, finalDmg);
                             attacker.archmageStep = 0;
                             attacker.archmageBuffer = [];
                         }
@@ -444,15 +453,16 @@ applyDamage(attacker, defender, finalDmg);
                 if (newHp === 0) {
                     target.hp = 0;
                     log(`💀 Нежить получила удар ровно в 0 HP и пала!`, "danger");
-                    endGame(game.activePlayer === 1 ? game.p2 : game.p1);
+                    endGame(game.activePla
+
+
+yer === 1 ? game.p2 : game.p1);
                 } else if (newHp < 0) {
                     let healed = Math.abs(newHp);
                     target.hp = healed;
                     log(`💀 Удар ушел в овер-хил! Нежить поглотила излишек урона и исцелилась до ${target.hp} HP!`, "success");
                 } else {
-
-
-target.hp = newHp;
+                    target.hp = newHp;
                     log(`💀 Нежить теряет ${amount} HP (осталось ${target.hp} HP).`, "danger");
                 }
             } else {
@@ -487,7 +497,7 @@ target.hp = newHp;
         function updateUI() {
             document.getElementById('p1-name-ui').innerText = game.p1.name;
             document.getElementById('p1-hp-text').innerText = `Здоровье: ${game.p1.hp} / ${game.p1.maxHp}`;
-            document.getElementById('p1-hp-bar'].style.width = Math.max(0, (game.p1.hp / game.p1.maxHp) * 100) + '%';
+            document.getElementById('p1-hp-bar').style.width = Math.max(0, (game.p1.hp / game.p1.maxHp) * 100) + '%';
 
             document.getElementById('p2-name-ui').innerText = game.p2.name;
             document.getElementById('p2-hp-text').innerText = `Здоровье: ${game.p2.hp} / ${game.p2.maxHp}`;
