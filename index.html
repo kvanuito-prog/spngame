@@ -2,7 +2,6 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ядерный Шторм: Шахтный Комплекс САРМАТ</title>
 <style>
 body {
@@ -79,6 +78,7 @@ margin-bottom: 15px;
 font-size: 13px;
 }
 #targetMenu {
+display: none;
 margin-top: 15px;
 background: #0d1117;
 padding: 12px;
@@ -92,35 +92,45 @@ border-radius: 4px;
 <h1>🚀 СТРАТЕГИЧЕСКИЙ КОМПЛЕКС «САРМАТ»</h1>
 
 <div class="container">
-<!— Панель управления —>
 <div class="panel">
 <h3>Выбор носителя</h3>
 <div class="target-info">
 <strong>Арсенал:</strong> 1200 шахтных установок
 
-<strong>Тип ракеты:</strong> РС-28 «Сармат» (3 ступени, жидкостная)
+<strong>Тип ракеты:</strong> РС-28 «Сармат»
 
-<strong>Масса боевой части:</strong> 10 000 кг (Термоядерный блок)
+<strong>Масса боевой части:</strong> 10 000 кг
 </div>
 
 <div class="form-group">
 <label for="missileSelect">Выберите номер ракеты (1–1200):</label>
-<select id="missileSelect" onchange="onMissileSelect()">
-<option value="">— Выберите ракету из шахты —</option>
+<select id="missileSelect" onchange="checkSelection()">
+<option value="">— Выберите ракету —</option>
+<script>
+const ranks = ['Полковник', 'Генерал-майор', 'Генерал-лейтенант', 'Генерал-полковник'];
+const surnames = ['Иванов', 'Петров', 'Смирнов', 'Кузнецов', 'Попов', 'Васильев', 'Соколов', 'Михайлов', 'Новиков', 'Федоров'];
+const initials = ['А.В.', 'Б.М.', 'В.П.', 'Д.Н.', 'Е.А.'];
+
+for (let i = 1; i <= 1200; i++) {
+let r = ranks[i % ranks.length];
+let s = surnames[i % surnames.length];
+let init = initials[i % initials.length];
+document.write('<option value="' + i + '">Шахта №' + i + ' | ' + r + ' ' + s + ' ' + init + '</option>');
+}
+</script>
 </select>
 </div>
 
-<!— Меню ввода широты и долготы —>
-<div id="targetMenu" style="display: none;">
+<div id="targetMenu">
 <h4 style="margin-top: 0; color: #58a6ff;">Целеуказание для Ракеты №<span id="selectedId"></span></h4>
 
 <div class="form-group">
-<label for="targetLat">Широта цели (град):</label>
+<label>Широта цели:</label>
 <input type="text" id="targetLat" value="38.8951">
 </div>
 
 <div class="form-group">
-<label for="targetLon">Долгота цели (град):</label>
+<label>Долгота цели:</label>
 <input type="text" id="targetLon" value="-77.0364">
 </div>
 
@@ -128,118 +138,50 @@ border-radius: 4px;
 </div>
 </div>
 
-<!— Лог полета —>
 <div class="panel">
 <h3>Телеметрия и статус пуска</h3>
 <div id="log" class="log-box">
-Система «Периметр» активна. В ожидании активации пусковых установок...
+Система «Периметр» активна. В ожидании пуска...
 
 </div>
 </div>
 </div>
 
 <script>
-// Безопасная генерация 1200 элементов для Chrome 109
-document.addEventListener("DOMContentLoaded", function() {
-const select = document.getElementById('missileSelect');
-const ranks = ['Полковник', 'Генерал-майор', 'Генерал-лейтенант', 'Генерал-полковник'];
-const surnames = ['Иванов', 'Петров', 'Смирнов', 'Кузнецов', 'Попов', 'Васильев', 'Соколов', 'Михайлов', 'Новиков', 'Федоров', 'Морозов', 'Волков', 'Алексеев', 'Лебедев', 'Семенов', 'Егоров', 'Павлов', 'Козлов', 'Степанов'];
-const initials = ['А.В.', 'Б.М.', 'В.П.', 'Д.Н.', 'Е.А.', 'И.И.', 'К.С.', 'М.О.', 'Н.Л.', 'П.Р.', 'С.Ю.', 'Ю.А.'];
-
-// Используем DocumentFragment для быстрой вставки в DOM в Chrome
-const fragment = document.createDocumentFragment();
-
-for (let i = 1; i <= 1200; i++) {
-const rank = ranks[(i * 7) % ranks.length];
-const surname = surnames[(i * 13) % surnames.length];
-const initial = initials[(i * 3) % initials.length];
-
-const opt = document.createElement('option');
-opt.value = i;
-opt.textContent = `Шахта №${i} | ${rank} ${surname} ${initial}`;
-fragment.appendChild(opt);
-}
-select.appendChild(fragment);
-});
-
-function log(message) {
-const logBox = document.getElementById('log');
-logBox.innerHTML += message + '
+function log(msg) {
+const box = document.getElementById('log');
+box.innerHTML += msg + '
 ';
-logBox.scrollTop = logBox.scrollHeight;
+box.scrollTop = box.scrollHeight;
 }
 
-function onMissileSelect() {
-const select = document.getElementById('missileSelect');
-const targetMenu = document.getElementById('targetMenu');
-const selectedIdSpan = document.getElementById('selectedId');
+function checkSelection() {
+const sel = document.getElementById('missileSelect');
+const menu = document.getElementById('targetMenu');
+const span = document.getElementById('selectedId');
 
-if (select.value && select.value !== "") {
-selectedIdSpan.textContent = select.value;
-targetMenu.style.display = 'block';
-log(`> Шахта №${select.value} выбрана. Расчет на месте. Введите координаты цели.`);
+if (sel.value !== "") {
+span.innerText = sel.value;
+menu.style.display = 'block';
+log('> Выбрана шахта №' + sel.value);
 } else {
-targetMenu.style.display = 'none';
+menu.style.display = 'none';
 }
 }
 
 function launchMissile() {
-try {
-const missileNum = document.getElementById('missileSelect').value;
-const latStr = document.getElementById('targetLat').value.replace(',', '.');
-const lonStr = document.getElementById('targetLon').value.replace(',', '.');
-
-const lat = parseFloat(latStr);
-const lon = parseFloat(lonStr);
-
-if (isNaN(lat) || isNaN(lon)) {
-log('❌ ОШИБКА: Некорректные координаты широты/долготы!');
-return;
-}
+const num = document.getElementById('missileSelect').value;
+const lat = document.getElementById('targetLat').value;
+const lon = document.getElementById('targetLon').value;
 
 log('-----------------------------------');
-log(`⚡ ВНИМАНИЕ! КЛЮЧ ПУСКА ПОВЕРНУТ ДЛЯ РАКЕТЫ №${missileNum}!`);
-log(`🎯 Цель задана: Широта ${lat}, Долгота ${lon}`);
-log('🔥 Запуск трехступенчатого двигателя «Сармата»...');
+log('⚡ ПУСК РАКЕТЫ №' + num + ' ПО КООРДИНАТАМ: ' + lat + ', ' + lon);
+log('🔥 Двигатели запущены, полет нормальный...');
 
-const warhead = 10000;
-const fuel = 178000;
-const dryMass = 20000;
-const totalMass = dryMass + warhead + fuel;
-const Isp = 310;
-const g0 = 9.81;
-
-const burnoutMass = dryMass + warhead;
-const deltaV = Isp * g0 * Math.log(totalMass / burnoutMass);
-
-log(`> Стартовая масса: ${totalMass} кг (БЧ: 10 т)`);
-log(`> Конечная скорость (Δv): ${deltaV.toFixed(1)} м/с`);
-
-const targetDistance = Math.abs(lat * 111) + Math.abs(lon * 50);
-const calculatedDistance = (deltaV * deltaV) / 5500;
-const distanceError = calculatedDistance - (targetDistance % 15000);
-
-log(`> Расчетная дальность полета: ${calculatedDistance.toFixed(0)} км`);
-log('> Ступени 1 и 2 отработали и сброшены. Полет в космическом пространстве...');
-
-setTimeout(() => {
-log('🎯 БОЕВОЙ БЛОК ВХОДИТ В АТМОСФЕРУ НАД ЦЕЛЬЮ...');
-
-setTimeout(() => {
-const totalMissDistance = Math.abs(distanceError) % 5.0;
-
-if (totalMissDistance <= 0.5) {
-log(`🎉 <strong>ПРЯМОЕ ПОПАДАНИЕ!</strong> Ракета №${missileNum} уничтожила объект по заданным координатам (БЧ 10т).`);
-} else {
-log(`💥 <strong>УСПЕХ!</strong> Мощнейший термоядерный заряд ракеты №${missileNum} накрыл область цели.`);
-}
+setTimeout(function() {
+log('🎯 БОЕВОЙ БЛОК ДОСТИГ ЦЕЛИ. ОБЪЕКТ УНИЧТОЖЕН.');
 log('-----------------------------------');
-}, 1000);
-}, 1000);
-
-} catch (err) {
-log('❌ СИСТЕМНЫЙ СБОЙ: ' + err.message);
-}
+}, 2000);
 }
 </script>
 </body>
