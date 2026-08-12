@@ -2,68 +2,89 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Битва на Кубиках</title>
+<title>Дуэль на Кубиках</title>
 <style>
-body { background-color: #1a1a1a; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; font-family: sans-serif; color: white; }
+body { background-color: #1a1a1a; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; font-family: 'Segoe UI', sans-serif; color: white; padding: 20px; }
 
-.game-field { width: 600px; height: 300px; background-color: #2e7d32; border: 8px solid #1b5e20; border-radius: 20px; display: flex; justify-content: center; align-items: center; gap: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-top: 50px; }
+/* Общая структура игры */
+.game-wrapper { display: flex; align-items: center; gap: 30px; margin-top: 20px; }
 
-.die { width: 80px; height: 80px; background-color: white; border-radius: 15px; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); padding: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-.dot { width: 16px; height: 16px; background-color: black; border-radius: 50%; align-self: center; justify-self: center; }
+/* Панели игроков */
+.player-panel { width: 200px; background: #2d3748; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+.hp-bar { width: 100%; height: 15px; background: #4a5568; border-radius: 8px; margin: 10px 0; overflow: hidden; }
+.hp-fill { height: 100%; background: #48bb78; width: 100%; transition: width 0.3s; }
+
+/* Игровое поле */
+.game-field { width: 300px; height: 200px; background-color: #2e7d32; border: 8px solid #1b5e20; border-radius: 20px; display: flex; justify-content: center; align-items: center; gap: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+
+.die { width: 60px; height: 60px; background-color: white; border-radius: 10px; display: grid; grid-template-columns: repeat(3, 1fr); padding: 5px; }
+.dot { width: 12px; height: 12px; background-color: black; border-radius: 50%; align-self: center; justify-self: center; }
 .hidden { visibility: hidden; }
 
-.controls { margin-top: 30px; text-align: center; }
-button { padding: 15px 40px; font-size: 20px; background: #f59e0b; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; transition: transform 0.1s; }
-button:active { transform: scale(0.95); }
-#result { font-size: 48px; margin-top: 20px; font-weight: bold; color: #fbbf24; }
+/* Элементы управления */
+.controls { margin-top: 20px; text-align: center; }
+button { padding: 15px 40px; font-size: 20px; background: #f59e0b; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+
+/* Лог событий */
+.log-box { width: 600px; height: 150px; background: #0f172a; margin-top: 20px; border-radius: 10px; padding: 15px; overflow-y: auto; border: 1px solid #334155; font-size: 14px; line-height: 1.5; color: #94a3b8; }
 </style>
 </head>
 <body>
+
+<div class="game-wrapper">
+<div class="player-panel">
+<h3>Игрок 1</h3>
+<div class="hp-bar"><div class="hp-fill" id="hp1" style="width: 100%;"></div></div>
+<span id="hp-text1">1000/1000</span>
+</div>
 
 <div class="game-field">
 <div class="die" id="die1"></div>
 <div class="die" id="die2"></div>
 </div>
 
-<div class="controls">
-<button onclick="rollDice()">ROLL</button>
-<div id="result">00</div>
+<div class="player-panel">
+<h3>Игрок 2</h3>
+<div class="hp-bar"><div class="hp-fill" id="hp2" style="width: 100%;"></div></div>
+<span id="hp-text2">1000/1000</span>
+</div>
 </div>
 
+<div class="controls">
+<button onclick="makeTurn()">БРОСИТЬ КУБИКИ</button>
+</div>
+
+<div class="log-box" id="log">Ожидание начала игры...</div>
+
 <script>
-// Конфигурация точек для каждой грани кубика (индексы 0-8, где 4 - центр)
-const layouts = {
-1: [4],
-2: [0, 8],
-3: [0, 4, 8],
-4: [0, 2, 6, 8],
-5: [0, 2, 4, 6, 8],
-6: [0, 2, 3, 5, 6, 8]
-};
+const layouts = { 1:[4], 2:[0,8], 3:[0,4,8], 4:[0,2,6,8], 5:[0,2,4,6,8], 6:[0,2,3,5,6,8] };
 
-function renderDie(elementId, value) {
-const container = document.getElementById(elementId);
-container.innerHTML = ''; // Очищаем старые точки
-for (let i = 0; i < 9; i++) {
+function renderDie(id, val) {
+const el = document.getElementById(id);
+el.innerHTML = '';
+for(let i=0; i<9; i++) {
 const dot = document.createElement('div');
-dot.className = 'dot';
-if (!layouts[value].includes(i)) dot.classList.add('hidden');
-container.appendChild(dot);
+dot.className = 'dot' + (layouts[val].includes(i) ? '' : ' hidden');
+el.appendChild(dot);
 }
 }
 
-function rollDice() {
-const val1 = Math.floor(Math.random() * 6) + 1;
-const val2 = Math.floor(Math.random() * 6) + 1;
-
-renderDie('die1', val1);
-renderDie('die2', val2);
-
-document.getElementById('result').innerText = `${val1}${val2}`;
+function log(msg) {
+const box = document.getElementById('log');
+box.innerHTML += `<div» ${msg}</div>`;
+box.scrollTop = box.scrollHeight;
 }
 
-// Инициализация при старте
-rollDice();
+function makeTurn() {
+const d1 = Math.floor(Math.random() * 6) + 1;
+const d2 = Math.floor(Math.random() * 6) + 1;
+
+renderDie('die1', d1);
+renderDie('die2', d2);
+
+const total = d1 * 10 + d2;
+log(`Выпало: ${total}. Игрок наносит ${total} урона!`);
+}
 </script>
 </body>
 </html>
