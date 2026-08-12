@@ -100,6 +100,12 @@ font-size: 13px;
 <label for="missileSelect">Выберите номер ракеты (1–120):</label>
 <select id="missileSelect" onchange="onMissileSelect()">
 <option value="">— Выберите ракету из шахты —</option>
+<script>
+// Генерация списка прямо в HTML
+for (let i = 1; i <= 120; i++) {
+document.write(`<option value="${i}">Шахта №${i} — РС-28 «Сармат» (Готова)</option>`);
+}
+</script>
 </select>
 </div>
 
@@ -133,17 +139,6 @@ font-size: 13px;
 </div>
 
 <script>
-// Генерируем список из 120 ракет при загрузке страницы
-window.onload = function() {
-const select = document.getElementById('missileSelect');
-for (let i = 1; i <= 120; i++) {
-const opt = document.createElement('option');
-opt.value = i;
-opt.textContent = `Шахта №${i} — РС-28 «Сармат» (Готова)`;
-select.appendChild(opt);
-}
-};
-
 function log(message) {
 const logBox = document.getElementById('log');
 logBox.innerHTML += message + '
@@ -184,12 +179,11 @@ log('-----------------------------------');
 log(`⚡ ВНИМАНИЕ! КЛЮЧ ПУСКА ПОВЕРНУТ ДЛЯ РАКЕТЫ №${missileNum}!`);
 log('🔥 Запуск трехступенчатого двигателя «Сармата»...');
 
-// Характеристики Сармата: боевая часть 10000 кг
 const warhead = 10000;
-const fuel = 178000; // Примерный запас жидкого топлива тяжелой МБР
+const fuel = 178000;
 const dryMass = 20000;
 const totalMass = dryMass + warhead + fuel;
-const Isp = 310; // Жидкостные двигатели имеют высокий удельный импульс
+const Isp = 310;
 const g0 = 9.81;
 
 const burnoutMass = dryMass + warhead;
@@ -198,20 +192,17 @@ const deltaV = Isp * g0 * Math.log(totalMass / burnoutMass);
 log(`> Стартовая масса: ${totalMass} кг (БЧ: 10 т)`);
 log(`> Конечная скорость (Δv): ${deltaV.toFixed(1)} м/с`);
 
-// Расчет баллистики под заданную дальность
 const calculatedDistance = (deltaV * deltaV) / 5500;
 const distanceError = calculatedDistance - targetDistance;
 
 log(`> Расчетная дальность: ${calculatedDistance.toFixed(0)} км (Цель: ${targetDistance} км)`);
 
-// Расчет погрешности азимута
 const optimalAzimuth = 184.2;
 const azimuthError = Math.abs(azimuth - optimalAzimuth);
 const lateralError = azimuthError * 111;
 
 log('> Ступени 1 и 2 отработали и сброшены. Полет в космическом пространстве...');
 
-// Имитация полета по времени с задержкой
 setTimeout(() => {
 log('🎯 БОЕВОЙ БЛОК ВХОДИТ В АТМОСФЕРУ НАД ЦЕЛЬЮ...');
 
