@@ -35,6 +35,8 @@ button:disabled { background: #4a5568; cursor: not-allowed; }
 <select id="class1">
 <option value="barbarian">🪓 Варвар</option>
 <option value="assassin">👤 Ассасин</option>
+<option value="vampire">🧛‍♂️ Вампир</option>
+<option value="berserk">🪓 Берсерк</option>
 </select>
 <h3>Игрок 1 (Орел)</h3>
 <div class="hp-bar"><div class="hp-fill" id="hp1" style="width: 100%;"></div></div>
@@ -51,7 +53,9 @@ button:disabled { background: #4a5568; cursor: not-allowed; }
 <div class="player-panel">
 <select id="class2">
 <option value="barbarian">🪓 Варвар</option>
-<option value="assassin" selected>👤 Ассасин</option>
+<option value="assassin">👤 Ассасин</option>
+<option value="vampire" selected>🧛‍♂️ Вампир</option>
+<option value="berserk">🪓 Берсерк</option>
 </select>
 <h3>Игрок 2 (Решка)</h3>
 <div class="hp-bar"><div class="hp-fill" id="hp2" style="width: 100%;"></div></div>
@@ -68,12 +72,14 @@ button:disabled { background: #4a5568; cursor: not-allowed; }
 <script>
 const CLASSES = {
 barbarian: { name: "🪓 Варвар" },
-assassin: { name: "👤 Ассасин" }
+assassin: { name: "👤 Ассасин" },
+vampire: { name: "🧛‍♂️ Вампир" },
+berserk: { name: "🪓 Берсерк" }
 };
 
 let game = {
-p1: { hp: 1000, maxHp: 1000, stunned: false, assassinReady: false },
-p2: { hp: 1000, maxHp: 1000, stunned: false, assassinReady: false },
+p1: { hp: 1000, maxHp: 1000, stunned: false, assassinReady: false, vampireReady: false },
+p2: { hp: 1000, maxHp: 1000, stunned: false, assassinReady: false, vampireReady: false },
 activePlayer: 1,
 started: false,
 over: false
@@ -97,10 +103,17 @@ box.innerHTML += `<div» ${msg}</div>`;
 box.scrollTop = box.scrollHeight;
 }
 
+function getBerserkBonus(hp) {
+if (hp < 5) return 80;
+if (hp < 50) return 40;
+if (hp < 100) return 20;
+if (hp < 150) return 5;
+return 0;
+}
+
 function makeTurn() {
 if (game.over) return;
 
-// Этап инициализации: подбрасываем монетку для определения первого хода
 if (!game.started) {
 game.started = true;
 document.getElementById('class1').disabled = true;
@@ -115,7 +128,7 @@ game.activePlayer = 2;
 log(`🪙 Подброшена монетка: <b>Решка!</b> Игрок 2 ходит первым.`);
 }
 log("Битва началась!");
-return; // Первый клик только определяет право хода, дальше идут броски кубиков
+return;
 }
 
 let attacker = game.activePlayer === 1 ? game.p1 : game.p2;
@@ -124,7 +137,6 @@ let attClass = document.getElementById(`class${game.activePlayer}`).value;
 let attName = CLASSES[attClass].name;
 let defName = CLASSES[document.getElementById(`class${game.activePlayer === 1 ? 2 : 1}`).value].name;
 
-// Проверка оглушения (Варвар)
 if (attacker.stunned) {
 log(`<b>${attName} (Игрок ${game.activePlayer})</b> оглушен и пропускает ход!`);
 attacker.stunned = false;
@@ -142,12 +154,29 @@ let isDubl = (d1 === d2);
 
 log(`<b>${attName} (Игрок ${game.activePlayer})</b> бросает кубики: ${roll} ${isDubl ? '(ДУБЛЬ!)' : ''}`);
 
-// Проверка баффа Ассасина с прошлого хода
+// Проверка баффа Ассасина
 if (attacker.assassinReady) {
 let dmg = Math.round(roll * 1.7);
 defender.hp = Math.max(0, defender.hp - dmg);
 log(`👤 Скрытый клинок Ассасина наносит усиленный урон: ${dmg}!`);
 attacker.assassinReady = false;
+updateUI();
+checkWin(defender, defName);
+if (!game.over) switchTurn();
+return;
+}
+
+// Проверка баффа Вампира (следующий удар наносит урон и лечит на урон * 1.7)
+if (attacker.vampireReady) {
+let bonusDmg = getBerserkBonus(attacker.hp);
+let finalDmg = roll + bonusDmg;
+let heal = Math.round(finalDmg * 1.7);
+
+defender.hp = Math.max(0, defender.hp - finalDmg);
+attacker.hp = Math.min(attacker.maxHp, attacker.hp + heal);
+
+log(`🧛‍♂️ Кровавый укус Вампира наносит ${finalDmg} урона и восполняет ${heal} здоровья!`);
+attacker.vampireReady = false;
 updateUI();
 checkWin(defender, defName);
 if (!game.over) switchTurn();
@@ -162,14 +191,26 @@ defender.stunned = true;
 log(`🪓 Варвар наносит ${roll} урона и ОГЛУШАЕТ соперника! Тот пропустит следующий ход.`);
 } else if (attClass === 'assassin') {
 attacker.assassinReady = true;
-log(`👤 Ассасин выбросил дубль! Урон в этот ход не нанесен, но клинок заряжен. Дается право на повторный бросок сомножителем x1.7!`);
+log(`👤 Ассасин выбросил дубль! Урон не нанесен, клинок заряжен для удара x1.7 на следующий ход.`);
+updateUI();
+return;
+} else if (attClass === 'vampire') {
+attacker.vampireReady = true;
+log(`🧛‍♂️ Вампир выбросил дубль! Урон не нанесен, готовится Кровавый укус на следующий ход.`);
 updateUI();
 return;
 }
 } else {
-// Обычный удар
-defender.hp = Math.max(0, defender.hp - roll);
-log(`${attName} наносит ${roll} урона.`);
+// Обычный удар с учетом пассивки Берсерка
+let bonusDmg = getBerserkBonus(attacker.hp);
+let finalDmg = roll + bonusDmg;
+defender.hp = Math.max(0, defender.hp - finalDmg);
+
+if (bonusDmg > 0) {
+log(`${attName} в ярости наносит ${roll} + ${bonusDmg} (бонус) = ${finalDmg} урона!`);
+} else {
+log(`${attName} наносит ${finalDmg} урона.`);
+}
 }
 
 updateUI();
