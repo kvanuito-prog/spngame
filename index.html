@@ -1,188 +1,167 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<title>Ядерный Шторм: Шахтный Комплекс САРМАТ</title>
-<style>
-body {
-font-family: 'Courier New', Courier, monospace;
-background-color: #0d1117;
-color: #c9d1d9;
-margin: 0;
-padding: 20px;
-display: flex;
-flex-direction: column;
-align-items: center;
-}
-h1 { color: #58a6ff; text-shadow: 0 0 10px rgba(88, 166, 255, 0.3); }
-.container {
-display: flex;
-gap: 20px;
-max-width: 1000px;
-width: 100%;
-flex-wrap: wrap;
-}
-.panel {
-background-color: #161b22;
-border: 1px solid #30363d;
-border-radius: 6px;
-padding: 20px;
-flex: 1;
-min-width: 320px;
-}
-.form-group {
-margin-bottom: 12px;
-}
-label {
-display: block;
-margin-bottom: 4px;
-font-size: 13px;
-color: #8b949e;
-}
-select, input {
-width: 100%;
-padding: 8px;
-background-color: #0d1117;
-border: 1px solid #30363d;
-border-radius: 4px;
-color: #c9d1d9;
-box-sizing: border-box;
-}
-button {
-background-color: #238636;
-color: white;
-border: none;
-padding: 10px 15px;
-border-radius: 4px;
-cursor: pointer;
-width: 100%;
-font-weight: bold;
-font-size: 16px;
-margin-top: 5px;
-}
-button:hover { background-color: #2ea043; }
-.log-box {
-background-color: #010409;
-border: 1px solid #30363d;
-border-radius: 4px;
-padding: 15px;
-height: 380px;
-overflow-y: auto;
-font-size: 13px;
-line-height: 1.4;
-}
-.target-info {
-border-left: 3px solid #f85149;
-padding-left: 10px;
-margin-bottom: 15px;
-font-size: 13px;
-}
-#targetMenu {
-display: none;
-margin-top: 15px;
-background: #0d1117;
-padding: 12px;
-border: 1px solid #30363d;
-border-radius: 4px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Трекер цен UC (PUBG Mobile)</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #38bdf8;
+            margin-bottom: 5px;
+        }
+        p.subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+            background: #1e293b;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            white-space: nowrap;
+        }
+        th, td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #334155;
+        }
+        th {
+            background-color: #0f172a;
+            color: #38bdf8;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        th:first-child, td:first-child {
+            text-align: left;
+            position: sticky;
+            left: 0;
+            background-color: #1e293b;
+            z-index: 1;
+        }
+        th:first-child {
+            z-index: 2;
+            background-color: #0f172a;
+        }
+        tr:hover td {
+            background-color: #334155;
+        }
+        .best-price {
+            color: #4ade80;
+            font-weight: bold;
+            background-color: rgba(74, 222, 128, 0.1);
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
 
-<h1>🚀 СТРАТЕГИЧЕСКИЙ КОМПЛЕКС «САРМАТ»</h1>
-
 <div class="container">
-<div class="panel">
-<h3>Выбор носителя</h3>
-<div class="target-info">
-<strong>Арсенал:</strong> 1200 шахтных установок
+    <h1>Мониторинг цен UC</h1>
+    <p class="subtitle">Сравнение стоимости игровой валюты в Telegram-магазинах</p>
 
-<strong>Тип ракеты:</strong> РС-28 «Сармат»
-
-<strong>Масса боевой части:</strong> 10 000 кг
-</div>
-
-<div class="form-group">
-<label for="missileSelect">Выберите номер ракеты (1–1200):</label>
-<select id="missileSelect" onchange="checkSelection()">
-<option value="">— Выберите ракету —</option>
-<script>
-const ranks = ['Полковник', 'Генерал-майор', 'Генерал-лейтенант', 'Генерал-полковник'];
-const surnames = ['Иванов', 'Петров', 'Смирнов', 'Кузнецов', 'Попов', 'Васильев', 'Соколов', 'Михайлов', 'Новиков', 'Федоров'];
-const initials = ['А.В.', 'Б.М.', 'В.П.', 'Д.Н.', 'Е.А.'];
-
-for (let i = 1; i <= 1200; i++) {
-let r = ranks[i % ranks.length];
-let s = surnames[i % surnames.length];
-let init = initials[i % initials.length];
-document.write('<option value="' + i + '">Шахта №' + i + ' | ' + r + ' ' + s + ' ' + init + '</option>');
-}
-</script>
-</select>
-</div>
-
-<div id="targetMenu">
-<h4 style="margin-top: 0; color: #58a6ff;">Целеуказание для Ракеты №<span id="selectedId"></span></h4>
-
-<div class="form-group">
-<label>Широта цели:</label>
-<input type="text" id="targetLat" value="38.8951">
-</div>
-
-<div class="form-group">
-<label>Долгота цели:</label>
-<input type="text" id="targetLon" value="-77.0364">
-</div>
-
-<button onclick="launchMissile()">ПУСК РАКЕТЫ</button>
-</div>
-</div>
-
-<div class="panel">
-<h3>Телеметрия и статус пуска</h3>
-<div id="log" class="log-box">
-Система «Периметр» активна. В ожидании пуска...
-
-</div>
-</div>
+    <div class="table-wrapper">
+        <table id="priceTable">
+            <thead>
+                <tr id="headerRow">
+                    <th>Магазин</th>
+                </tr>
+            </thead>
+            <tbody id="bodyRows">
+                <!-- Данные подгружаются через JavaScript -->
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>
-function log(msg) {
-const box = document.getElementById('log');
-box.innerHTML += msg + '
-';
-box.scrollTop = box.scrollHeight;
-}
+    fetch('data.json')
+        .then(response => response.json())
+        .then(storesData => {
+            if (storesData.length === 0) return;
 
-function checkSelection() {
-const sel = document.getElementById('missileSelect');
-const menu = document.getElementById('targetMenu');
-const span = document.getElementById('selectedId');
+            // Собираем все уникальные номиналы UC со всех магазинов
+            let allKeysSet = new Set();
+            storesData.forEach(store => {
+                Object.keys(store.prices).forEach(key => allKeysSet.add(key));
+            });
+            
+            // Сортируем номиналы (попробуем отталкиваться от числового значения)
+            let ucKeys = Array.from(allKeysSet).sort((a, b) => {
+                return parseInt(a) - parseInt(b);
+            });
 
-if (sel.value !== "") {
-span.innerText = sel.value;
-menu.style.display = 'block';
-log('> Выбрана шахта №' + sel.value);
-} else {
-menu.style.display = 'none';
-}
-}
+            // Заполняем шапку таблицы номиналами
+            const headerRow = document.getElementById('headerRow');
+            ucKeys.forEach(key => {
+                const th = document.createElement('th');
+                th.textContent = key;
+                headerRow.appendChild(th);
+            });
 
-function launchMissile() {
-const num = document.getElementById('missileSelect').value;
-const lat = document.getElementById('targetLat').value;
-const lon = document.getElementById('targetLon').value;
+            // Находим минимальные цены для каждого номинала (для подсветки выгоды)
+            let minPrices = {};
+            ucKeys.forEach(key => {
+                let min = Infinity;
+                storesData.forEach(store => {
+                    if (store.prices[key] && store.prices[key] < min) {
+                        min = store.prices[key];
+                    }
+                });
+                minPrices[key] = min;
+            });
 
-log('-----------------------------------');
-log('⚡ ПУСК РАКЕТЫ №' + num + ' ПО КООРДИНАТАМ: ' + lat + ', ' + lon);
-log('🔥 Двигатели запущены, полет нормальный...');
+            // Заполняем тело таблицы данными магазинов
+            const bodyRows = document.getElementById('bodyRows');
+            storesData.forEach(store => {
+                const tr = document.createElement('tr');
+                
+                // Название магазина
+                const tdStore = document.createElement('td');
+                tdStore.textContent = store.store;
+                tr.appendChild(tdStore);
 
-setTimeout(function() {
-log('🎯 БОЕВОЙ БЛОК ДОСТИГ ЦЕЛИ. ОБЪЕКТ УНИЧТОЖЕН.');
-log('-----------------------------------');
-}, 2000);
-}
+                // Цены для каждого номинала
+                ucKeys.forEach(key => {
+                    const tdPrice = document.createElement('td');
+                    const price = store.prices[key];
+                    
+                    if (price !== undefined) {
+                        tdPrice.textContent = price + ' ₽';
+                        // Подсвечиваем зеленым самую низкую цену
+                        if (price === minPrices[key]) {
+                            tdPrice.classList.add('best-price');
+                        }
+                    } else {
+                        tdPrice.textContent = '—';
+                        tdPrice.style.color = '#64748b';
+                    }
+                    tr.appendChild(tdPrice);
+                });
+
+                bodyRows.appendChild(tr);
+            });
+        })
+        .catch(error => console.error('Ошибка загрузки данных:', error));
 </script>
+
 </body>
 </html>
