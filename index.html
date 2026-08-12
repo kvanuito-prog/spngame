@@ -32,12 +32,12 @@ flex: 1;
 min-width: 320px;
 }
 .form-group {
-margin-bottom: 15px;
+margin-bottom: 12px;
 }
 label {
 display: block;
-margin-bottom: 5px;
-font-size: 14px;
+margin-bottom: 4px;
+font-size: 13px;
 color: #8b949e;
 }
 select, input {
@@ -59,6 +59,7 @@ cursor: pointer;
 width: 100%;
 font-weight: bold;
 font-size: 16px;
+margin-top: 5px;
 }
 button:hover { background-color: #2ea043; }
 .log-box {
@@ -66,7 +67,7 @@ background-color: #010409;
 border: 1px solid #30363d;
 border-radius: 4px;
 padding: 15px;
-height: 300px;
+height: 340px;
 overflow-y: auto;
 font-size: 13px;
 line-height: 1.4;
@@ -77,7 +78,14 @@ padding-left: 10px;
 margin-bottom: 15px;
 font-size: 13px;
 }
-.hidden { display: none; }
+.hidden { display: none !important; }
+#targetMenu {
+margin-top: 15px;
+background: #0d1117;
+padding: 12px;
+border: 1px solid #30363d;
+border-radius: 4px;
+}
 </style>
 </head>
 <body>
@@ -102,7 +110,7 @@ font-size: 13px;
 <option value="">— Выберите ракету из шахты —</option>
 <script>
 const ranks = ['Полковник', 'Генерал-майор', 'Генерал-лейтенант', 'Генерал-полковник'];
-const surnames = ['Иванов', 'Петров', 'Смирнов', 'Кузнецов', 'Попов', 'Васильев', 'Соколов', 'Михайлов', 'Новиков', 'Федоров', 'Морозов', 'Волков', 'Алексеев', 'Лебедев', 'Семенов', 'Егоров', 'Павлов', 'Козлов', 'Степанов', 'Андреев', 'Макаров', 'Николаев', 'Орлов', 'Андрианов'];
+const surnames = ['Иванов', 'Петров', 'Смирнов', 'Кузнецов', 'Попов', 'Васильев', 'Соколов', 'Михайлов', 'Новиков', 'Федоров', 'Морозов', 'Волков', 'Алексеев', 'Лебедев', 'Семенов', 'Егоров', 'Павлов', 'Козлов', 'Степанов'];
 const initials = ['А.В.', 'Б.М.', 'В.П.', 'Д.Н.', 'Е.А.', 'И.И.', 'К.С.', 'М.О.', 'Н.Л.', 'П.Р.', 'С.Ю.', 'Ю.А.'];
 
 for (let i = 1; i <= 1200; i++) {
@@ -110,28 +118,27 @@ const rank = ranks[(i * 7) % ranks.length];
 const surname = surnames[(i * 13) % surnames.length];
 const initial = initials[(i * 3) % initials.length];
 
-document.write(`<option value="${i}">Шахта №${i} — РС-28 «Сармат» (Готова 🟢) | ${rank} ${surname} ${initial}</option>`);
+document.write(`<option value="${i}">Шахта №${i} | ${rank} ${surname} ${initial}</option>`);
 }
 </script>
 </select>
 </div>
 
-<!— Динамическое меню ввода координат цели (появляется при выборе ракеты) —>
+<!— Меню ввода широты и долготы (появляется строго под селектором) —>
 <div id="targetMenu" class="hidden">
-<hr style="border-color: #30363d; margin: 15px 0;">
-<h4>Параметры цели для Ракеты №<span id="selectedId"></span></h4>
+<h4 style="margin-top: 0; color: #58a6ff;">Целеуказание для Ракеты №<span id="selectedId"></span></h4>
 
 <div class="form-group">
-<label for="targetDistance">Дальность до цели (км):</label>
-<input type="text" id="targetDistance" value="11000">
+<label for="targetLat">Широта цели (град):</label>
+<input type="text" id="targetLat" value="38.8951">
 </div>
 
 <div class="form-group">
-<label for="azimuth">Азимут пуска (градусы 0–360):</label>
-<input type="text" id="azimuth" value="184.2">
+<label for="targetLon">Долгота цели (град):</label>
+<input type="text" id="targetLon" value="-77.0364">
 </div>
 
-<button onclick="launchMissile()">ПРИКАЗ НА ЗАПУСК</button>
+<button onclick="launchMissile()">ПУСК РАКЕТЫ</button>
 </div>
 </div>
 
@@ -153,7 +160,6 @@ logBox.innerHTML += message + '
 logBox.scrollTop = logBox.scrollHeight;
 }
 
-// Показываем меню координат при выборе конкретной ракеты
 function onMissileSelect() {
 const select = document.getElementById('missileSelect');
 const targetMenu = document.getElementById('targetMenu');
@@ -162,7 +168,7 @@ const selectedIdSpan = document.getElementById('selectedId');
 if (select.value) {
 selectedIdSpan.textContent = select.value;
 targetMenu.classList.remove('hidden');
-log(`> Шахта №${select.value} выбрана. Установлена связь с бортовым компьютером «Сармата». Ответственный расчет подтвержден.`);
+log(`> Шахта №${select.value} выбрана. Расчет на месте. Введите координаты цели.`);
 } else {
 targetMenu.classList.add('hidden');
 }
@@ -171,19 +177,20 @@ targetMenu.classList.add('hidden');
 function launchMissile() {
 try {
 const missileNum = document.getElementById('missileSelect').value;
-const distStr = document.getElementById('targetDistance').value.replace(',', '.');
-const azStr = document.getElementById('azimuth').value.replace(',', '.');
+const latStr = document.getElementById('targetLat').value.replace(',', '.');
+const lonStr = document.getElementById('targetLon').value.replace(',', '.');
 
-const targetDistance = parseFloat(distStr);
-const azimuth = parseFloat(azStr);
+const lat = parseFloat(latStr);
+const lon = parseFloat(lonStr);
 
-if (isNaN(targetDistance) || isNaN(azimuth)) {
-log('❌ ОШИБКА: Некорректные параметры цели!');
+if (isNaN(lat) || isNaN(lon)) {
+log('❌ ОШИБКА: Некорректные координаты широты/долготы!');
 return;
 }
 
 log('-----------------------------------');
 log(`⚡ ВНИМАНИЕ! КЛЮЧ ПУСКА ПОВЕРНУТ ДЛЯ РАКЕТЫ №${missileNum}!`);
+log(`🎯 Цель задана: Широта ${lat}, Долгота ${lon}`);
 log('🔥 Запуск трехступенчатого двигателя «Сармата»...');
 
 const warhead = 10000;
@@ -199,14 +206,12 @@ const deltaV = Isp * g0 * Math.log(totalMass / burnoutMass);
 log(`> Стартовая масса: ${totalMass} кг (БЧ: 10 т)`);
 log(`> Конечная скорость (Δv): ${deltaV.toFixed(1)} м/с`);
 
+// Условный расчет дальности на основе координат (для примера симуляции)
+const targetDistance = Math.abs(lat * 111) + Math.abs(lon * 50);
 const calculatedDistance = (deltaV * deltaV) / 5500;
-const distanceError = calculatedDistance - targetDistance;
+const distanceError = calculatedDistance - (targetDistance % 15000);
 
-log(`> Расчетная дальность: ${calculatedDistance.toFixed(0)} км (Цель: ${targetDistance} км)`);
-
-const optimalAzimuth = 184.2;
-const azimuthError = Math.abs(azimuth - optimalAzimuth);
-const lateralError = azimuthError * 111;
+log(`> Расчетная дальность полета: ${calculatedDistance.toFixed(0)} км`);
 
 log('> Ступени 1 и 2 отработали и сброшены. Полет в космическом пространстве...');
 
@@ -214,17 +219,12 @@ setTimeout(() => {
 log('🎯 БОЕВОЙ БЛОК ВХОДИТ В АТМОСФЕРУ НАД ЦЕЛЬЮ...');
 
 setTimeout(() => {
-const totalMissDistance = Math.sqrt((distanceError * distanceError) + (lateralError * lateralError));
-
-log(`> Отклонение по дальности: ${Math.abs(distanceError).toFixed(2)} км`);
-log(`> Боковое отклонение: ${lateralError.toFixed(2)} км`);
+const totalMissDistance = Math.abs(distanceError) % 5.0;
 
 if (totalMissDistance <= 0.5) {
-log(`🎉 <strong>ПРЯМОЕ ПОПАДАНИЕ!</strong> Ракета №${missileNum} стерла цель с лица земли (Мощность 10т БЧ).`);
-} else if (totalMissDistance <= 5.0) {
-log(`💥 <strong>УСПЕХ!</strong> Мощнейший термоядерный заряд ракеты №${missileNum} уничтожил объект в радиусе поражения.`);
+log(`🎉 <strong>ПРЯМОЕ ПОПАДАНИЕ!</strong> Ракета №${missileNum} уничтожила объект по заданным координатам (БЧ 10т).`);
 } else {
-log(`❌ <strong>ПРОМАХ!</strong> Ракета №${missileNum} отклонилась на ${totalMissDistance.toFixed(2)} км.`);
+log(`💥 <strong>УСПЕХ!</strong> Мощнейший термоядерный заряд ракеты №${missileNum} накрыл область цели.`);
 }
 log('-----------------------------------');
 }, 1000);
