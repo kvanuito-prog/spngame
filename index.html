@@ -28,6 +28,7 @@ button:disabled { background: #4a5568; cursor: not-allowed; }
 .log-highlight { color: #facc15; font-weight: bold; }
 .log-ability { color: #38bdf8; font-weight: bold; }
 .log-berserk { color: #f87171; font-weight: bold; }
+.log-mage { color: #c084fc; font-weight: bold; }
 </style>
 </head>
 <body>
@@ -40,6 +41,7 @@ button:disabled { background: #4a5568; cursor: not-allowed; }
 <option value="assassin">👤 Ассасин</option>
 <option value="vampire">🧛‍♂️ Вампир</option>
 <option value="berserk">🪓 Берсерк</option>
+<option value="archmage">🧙‍♂️ Архимаг</option>
 </select>
 <h3>Игрок 1 (Орел)</h3>
 <div class="hp-bar"><div class="hp-fill" id="hp1" style="width: 100%;"></div></div>
@@ -57,8 +59,9 @@ button:disabled { background: #4a5568; cursor: not-allowed; }
 <select id="class2">
 <option value="barbarian">🪓 Варвар</option>
 <option value="assassin">👤 Ассасин</option>
-<option value="vampire" selected>🧛‍♂️ Вампир</option>
+<option value="vampire">🧛‍♂️ Вампир</option>
 <option value="berserk">🪓 Берсерк</option>
+<option value="archmage" selected>🧙‍♂️ Архимаг</option>
 </select>
 <h3>Игрок 2 (Решка)</h3>
 <div class="hp-bar"><div class="hp-fill" id="hp2" style="width: 100%;"></div></div>
@@ -77,12 +80,13 @@ const CLASSES = {
 barbarian: { name: "🪓 Варвар" },
 assassin: { name: "👤 Ассасин" },
 vampire: { name: "🧛‍♂️ Вампир" },
-berserk: { name: "🪓 Берсерк" }
+berserk: { name: "🪓 Берсерк" },
+archmage: { name: "🧙‍♂️ Архимаг" }
 };
 
 let game = {
-p1: { hp: 1000, maxHp: 1000, stunned: false, assassinReady: false, vampireReady: false },
-p2: { hp: 1000, maxHp: 1000, stunned: false, assassinReady: false, vampireReady: false },
+p1: { hp: 1000, maxHp: 1000, stunned: false, assassinReady: false, vampireReady: false, archmageCasting: false, archmageTurnsLeft: 0, archmageAccumulated: 0 },
+p2: { hp: 1000, maxHp: 1000, stunned: false, assassinReady: false, vampireReady: false, archmageCasting: false, archmageTurnsLeft: 0, archmageAccumulated: 0 },
 activePlayer: 1,
 started: false,
 over: false
@@ -180,7 +184,7 @@ return;
 
 // Проверка баффа Вампира
 if (attacker.vampireReady) {
-let finalDmg = roll + berserkData.bonus; // Если вдруг Вампир как-то получил бонус, но теперь строго по классам
+let finalDmg = roll;
 let heal = Math.round(finalDmg * 1.7);
 
 defender.hp = Math.max(0, defender.hp - finalDmg);
@@ -188,6 +192,26 @@ attacker.hp = Math.min(attacker.maxHp, attacker.hp + heal);
 
 log(`<span class="log-ability">🧛‍♂️ Способность "Кровавый укус" (Вампир):</span> Успешно совершен вампирский рывок! Нанесено урона: <span class="log-highlight">${finalDmg}</span>, восполнено здоровья: <span class="log-highlight">+${heal} HP</span>.`);
 attacker.vampireReady = false;
+updateUI();
+checkWin(defender, defName);
+if (!game.over) switchTurn();
+return;
+}
+
+// Проверка каста Архимага (если он прямо сейчас кастует заклинание)
+if (attacker.archmageCasting) {
+attacker.archmageAccumulated += roll;
+attacker.archmageTurnsLeft--;
+log(`<span class="log-mage">🧙‍♂️ Архимаг читает заклинание:</span> Добавлено бросков: ${roll}. Осталось ходов каста: ${attacker.archmageTurnsLeft}. Накопленная база: ${attacker.archmageAccumulated}.`);
+
+if (attacker.archmageTurnsLeft === 0) {
+let finalDmg = Math.round(attacker.archmageAccumulated * 2.5);
+defender.hp = Math.max(0, defender.hp - finalDmg);
+log(`<span class="log-mage">✨ Заклинание Архимага завершено!</span> Сумма трех ходов (${attacker.archmageAccumulated}) умножена на 2.5. Врагу нанесено сокрушительно урона: <span class="log-highlight">${finalDmg}</span>!`);
+attacker.archmageCasting = false;
+attacker.archmageAccumulated = 0;
+}
+
 updateUI();
 checkWin(defender, defName);
 if (!game.over) switchTurn();
@@ -210,6 +234,14 @@ return;
 attacker.vampireReady = true;
 log(`<span class="log-ability">🧛‍♂️ Способность "Жажда крови" (Дубль ${roll}):</span> Урон текущего броска аннулирован. Вампир готовится к "Кровавому укусу" на следующий ход!`);
 updateUI();
+return;
+} else if (attClass === 'archmage') {
+attacker.archmageCasting = true;
+attacker.archmageTurnsLeft = 3;
+attacker.archmageAccumulated = roll; // Первый бросок идет в копилку каста
+log(`<span class="log-mage">🧙‍♂️ Архимаг выбросил дубль (${roll})!</span> Заклинание начинает формироваться. Урон отложен на 3 хода (этот бросок учтен). Противник продолжает ходить!`);
+updateUI();
+if (!game.over) switchTurn();
 return;
 } else {
 let finalDmg = roll + berserkData.bonus;
