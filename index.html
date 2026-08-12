@@ -140,10 +140,13 @@ let attClass = document.getElementById(`class${game.activePlayer}`).value;
 let attName = CLASSES[attClass].name;
 let defName = CLASSES[document.getElementById(`class${game.activePlayer === 1 ? 2 : 1}`).value].name;
 
-// Лог пассивки Берсерка при начале хода (если здоровье ниже 150)
-let berserkData = getBerserkBonus(attacker.hp);
-if (attClass === 'berserk' && berserkData.bonus > 0) {
+// Проверяем бонус Берсерка ТОЛЬКО если атакующая сторона — Берсерк
+let berserkData = { bonus: 0, tier: null };
+if (attClass === 'berserk') {
+berserkData = getBerserkBonus(attacker.hp);
+if (berserkData.bonus > 0) {
 log(`<span class="log-berserk">⚠️ Пассивка Берсерка активна!</span> Уровень ярости: ${berserkData.tier}`);
+}
 }
 
 if (attacker.stunned) {
@@ -177,7 +180,7 @@ return;
 
 // Проверка баффа Вампира
 if (attacker.vampireReady) {
-let finalDmg = roll + berserkData.bonus;
+let finalDmg = roll + berserkData.bonus; // Если вдруг Вампир как-то получил бонус, но теперь строго по классам
 let heal = Math.round(finalDmg * 1.7);
 
 defender.hp = Math.max(0, defender.hp - finalDmg);
@@ -209,10 +212,9 @@ log(`<span class="log-ability">🧛‍♂️ Способность "Жажда 
 updateUI();
 return;
 } else {
-// Для других классов (если появятся) обычный дубль
 let finalDmg = roll + berserkData.bonus;
 defender.hp = Math.max(0, defender.hp - finalDmg);
-log(`Выпал дубль ${roll}, на нанесено <span class="log-highlight">${finalDmg}</span> урона.`);
+log(`Выпал дубль ${roll}, нанесено <span class="log-highlight">${finalDmg}</span> урона.`);
 }
 } else {
 let finalDmg = roll + berserkData.bonus;
@@ -253,4 +255,3 @@ document.getElementById('btn-turn').disabled = true;
 </script>
 </body>
 </html>
-
