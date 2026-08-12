@@ -2,61 +2,83 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Дуэль на Кубиках</title>
+<title>Дуэль Классов на Кубиках</title>
 <style>
 body { background-color: #1a1a1a; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; font-family: 'Segoe UI', sans-serif; color: white; padding: 20px; }
 
-/* Общая структура игры */
 .game-wrapper { display: flex; align-items: center; gap: 30px; margin-top: 20px; }
 
-/* Панели игроков */
-.player-panel { width: 200px; background: #2d3748; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+.player-panel { width: 220px; background: #2d3748; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+.player-panel select { width: 100%; padding: 8px; margin-bottom: 15px; background: #1a202c; color: white; border: 1px solid #4a5568; border-radius: 6px; }
+
 .hp-bar { width: 100%; height: 15px; background: #4a5568; border-radius: 8px; margin: 10px 0; overflow: hidden; }
 .hp-fill { height: 100%; background: #48bb78; width: 100%; transition: width 0.3s; }
 
-/* Игровое поле */
 .game-field { width: 300px; height: 200px; background-color: #2e7d32; border: 8px solid #1b5e20; border-radius: 20px; display: flex; justify-content: center; align-items: center; gap: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
 .die { width: 60px; height: 60px; background-color: white; border-radius: 10px; display: grid; grid-template-columns: repeat(3, 1fr); padding: 5px; }
 .dot { width: 12px; height: 12px; background-color: black; border-radius: 50%; align-self: center; justify-self: center; }
 .hidden { visibility: hidden; }
 
-/* Элементы управления */
 .controls { margin-top: 20px; text-align: center; }
 button { padding: 15px 40px; font-size: 20px; background: #f59e0b; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+button:disabled { background: #4a5568; cursor: not-allowed; }
 
-/* Лог событий */
-.log-box { width: 600px; height: 150px; background: #0f172a; margin-top: 20px; border-radius: 10px; padding: 15px; overflow-y: auto; border: 1px solid #334155; font-size: 14px; line-height: 1.5; color: #94a3b8; }
+.log-box { width: 660px; height: 150px; background: #0f172a; margin-top: 20px; border-radius: 10px; padding: 15px; overflow-y: auto; border: 1px solid #334155; font-size: 14px; line-height: 1.5; color: #94a3b8; }
 </style>
 </head>
 <body>
 
 <div class="game-wrapper">
+<!— Игрок 1 —>
 <div class="player-panel">
-<h3>Игрок 1</h3>
+<select id="class1">
+<option value="barbarian">🪓 Варвар</option>
+<option value="assassin">👤 Ассасин</option>
+</select>
+<h3>Игрок 1 (Орел)</h3>
 <div class="hp-bar"><div class="hp-fill" id="hp1" style="width: 100%;"></div></div>
-<span id="hp-text1">1000/1000</span>
+<span id="hp-text1">1000 / 1000</span>
 </div>
 
+<!— Поле кубиков —>
 <div class="game-field">
 <div class="die" id="die1"></div>
 <div class="die" id="die2"></div>
 </div>
 
+<!— Игрок 2 —>
 <div class="player-panel">
-<h3>Игрок 2</h3>
+<select id="class2">
+<option value="barbarian">🪓 Варвар</option>
+<option value="assassin" selected>👤 Ассасин</option>
+</select>
+<h3>Игрок 2 (Решка)</h3>
 <div class="hp-bar"><div class="hp-fill" id="hp2" style="width: 100%;"></div></div>
-<span id="hp-text2">1000/1000</span>
+<span id="hp-text2">1000 / 1000</span>
 </div>
 </div>
 
 <div class="controls">
-<button onclick="makeTurn()">БРОСИТЬ КУБИКИ</button>
+<button id="btn-turn" onclick="makeTurn()">НАЧАТЬ БИТВУ / ХОД</button>
 </div>
 
-<div class="log-box" id="log">Ожидание начала игры...</div>
+<div class="log-box" id="log">Настройте героев и нажмите кнопку, чтобы подбросить монетку и начать битву!</div>
 
 <script>
+const CLASSES = {
+barbarian: { name: "🪓 Варвар" },
+assassin: { name: "👤 Ассасин" }
+};
+
+let game = {
+p1: { hp: 1000, maxHp: 1000, stunned: false, assassinReady: false },
+p2: { hp: 1000, maxHp: 1000, stunned: false, assassinReady: false },
+activePlayer: 1,
+started: false,
+over: false
+};
+
 const layouts = { 1:[4], 2:[0,8], 3:[0,4,8], 4:[0,2,6,8], 5:[0,2,4,6,8], 6:[0,2,3,5,6,8] };
 
 function renderDie(id, val) {
@@ -76,14 +98,104 @@ box.scrollTop = box.scrollHeight;
 }
 
 function makeTurn() {
-const d1 = Math.floor(Math.random() * 6) + 1;
-const d2 = Math.floor(Math.random() * 6) + 1;
+if (game.over) return;
 
+// Этап инициализации: подбрасываем монетку для определения первого хода
+if (!game.started) {
+game.started = true;
+document.getElementById('class1').disabled = true;
+document.getElementById('class2').disabled = true;
+
+let coin = Math.random() < 0.5 ? 'орел' : 'решка';
+if (coin === 'орел') {
+game.activePlayer = 1;
+log(`🪙 Подброшена монетка: <b>Орел!</b> Игрок 1 ходит первым.`);
+} else {
+game.activePlayer = 2;
+log(`🪙 Подброшена монетка: <b>Решка!</b> Игрок 2 ходит первым.`);
+}
+log("Битва началась!");
+return; // Первый клик только определяет право хода, дальше идут броски кубиков
+}
+
+let attacker = game.activePlayer === 1 ? game.p1 : game.p2;
+let defender = game.activePlayer === 1 ? game.p2 : game.p1;
+let attClass = document.getElementById(`class${game.activePlayer}`).value;
+let attName = CLASSES[attClass].name;
+let defName = CLASSES[document.getElementById(`class${game.activePlayer === 1 ? 2 : 1}`).value].name;
+
+// Проверка оглушения (Варвар)
+if (attacker.stunned) {
+log(`<b>${attName} (Игрок ${game.activePlayer})</b> оглушен и пропускает ход!`);
+attacker.stunned = false;
+switchTurn();
+return;
+}
+
+let d1 = Math.floor(Math.random() * 6) + 1;
+let d2 = Math.floor(Math.random() * 6) + 1;
 renderDie('die1', d1);
 renderDie('die2', d2);
 
-const total = d1 * 10 + d2;
-log(`Выпало: ${total}. Игрок наносит ${total} урона!`);
+let roll = d1 * 10 + d2;
+let isDubl = (d1 === d2);
+
+log(`<b>${attName} (Игрок ${game.activePlayer})</b> бросает кубики: ${roll} ${isDubl ? '(ДУБЛЬ!)' : ''}`);
+
+// Проверка баффа Ассасина с прошлого хода
+if (attacker.assassinReady) {
+let dmg = Math.round(roll * 1.7);
+defender.hp = Math.max(0, defender.hp - dmg);
+log(`👤 Скрытый клинок Ассасина наносит усиленный урон: ${dmg}!`);
+attacker.assassinReady = false;
+updateUI();
+checkWin(defender, defName);
+if (!game.over) switchTurn();
+return;
+}
+
+// Обработка дублей
+if (isDubl) {
+if (attClass === 'barbarian') {
+defender.hp = Math.max(0, defender.hp - roll);
+defender.stunned = true;
+log(`🪓 Варвар наносит ${roll} урона и ОГЛУШАЕТ соперника! Тот пропустит следующий ход.`);
+} else if (attClass === 'assassin') {
+attacker.assassinReady = true;
+log(`👤 Ассасин выбросил дубль! Урон в этот ход не нанесен, но клинок заряжен. Дается право на повторный бросок сомножителем x1.7!`);
+updateUI();
+return;
+}
+} else {
+// Обычный удар
+defender.hp = Math.max(0, defender.hp - roll);
+log(`${attName} наносит ${roll} урона.`);
+}
+
+updateUI();
+checkWin(defender, defName);
+if (!game.over) switchTurn();
+}
+
+function switchTurn() {
+game.activePlayer = game.activePlayer === 1 ? 2 : 1;
+log(`-— Ход переходит к Игроку ${game.activePlayer} —-`);
+}
+
+function updateUI() {
+document.getElementById('hp1').style.width = (game.p1.hp / game.p1.maxHp) * 100 + '%';
+document.getElementById('hp-text1').innerText = `${game.p1.hp} / 1000`;
+
+document.getElementById('hp2').style.width = (game.p2.hp / game.p2.maxHp) * 100 + '%';
+document.getElementById('hp-text2').innerText = `${game.p2.hp} / 1000`;
+}
+
+function checkWin(def, defName) {
+if (def.hp <= 0) {
+game.over = true;
+log(`🏆 <b>${defName} повержен! Игра окончена.</b>`);
+document.getElementById('btn-turn').disabled = true;
+}
 }
 </script>
 </body>
