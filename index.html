@@ -67,7 +67,7 @@ background-color: #010409;
 border: 1px solid #30363d;
 border-radius: 4px;
 padding: 15px;
-height: 340px;
+height: 380px;
 overflow-y: auto;
 font-size: 13px;
 line-height: 1.4;
@@ -78,7 +78,6 @@ padding-left: 10px;
 margin-bottom: 15px;
 font-size: 13px;
 }
-.hidden { display: none !important; }
 #targetMenu {
 margin-top: 15px;
 background: #0d1117;
@@ -106,7 +105,7 @@ border-radius: 4px;
 
 <div class="form-group">
 <label for="missileSelect">Выберите номер ракеты (1–1200):</label>
-<select id="missileSelect" onchange="onMissileSelect()">
+<select id="missileSelect" onchange="onMissileSelect()" onclick="onMissileSelect()">
 <option value="">— Выберите ракету из шахты —</option>
 <script>
 const ranks = ['Полковник', 'Генерал-майор', 'Генерал-лейтенант', 'Генерал-полковник'];
@@ -124,8 +123,8 @@ document.write(`<option value="${i}">Шахта №${i} | ${rank} ${surname} ${i
 </select>
 </div>
 
-<!— Меню ввода широты и долготы (появляется строго под селектором) —>
-<div id="targetMenu" class="hidden">
+<!— Меню ввода широты и долготы (теперь управляется через display style напрямую) —>
+<div id="targetMenu" style="display: none;">
 <h4 style="margin-top: 0; color: #58a6ff;">Целеуказание для Ракеты №<span id="selectedId"></span></h4>
 
 <div class="form-group">
@@ -160,19 +159,29 @@ logBox.innerHTML += message + '
 logBox.scrollTop = logBox.scrollHeight;
 }
 
+// Принудительное отслеживание выбора через setInterval + onchange для 100% срабатывания
 function onMissileSelect() {
 const select = document.getElementById('missileSelect');
 const targetMenu = document.getElementById('targetMenu');
 const selectedIdSpan = document.getElementById('selectedId');
 
-if (select.value) {
+if (select.value && select.value !== "") {
 selectedIdSpan.textContent = select.value;
-targetMenu.classList.remove('hidden');
-log(`> Шахта №${select.value} выбрана. Расчет на месте. Введите координаты цели.`);
+targetMenu.style.display = 'block';
 } else {
-targetMenu.classList.add('hidden');
+targetMenu.style.display = 'none';
 }
 }
+
+// Дополнительный монитор на случай кликов мыши
+setInterval(() => {
+const select = document.getElementById('missileSelect');
+const targetMenu = document.getElementById('targetMenu');
+if (select && select.value && targetMenu.style.display === 'none') {
+onMissileSelect();
+log(`> Шахта №${select.value} активирована. Введите координаты цели.`);
+}
+}, 500);
 
 function launchMissile() {
 try {
@@ -206,13 +215,11 @@ const deltaV = Isp * g0 * Math.log(totalMass / burnoutMass);
 log(`> Стартовая масса: ${totalMass} кг (БЧ: 10 т)`);
 log(`> Конечная скорость (Δv): ${deltaV.toFixed(1)} м/с`);
 
-// Условный расчет дальности на основе координат (для примера симуляции)
 const targetDistance = Math.abs(lat * 111) + Math.abs(lon * 50);
 const calculatedDistance = (deltaV * deltaV) / 5500;
 const distanceError = calculatedDistance - (targetDistance % 15000);
 
 log(`> Расчетная дальность полета: ${calculatedDistance.toFixed(0)} км`);
-
 log('> Ступени 1 и 2 отработали и сброшены. Полет в космическом пространстве...');
 
 setTimeout(() => {
