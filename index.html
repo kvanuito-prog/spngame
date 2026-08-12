@@ -67,7 +67,7 @@ button:disabled { background: #4a5568; cursor: not-allowed; }
 <button id="btn-turn" onclick="makeTurn()">НАЧАТЬ БИТВУ / ХОД</button>
 </div>
 
-<div class="log-box" id="log">Настройте героев и нажмите кнопку, чтобы подбросить монетку и начать битву!</div>
+<div class="log-box" id="log"><div» Настройте героев и нажмите кнопку, чтобы подбросить монетку и начать битву!</div></div>
 
 <script>
 const CLASSES = {
@@ -99,8 +99,9 @@ el.appendChild(dot);
 
 function log(msg) {
 const box = document.getElementById('log');
-box.innerHTML += `<div» ${msg}</div>`;
-box.scrollTop = box.scrollHeight;
+// Добавляем новые сообщения в самый верх списка и сбрасываем скролл вверх
+box.innerHTML = `<div» ${msg}</div>` + box.innerHTML;
+box.scrollTop = 0;
 }
 
 function getBerserkBonus(hp) {
@@ -166,7 +167,7 @@ if (!game.over) switchTurn();
 return;
 }
 
-// Проверка баффа Вампира (следующий удар наносит урон и лечит на урон * 1.7)
+// Проверка баффа Вампира
 if (attacker.vampireReady) {
 let bonusDmg = getBerserkBonus(attacker.hp);
 let finalDmg = roll + bonusDmg;
@@ -201,7 +202,6 @@ updateUI();
 return;
 }
 } else {
-// Обычный удар с учетом пассивки Берсерка
 let bonusDmg = getBerserkBonus(attacker.hp);
 let finalDmg = roll + bonusDmg;
 defender.hp = Math.max(0, defender.hp - finalDmg);
@@ -241,3 +241,4 @@ document.getElementById('btn-turn').disabled = true;
 </script>
 </body>
 </html>
+
