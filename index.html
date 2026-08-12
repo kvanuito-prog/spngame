@@ -24,7 +24,10 @@ body { background-color: #1a1a1a; display: flex; flex-direction: column; align-i
 button { padding: 15px 40px; font-size: 20px; background: #f59e0b; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
 button:disabled { background: #4a5568; cursor: not-allowed; }
 
-.log-box { width: 660px; height: 150px; background: #0f172a; margin-top: 20px; border-radius: 10px; padding: 15px; overflow-y: auto; border: 1px solid #334155; font-size: 14px; line-height: 1.5; color: #94a3b8; }
+.log-box { width: 660px; height: 160px; background: #0f172a; margin-top: 20px; border-radius: 10px; padding: 15px; overflow-y: auto; border: 1px solid #334155; font-size: 14px; line-height: 1.5; color: #94a3b8; }
+.log-highlight { color: #facc15; font-weight: bold; }
+.log-ability { color: #38bdf8; font-weight: bold; }
+.log-berserk { color: #f87171; font-weight: bold; }
 </style>
 </head>
 <body>
@@ -99,17 +102,16 @@ el.appendChild(dot);
 
 function log(msg) {
 const box = document.getElementById('log');
-// Добавляем новые сообщения в самый верх списка и сбрасываем скролл вверх
 box.innerHTML = `<div» ${msg}</div>` + box.innerHTML;
 box.scrollTop = 0;
 }
 
 function getBerserkBonus(hp) {
-if (hp < 5) return 80;
-if (hp < 50) return 40;
-if (hp < 100) return 20;
-if (hp < 150) return 5;
-return 0;
+if (hp < 5) return { bonus: 80, tier: "критический (<5 HP: +80 урон)" };
+if (hp < 50) return { bonus: 40, tier: "высокий (<50 HP: +40 урон)" };
+if (hp < 100) return { bonus: 20, tier: "средний (<100 HP: +20 урон)" };
+if (hp < 150) return { bonus: 5, tier: "слабый (<150 HP: +5 урон)" };
+return { bonus: 0, tier: null };
 }
 
 function makeTurn() {
@@ -123,10 +125,10 @@ document.getElementById('class2').disabled = true;
 let coin = Math.random() < 0.5 ? 'орел' : 'решка';
 if (coin === 'орел') {
 game.activePlayer = 1;
-log(`🪙 Подброшена монетка: <b>Орел!</b> Игрок 1 ходит первым.`);
+log(`🪙 Подброшена монетка: <span class="log-highlight">Орел!</span> Игрок 1 ходит первым.`);
 } else {
 game.activePlayer = 2;
-log(`🪙 Подброшена монетка: <b>Решка!</b> Игрок 2 ходит первым.`);
+log(`🪙 Подброшена монетка: <span class="log-highlight">Решка!</span> Игрок 2 ходит первым.`);
 }
 log("Битва началась!");
 return;
@@ -138,8 +140,14 @@ let attClass = document.getElementById(`class${game.activePlayer}`).value;
 let attName = CLASSES[attClass].name;
 let defName = CLASSES[document.getElementById(`class${game.activePlayer === 1 ? 2 : 1}`).value].name;
 
+// Лог пассивки Берсерка при начале хода (если здоровье ниже 150)
+let berserkData = getBerserkBonus(attacker.hp);
+if (attClass === 'berserk' && berserkData.bonus > 0) {
+log(`<span class="log-berserk">⚠️ Пассивка Берсерка активна!</span> Уровень ярости: ${berserkData.tier}`);
+}
+
 if (attacker.stunned) {
-log(`<b>${attName} (Игрок ${game.activePlayer})</b> оглушен и пропускает ход!`);
+log(`<b>${attName} (Игрок ${game.activePlayer})</b> <span class="log-highlight">оглушен</span> и пропускает ход!`);
 attacker.stunned = false;
 switchTurn();
 return;
@@ -153,13 +161,13 @@ renderDie('die2', d2);
 let roll = d1 * 10 + d2;
 let isDubl = (d1 === d2);
 
-log(`<b>${attName} (Игрок ${game.activePlayer})</b> бросает кубики: ${roll} ${isDubl ? '(ДУБЛЬ!)' : ''}`);
+log(`<b>${attName} (Игрок ${game.activePlayer})</b> бросает кубики: <span class="log-highlight">${roll}</span> ${isDubl ? '<span class="log-ability">(ДУБЛЬ!)</span>' : ''}`);
 
 // Проверка баффа Ассасина
 if (attacker.assassinReady) {
 let dmg = Math.round(roll * 1.7);
 defender.hp = Math.max(0, defender.hp - dmg);
-log(`👤 Скрытый клинок Ассасина наносит усиленный урон: ${dmg}!`);
+log(`<span class="log-ability">👤 Способность "Скрытый клинок" (Ассасин):</span> Удар из тени! Базовый бросок ${roll} умножен на 1.7. Нанесено урона: <span class="log-highlight">${dmg}</span>.`);
 attacker.assassinReady = false;
 updateUI();
 checkWin(defender, defName);
@@ -169,14 +177,13 @@ return;
 
 // Проверка баффа Вампира
 if (attacker.vampireReady) {
-let bonusDmg = getBerserkBonus(attacker.hp);
-let finalDmg = roll + bonusDmg;
+let finalDmg = roll + berserkData.bonus;
 let heal = Math.round(finalDmg * 1.7);
 
 defender.hp = Math.max(0, defender.hp - finalDmg);
 attacker.hp = Math.min(attacker.maxHp, attacker.hp + heal);
 
-log(`🧛‍♂️ Кровавый укус Вампира наносит ${finalDmg} урона и восполняет ${heal} здоровья!`);
+log(`<span class="log-ability">🧛‍♂️ Способность "Кровавый укус" (Вампир):</span> Успешно совершен вампирский рывок! Нанесено урона: <span class="log-highlight">${finalDmg}</span>, восполнено здоровья: <span class="log-highlight">+${heal} HP</span>.`);
 attacker.vampireReady = false;
 updateUI();
 checkWin(defender, defName);
@@ -187,29 +194,34 @@ return;
 // Обработка дублей
 if (isDubl) {
 if (attClass === 'barbarian') {
-defender.hp = Math.max(0, defender.hp - roll);
+let finalDmg = roll + berserkData.bonus;
+defender.hp = Math.max(0, defender.hp - finalDmg);
 defender.stunned = true;
-log(`🪓 Варвар наносит ${roll} урона и ОГЛУШАЕТ соперника! Тот пропустит следующий ход.`);
+log(`<span class="log-ability">🪓 Способность "Ярость Варвара" (Дубль ${roll}):</span> Нанесено <span class="log-highlight">${finalDmg}</span> урона и наложено <span class="log-highlight">ОГЛУШЕНИЕ</span>! Соперник пропустит следующий ход.`);
 } else if (attClass === 'assassin') {
 attacker.assassinReady = true;
-log(`👤 Ассасин выбросил дубль! Урон не нанесен, клинок заряжен для удара x1.7 на следующий ход.`);
+log(`<span class="log-ability">👤 Способность "Теневой шаг" (Дубль ${roll}):</span> Урон текущего броска аннулирован, клинок заряжен. Следующий удар будет усилен на <span class="log-highlight">x1.7</span>!`);
 updateUI();
 return;
 } else if (attClass === 'vampire') {
 attacker.vampireReady = true;
-log(`🧛‍♂️ Вампир выбросил дубль! Урон не нанесен, готовится Кровавый укус на следующий ход.`);
+log(`<span class="log-ability">🧛‍♂️ Способность "Жажда крови" (Дубль ${roll}):</span> Урон текущего броска аннулирован. Вампир готовится к "Кровавому укусу" на следующий ход!`);
 updateUI();
 return;
+} else {
+// Для других классов (если появятся) обычный дубль
+let finalDmg = roll + berserkData.bonus;
+defender.hp = Math.max(0, defender.hp - finalDmg);
+log(`Выпал дубль ${roll}, на нанесено <span class="log-highlight">${finalDmg}</span> урона.`);
 }
 } else {
-let bonusDmg = getBerserkBonus(attacker.hp);
-let finalDmg = roll + bonusDmg;
+let finalDmg = roll + berserkData.bonus;
 defender.hp = Math.max(0, defender.hp - finalDmg);
 
-if (bonusDmg > 0) {
-log(`${attName} в ярости наносит ${roll} + ${bonusDmg} (бонус) = ${finalDmg} урона!`);
+if (berserkData.bonus > 0) {
+log(`${attName} атакует: базовый бросок ${roll} + ярость берсерка <span class="log-berserk">+${berserkData.bonus}</span> = нанесено <span class="log-highlight">${finalDmg}</span> урона.`);
 } else {
-log(`${attName} наносит ${finalDmg} урона.`);
+log(`${attName} наносит <span class="log-highlight">${finalDmg}</span> урона.`);
 }
 }
 
@@ -234,7 +246,7 @@ document.getElementById('hp-text2').innerText = `${game.p2.hp} / 1000`;
 function checkWin(def, defName) {
 if (def.hp <= 0) {
 game.over = true;
-log(`🏆 <b>${defName} повержен! Игра окончена.</b>`);
+log(`🏆 <span class="log-highlight"><b>${defName} повержен! Игра окончена.</b></span>`);
 document.getElementById('btn-turn').disabled = true;
 }
 }
