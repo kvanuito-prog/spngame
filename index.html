@@ -105,25 +105,12 @@ border-radius: 4px;
 
 <div class="form-group">
 <label for="missileSelect">Выберите номер ракеты (1–1200):</label>
-<select id="missileSelect" onchange="onMissileSelect()" onclick="onMissileSelect()">
+<select id="missileSelect" onchange="onMissileSelect()">
 <option value="">— Выберите ракету из шахты —</option>
-<script>
-const ranks = ['Полковник', 'Генерал-майор', 'Генерал-лейтенант', 'Генерал-полковник'];
-const surnames = ['Иванов', 'Петров', 'Смирнов', 'Кузнецов', 'Попов', 'Васильев', 'Соколов', 'Михайлов', 'Новиков', 'Федоров', 'Морозов', 'Волков', 'Алексеев', 'Лебедев', 'Семенов', 'Егоров', 'Павлов', 'Козлов', 'Степанов'];
-const initials = ['А.В.', 'Б.М.', 'В.П.', 'Д.Н.', 'Е.А.', 'И.И.', 'К.С.', 'М.О.', 'Н.Л.', 'П.Р.', 'С.Ю.', 'Ю.А.'];
-
-for (let i = 1; i <= 1200; i++) {
-const rank = ranks[(i * 7) % ranks.length];
-const surname = surnames[(i * 13) % surnames.length];
-const initial = initials[(i * 3) % initials.length];
-
-document.write(`<option value="${i}">Шахта №${i} | ${rank} ${surname} ${initial}</option>`);
-}
-</script>
 </select>
 </div>
 
-<!— Меню ввода широты и долготы (теперь управляется через display style напрямую) —>
+<!— Меню ввода широты и долготы —>
 <div id="targetMenu" style="display: none;">
 <h4 style="margin-top: 0; color: #58a6ff;">Целеуказание для Ракеты №<span id="selectedId"></span></h4>
 
@@ -152,6 +139,25 @@ document.write(`<option value="${i}">Шахта №${i} | ${rank} ${surname} ${i
 </div>
 
 <script>
+// Заполняем список 1200 ракетами при загрузке через DOM
+window.onload = function() {
+const select = document.getElementById('missileSelect');
+const ranks = ['Полковник', 'Генерал-майор', 'Генерал-лейтенант', 'Генерал-полковник'];
+const surnames = ['Иванов', 'Петров', 'Смирнов', 'Кузнецов', 'Попов', 'Васильев', 'Соколов', 'Михайлов', 'Новиков', 'Федоров', 'Морозов', 'Волков', 'Алексеев', 'Лебедев', 'Семенов', 'Егоров', 'Павлов', 'Козлов', 'Степанов'];
+const initials = ['А.В.', 'Б.М.', 'В.П.', 'Д.Н.', 'Е.А.', 'И.И.', 'К.С.', 'М.О.', 'Н.Л.', 'П.Р.', 'С.Ю.', 'Ю.А.'];
+
+for (let i = 1; i <= 1200; i++) {
+const rank = ranks[(i * 7) % ranks.length];
+const surname = surnames[(i * 13) % surnames.length];
+const initial = initials[(i * 3) % initials.length];
+
+const opt = document.createElement('option');
+opt.value = i;
+opt.textContent = `Шахта №${i} | ${rank} ${surname} ${initial}`;
+select.appendChild(opt);
+}
+};
+
 function log(message) {
 const logBox = document.getElementById('log');
 logBox.innerHTML += message + '
@@ -159,7 +165,7 @@ logBox.innerHTML += message + '
 logBox.scrollTop = logBox.scrollHeight;
 }
 
-// Принудительное отслеживание выбора через setInterval + onchange для 100% срабатывания
+// Обработчик выбора ракеты
 function onMissileSelect() {
 const select = document.getElementById('missileSelect');
 const targetMenu = document.getElementById('targetMenu');
@@ -168,20 +174,11 @@ const selectedIdSpan = document.getElementById('selectedId');
 if (select.value && select.value !== "") {
 selectedIdSpan.textContent = select.value;
 targetMenu.style.display = 'block';
+log(`> Шахта №${select.value} выбрана. Расчет на месте. Введите координаты цели.`);
 } else {
 targetMenu.style.display = 'none';
 }
 }
-
-// Дополнительный монитор на случай кликов мыши
-setInterval(() => {
-const select = document.getElementById('missileSelect');
-const targetMenu = document.getElementById('targetMenu');
-if (select && select.value && targetMenu.style.display === 'none') {
-onMissileSelect();
-log(`> Шахта №${select.value} активирована. Введите координаты цели.`);
-}
-}, 500);
 
 function launchMissile() {
 try {
