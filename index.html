@@ -7,21 +7,22 @@
     <style>
         :root {
             --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-color: #f8fafc;
-            --accent-color: #3b82f6;
-            --accent-hover: #2563eb;
-            --danger-color: #ef4444;
-            --success-color: #22c55e;
+            --panel-bg: #1e293b;
             --border-color: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --success: #22c55e;
+            --success-hover: #16a34a;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-color);
+            color: var(--text-main);
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -29,40 +30,45 @@
         }
 
         h1 {
+            font-size: 1.8rem;
             margin-bottom: 5px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            text-align: center;
         }
 
         .subtitle {
-            color: #94a3b8;
-            margin-bottom: 25px;
-            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            text-align: center;
         }
 
-        .container {
-            display: flex;
+        .game-container {
+            display: grid;
+            grid-template-columns: 1fr;
             gap: 20px;
             width: 100%;
-            max-width: 1000px;
-            flex-wrap: wrap;
-            justify-content: center;
+            max-width: 900px;
+        }
+
+        @media (min-width: 768px) {
+            .game-container {
+                grid-template-columns: 1fr 1fr;
+            }
         }
 
         .panel {
-            background-color: var(--card-bg);
+            background-color: var(--panel-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 20px;
-            flex: 1;
-            min-width: 300px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         h2 {
+            font-size: 1.2rem;
             margin-top: 0;
-            border-bottom: 2px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
             padding-bottom: 10px;
-            font-size: 1.25rem;
         }
 
         .form-group {
@@ -71,106 +77,100 @@
 
         label {
             display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
             margin-bottom: 5px;
-            color: #cbd5e1;
-            font-size: 0.9rem;
         }
 
         select {
             width: 100%;
             padding: 10px;
-            background-color: #0f172a;
-            color: var(--text-color);
+            background-color: var(--bg-color);
             border: 1px solid var(--border-color);
-            border-radius: 6px;
+            color: var(--text-main);
+            border-radius: 8px;
             font-size: 1rem;
         }
 
         button {
             width: 100%;
             padding: 12px;
-            background-color: var(--accent-color);
-            color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background-color: var(--accent-hover);
-        }
-
-        button:disabled {
-            background-color: #475569;
-            cursor: not-allowed;
-        }
-
-        .fighter-card {
-            background: rgba(15, 23, 42, 0.6);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid var(--border-color);
-        }
-
-        .fighter-name {
-            font-weight: bold;
-            font-size: 1.1rem;
-            color: #38bdf8;
-            margin-bottom: 8px;
-        }
-
-        .hp-bar-container {
-            background-color: #334155;
-            border-radius: 4px;
-            height: 14px;
-            overflow: hidden;
-            margin-top: 8px;
-        }
-
-        .hp-bar {
-            height: 100%;
-            background-color: var(--success-color);
-            width: 100%;
-            transition: width 0.3s ease;
-        }
-
-        .status-badge {
-            display: inline-block;
-            background: #475569;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
+            transition: background-color 0.2s;
             margin-top: 5px;
         }
 
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        .btn-success:hover {
+            background-color: var(--success-hover);
+        }
+        
+        .btn-success:disabled, .btn-primary:disabled {
+            background-color: var(--border-color);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
         .log-box {
-            background-color: #0f172a;
+            background-color: var(--bg-color);
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            height: 350px;
-            overflow-y: auto;
             padding: 12px;
-            font-family: 'Courier New', Courier, monospace;
+            height: 320px;
+            overflow-y: auto;
+            font-family: monospace;
             font-size: 0.85rem;
+            line-height: 1.4;
             display: flex;
             flex-direction: column;
             gap: 6px;
         }
 
-        .log-entry {
-            border-left: 3px solid var(--accent-color);
-            padding-left: 8px;
-            color: #e2e8f0;
+        .status-box {
+            margin-top: 15px;
+            background-color: var(--bg-color);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
         }
 
-        .log-dmg { border-left-color: var(--danger-color); color: #fca5a5; }
-        .log-heal { border-left-color: var(--success-color); color: #86efac; }
-        .log-system { border-left-color: #eab308; color: #fde047; font-weight: bold; }
+        .stats-grid {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .health-bar-container {
+            width: 100%;
+            background-color: var(--border-color);
+            border-radius: 4px;
+            height: 8px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .health-bar {
+            height: 100%;
+            background-color: var(--success);
+            width: 100%;
+            transition: width 0.3s ease;
+        }
     </style>
 </head>
 <body>
@@ -178,377 +178,173 @@
     <h1>Дуэль Классов</h1>
     <div class="subtitle">Тактическая пошаговая игра на двузначных кубиках (11–66)</div>
 
-    <div class="container">
-        <!-- Левая панель: Выбор и Статус -->
+    <div class="game-container">
+        <!-- Левая колонка: Настройки и Управление -->
         <div class="panel">
             <h2>Настройки боя</h2>
             <div class="form-group">
-                <label for="p1-select">Боец 1 (Игрок):</label>
-                <select id="p1-select"></select>
+                <label for="p1-class">Боец 1 (Игрок):</label>
+                <select id="p1-class"></select>
             </div>
             <div class="form-group">
-                <label for="p2-select">Боец 2 (ИИ / Соперник):</label>
-                <select id="p2-select"></select>
+                <label for="p2-class">Боец 2 (ИИ / Соперник):</label>
+                <select id="p2-class"></select>
             </div>
-            <button id="start-btn" onclick="startBattle()">Начать новую битву</button>
-            <button id="step-btn" onclick="executeTurn()" disabled style="background-color: var(--success-color);">Сделать ход</button>
+            
+            <button class="btn-primary" id="btn-start" onclick="startBattle()">Начать новую битву</button>
+            <button class="btn-success" id="btn-turn" onclick="makeTurn()" disabled>Сделать ход</button>
 
-            <div style="margin-top: 20px;">
-                <div class="fighter-card" id="card-p1">
-                    <div class="fighter-name" id="name-p1">Игрок 1</div>
-                    <div>Здоровье: <span id="hp-p1">1000</span> / <span id="maxhp-p1">1000</span></div>
-                    <div class="hp-bar-container"><div class="hp-bar" id="bar-p1"></div></div>
-                    <div id="status-p1" class="status-badge" style="display:none;"></div>
+            <div class="status-box">
+                <div class="stats-grid">
+                    <span id="p1-name-ui">Игрок 1</span>
+                    <span id="p1-hp-text">Здоровье: 1000 / 1000</span>
                 </div>
+                <div class="health-bar-container">
+                    <div class="health-bar" id="p1-hp-bar"></div>
+                </div>
+            </div>
 
-                <div class="fighter-card" id="card-p2">
-                    <div class="fighter-name" id="name-p2">Игрок 2</div>
-                    <div>Здоровье: <span id="hp-p2">1000</span> / <span id="maxhp-p2">1000</span></div>
-                    <div class="hp-bar-container"><div class="hp-bar" id="bar-p2"></div></div>
-                    <div id="status-p2" class="status-badge" style="display:none;"></div>
+            <div class="status-box" style="margin-top: 10px;">
+                <div class="stats-grid">
+                    <span id="p2-name-ui">Игрок 2</span>
+                    <span id="p2-hp-text">Здоровье: 1000 / 1000</span>
+                </div>
+                <div class="health-bar-container">
+                    <div class="health-bar" id="p2-hp-bar" style="background-color: #ef4444;"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Правая панель: Лог боя -->
-        <div class="panel" style="flex: 1.5;">
+        <!-- Правая колонка: Лог сражения -->
+        <div class="panel">
             <h2>Ход сражения</h2>
             <div class="log-box" id="log-box">
-                <div class="log-entry log-system">Выберите бойцов и нажмите «Начать новую битву».</div>
+                <span style="color: #fbbf24;">⚡ Выберите бойцов и нажмите «Начать новую битву».</span>
             </div>
         </div>
     </div>
 
-<script>
-    const CLASSES = {
-        barbarian: { name: "Варвар", hp: 1000 },
-        knight: { name: "Рыцарь", hp: 1000 },
-        vampire: { name: "Вампир", hp: 1000 },
-        elf: { name: "Эльф-Лучник", hp: 1000 },
-        archmage: { name: "Архимаг", hp: 1000 },
-        joker: { name: "Джокер", hp: 1000 },
-        assassin: { name: "Ассасин", hp: 1000 },
-        druid: { name: "Друид", hp: 1000 },
-        berserk: { name: "Берсерк", hp: 1000 },
-        undead: { name: "Нежить", hp: 100 }
-    };
-
-    let game = null;
-
-    // Заполнение селектов при загрузке
-    window.onload = () => {
-        const p1Sel = document.getElementById('p1-select');
-        const p2Sel = document.getElementById('p2-select');
-        for (let key in CLASSES) {
-            p1Sel.add(new Option(CLASSES[key].name, key));
-            p2Sel.add(new Option(CLASSES[key].name, key));
-        }
-        p2Sel.selectedIndex = 1; // По умолчанию второй класс другой
-    };
-
-    function initFighter(type) {
-        const base = CLASSES[type];
-        return {
-            type: type,
-            name: base.name,
-            hp: base.hp,
-            maxHp: base.hp,
-            stunned: false,
-            // Специфичные флаги
-            buffNextDmg: 1, // для ассасина/вампира
-            isAssassinReady: false,
-            isVampireReady: false,
-            archmageBuffer: [],
-            archmageStep: 0,
-            druidSummon: null, // {name, hp, maxHp}
-            elfPhase: 0 // для шквала стрел (3 хода со старта)
-        };
-    }
-
-    function startBattle() {
-        const p1Type = document.getElementById('p1-select').value;
-        const p2Type = document.getElementById('p2-select').value;
-
-        game = {
-            p1: initFighter(p1Type),
-            p2: initFighter(p2Type),
-            turn: 1,
-            activePlayer: 1, // 1 или 2
-            over: false
+    <script>
+        const classesData = {
+            warrior: { name: "⚔️ Воин", hp: 1200, def: 5 },
+            mage: { name: "🔮 Архимаг", hp: 900, def: 2 },
+            rogue: { name: "🗡️ Разбойник", hp: 1000, def: 3 },
+            paladin: { name: "🛡️ Паладин", hp: 1300, def: 6 },
+            necromancer: { name: "💀 Нежить", hp: 950, def: 2 },
+            druid: { name: "🌿 Друид", hp: 1100, def: 4 }
         };
 
-        // Если Эльф в игре, он всегда ходит первым по правилу
-        if (game.p2.type === 'elf' && game.p1.type !== 'elf') {
-            // Меняем местами, чтобы Эльф был первым (Игрок 1)
-            let temp = game.p1; game.p1 = game.p2; game.p2 = temp;
+        let p1, p2, turnNumber;
+        let isGameOver = false;
+
+        function initSelects() {
+            const p1Select = document.getElementById('p1-class');
+            const p2Select = document.getElementById('p2-class');
+            p1Select.innerHTML = '';
+            p2Select.innerHTML = '';
+
+            for (let key in classesData) {
+                p1Select.innerHTML += `<option value="${key}">${classesData[key].name}</option>`;
+                p2Select.innerHTML += `<option value="${key}">${classesData[key].name}</option>`;
+            }
+            if (p2Select.options.length > 1) p2Select.selectedIndex = 1;
         }
 
-        document.getElementById('log-boxinnerHTML = '';
-        log("Битва началась между " + game.p1.name + " и " + game.p2.name + "!", "system");
-
-        // Особый старт Эльфа
-        if (game.p1.type === 'elf') {
-            game.p1.elfPhase = 3;
-            log("Эльф-Лучник начинает бой с трехстороннего «Шквала стрел»!", "system");
+        function rollDice() {
+            const tens = [1, 2, 3, 4, 5, 6][Math.floor(Math.random() * 6)];
+            const units = [1, 2, 3, 4, 5, 6][Math.floor(Math.random() * 6)];
+            return tens * 10 + units;
         }
 
-        updateUI();
-        document.getElementById('step-btn').disabled = false;
-    }
+        function startBattle() {
+            const c1Key = document.getElementById('p1-class').value;
+            const c2Key = document.getElementById('p2-class').value;
 
-    function log(text, type = "") {
-        const box = document.getElementById('log-box');
-        const entry = document.createElement('div');
-        entry.className = `log-entry log-${type}`;
-        entry.textContent = text;
-        box.appendChild(entry);
-        box.scrollTop = box.scrollHeight;
-    }
+            p1 = { key: c1Key, name: classesData[c1Key].name, maxHp: classesData[c1Key].hp, hp: classesData[c1Key].hp, def: classesData[c1Key].def, effects: {} };
+            p2 = { key: c2Key, name: classesData[c2Key].name, maxHp: classesData[c2Key].hp, hp: classesData[c2Key].hp, def: classesData[c2Key].def, effects: {} };
+            
+            turnNumber = 1;
+            isGameOver = false;
 
-    function rollDice() {
-        const d1 = Math.floor(Math.random() * 6) + 1;
-        const d2 = Math.floor(Math.random() * 6) + 1;
-        return d1 * 10 + d2; // двузначное число от 11 до 66
-    }
-
-    function isDubl(roll) {
-        return Math.floor(roll / 10) === (roll % 10);
-    }
-
-    function executeTurn() {
-        if (game.over) return;
-
-        let attacker = game.activePlayer === 1 ? game.p1 : game.p2;
-        let defender = game.activePlayer === 1 ? game.p2 : game.p1;
-
-        log(`--- Раунд ${game.turn} (${attacker.name} атакует) ---`, "system");
-
-        // Проверка оглушения
-        if (attacker.stunned) {
-            log(`${attacker.name} оглушен и пропускает ход!`, "dmg");
-            attacker.stunned = false;
-            switchTurn();
+            document.getElementById('log-box').innerHTML = `<span style="color: #38bdf8;">🏁 Битва началась между ${p1.name} и ${p2.name}!</span>`;
+            
             updateUI();
-            return;
+            document.getElementById('btn-turn').disabled = false;
         }
 
-        // Проверка Эльфа (Шквал со старта)
-        if (attacker.type === 'elf' && attacker.elfPhase > 0) {
-            let roll = rollDice();
-            log(`Эльф выпускает стрелу Шквала! Выпало: ${roll}`, "");
-            applyDamage(attacker, defender, roll);
-            attacker.elfPhase--;
-            if (attacker.elfPhase === 0) {
-                log("Шквал стрел завершен! Противник сближается с Эльфом.", "system");
+        function executeRound(attacker, defender) {
+            if (isGameOver) return;
+
+            let logHtml = document.getElementById('log-box').innerHTML;
+            logHtml += `<br><b>--- Ход ${turnNumber}: ${attacker.name} атакует ---</b>`;
+
+            // Пассивки и эффекты начала хода
+            if (attacker.key === 'necromancer' && attacker.hp < attacker.maxHp) {
+                let heal = 30;
+                attacker.hp = Math.min(attacker.maxHp, attacker.hp + heal);
+                logHtml += `<br>💀 Нежить регенерирует ${heal} HP за счет темных сил.`;
             }
-            endTurnRoutine();
-            return;
-        }
 
-        // Стандартный бросок
-        let roll = rollDice();
-        let dubl = isDubl(roll);
-        log(`${attacker.name} бросает кубики: ${roll} ${dubl ? '(ДУБЛЬ!)' : ''}`, "");
+            const roll = rollDice();
+            logHtml += `<br>🎲 Бросок кубика: <b>[${roll}]</b>`;
 
-        // Проверка Джокера (Джекпот)
-        if (attacker.type === 'joker' && isSameDigits(attacker.hp)) {
-            roll = Math.floor(roll * 3.5);
-            log(`Джокер активировал Джекпот! Урон увеличен до ${roll}`, "heal");
-        }
+            let baseDmg = roll + attacker.def - defender.def;
+            if (baseDmg < 5) baseDmg = 5;
 
-        // Проверка Берсерка (Ярость боли)
-        if (attacker.type === 'berserk' && attacker.hp < 500) {
-            let bonus = Math.floor((500 - attacker.hp) * 0.14); // до +70 урона
-            roll += bonus;
-            log(`Берсерк в ярости! +${bonus} к урону (теперь ${roll})`, "dmg");
-        }
-
-        // Обработка по классам
-        if (dubl) {
-            handleDubl(attacker, defender, roll);
-        } else {
-            // Обычный удар
-            if (attacker.isAssassinReady) {
-                let dmg = Math.floor(roll * 1.7);
-                log(`Ассасин наносит смертельный удар скрытым клинком: ${dmg} урона!`, "dmg");
-                applyDamage(attacker, defender, dmg);
-                attacker.isAssassinReady = false;
-            } else if (attacker.isVampireReady) {
-                let dmg = Math.floor(roll * 1.7);
-                log(`Вампир совершает Кровавый укус на ${dmg} урона!`, "dmg");
-                applyDamage(attacker, defender, dmg);
-                let healed = Math.min(dmg, attacker.maxHp - attacker.hp);
-                attacker.hp += healed;
-                log(`Вампир восстанавливает ${healed} HP за счет крови!`, "heal");
-                attacker.isVampireReady = false;
-            } else {
-                // Обычный урон
-                if (attacker.type === 'archmage' && attacker.archmageStep > 0) {
-                    attacker.archmageBuffer.push(roll);
-                    attacker.archmageStep++;
-                    log(`Архимаг накапливает ${roll} в буфер заклинания (Шаг ${attacker.archmageStep}/3)`, "");
-                    if (attacker.archmageStep === 3) {
-                        let sum = attacker.archmageBuffer.reduce((a,b)=>a+b, 0);
-                        let finalDmg = Math.floor(sum * 2.5);
-                        log(`Архимаг завершает Великое заклинание! Сумма буфера (${sum}) x 2.5 = ${finalDmg} урона!`, "dmg");
-                        applyDamage(attacker, defender, finalDmg);
-                        attacker.archmageStep = 0;
-                        attacker.archmageBuffer = [];
-                    }
-                } else {
-                    applyDamage(attacker, defender, roll);
-                }
+            // Уникальные механики классов
+            if (attacker.key === 'warrior' && roll >= 55) {
+                baseDmg *= 1.5;
+                logHtml += `<br>💥 Воин совершает сокрушительный удар! Урон увеличен!`;
+            } else if (attacker.key === 'rogue' && roll % 2 !== 0) {
+                baseDmg *= 1.35;
+                logHtml += `<br>🗡️ Разбойник наносит критический удар в тень!`;
+            } else if (attacker.key === 'paladin' && roll >= 60) {
+                let heal = 40;
+                attacker.hp = Math.min(attacker.maxHp, attacker.hp + heal);
+                logHtml += `<br>🛡️ Паладин укрыт божественным светом и восстанавливает ${heal} HP!`;
             }
-        }
 
-        endTurnRoutine();
-    }
+            defender.hp -= Math.floor(baseDmg);
+            logHtml += `<br>⚔️ ${defender.name} получает урона: <b>${Math.floor(baseDmg)}</b>`;
 
-    function handleDubl(attacker, defender, roll) {
-        log(`${attacker.name} выбросил дубль ${roll}! Срабатывает пассивка класса.`, "system");
-
-        if (attacker.type === 'barbarian') {
-            applyDamage(attacker, defender, roll);
-            log(`Варвар оглушает оппонента и получает дополнительный ход!`, "dmg");
-            defender.stunned = true;
-            // Ход не переключается, варвар бьет еще раз
-            return;
-        } 
-        else if (attacker.type === 'knight') {
-            let bonus = (roll % 10); // +3, +5 или +7 примерно из цифры
-            let total = roll + bonus;
-            log(`Рыцарь использует Стойку (+${bonus} урона), нанося ${total} урона!`, "dmg");
-            applyDamage(attacker, defender, total);
-        }
-        else if (attacker.type === 'vampire') {
-            attacker.isVampireReady = true;
-            log(`Вампир оскалился: следующий удар станет Кровавым укусом (x1.7)!`, "heal");
-        }
-        else if (attacker.type === 'elf') {
-            let count = Math.floor(roll / 10); // первая цифра дубля (1-6)
-            log(`Эльф отбегает на дистанцию и делает ${count} бонусных безопасных выстрела!`, "system");
-            applyDamage(attacker, defender, roll);
-            for (let i = 0; i < count; i++) {
-                if (game.over) break;
-                let bonusRoll = rollDice();
-                log(`Бонусная стрела Эльфа наносит ${bonusRoll} урона`, "");
-                applyDamage(attacker, defender, bonusRoll);
+            if (defender.hp <= 0) {
+                defender.hp = 0;
+                isGameOver = true;
+                logHtml += `<br><span style="color: #22c55e; font-size: 1.1rem;">🏆 Победил ${attacker.name}!</span>`;
+                document.getElementById('btn-turn').disabled = true;
             }
-        }
-        else if (attacker.type === 'archmage') {
-            attacker.archmageStep = 1;
-            attacker.archmageBuffer = [roll];
-            log(`Архимаг начал подготовку Великого заклинания (Шаг 1/3). В буфере: ${roll}`, "");
-        }
-        else if (attacker.type === 'assassin') {
-            attacker.isAssassinReady = true;
-            log(`Ассасин затаился в тени: следующий удар усилен скрытым клинком (x1.7)!`, "dmg");
-        }
-        else if (attacker.type === 'druid') {
-            applyDamage(attacker, defender, roll);
-            let types = ['boar', 'wolf', 'bear'];
-            let chosen = types[Math.floor(Math.random() * types.length)];
-            if (roll <= 22) chosen = 'boar';
-            else if (roll <= 44) chosen = 'wolf';
-            else chosen = 'bear';
 
-            if (chosen === 'boar') attacker.druidSummon = { name: 'Кабан', hp: 40, maxHp: 40, type: 'boar' };
-            if (chosen === 'wolf') attacker.druidSummon = { name: 'Волк', hp: 70, maxHp: 70, type: 'wolf' };
-            if (chosen === 'bear') attacker.druidSummon  = { name: 'Медведь', hp: 140, maxHp: 140, type: 'bear' };
-            log(`Друид призывает духа: ${attacker.druidSummon.name} (${attacker.druidSummon.hp} HP)!`, "heal");
-        }
-        else {
-            // Обычный урон для остальных при дубле
-            applyDamage(attacker, defender, roll);
-        }
-    }
-
-    function applyDamage(attacker, defender, amount) {
-        // Проверка Нежити (страх перед 11)
-        if (defender.type === 'undead' && attacker.lastRoll === 11 || amount === 11) { // упрощенно
-            // Проверим шанс страха 11
+            turnNumber++;
+            document.getElementById('log-box').innerHTML = logHtml;
+            updateUI();
+            
+            const box = document.getElementById('log-box');
+            box.scrollTop = box.scrollHeight;
         }
 
-        // Если у защитника есть суммон (Друид)
-        let actualTarget = defender;
-        if (defender.druidSummon) {
-            log(`Удар приходится в питомца Друида (${defender.druidSummon.name})!`, "");
-            defender.druidSummon.hp -= amount;
-            if (defender.druidSummon.hp <= 0) {
-                let overflow = Math.abs(defender.druidSummon.hp);
-                log(`Питомец ${defender.druidSummon.name} погиб! Сквозной урон в ${overflow} идет в Друида.`, "dmg");
-                defender.druidSummon = null;
-                applyDirectDamage(defender, overflow);
-            } else {
-                log(`Питомец выживает, у него осталось ${defender.druidSummon.hp} HP.`, "");
-            }
-            return;
+        function makeTurn() {
+            if (isGameOver) return;
+            // Ход игрока
+            executeRound(p1, p2);
+            if (isGameOver) return;
+            
+            // Ответный ход ИИ с небольшой задержкой для реалистичности
+            setTimeout(() => {
+                executeRound(p2, p1);
+            }, 400);
         }
 
-        applyDirectDamage(defender, amount);
+        function updateUI() {
+            document.getElementById('p1-name-ui').innerText = p1.name;
+            document.getElementById('p1-hp-text').innerText = `Здоровье: ${p1.hp} / ${p1.maxHp}`;
+            document.getElementById('p1-hp-bar').style.width = Math.max(0, (p1.hp / p1.maxHp) * 100) + '%';
 
-        // Пассивка Нежити (Зловоние разложения)
-        if (defender.type === 'undead' && defender.hp > 0) {
-            let poison = Math.floor(Math.random() * 15) + 1;
-            attacker.hp -= poison;
-            log(`Нежить отравила зловонием атакующего! ${attacker.name} получает ${poison} урона от яда.`, "dmg");
-            if (attacker.hp <= 0) {
-                attacker.hp = 0;
-                endGame(defender);
-            }
+            document.getElementById('p2-name-ui').innerText = p2.name;
+            document.getElementById('p2-hp-text').innerText = `Здоровье: ${p2.hp} / ${p2.maxHp}`;
+            document.getElementById('p2-hp-bar').style.width = Math.max(0, (p2.hp / p2.maxHp) * 100) + '%';
         }
-    }
 
-    function applyDirectDamage(target, amount) {
-        if (target.type === 'undead') {
-            // Бессмертие Нежити: умирает ровно в 0, оверкилл лечит
-            let newHp = target.hp - amount;
-            if (newHp === 0) {
-                target.hp = 0;
-                log(`Нежить получила смертельный удар ровно в 0 HP!`, "dmg");
-                endGame(game.activePlayer === 1 ? game.p2 : game.p1); // победил тот кто бил
-            } else if (newHp < 0) {
-                let healed = Math.abs(newHp);
-                target.hp = healed;
-                log(`Удар ушел в овер-хил! Нежить поглотила излишек и исцелилась до ${target.hp} HP!`, "heal");
-            } else {
-                target.hp = newHp;
-                log(`Нежить теряет ${amount} HP, осталось ${target.hp} HP.`, "dmg");
-            }
-        } else {
-            target.hp -= amount;
-            log(`${target.name} получает ${amount} урона (Осталось: ${Math.max(0, target.hp)} HP)`, "dmg");
-            if (target.hp <= 0) {
-                target.hp = 0;
-                endGame(game.activePlayer === 1 ? game.p1 : game.p2);
-            }
-        }
-    }
-
-    function isSameDigits(num) {
-        let s = num.toString();
-        return s.split('').every(char => char === s[0]);
-    }
-
-    function endTurnRoutine() {
-        if (game.over) return;
-        switchTurn();
-        game.turn++;
-        updateUI();
-    }
-
-    function switchTurn() {
-        game.activePlayer = game.activePlayer === 1 ? 2 : 1;
-    }
-
-    function endGame(winner) {
-        game.over = true;
-        log(`🏆 ПОБЕДИТЕЛЬ: ${winner.name}! Битва окончена.`, "system");
-        document.getElementById('step-btn').disabled = true;
-        updateUI();
-    }
-
-    function updateUI() {
-        document.getElementById('name-p1').textContent = game.p1.name;
-        document.getElementById('hp-p1').textContent = game.p1.hp;
-        document.getElementById('maxhp-p1').textContent = game.p1.ma
+        window.onload = initSelects;
+    </script>
+</body>
+</html>
