@@ -103,12 +103,12 @@ margin-bottom: 15px;
 
 <div class="form-group">
 <label for="fuel">Масса твердого топлива (кг):</label>
-<input type="number" id="fuel" value="40000" min="1000" max="100000">
+<input type="number" id="fuel" value="42000" min="1000" max="100000">
 </div>
 
 <div class="form-group">
 <label for="azimuth">Азимут запуска (градусы 0–360):</label>
-<input type="number" id="azimuth" value="74.0" step="0.1" min="0" max="360">
+<input type="number" id="azimuth" value="74.5" step="0.1" min="0" max="360">
 </div>
 
 <button onclick="launchMissile()">ЗАПУСК РАКЕТЫ</button>
@@ -141,42 +141,34 @@ log('-----------------------------------');
 log('⚡ Произведено зажигание двигателей!');
 
 // 1. Расчет массы и уравнения Циолковского
-const dryMass = 3000; // масса пустого корпуса ракеты
+const dryMass = 3000;
 const totalMass = dryMass + warhead + fuel;
-const Isp = 280; // удельный импульс твердого топлива (с)
+const Isp = 280;
 const g0 = 9.81;
 
-// Идеальная скорость по Циолковскому: v = Isp * g0 * ln(m0 / m1)
 const burnoutMass = dryMass + warhead;
 const deltaV = Isp * g0 * Math.log(totalMass / burnoutMass);
 
 log(`> Стартовая масса: ${totalMass} кг`);
 log(`> Конечная скорость (Δv): ${deltaV.toFixed(1)} м/с`);
 
-// 2. Расчет дальности полета на основе энергии/скорости
-// Для упрощения симуляции: переводим deltaV в дальность полета по дуге Земли
-// 7500 км требуют определенной скорости (примерно 5500-5800 м/с суборбитальной скорости)
-const calculatedDistance = (deltaV * deltaV) / 6000; // условный коэффициент масштаба физики
-const targetDistance = 7500; // км
+// 2. Расчет дальности полета
+const calculatedDistance = (deltaV * deltaV) / 6000;
+const targetDistance = 7500;
 const distanceError = calculatedDistance - targetDistance;
 
 log(`> Расчетная дальность: ${calculatedDistance.toFixed(1)} км (Цель: ${targetDistance} км)`);
 
-// 3. Расчет ошибки по азимуту (с учетом вращения Земли / Кориолиса)
-// Время полета для 7500 км составляет примерно 1200 секунд (20 минут)
+// 3. Расчет ошибки по азимуту
 const flightTime = (targetDistance / 7500) * 1200;
-const earthRotationDrift = (flightTime * 465 * Math.sin(Math.PI / 4)) / 1000; // снос из-за вращения Земли в км
-
 const optimalAzimuth = 74.5;
 const azimuthError = Math.abs(azimuth - optimalAzimuth);
-
-// Переводим отклонение по азимуту в линейное отклонение на дальности 7500 км
-const lateralError = azimuthError * 111; // примерно 111 км на 1 градус на экваторе/средних широтах
+const lateralError = azimuthError * 111;
 
 log(`> Полетное время: ${(flightTime / 60).toFixed(1)} мин.`);
 log(`> Учет вращения Земли (Кориолис): учтен.`);
 
-// 4. Оценка результатов падения
+// 4. Оценка результатов падения с задержкой
 setTimeout(() => {
 log('🎯 РАКЕТА ПОДХОДИТ К ЦЕЛИ...');
 
@@ -185,15 +177,15 @@ const totalMissDistance = Math.sqrt((distanceError * distanceError) + (lateralEr
 
 log(`> Ошибка по дальности: ${Math.abs(distanceError).toFixed(2)} км`);
 log(`> Боковое отклонение: ${lateralError.toFixed(2)} км`);
-log(`> Общее отклонение от центра шахты: ${(totalMissDistance * 1000).meters || (totalMissDistance).toFixed(2)} км`);
+log(`> Общее отклонение: ${totalMissDistance.toFixed(2)} км`);
 
-// Проверка попадания в клетку 100x100 метров (0.1 км)
+// Проверка попадания в ячейку 100х100 метров (0.1 км)
 if (totalMissDistance <= 0.1) {
 log('🎉 <strong>ПРЯМОЕ ПОПАДАНИЕ!</strong> Шахта противника уничтожена!');
 } else if (totalMissDistance <= 2.0 && warhead >= 5000) {
-log('💥 <strong>УСПЕХ БОЕГОЛОВКИ!</strong> Близкий разрыв мощного заряда уничтожной ударной волной!');
+log('💥 <strong>УСПЕХ БОЕГОЛОВКИ!</strong> Близкий разрыв мощного заряда уничтожил шахту!');
 } else {
-log('❌ <strong>ПРОМАХ!</strong> Ракета упала в пустом поле. Шахта врага цеста.');
+log('❌ <strong>ПРОМАХ!</strong> Ракета упала в стороне от цели.');
 }
 log('-----------------------------------');
 }, 1000);
