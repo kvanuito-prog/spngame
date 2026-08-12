@@ -234,10 +234,14 @@ margin-bottom: 5px;
         window.onload = () => {
             const p1Sel = document.getElementById('p1-class');
             const p2Sel = document.getElementById('p2-class');
+            
+            let optionsHTML = '';
             for (let key in CLASSES) {
-                p1Sel.add(new Option(CLASSES[key].name, key));
-                p2Sel.add(new Option(CLASSES[key].name, key));
+                optionsHTML += `<option value="${key}">${CLASSES[key].name}</option>`;
             }
+            
+            p1Sel.innerHTML = optionsHTML;
+            p2Sel.innerHTML = optionsHTML;
             p2Sel.selectedIndex = 1;
         };
 
@@ -257,18 +261,18 @@ margin-bottom: 5px;
             };
         }
 
-        function startBattle() {
+        function star
+
+
+tBattle() {
             let p1Type = document.getElementById('p1-class').value;
-            let p2Type = do
-
-
-cument.getElementById('p2-class').value;
+            let p2Type = document.getElementById('p2-class').value;
 
             game = {
                 p1: initFighter(p1Type),
                 p2: initFighter(p2Type),
                 turn: 1,
-                activePlayer: 1, // 1 - ходит Игрок, 2 - ходит ИИ
+                activePlayer: 1,
                 over: false
             };
 
@@ -300,7 +304,6 @@ cument.getElementById('p2-class').value;
         function makeTurn() {
             if (game.over) return;
 
-            // Определяем кто атакует, а кто защищается
             let attacker = game.activePlayer === 1 ? game.p1 : game.p2;
             let defender = game.activePlayer === 1 ? game.p2 : game.p1;
 
@@ -317,13 +320,11 @@ cument.getElementById('p2-class').value;
             let dubl = isDubl(roll);
             log(`${attacker.name} бросает кубики: <b>${roll}</b> ${dubl ? '(ДУБЛЬ!)' : ''}`);
 
-            // Джокер Джекпот
             if (attacker.type === 'joker' && isSameDigits(attacker.hp)) {
                 roll = Math.floor(roll * 3.5);
                 log(`🃏 Джокер активировал Джекпот! Урон повышен до ${roll}`, "success");
             }
 
-            // Берсерк Ярость боли
             if (attacker.type === 'berserk' && attacker.hp < 500) {
                 let bonus = Math.floor((500 - attacker.hp) * 0.14);
                 roll += bonus;
@@ -354,11 +355,10 @@ cument.getElementById('p2-class').value;
                         if (attacker.archmageStep === 3) {
                             let sum = attacker.archmageBuffer.reduce((a,b)=>a+b, 0);
                             let finalDmg = Math.floor(sum * 2.5);
-                            log(`🧙‍♂️ КАСТ ВЕЛИКОГО ЗАКЛИНАНИЯ! Сумма ${sum} x 2.5 = ${
+                            log(`🧙‍♂️ КАСТ ВЕЛИКОГО ЗАКЛИНАНИЯ! Сумма ${sum} x 2.5 = ${finalDmg} урона!`, "danger");
 
 
-finalDmg} урона!`, "danger");
-                            applyDamage(attacker, defender, finalDmg);
+applyDamage(attacker, defender, finalDmg);
                             attacker.archmageStep = 0;
                             attacker.archmageBuffer = [];
                         }
@@ -418,7 +418,6 @@ finalDmg} урона!`, "danger");
         function applyDamage(attacker, defender, amount) {
             if (game.over) return;
 
-            // Проверка страха Нежити на 11
             if (defender.type === 'undead' && amount === 11) {
                 log(`💀 Враг выбросил фатальные 11! Нежить охвачена паническим страхом и мгновенно уничтожена!`, "danger");
                 defender.hp = 0;
@@ -428,7 +427,6 @@ finalDmg} урона!`, "danger");
 
             applyDirectDamage(defender, amount);
 
-            // Пассивка Нежити: Зловоние разложения
             if (defender.type === 'undead' && defender.hp > 0 && !game.over) {
                 let poison = Math.floor(Math.random() * 15) + 1;
                 attacker.hp -= poison;
@@ -450,12 +448,11 @@ finalDmg} урона!`, "danger");
                 } else if (newHp < 0) {
                     let healed = Math.abs(newHp);
                     target.hp = healed;
-                    log(`💀
-
-
-Удар ушел в овер-хил! Нежить поглотила излишек урона и исцелилась до ${target.hp} HP!`, "success");
+                    log(`💀 Удар ушел в овер-хил! Нежить поглотила излишек урона и исцелилась до ${target.hp} HP!`, "success");
                 } else {
-                    target.hp = newHp;
+
+
+target.hp = newHp;
                     log(`💀 Нежить теряет ${amount} HP (осталось ${target.hp} HP).`, "danger");
                 }
             } else {
@@ -463,7 +460,7 @@ finalDmg} урона!`, "danger");
                 log(`${target.name} получает ${amount} урона (осталось: ${Math.max(0, target.hp)} HP)`, "danger");
                 if (target.hp <= 0) {
                     target.hp = 0;
-                    endGame(game.activePlayer === 1 ? game.p1 : game.p2);
+                    endGame(game.activePlayer === 1 ? game.p2 : game.p1);
                 }
             }
         }
@@ -475,7 +472,6 @@ finalDmg} урона!`, "danger");
 
         function endTurnRoutine() {
             if (game.over) return;
-            // Переключаем ход на другого игрока
             game.activePlayer = game.activePlayer === 1 ? 2 : 1;
             game.turn++;
             updateUI();
@@ -491,7 +487,7 @@ finalDmg} урона!`, "danger");
         function updateUI() {
             document.getElementById('p1-name-ui').innerText = game.p1.name;
             document.getElementById('p1-hp-text').innerText = `Здоровье: ${game.p1.hp} / ${game.p1.maxHp}`;
-            document.getElementById('p1-hp-bar').style.width = Math.max(0, (game.p1.hp / game.p1.maxHp) * 100) + '%';
+            document.getElementById('p1-hp-bar'].style.width = Math.max(0, (game.p1.hp / game.p1.maxHp) * 100) + '%';
 
             document.getElementById('p2-name-ui').innerText = game.p2.name;
             document.getElementById('p2-hp-text').innerText = `Здоровье: ${game.p2.hp} / ${game.p2.maxHp}`;
