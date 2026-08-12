@@ -4,73 +4,66 @@
 <meta charset="UTF-8">
 <title>Битва на Кубиках</title>
 <style>
-body {
-background-color: #1a1a1a;
-display: flex;
-justify-content: center;
-align-items: center;
-height: 100vh;
-margin: 0;
-}
+body { background-color: #1a1a1a; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; font-family: sans-serif; color: white; }
 
-/* Игровое поле */
-.game-field {
-width: 600px;
-height: 400px;
-background-color: #2e7d32; /* Травянисто-зеленый цвет */
-border: 8px solid #1b5e20;
-border-radius: 20px;
-display: flex;
-justify-content: center;
-align-items: center;
-gap: 40px;
-box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
+.game-field { width: 600px; height: 300px; background-color: #2e7d32; border: 8px solid #1b5e20; border-radius: 20px; display: flex; justify-content: center; align-items: center; gap: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-top: 50px; }
 
-/* Кубик */
-.die {
-width: 80px;
-height: 80px;
-background-color: white;
-border-radius: 15px;
-display: grid;
-grid-template-columns: repeat(3, 1fr);
-grid-template-rows: repeat(3, 1fr);
-padding: 10px;
-box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-}
-
-/* Точки на кубике */
-.dot {
-width: 15px;
-height: 15px;
-background-color: black;
-border-radius: 50%;
-align-self: center;
-justify-self: center;
-}
-
-/* Скрываем точки, если они не нужны для текущего числа */
+.die { width: 80px; height: 80px; background-color: white; border-radius: 15px; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); padding: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+.dot { width: 16px; height: 16px; background-color: black; border-radius: 50%; align-self: center; justify-self: center; }
 .hidden { visibility: hidden; }
+
+.controls { margin-top: 30px; text-align: center; }
+button { padding: 15px 40px; font-size: 20px; background: #f59e0b; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; transition: transform 0.1s; }
+button:active { transform: scale(0.95); }
+#result { font-size: 48px; margin-top: 20px; font-weight: bold; color: #fbbf24; }
 </style>
 </head>
 <body>
 
 <div class="game-field">
-<!— Первый кубик (число 5) —>
-<div class="die" id="die1">
-<div class="dot"></div><div class="dot hidden"></div><div class="dot"></div>
-<div class="dot hidden"></div><div class="dot"></div><div class="dot hidden"></div>
-<div class="dot"></div><div class="dot hidden"></div><div class="dot"></div>
+<div class="die" id="die1"></div>
+<div class="die" id="die2"></div>
 </div>
 
-<!— Второй кубик (число 6) —>
-<div class="die" id="die2">
-<div class="dot"></div><div class="dot"></div><div class="dot"></div>
-<div class="dot"></div><div class="dot"></div><div class="dot"></div>
-<div class="dot"></div><div class="dot"></div><div class="dot"></div>
-</div>
+<div class="controls">
+<button onclick="rollDice()">ROLL</button>
+<div id="result">00</div>
 </div>
 
+<script>
+// Конфигурация точек для каждой грани кубика (индексы 0-8, где 4 - центр)
+const layouts = {
+1: [4],
+2: [0, 8],
+3: [0, 4, 8],
+4: [0, 2, 6, 8],
+5: [0, 2, 4, 6, 8],
+6: [0, 2, 3, 5, 6, 8]
+};
+
+function renderDie(elementId, value) {
+const container = document.getElementById(elementId);
+container.innerHTML = ''; // Очищаем старые точки
+for (let i = 0; i < 9; i++) {
+const dot = document.createElement('div');
+dot.className = 'dot';
+if (!layouts[value].includes(i)) dot.classList.add('hidden');
+container.appendChild(dot);
+}
+}
+
+function rollDice() {
+const val1 = Math.floor(Math.random() * 6) + 1;
+const val2 = Math.floor(Math.random() * 6) + 1;
+
+renderDie('die1', val1);
+renderDie('die2', val2);
+
+document.getElementById('result').innerText = `${val1}${val2}`;
+}
+
+// Инициализация при старте
+rollDice();
+</script>
 </body>
 </html>
