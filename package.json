@@ -1,7 +1,6 @@
 {
   "name": "spngame",
   "version": "1.0.0",
-  "description": "Case opening game",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
