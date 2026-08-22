@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>СПН Игры - Кейс с АК-47</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Коллекция АК-47</h1>
+
+        <div id="case-box" class="case-box">
+            <p id="result-text">Нажмите кнопку, чтобы открыть кейс</p>
+        </div>
+
+        <button id="open-btn" onclick="openCase()">Открыть кейс</button>
+    </div>
+
+    <script>
+        async function openCase() {
+            const btn = document.getElementById('open-btn');
+            const resultText = document.getElementById('result-text');
+            const caseBox = document.getElementById('case-box');
+
+            btn.disabled = true;
+            resultText.textContent = "Открываем кейс...";
+            caseBox.style.borderColor = "#444";
+
+            try {
+                const response = await fetch('/api/open-case', { method: 'POST' });
+                const data = await response.json();
+
+                if (data.success) {
+                    setTimeout(() => {
+                        resultText.textContent = `Вам выпал: ${data.item.name}`;
+                        caseBox.style.borderColor = data.item.color;
+                        btn.disabled = false;
+                    }, 1000);
+                }
+            } catch (error) {
+                resultText.textContent = "Ошибка соединения с сервером";
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
