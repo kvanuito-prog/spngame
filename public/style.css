@@ -1,7 +1,7 @@
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #121212;
-    color: #e0e0e0;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,53 +12,87 @@ body {
 .container {
     text-align: center;
     background: #1e1e1e;
-    padding: 40px;
+    padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
-    width: 350px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    width: 90%;
+    max-width: 600px;
 }
 
 h1 {
-    font-size: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
-.case-box {
+/* Оформление рулетки */
+.roulette-container {
+    position: relative;
     width: 100%;
     height: 120px;
-    border: 2px dashed #444;
+    background: #111;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 25px;
+    border: 2px solid #333;
+}
+
+/* Красная/неоновая линия по центру */
+.selector-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 4px;
+    background: #00ffcc;
+    transform: translateX(-50%);
+    z-index: 10;
+    box-shadow: 0 0 10px #00ffcc;
+}
+
+/* Лента, которая будет двигаться */
+.roulette-strip {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    align-items: center;
+    transition: transform 4s cubic-bezier(0.15, 0.75, 0.15, 1);
+}
+
+/* Отдельная карточка предмета в рулетке */
+.roulette-item {
+    min-width: 110px;
+    height: 90px;
+    background: #2a2a2a;
+    margin: 0 5px;
+    border-radius: 6px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 25px;
-    background: #181818;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: border-color 0.3s ease;
-    padding: 0 15px;
-    box-sizing: border-box;
+    font-size: 13px;
     text-align: center;
+    padding: 5px;
+    border: 1px solid #444;
+    box-sizing: border-box;
 }
 
-button {
-    background-color: #00b894;
-    color: white;
+.btn {
+    background-color: #00ffcc;
+    color: #121212;
     border: none;
-    padding: 12px 20px;
+    padding: 12px 25px;
     font-size: 16px;
+    font-weight: bold;
     border-radius: 6px;
     cursor: pointer;
-    width: 100%;
-    font-weight: bold;
     transition: background 0.2s;
 }
 
-button:hover {
-    background-color: #55efc4;
+.btn:hover {
+    background-color: #00cca3;
 }
 
-button:disabled {
-    background-color: #444;
-    color: #888;
+.btn:disabled {
+    background-color: #555;
     cursor: not-allowed;
 }
