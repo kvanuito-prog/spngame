@@ -10,6 +10,7 @@
             --bg: #121212;
             --card-bg: #1e1e1e;
             --text: #ffffff;
+            --blocked: #ff4444;
         }
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -38,6 +39,7 @@
             font-size: 0.8em;
         }
         .slot.free { border-color: #444; color: #888; }
+        .slot.blocked { border-color: var(--blocked); color: var(--blocked); font-weight: bold; }
         
         /* Форма */
         form { background: var(--card-bg); padding: 20px; border-radius: 8px; }
@@ -50,15 +52,21 @@
     <div class="container">
         <header>
             <h1>PUBG Mobile Tournament</h1>
-            <p>Регистрация команд: осталось мест — <span id="remaining">50</span>/50</p>
+            <p>Регистрация команд</p>
         </header>
 
         <section>
-            <h2>Свободные слоты</h2>
+            <h2>Слоты команд</h2>
             <div class="slots-grid" id="slots">
                 <script>
                     for(let i = 1; i <= 50; i++) {
-                        document.write('<div class="slot free">#' + i + '<br>Свободен</div>');
+                        if (i <= 4) {
+                            // Блокируем слоты 1-4
+                            document.write('<div class="slot blocked">#' + i + '<br>БУФЕР</div>');
+                        } else {
+                            // Обычные свободные слоты
+                            document.write('<div class="slot free">#' + i + '<br>Свободен</div>');
+                        }
                     }
                 </script>
             </div>
