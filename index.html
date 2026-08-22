@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Регистрация на турнир PUBG Mobile</title>
+    <title>SPN CUSTOM ROOM - Регистрация</title>
     <style>
         :root {
             --primary: #ff9900;
@@ -16,7 +16,7 @@
         }
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); padding: 10px; margin: 0; }
         .container { max-width: 600px; margin: auto; }
-        h1, h2 { text-align: center; color: var(--primary); font-size: 1.8em; margin-bottom: 20px; }
+        h1 { text-align: center; color: var(--primary); font-size: 1.8em; margin-bottom: 20px; }
         
         .slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; }
         .slot { background: var(--card-bg); border: 1px solid #333; padding: 5px; border-radius: 4px; font-size: 0.75em; min-height: 60px; text-align: center; cursor: pointer; }
@@ -25,7 +25,6 @@
         .slot.busy { border-color: var(--busy); background: var(--busy); color: #fff; cursor: default; }
         .slot.blocked { border-color: var(--blocked); color: var(--blocked); cursor: default; }
 
-        /* Оптимизированное модальное окно */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; overflow-y: auto; }
         .modal-content { background: var(--card-bg); margin: 20px auto; padding: 20px; border-radius: 8px; width: 95%; max-width: 400px; border: 1px solid #444; }
         
@@ -43,20 +42,13 @@
     <div class="container">
         <h1>SPN CUSTOM ROOM</h1>
         <div class="slots-grid" id="slots">
-            <script>
-                const bookedSlots = { 5: { team: "Team Alpha", p1: "Rider", p2: "Storm", sub: "Ghost" } };
-                for(let i = 1; i <= 50; i++) {
-                    if (i <= 4) document.write('<div class="slot blocked">#'+i+'<br>БУФЕР</div>');
-                    else if (bookedSlots[i]) document.write('<div class="slot busy">#'+i+'<br>'+bookedSlots[i].team+'</div>');
-                    else document.write('<div class="slot free" onclick="openModal('+i+')">#'+i+'<br>Свободен</div>');
-                }
-            </script>
+            <!-- Сетка загружается динамически -->
         </div>
     </div>
 
     <div class="modal" id="regModal">
         <div class="modal-content">
-            <h3 id="modalTitle" style="text-align:center;">Регистрация</h3>
+            <h3 id="modalTitle" style="text-align:center; color: var(--primary);">Регистрация</h3>
             <form action="https://formspree.io/f/moeabknb" method="POST">
                 <input type="hidden" name="slot_number" id="formSlotInput">
                 <input type="text" name="team_name" placeholder="Название команды" required>
@@ -83,9 +75,50 @@
     </div>
 
     <script>
+        const SHEET_API = 'https://sheetdb.io/api/v1/9mfn5f1lr1hu2';
+
+        async function loadSlots() {
+            let bookedSlots = {};
+            
+            try {
+                let response = await fetch(SHEET_API);
+                let data = await response.json();
+                data.forEach(row => {
+                    // Ожидаем, что в таблице есть колонка slot_number и team_name
+                    if(row.slot_number) {
+                        bookedSlots[row.slot_number] = row;
+                    }
+                });
+            } catch (e) {
+                console.log('Ошибка загрузки данных из таблицы');
+            }
+
+            let grid = document.getElementById('slots');
+            grid.innerHTML = '';
+
+            for(let i = 1; i <= 50; i++) {
+                if (i <= 4) {
+                    grid.innerHTML += '<div class="slot blocked">#'+i+'<br>БУФЕР</div>';
+                } else if (bookedSlots[i]) {
+                    grid.innerHTML += '<div class="slot busy">#'+i+'<br><b>'+(bookedSlots[i].team_name || 'Занято')+'</b></div>';
+                } else {
+                    grid.innerHTML += '<div class="slot free" onclick="openModal('+i+')">#'+i+'<br>Свободен</div>';
+                }
+            }
+        }
+
         const modal = document.getElementById('regModal');
-        function openModal(n) { modal.style.display = 'block'; document.getElementById('modalTitle').innerText = 'Регистрация: Слот #' + n; document.getElementById('formSlotInput').value = n; }
-        function closeModal() { modal.style.display = 'none'; }
+        function openModal(n) { 
+            modal.style.display = 'block'; 
+            document.getElementById('modalTitle').innerText = 'Регистрация: Слот #' + n; 
+            document.getElementById('formSlotInput').value = n; 
+        }
+        function closeModal() { 
+            modal.style.display = 'none'; 
+        }
+
+        // Загружаем слоты при открытии страницы
+        loadSlots();
     </script>
 </body>
 </html>
