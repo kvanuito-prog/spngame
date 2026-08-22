@@ -193,8 +193,6 @@
         }
 
         function openPlayerScreen(role) {
-            // Берем ссылку из таблицы (например, колонки p1_screen, p2_screen, sub_screen) 
-            // Или если не указано явно, можно составить путь по умолчанию: team{номер}p1.jpg
             let screenUrl = currentSlotData[role + '_screen'];
             
             if (screenUrl) {
