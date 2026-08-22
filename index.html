@@ -16,24 +16,20 @@
         }
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); padding: 10px; margin: 0; }
         .container { max-width: 600px; margin: auto; }
-        h1 { text-align: center; color: var(--primary); font-size: 1.8em; margin-bottom: 10px; }
+        h1 { text-align: center; color: var(--primary); font-size: 1.8em; margin-bottom: 20px; }
         
-        .info-box { background: #1e1e1e; border: 1px solid var(--primary); padding: 12px; border-radius: 6px; margin-bottom: 20px; text-align: center; font-size: 0.85em; line-height: 1.4; }
-        .info-box span { color: var(--primary); font-weight: bold; }
-        .card-number { font-size: 1.1em; color: #4da6ff; font-weight: bold; background: #252525; padding: 4px 8px; border-radius: 4px; display: inline-block; margin: 5px 0; }
-
         .slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
-        .slot { background: var(--card-bg); border: 1px solid #333; padding: 6px; border-radius: 4px; font-size: 0.75em; min-height: 85px; text-align: center; cursor: pointer; display: flex; flex-direction: column; justify-content: center; }
+        .slot { background: var(--card-bg); border: 1px solid #333; padding: 6px; border-radius: 4px; font-size: 0.75em; min-height: 90px; text-align: center; cursor: pointer; display: flex; flex-direction: column; justify-content: center; }
         
         .slot.free { border-color: var(--free); background: #1a331a; }
         .slot.busy { border-color: var(--busy); background: var(--busy); color: #fff; }
         .slot.blocked { border-color: var(--blocked); color: var(--blocked); cursor: default; }
 
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; overflow-y: auto; }
-        .modal-content { background: var(--card-bg); margin: 20px auto; padding: 20px; border-radius: 8px; width: 95%; max-width: 400px; border: 1px solid #444; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; overflow-y: auto; align-items: center; justify-content: center; }
+        .modal-content { background: var(--card-bg); padding: 25px; border-radius: 8px; width: 90%; max-width: 380px; border: 1px solid #444; text-align: center; box-sizing: border-box; }
         
         form input { width: 100%; padding: 8px; margin: 5px 0; background: #333; border: 1px solid #444; color: white; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
-        .player-group { background: #252525; padding: 8px; margin-bottom: 8px; border-radius: 4px; }
+        .player-group { background: #252525; padding: 8px; margin-bottom: 8px; border-radius: 4px; text-align: left; }
         .player-group label { font-size: 0.8em; color: var(--primary); font-weight: bold; }
         
         .btn-group { display: flex; gap: 10px; margin-top: 15px; }
@@ -43,20 +39,13 @@
         .btn-yes { background: #2d5a27; color: white; }
         .btn-no { background: var(--blocked); color: white; }
         
-        .text-center { text-align: center; }
+        .tg-link { display: inline-block; margin-top: 15px; background: #0088cc; color: white; padding: 10px 15px; border-radius: 4px; text-decoration: none; font-weight: bold; }
+        .tg-link:hover { background: #0077b3; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>SPN CUSTOM ROOM</h1>
-        
-        <div class="info-box">
-            🔥 <b>Правила выкупа слотов:</b><br>
-            • Свободный слот: от <span>100 ₽</span><br>
-            • Перехват занятого слота: <span>цена удваивается</span>!<br>
-            💳 <b>Альфа-Банк:</b> <div class="card-number">2200 1529 5038 9182</div>
-        </div>
-
         <div class="slots-grid" id="slots">
             <!-- Сетка загружается динамически -->
         </div>
@@ -65,48 +54,38 @@
     <!-- Модальное окно -->
     <div class="modal" id="regModal">
         <div class="modal-content">
-            <h3 id="modalTitle" class="text-center" style="color: var(--primary);">Регистрация</h3>
+            <h3 id="modalTitle" style="color: var(--primary); margin-top:0;">Регистрация</h3>
             
-            <!-- Шаг 1: Обычная форма для свободного слота -->
+            <!-- Форма регистрации свободного слота -->
             <form id="freeForm" action="https://formspree.io/f/moeabknb" method="POST" style="display:none;">
-                <input type="hidden" name="slot_number" id="formSlotInput1">
+                <input type="hidden" name="slot_number" id="formSlotInput">
                 <input type="text" name="team_name" placeholder="Название команды" required>
                 <div class="player-group"><label>Капитан (Ник + ID)</label><input type="text" name="p1" required></div>
                 <div class="player-group"><label>Игрок 2 (Ник + ID)</label><input type="text" name="p2" required></div>
                 <div class="player-group"><label>Запасной (Ник + ID)</label><input type="text" name="sub" required></div>
-                <div class="player-group"><label>Чек / Оплата (от 100 руб)</label><input type="text" name="payment" placeholder="Номер чека или 'Бесплатно'" required></div>
                 <div class="btn-group">
                     <button type="button" class="btn-back" onclick="closeModal()">Назад</button>
                     <button type="submit" class="btn-submit">Отправить</button>
                 </div>
             </form>
 
-            <!-- Шаг 2: Вопрос при клике на занятый слот -->
+            <!-- Вопрос при клике на занятый слот -->
             <div id="buyoutPrompt" style="display:none;">
-                <p class="text-center">Этот слот уже занят. Хотите выкупить его (перехватить с удвоением ставки)?</p>
+                <p>Хотите выкупить этот слот?</p>
                 <div class="btn-group">
                     <button type="button" class="btn-no" onclick="closeModal()">Нет</button>
-                    <button type="button" class="btn-yes" onclick="showBuyoutForm()">Да</button>
+                    <button type="button" class="btn-yes" onclick="showBuyoutInfo()">Да</button>
                 </div>
             </div>
 
-            <!-- Шаг 3: Форма выкупа занятого слота -->
-            <form id="buyoutForm" action="https://formspree.io/f/moeabknb" method="POST" enctype="multipart/form-data" style="display:none;">
-                <input type="hidden" name="slot_number" id="formSlotInput2">
-                <p style="font-size: 0.85em; color: #ff9900; text-align: center;">Перевод х2 суммы на карту Альфа-Банк:<br><b>2200 1529 5038 9182</b></p>
-                <input type="text" name="team_name" placeholder="Название вашей команды" required>
-                <div class="player-group"><label>Капитан (Ник + ID)</label><input type="text" name="p1" required></div>
-                <div class="player-group"><label>Игрок 2 (Ник + ID)</label><input type="text" name="p2" required></div>
-                <div class="player-group"><label>Запасной (Ник + ID)</label><input type="text" name="sub" required></div>
-                <div class="player-group">
-                    <label>Скриншот чека (файл или ссылка)</label>
-                    <input type="file" name="screenshot" accept="image/*" style="color:white; background:none; border:none;" required>
+            <!-- Контакты администратора для выкупа -->
+            <div id="buyoutInfo" style="display:none;">
+                <p style="font-size: 0.9em; line-height: 1.4;">Для выкупа слота обратитесь в Telegram к администратору:</p>
+                <a href="https://t.me/VankKinX" target="_blank" class="tg-link">@VankKinX</a>
+                <div style="margin-top: 15px;">
+                    <button type="button" class="btn-back" onclick="closeModal()" style="width:100%;">Закрыть</button>
                 </div>
-                <div class="btn-group">
-                    <button type="button" class="btn-back" onclick="closeModal()">Назад</button>
-                    <button type="submit" class="btn-submit">Отправить выкуп</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 
@@ -131,8 +110,9 @@
                     grid.innerHTML += '<div class="slot blocked">#'+i+'<br>БУФЕР</div>';
                 } else if (bookedSlots[i]) {
                     let d = bookedSlots[i];
-                    // Клик по занятому слоту вызывает функцию buyoutPromptModal
-                    grid.innerHTML += '<div class="slot busy" onclick="openBuyoutPrompt('+i+', \''+(d.team_name || 'Занято')+'\')">#'+i+'<br><b>'+(d.team_name || 'Занято')+'</b><span style="font-size:0.85em; margin-top:2px; opacity:0.9;">1: '+(d.p1||'')+'<br>2: '+(d.p2||'')+'<br>Зап: '+(d.sub||'-')+'</span></div>';
+                    // Расчет цены: первый выкуп 100р, каждый следующий перехват удваивается (можно зафиксировать или передавать из таблицы)
+                    let price = d.price ? d.price + ' ₽' : '100 ₽'; 
+                    grid.innerHTML += '<div class="slot busy" onclick="openBuyoutPrompt('+i+', \''+(d.team_name || 'Занято')+'\')">#'+i+'<br><b>'+(d.team_name || 'Занято')+'</b><span style="font-size:0.8em; opacity:0.9; display:block; margin-top:2px;">1: '+(d.p1||'')+'<br>2: '+(d.p2||'')+'<br>Зап: '+(d.sub||'-')+'</span><span style="color:#ffcc00; font-weight:bold; font-size:0.85em; margin-top:2px;">Выкуп: '+price+'</span></div>';
                 } else {
                     grid.innerHTML += '<div class="slot free" onclick="openFreeModal('+i+')">#'+i+'<br>Свободен</div>';
                 }
@@ -142,31 +122,30 @@
         const modal = document.getElementById('regModal');
         const freeForm = document.getElementById('freeForm');
         const buyoutPrompt = document.getElementById('buyoutPrompt');
-        const buyoutForm = document.getElementById('buyoutForm');
+        const buyoutInfo = document.getElementById('buyoutInfo');
         const modalTitle = document.getElementById('modalTitle');
 
         function openFreeModal(n) {
-            modal.style.display = 'block';
+            modal.style.display = 'flex';
             modalTitle.innerText = 'Регистрация: Слот #' + n;
-            document.getElementById('formSlotInput1').value = n;
+            document.getElementById('formSlotInput').value = n;
             freeForm.style.display = 'block';
             buyoutPrompt.style.display = 'none';
-            buyoutForm.style.display = 'none';
+            buyoutInfo.style.display = 'none';
         }
 
         function openBuyoutPrompt(n, teamName) {
-            modal.style.display = 'block';
-            modalTitle.innerText = 'Слот #' + n + ' занят (' + teamName + ')';
-            document.getElementById('formSlotInput2').value = n;
+            modal.style.display = 'flex';
+            modalTitle.innerText = 'Слот #' + n + ' (' + teamName + ')';
             freeForm.style.display = 'none';
             buyoutPrompt.style.display = 'block';
-            buyoutForm.style.display = 'none';
+            buyoutInfo.style.display = 'none';
         }
 
-        function showBuyoutForm() {
+        function showBuyoutInfo() {
             buyoutPrompt.style.display = 'none';
-            buyoutForm.style.display = 'block';
-            modalTitle.innerText = 'Правила выкупа слота';
+            buyoutInfo.style.display = 'block';
+            modalTitle.innerText = 'Выкуп слота';
         }
 
         function closeModal() {
