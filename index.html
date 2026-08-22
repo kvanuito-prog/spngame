@@ -16,10 +16,14 @@
         }
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); padding: 10px; margin: 0; }
         .container { max-width: 600px; margin: auto; }
-        h1 { text-align: center; color: var(--primary); font-size: 1.8em; margin-bottom: 20px; }
+        h1 { text-align: center; color: var(--primary); font-size: 1.8em; margin-bottom: 10px; }
         
+        /* Блок информации о выкупе и реквизитах */
+        .info-box { background: #1e1e1e; border: 1px solid var(--primary); padding: 12px; border-radius: 6px; margin-bottom: 20px; text-align: center; font-size: 0.85em; line-height: 1.4; }
+        .info-box span { color: var(--primary); font-weight: bold; }
+        .card-number { font-size: 1.1em; color: #4da6ff; font-weight: bold; background: #252525; padding: 4px 8px; border-radius: 4px; display: inline-block; margin: 5px 0; }
+
         .slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
-        /* Увеличили минимальную высоту, чтобы поместились ники */
         .slot { background: var(--card-bg); border: 1px solid #333; padding: 6px; border-radius: 4px; font-size: 0.75em; min-height: 85px; text-align: center; cursor: pointer; display: flex; flex-direction: column; justify-content: center; }
         
         .slot.free { border-color: var(--free); background: #1a331a; }
@@ -42,6 +46,17 @@
 <body>
     <div class="container">
         <h1>SPN CUSTOM ROOM</h1>
+        
+        <!-- Инфо-блок правил выкупа и реквизитов -->
+        <div class="info-box">
+            🔥 <b>Правила выкупа слотов:</b><br>
+            • Минимальный выкуп свободного слота: <span>от 100 ₽</span><br>
+            • Перехват уже занятого слота: <span>цена удваивается</span> от предыдущей ставки!<br>
+            💳 <b>Альфа-Банк:</b><br>
+            <div class="card-number">2200 1529 5038 9182</div><br>
+            <small>После оплаты укажите чек/данные в форме заявки</small>
+        </div>
+
         <div class="slots-grid" id="slots">
             <!-- Сетка загружается динамически -->
         </div>
@@ -65,6 +80,11 @@
                 <div class="player-group">
                     <label>Запасной (Ник + ID)</label>
                     <input type="text" name="sub" placeholder="Ник и ID" required>
+                </div>
+
+                <div class="player-group">
+                    <label>Информация об оплате</label>
+                    <input type="text" name="payment_info" placeholder="Сумма и номер чека / 'Бесплатно'" required>
                 </div>
 
                 <div class="btn-group">
@@ -101,7 +121,6 @@
                     grid.innerHTML += '<div class="slot blocked">#'+i+'<br>БУФЕР</div>';
                 } else if (bookedSlots[i]) {
                     let d = bookedSlots[i];
-                    // Выводим название команды и данные игроков из колонок p1, p2, sub
                     grid.innerHTML += '<div class="slot busy">#'+i+'<br><b>'+(d.team_name || 'Занято')+'</b><span style="font-size:0.85em; margin-top:2px; opacity:0.9;">1: '+(d.p1||'')+'<br>2: '+(d.p2||'')+'<br>Зап: '+(d.sub||'-')+'</span></div>';
                 } else {
                     grid.innerHTML += '<div class="slot free" onclick="openModal('+i+')">#'+i+'<br>Свободен</div>';
