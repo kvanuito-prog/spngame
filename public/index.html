@@ -7,21 +7,20 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Модальное окно авторизации/регистрации -->
+    <!-- Модальное окно входа через Telegram -->
     <div id="authModal" class="modal">
         <div class="modal-content">
             <h2>Авторизация</h2>
-            <input type="text" id="authUsername" placeholder="Имя пользователя">
-            <input type="password" id="authPassword" placeholder="Пароль">
-            <div class="modal-buttons">
-                <button id="loginBtn" class="btn">Войти</button>
-                <button id="registerBtn" class="btn secondary">Регистрация</button>
-            </div>
+            <p style="color: #aaa; font-size: 14px; margin-bottom: 20px;">Войдите через Telegram, чтобы начать игру и получить 1000 монет!</p>
+            
+            <!-- Сюда автоматически вставится кнопка Telegram -->
+            <div id="telegramLoginContainer" style="display: flex; justify-content: center;"></div>
+            
             <p id="authError" class="error"></p>
         </div>
     </div>
 
-    <!-- Основной интерфейс игры -->
+    <!-- Основной игровой интерфейс -->
     <div class="container" id="gameContainer" style="display: none;">
         <div class="header">
             <div>Игрок: <span id="userNameDisplay"></span></div>
