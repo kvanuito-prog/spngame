@@ -130,3 +130,19 @@ input {
     font-size: 13px;
     margin-top: 10px;
 }
+.telegram-btn {
+    display: inline-block;
+    background-color: #2481cc;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(36, 129, 204, 0.4);
+    transition: background 0.2s;
+}
+
+.telegram-btn:hover {
+    background-color: #1e6fb3;
+}
