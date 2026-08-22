@@ -7,14 +7,16 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Модальное окно входа через Telegram -->
+    <!-- Модальное окно авторизации -->
     <div id="authModal" class="modal">
         <div class="modal-content">
             <h2>Авторизация</h2>
-            <p style="color: #aaa; font-size: 14px; margin-bottom: 20px;">Войдите через Telegram, чтобы начать игру и получить 1000 монет!</p>
+            <p style="color: #aaa; font-size: 14px; margin-bottom: 25px;">Войдите через Telegram, чтобы начать игру и получить 1000 монет!</p>
             
-            <!-- Сюда автоматически вставится кнопка Telegram -->
-            <div id="telegramLoginContainer" style="display: flex; justify-content: center;"></div>
+            <!-- Надежная кнопка-ссылка для авторизации -->
+            <a href="https://t.me/spngame_auth_bot?start=auth" id="telegramLoginBtn" class="btn telegram-btn" target="_blank">
+                💬 Войти через Telegram
+            </a>
             
             <p id="authError" class="error"></p>
         </div>
