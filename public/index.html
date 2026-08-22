@@ -7,18 +7,35 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Коллекция АК-47</h1>
-        
-        <!-- Окно рулетки -->
-        <div class="roulette-container">
-            <div class="selector-line"></div>
-            <div class="roulette-strip" id="rouletteStrip">
-                <!-- Сюда будут динамически добавляться карточки при прокрутке -->
+    <!-- Модальное окно авторизации/регистрации -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <h2>Авторизация</h2>
+            <input type="text" id="authUsername" placeholder="Имя пользователя">
+            <input type="password" id="authPassword" placeholder="Пароль">
+            <div class="modal-buttons">
+                <button id="loginBtn" class="btn">Войти</button>
+                <button id="registerBtn" class="btn secondary">Регистрация</button>
             </div>
+            <p id="authError" class="error"></p>
+        </div>
+    </div>
+
+    <!-- Основной интерфейс игры -->
+    <div class="container" id="gameContainer" style="display: none;">
+        <div class="header">
+            <div>Игрок: <span id="userNameDisplay"></span></div>
+            <div>Баланс: <span id="userBalance">1000</span> 🪙</div>
         </div>
 
-        <button id="openCaseBtn" class="btn">Открыть кейс</button>
+        <h1>Коллекция АК-47</h1>
+        
+        <div class="roulette-container">
+            <div class="selector-line"></div>
+            <div class="roulette-strip" id="rouletteStrip"></div>
+        </div>
+
+        <button id="openCaseBtn" class="btn">Открыть кейс (100 🪙)</button>
     </div>
 
     <script src="script.js"></script>
