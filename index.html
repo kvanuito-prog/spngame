@@ -18,8 +18,9 @@
         .container { max-width: 600px; margin: auto; }
         h1 { text-align: center; color: var(--primary); font-size: 1.8em; margin-bottom: 20px; }
         
-        .slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; }
-        .slot { background: var(--card-bg); border: 1px solid #333; padding: 5px; border-radius: 4px; font-size: 0.75em; min-height: 60px; text-align: center; cursor: pointer; }
+        .slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
+        /* Увеличили минимальную высоту, чтобы поместились ники */
+        .slot { background: var(--card-bg); border: 1px solid #333; padding: 6px; border-radius: 4px; font-size: 0.75em; min-height: 85px; text-align: center; cursor: pointer; display: flex; flex-direction: column; justify-content: center; }
         
         .slot.free { border-color: var(--free); background: #1a331a; }
         .slot.busy { border-color: var(--busy); background: var(--busy); color: #fff; cursor: default; }
@@ -84,7 +85,6 @@
                 let response = await fetch(SHEET_API);
                 let data = await response.json();
                 data.forEach(row => {
-                    // Ожидаем, что в таблице есть колонка slot_number и team_name
                     if(row.slot_number) {
                         bookedSlots[row.slot_number] = row;
                     }
@@ -100,7 +100,9 @@
                 if (i <= 4) {
                     grid.innerHTML += '<div class="slot blocked">#'+i+'<br>БУФЕР</div>';
                 } else if (bookedSlots[i]) {
-                    grid.innerHTML += '<div class="slot busy">#'+i+'<br><b>'+(bookedSlots[i].team_name || 'Занято')+'</b></div>';
+                    let d = bookedSlots[i];
+                    // Выводим название команды и данные игроков из колонок p1, p2, sub
+                    grid.innerHTML += '<div class="slot busy">#'+i+'<br><b>'+(d.team_name || 'Занято')+'</b><span style="font-size:0.85em; margin-top:2px; opacity:0.9;">1: '+(d.p1||'')+'<br>2: '+(d.p2||'')+'<br>Зап: '+(d.sub||'-')+'</span></div>';
                 } else {
                     grid.innerHTML += '<div class="slot free" onclick="openModal('+i+')">#'+i+'<br>Свободен</div>';
                 }
@@ -117,7 +119,6 @@
             modal.style.display = 'none'; 
         }
 
-        // Загружаем слоты при открытии страницы
         loadSlots();
     </script>
 </body>
