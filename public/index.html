@@ -9,40 +9,18 @@
 <body>
     <div class="container">
         <h1>Коллекция АК-47</h1>
-
-        <div id="case-box" class="case-box">
-            <p id="result-text">Нажмите кнопку, чтобы открыть кейс</p>
+        
+        <!-- Окно рулетки -->
+        <div class="roulette-container">
+            <div class="selector-line"></div>
+            <div class="roulette-strip" id="rouletteStrip">
+                <!-- Сюда будут динамически добавляться карточки при прокрутке -->
+            </div>
         </div>
 
-        <button id="open-btn" onclick="openCase()">Открыть кейс</button>
+        <button id="openCaseBtn" class="btn">Открыть кейс</button>
     </div>
 
-    <script>
-        async function openCase() {
-            const btn = document.getElementById('open-btn');
-            const resultText = document.getElementById('result-text');
-            const caseBox = document.getElementById('case-box');
-
-            btn.disabled = true;
-            resultText.textContent = "Открываем кейс...";
-            caseBox.style.borderColor = "#444";
-
-            try {
-                const response = await fetch('/api/open-case', { method: 'POST' });
-                const data = await response.json();
-
-                if (data.success) {
-                    setTimeout(() => {
-                        resultText.textContent = `Вам выпал: ${data.item.name}`;
-                        caseBox.style.borderColor = data.item.color;
-                        btn.disabled = false;
-                    }, 1000);
-                }
-            } catch (error) {
-                resultText.textContent = "Ошибка соединения с сервером";
-                btn.disabled = false;
-            }
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
