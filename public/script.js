@@ -21,36 +21,17 @@ function checkAuth() {
 }
 checkAuth();
 
-// Функция, которую вызывает Telegram после успешного входа
-window.onTelegramAuth = async function(user) {
-    const res = await fetch('/api/telegram-auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(user)
-    });
-    const data = await res.json();
-
-    if (data.success) {
-        currentUser = data;
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        checkAuth();
-    } else {
-        document.getElementById('authError').innerText = data.error;
-    }
-};
-
-// Динамически внедряем официальную кнопку Telegram
-window.addEventListener('DOMContentLoaded', () => {
-    if (!currentUser) {
-        const container = document.getElementById('telegramLoginContainer');
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = "https://telegram.org/js/telegram-widget.js?22";
-        script.setAttribute('data-telegram-login', 'spngame_auth_bot');
-        script.setAttribute('data-size', 'large');
-        script.setAttribute('data-onauth', 'onTelegramAuth(user)');
-        container.appendChild(script);
-    }
+// Временный вход по кнопке для теста на планшете
+document.getElementById('telegramLoginBtn').addEventListener('click', (e) => {
+    e.preventDefault();
+    // Создаем тестового игрока прямо на планшете, чтобы сразу открыть кейс
+    currentUser = {
+        id: 1,
+        username: "Xiaomi Player",
+        balance: 1000
+    };
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    checkAuth();
 });
 
 // Анимация рулетки и открытие кейса
@@ -92,33 +73,22 @@ openBtn.addEventListener('click', async () => {
 
     openBtn.disabled = true;
 
-    try {
-        const response = await fetch('/api/open-case', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId: currentUser.id })
-        });
-        const data = await response.json();
+    // Имитируем открытие кейса локально или через сервер
+    setTimeout(() => {
+        const wonItem = itemsPool[Math.floor(Math.random() * itemsPool.length)];
+        currentUser.balance -= 100;
+        if (wonItem.includes('Редкий')) currentUser.balance += 150;
+        else if (wonItem.includes('Закаленный')) currentUser.balance += 300;
+        else if (wonItem.includes('Азимов')) currentUser.balance += 1000;
+        else currentUser.balance += 50;
 
-        if (data.error) {
-            alert(data.error);
-            openBtn.disabled = false;
-            return;
-        }
-
-        currentUser.balance = data.newBalance;
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
         userBalance.innerText = currentUser.balance;
 
-        createStrip(data.item);
+        createStrip(wonItem);
 
         setTimeout(() => {
             openBtn.disabled = false;
         }, 4100);
-
-    } catch (error) {
-        console.error('Ошибка:', error);
-        alert('Не удалось открыть кейс');
-        openBtn.disabled = false;
-    }
+    }, 100);
 });
