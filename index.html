@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Регистрация на турнир PUBG</title>
+    <title>Регистрация на турнир PUBG Mobile</title>
     <style>
         :root {
             --primary: #ff9900;
@@ -15,30 +14,41 @@
             --busy: #1a4a8d;   /* Синий */
             --blocked: #ff4444; /* Красный */
         }
-        body { font-family: sans-serif; background-color: var(--bg); color: var(--text); padding: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); padding: 20px; margin: 0; }
         .container { max-width: 900px; margin: auto; }
+        h1, h2 { text-align: center; color: var(--primary); }
         
-        .slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
-        .slot { background: var(--card-bg); border: 1px solid #333; padding: 10px; border-radius: 4px; font-size: 0.8em; min-height: 80px; }
+        .slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-bottom: 30px; }
+        .slot { background: var(--card-bg); border: 1px solid #333; padding: 10px; border-radius: 4px; font-size: 0.8em; min-height: 70px; text-align: center; }
         
-        .free { border-color: var(--free); color: #fff; background: #1a331a; }
-        .busy { border-color: var(--busy); color: #fff; background: var(--busy); }
-        .blocked { border-color: var(--blocked); color: var(--blocked); }
-        
-        form { background: var(--card-bg); padding: 20px; margin-top: 30px; border-radius: 8px; }
-        input, textarea { width: 100%; padding: 10px; margin: 10px 0; background: #333; border: none; color: white; box-sizing: border-box; }
-        button { background: var(--primary); padding: 10px; width: 100%; border: none; cursor: pointer; font-weight: bold; }
+        .slot.free { border-color: var(--free); background: #1a331a; cursor: pointer; transition: 0.2s; }
+        .slot.free:hover { background: #264d26; transform: scale(1.02); }
+        .slot.busy { border-color: var(--busy); background: var(--busy); color: #fff; }
+        .slot.blocked { border-color: var(--blocked); color: var(--blocked); }
+
+        /* Модальное окно */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: var(--card-bg); padding: 30px; border-radius: 8px; width: 90%; max-width: 500px; position: relative; border: 1px solid #444; }
+        .close-btn { position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer; color: #aaa; }
+        .close-btn:hover { color: #fff; }
+
+        form input { width: 100%; padding: 10px; margin: 8px 0; background: #333; border: 1px solid #444; color: white; border-radius: 4px; box-sizing: border-box; }
+        .player-group { background: #252525; padding: 10px; margin-bottom: 10px; border-radius: 4px; }
+        .player-group label { font-size: 0.85em; color: var(--primary); font-weight: bold; }
+        button[type="submit"] { background: var(--primary); padding: 12px; width: 100%; border: none; cursor: pointer; font-weight: bold; border-radius: 4px; margin-top: 10px; font-size: 1em; }
+        button[type="submit"]:hover { background: #e68a00; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Список команд</h1>
+        <h1>PUBG Mobile Tournament</h1>
+        <h2>Выберите свободный слот для регистрации</h2>
+        
         <div class="slots-grid" id="slots">
             <script>
-                // Сюда вы будете вписывать занятые слоты вручную
+                // База данных занятых слотов (обновляйте вручную при получении заявок)
                 const bookedSlots = {
-                    5: { team: "Team Alpha", p1: "Player1", p2: "Player2", sub: "Sub1" },
-                    6: { team: "Bravo Squad", p1: "Ivan", p2: "Dmitry", sub: "Alex" }
+                    5: { team: "Team Alpha", p1: "Rider (ID: 5123456)", p2: "Storm (ID: 5123457)", sub: "Ghost (ID: 5123458)" }
                 };
 
                 for(let i = 1; i <= 50; i++) {
@@ -46,23 +56,71 @@
                         document.write('<div class="slot blocked">#' + i + '<br>БУФЕР</div>');
                     } else if (bookedSlots[i]) {
                         const data = bookedSlots[i];
-                        document.write('<div class="slot busy">#' + i + '<br><b>' + data.team + '</b><br><small>' + data.p1 + ', ' + data.p2 + '<br>Зап: ' + data.sub + '</small></div>');
+                        document.write('<div class="slot busy">#' + i + '<br><b>' + data.team + '</b><br><small>' + data.p1 + '<br>' + data.p2 + '<br>Зап: ' + data.sub + '</small></div>');
                     } else {
-                        document.write('<div class="slot free">#' + i + '<br>Свободен</div>');
+                        document.write('<div class="slot free" onclick="openModal(' + i + ')">#' + i + '<br>Свободен<br><small>Нажмите</small></div>');
                     }
                 }
             </script>
         </div>
+    </div>
 
-        <section>
-            <h2>Подать заявку</h2>
+    <!-- Модальное окно регистрации -->
+    <div class="modal" id="regModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h3 id="modalTitle">Регистрация слота</h3>
+            
+            <!-- НЕ ЗАБУДЬТЕ заменить YOUR_FORM_ID на ваш реальный ID с Formspree.io -->
             <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                <input type="hidden" name="slot_number" id="formSlotInput">
+                
                 <input type="text" name="team_name" placeholder="Название команды" required>
-                <input type="text" name="slot_number" placeholder="Желаемый номер слота (5-50)" required>
-                <input type="text" name="players" placeholder="Ники 2 игроков и 1 запасного" required>
+                
+                <div class="player-group">
+                    <label>Игрок 1 (Капитан)</label>
+                    <input type="text" name="p1_nick" placeholder="Никнейм" required>
+                    <input type="text" name="p1_id" placeholder="Игровой ID" required>
+                </div>
+
+                <div class="player-group">
+                    <label>Игрок 2</label>
+                    <input type="text" name="p2_nick" placeholder="Никнейм" required>
+                    <input type="text" name="p2_id" placeholder="Игровой ID" required>
+                </div>
+
+                <div class="player-group">
+                    <label>Запасной игрок</label>
+                    <input type="text" name="sub_nick" placeholder="Никнейм" required>
+                    <input type="text" name="sub_id" placeholder="Игровой ID" required>
+                </div>
+
                 <button type="submit">Отправить заявку</button>
             </form>
-        </section>
+        </div>
     </div>
+
+    <script>
+        const modal = document.getElementById('regModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const formSlotInput = document.getElementById('formSlotInput');
+
+        function openModal(slotNum) {
+            modal.style.display = 'flex';
+            modalTitle.innerText = 'Заявка на слот #' + slotNum;
+            formSlotInput.value = slotNum;
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        // Закрытие модального окна при клике вне его
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
 </body>
 </html>
