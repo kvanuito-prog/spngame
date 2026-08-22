@@ -1,60 +1,64 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
-const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Инициализация базы данных SQLite
+// База данных
 const db = new sqlite3.Database('./database.sqlite', (err) => {
     if (err) console.error('Ошибка базы данных:', err.message);
     else console.log('Подключено к базе данных SQLite.');
 });
 
-// Создание таблиц пользователей
 db.run(`CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT UNIQUE,
-    password TEXT,
+    telegram_id TEXT UNIQUE,
+    username TEXT,
     balance INTEGER DEFAULT 1000
 )`);
 
-// Регистрация
-app.post('/api/register', async (req, res) => {
-    const { username, password } = req.body;
-    if (!username || !password) return res.status(400).json({ error: 'Заполните все поля' });
+// Авторизация через Telegram
+app.post('/api/telegram-auth', (req, res) => {
+    const tgData = req.body;
+    const checkHash = tgData.hash;
+    delete tgData.hash;
 
-    try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        db.run(`INSERT INTO users (username, password) VALUES (?, ?)`, [username, hashedPassword], function(err) {
-            if (err) return res.status(400).json({ error: 'Имя пользователя уже занято' });
-            res.json({ success: true, userId: this.lastID, username, balance: 1000 });
-        });
-    } catch (e) {
-        res.status(500).json({ error: 'Ошибка сервера' });
-    }
-});
-
-// Вход
-app.post('/api/login', (req, res) => {
-    const { username, password } = req.body;
+    // Проверка подлинности данных от Telegram
+    const dataCheckArr = Object.keys(tgData)
+        .sort()
+        .map(key => `${key}=${tgData[key]}`);
     
-    db.get(`SELECT * FROM users WHERE username = ?`, [username], async (err, user) => {
-        if (err || !user) return res.status(400).json({ error: 'Неверный логин или пароль' });
+    const secretKey = crypto.createHash('sha256').update(BOT_TOKEN).digest();
+    const hmac = crypto.createHmac('sha256', secretKey).update(dataCheckArr.join('\n')).digest('hex');
 
-        const isValid = await bcrypt.compare(password, user.password);
-        if (!isValid) return res.status(400).json({ error: 'Неверный логин или пароль' });
+    if (hmac !== checkHash) {
+        return res.status(400).json({ error: 'Ошибка безопасности: данные не подтверждены Telegram' });
+    }
 
-        res.json({ success: true, userId: user.id, username: user.username, balance: user.balance });
+    const telegramId = String(tgData.id);
+    const username = tgData.username || tgData.first_name || 'Игрок';
+
+    // Ищем или создаем пользователя в БД
+    db.get(`SELECT * FROM users WHERE telegram_id = ?`, [telegramId], (err, user) => {
+        if (user) {
+            res.json({ success: true, userId: user.id, username: user.username, balance: user.balance });
+        } else {
+            db.run(`INSERT INTO users (telegram_id, username, balance) VALUES (?, ?, 1000)`, [telegramId, username], function(err) {
+                if (err) return res.status(500).json({ error: 'Ошибка создания аккаунта' });
+                res.json({ success: true, userId: this.lastID, username, balance: 1000 });
+            });
+        }
     });
 });
 
-// Открытие кейса (списание 100 монет и выдача приза)
+// Открытие кейса
 app.post('/api/open-case', (req, res) => {
     const { userId } = req.body;
     const casePrice = 100;
