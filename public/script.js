@@ -4,12 +4,10 @@ const authModal = document.getElementById('authModal');
 const gameContainer = document.getElementById('gameContainer');
 const userNameDisplay = document.getElementById('userNameDisplay');
 const userBalance = document.getElementById('userBalance');
-const authError = document.getElementById('authError');
 
 const openBtn = document.getElementById('openCaseBtn');
 const strip = document.getElementById('rouletteStrip');
 
-// Проверка сессии при загрузке
 function checkAuth() {
     if (currentUser) {
         authModal.style.display = 'none';
@@ -23,15 +21,12 @@ function checkAuth() {
 }
 checkAuth();
 
-// Регистрация
-document.getElementById('registerBtn').addEventListener('click', async () => {
-    const username = document.getElementById('authUsername').value.trim();
-    const password = document.getElementById('authPassword').value.trim();
-
-    const res = await fetch('/api/register', {
+// Функция, которую вызовет Telegram после успешного входа
+window.onTelegramAuth = async function(user) {
+    const res = await fetch('/api/telegram-auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify(user)
     });
     const data = await res.json();
 
@@ -40,32 +35,26 @@ document.getElementById('registerBtn').addEventListener('click', async () => {
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
         checkAuth();
     } else {
-        authError.innerText = data.error;
+        document.getElementById('authError').innerText = data.error;
+    }
+};
+
+// Динамически внедряем официальную кнопку Telegram
+// ВНИМАНИЕ: Замените data-telegram-login на имя вашего бота (без слова bot, точнее полный username вашего бота от BotFather)
+window.addEventListener('DOMContentLoaded', () => {
+    if (!currentUser) {
+        const container = document.getElementById('telegramLoginContainer');
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = "https://telegram.org/js/telegram-widget.js?22";
+        script.setAttribute('data-telegram-login', 'ЗДЕСЬ_УКАЖИТЕ_USERNAME_ВАШЕГО_БОТА'); // Например: spngame_auth_bot
+        script.setAttribute('data-size', 'large');
+        script.setAttribute('data-onauth', 'onTelegramAuth(user)');
+        container.appendChild(script);
     }
 });
 
-// Вход
-document.getElementById('loginBtn').addEventListener('click', async () => {
-    const username = document.getElementById('authUsername').value.trim();
-    const password = document.getElementById('authPassword').value.trim();
-
-    const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-    });
-    const data = await res.json();
-
-    if (data.success) {
-        currentUser = data;
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        checkAuth();
-    } else {
-        authError.innerText = data.error;
-    }
-});
-
-// Анимация рулетки
+// Анимация рулетки и открытие кейса
 const itemsPool = ["АК-47 | Обычный", "АК-47 | Редкий", "АК-47 | Закаленный", "АК-47 | Азимов"];
 
 function createStrip(winningItem) {
@@ -96,7 +85,6 @@ function createStrip(winningItem) {
     }, 50);
 }
 
-// Открытие кейса
 openBtn.addEventListener('click', async () => {
     if (currentUser.balance < 100) {
         alert('Недостаточно монет!');
