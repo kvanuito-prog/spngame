@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Турнир PUBG Mobile - Регистрация</title>
+    <style>
+        :root {
+            --primary: #ff9900;
+            --bg: #121212;
+            --card-bg: #1e1e1e;
+            --text: #ffffff;
+        }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: auto; }
+        header { text-align: center; margin-bottom: 40px; }
+        h1 { color: var(--primary); text-transform: uppercase; }
+        
+        /* Сетка слотов */
+        .slots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+        .slot {
+            background: var(--card-bg);
+            border: 1px solid #333;
+            padding: 10px;
+            text-align: center;
+            border-radius: 4px;
+            font-size: 0.8em;
+        }
+        .slot.free { border-color: #444; color: #888; }
+        
+        /* Форма */
+        form { background: var(--card-bg); padding: 20px; border-radius: 8px; }
+        input, textarea { width: 100%; padding: 10px; margin: 10px 0; background: #333; border: none; color: white; border-radius: 4px; box-sizing: border-box; }
+        button { background: var(--primary); color: black; padding: 10px 20px; border: none; cursor: pointer; font-weight: bold; border-radius: 4px; width: 100%; }
+        button:hover { background: #e68a00; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>PUBG Mobile Tournament</h1>
+            <p>Регистрация команд: осталось мест — <span id="remaining">50</span>/50</p>
+        </header>
+
+        <section>
+            <h2>Свободные слоты</h2>
+            <div class="slots-grid" id="slots">
+                <script>
+                    for(let i = 1; i <= 50; i++) {
+                        document.write('<div class="slot free">#' + i + '<br>Свободен</div>');
+                    }
+                </script>
+            </div>
+        </section>
+
+        <section>
+            <h2>Подать заявку</h2>
+            <!-- НЕ ЗАБУДЬТЕ заменить YOUR_FORM_ID на ваш ID с Formspree.io -->
+            <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                <input type="text" name="team_name" placeholder="Название команды" required>
+                <input type="text" name="captain" placeholder="Никнейм капитана (Telegram @)" required>
+                <textarea name="roster" placeholder="Ники и ID игроков (4 + запасные)" rows="5" required></textarea>
+                <button type="submit">Отправить заявку</button>
+            </form>
+        </section>
+    </div>
+</body>
+</html>
