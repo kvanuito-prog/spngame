@@ -10,115 +10,82 @@
             --bg: #121212;
             --card-bg: #1e1e1e;
             --text: #ffffff;
-            --free: #2d5a27;   /* Зеленый */
-            --busy: #1a4a8d;   /* Синий */
-            --blocked: #ff4444; /* Красный */
+            --free: #2d5a27;
+            --busy: #1a4a8d;
+            --blocked: #ff4444;
         }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); padding: 20px; margin: 0; }
-        .container { max-width: 900px; margin: auto; }
-        h1, h2 { text-align: center; color: var(--primary); }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); padding: 10px; margin: 0; }
+        .container { max-width: 600px; margin: auto; }
+        h1, h2 { text-align: center; color: var(--primary); font-size: 1.5em; }
         
-        .slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-bottom: 30px; }
-        .slot { background: var(--card-bg); border: 1px solid #333; padding: 10px; border-radius: 4px; font-size: 0.8em; min-height: 70px; text-align: center; }
+        .slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; }
+        .slot { background: var(--card-bg); border: 1px solid #333; padding: 5px; border-radius: 4px; font-size: 0.75em; min-height: 60px; text-align: center; cursor: pointer; }
         
-        .slot.free { border-color: var(--free); background: #1a331a; cursor: pointer; transition: 0.2s; }
-        .slot.free:hover { background: #264d26; transform: scale(1.02); }
-        .slot.busy { border-color: var(--busy); background: var(--busy); color: #fff; }
-        .slot.blocked { border-color: var(--blocked); color: var(--blocked); }
+        .slot.free { border-color: var(--free); background: #1a331a; }
+        .slot.busy { border-color: var(--busy); background: var(--busy); color: #fff; cursor: default; }
+        .slot.blocked { border-color: var(--blocked); color: var(--blocked); cursor: default; }
 
-        /* Модальное окно */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000; }
-        .modal-content { background: var(--card-bg); padding: 30px; border-radius: 8px; width: 90%; max-width: 500px; position: relative; border: 1px solid #444; }
-        .close-btn { position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer; color: #aaa; }
-        .close-btn:hover { color: #fff; }
-
-        form input { width: 100%; padding: 10px; margin: 8px 0; background: #333; border: 1px solid #444; color: white; border-radius: 4px; box-sizing: border-box; }
-        .player-group { background: #252525; padding: 10px; margin-bottom: 10px; border-radius: 4px; }
-        .player-group label { font-size: 0.85em; color: var(--primary); font-weight: bold; }
-        button[type="submit"] { background: var(--primary); padding: 12px; width: 100%; border: none; cursor: pointer; font-weight: bold; border-radius: 4px; margin-top: 10px; font-size: 1em; }
-        button[type="submit"]:hover { background: #e68a00; }
+        /* Оптимизированное модальное окно */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; overflow-y: auto; }
+        .modal-content { background: var(--card-bg); margin: 20px auto; padding: 20px; border-radius: 8px; width: 95%; max-width: 400px; border: 1px solid #444; }
+        
+        form input { width: 100%; padding: 8px; margin: 5px 0; background: #333; border: 1px solid #444; color: white; border-radius: 4px; box-sizing: border-box; font-size: 16px; /* 16px предотвращает зум на iOS */ }
+        .player-group { background: #252525; padding: 8px; margin-bottom: 8px; border-radius: 4px; }
+        .player-group label { font-size: 0.8em; color: var(--primary); font-weight: bold; }
+        
+        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
+        button { padding: 12px; border: none; cursor: pointer; font-weight: bold; border-radius: 4px; flex: 1; font-size: 1em; }
+        .btn-submit { background: var(--primary); color: black; }
+        .btn-back { background: #555; color: white; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>PUBG Mobile Tournament</h1>
-        <h2>Выберите свободный слот для регистрации</h2>
-        
         <div class="slots-grid" id="slots">
             <script>
-                // База данных занятых слотов
-                const bookedSlots = {
-                    5: { team: "Team Alpha", p1: "Rider (ID: 5123456)", p2: "Storm (ID: 5123457)", sub: "Ghost (ID: 5123458)" }
-                };
-
+                const bookedSlots = { 5: { team: "Team Alpha", p1: "Rider", p2: "Storm", sub: "Ghost" } };
                 for(let i = 1; i <= 50; i++) {
-                    if (i <= 4) {
-                        document.write('<div class="slot blocked">#' + i + '<br>БУФЕР</div>');
-                    } else if (bookedSlots[i]) {
-                        const data = bookedSlots[i];
-                        document.write('<div class="slot busy">#' + i + '<br><b>' + data.team + '</b><br><small>' + data.p1 + '<br>' + data.p2 + '<br>Зап: ' + data.sub + '</small></div>');
-                    } else {
-                        document.write('<div class="slot free" onclick="openModal(' + i + ')">#' + i + '<br>Свободен<br><small>Нажмите</small></div>');
-                    }
+                    if (i <= 4) document.write('<div class="slot blocked">#'+i+'<br>БУФЕР</div>');
+                    else if (bookedSlots[i]) document.write('<div class="slot busy">#'+i+'<br>'+bookedSlots[i].team+'</div>');
+                    else document.write('<div class="slot free" onclick="openModal('+i+')">#'+i+'<br>Свободен</div>');
                 }
             </script>
         </div>
     </div>
 
-    <!-- Модальное окно -->
     <div class="modal" id="regModal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            <h3 id="modalTitle">Регистрация слота</h3>
-            
+            <h3 id="modalTitle" style="text-align:center;">Регистрация</h3>
             <form action="https://formspree.io/f/moeabknb" method="POST">
                 <input type="hidden" name="slot_number" id="formSlotInput">
-                
                 <input type="text" name="team_name" placeholder="Название команды" required>
                 
                 <div class="player-group">
-                    <label>Игрок 1 (Капитан)</label>
-                    <input type="text" name="p1_nick" placeholder="Никнейм" required>
-                    <input type="text" name="p1_id" placeholder="Игровой ID" required>
+                    <label>Капитан (Ник + ID)</label>
+                    <input type="text" name="p1" placeholder="Ник и ID" required>
                 </div>
-
                 <div class="player-group">
-                    <label>Игрок 2</label>
-                    <input type="text" name="p2_nick" placeholder="Никнейм" required>
-                    <input type="text" name="p2_id" placeholder="Игровой ID" required>
+                    <label>Игрок 2 (Ник + ID)</label>
+                    <input type="text" name="p2" placeholder="Ник и ID" required>
                 </div>
-
                 <div class="player-group">
-                    <label>Запасной игрок</label>
-                    <input type="text" name="sub_nick" placeholder="Никнейм" required>
-                    <input type="text" name="sub_id" placeholder="Игровой ID" required>
+                    <label>Запасной (Ник + ID)</label>
+                    <input type="text" name="sub" placeholder="Ник и ID" required>
                 </div>
 
-                <button type="submit">Отправить заявку</button>
+                <div class="btn-group">
+                    <button type="button" class="btn-back" onclick="closeModal()">Назад</button>
+                    <button type="submit" class="btn-submit">Отправить</button>
+                </div>
             </form>
         </div>
     </div>
 
     <script>
         const modal = document.getElementById('regModal');
-        const modalTitle = document.getElementById('modalTitle');
-        const formSlotInput = document.getElementById('formSlotInput');
-
-        function openModal(slotNum) {
-            modal.style.display = 'flex';
-            modalTitle.innerText = 'Заявка на слот #' + slotNum;
-            formSlotInput.value = slotNum;
-        }
-
-        function closeModal() {
-            modal.style.display = 'none';
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                closeModal();
-            }
-        }
+        function openModal(n) { modal.style.display = 'block'; document.getElementById('modalTitle').innerText = 'Слот #' + n; document.getElementById('formSlotInput').value = n; }
+        function closeModal() { modal.style.display = 'none'; }
     </script>
 </body>
 </html>
