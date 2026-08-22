@@ -46,7 +46,7 @@
         
         <div class="slots-grid" id="slots">
             <script>
-                // База данных занятых слотов (обновляйте вручную при получении заявок)
+                // База данных занятых слотов
                 const bookedSlots = {
                     5: { team: "Team Alpha", p1: "Rider (ID: 5123456)", p2: "Storm (ID: 5123457)", sub: "Ghost (ID: 5123458)" }
                 };
@@ -65,14 +65,13 @@
         </div>
     </div>
 
-    <!-- Модальное окно регистрации -->
+    <!-- Модальное окно -->
     <div class="modal" id="regModal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
             <h3 id="modalTitle">Регистрация слота</h3>
             
-            <!-- НЕ ЗАБУДЬТЕ заменить YOUR_FORM_ID на ваш реальный ID с Formspree.io -->
-            <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+            <form action="https://formspree.io/f/moeabknb" method="POST">
                 <input type="hidden" name="slot_number" id="formSlotInput">
                 
                 <input type="text" name="team_name" placeholder="Название команды" required>
@@ -115,7 +114,6 @@
             modal.style.display = 'none';
         }
 
-        // Закрытие модального окна при клике вне его
         window.onclick = function(event) {
             if (event.target == modal) {
                 closeModal();
