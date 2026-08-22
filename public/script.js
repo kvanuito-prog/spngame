@@ -21,7 +21,7 @@ function checkAuth() {
 }
 checkAuth();
 
-// Функция, которую вызовет Telegram после успешного входа
+// Функция, которую вызывает Telegram после успешного входа
 window.onTelegramAuth = async function(user) {
     const res = await fetch('/api/telegram-auth', {
         method: 'POST',
@@ -40,14 +40,13 @@ window.onTelegramAuth = async function(user) {
 };
 
 // Динамически внедряем официальную кнопку Telegram
-// ВНИМАНИЕ: Замените data-telegram-login на имя вашего бота (без слова bot, точнее полный username вашего бота от BotFather)
 window.addEventListener('DOMContentLoaded', () => {
     if (!currentUser) {
         const container = document.getElementById('telegramLoginContainer');
         const script = document.createElement('script');
         script.async = true;
         script.src = "https://telegram.org/js/telegram-widget.js?22";
-        script.setAttribute('data-telegram-login', 'ЗДЕСЬ_УКАЖИТЕ_USERNAME_ВАШЕГО_БОТА'); // Например: spngame_auth_bot
+        script.setAttribute('data-telegram-login', 'spngame_auth_bot');
         script.setAttribute('data-size', 'large');
         script.setAttribute('data-onauth', 'onTelegramAuth(user)');
         container.appendChild(script);
