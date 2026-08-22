@@ -38,9 +38,11 @@
         .btn-back { background: #555; color: white; }
         .btn-yes { background: #2d5a27; color: white; }
         .btn-no { background: var(--blocked); color: white; }
+        .btn-info { background: #1a4a8d; color: white; }
         
         .tg-link { display: inline-block; margin-top: 15px; background: #0088cc; color: white; padding: 10px 15px; border-radius: 4px; text-decoration: none; font-weight: bold; }
         .tg-link:hover { background: #0077b3; }
+        .screen-link { color: #4da6ff; font-size: 0.85em; text-decoration: underline; display: inline-block; margin-top: 2px; }
     </style>
 </head>
 <body>
@@ -69,12 +71,37 @@
                 </div>
             </form>
 
-            <!-- Вопрос при клике на занятый слот -->
-            <div id="buyoutPrompt" style="display:none;">
-                <p>Хотите выкупить этот слот?</p>
-                <div class="btn-group">
-                    <button type="button" class="btn-no" onclick="closeModal()">Нет</button>
-                    <button type="button" class="btn-yes" onclick="showBuyoutInfo()">Да</button>
+            <!-- Меню выбора для занятого слота -->
+            <div id="busyChoice" style="display:none;">
+                <p>Что вы хотите сделать?</p>
+                <div class="btn-group" style="flex-direction: column;">
+                    <button type="button" class="btn-info" onclick="showTeamInfo()">Просмотр команды</button>
+                    <button type="button" class="btn-yes" onclick="showBuyoutInfo()">Выкупить слот</button>
+                </div>
+                <div style="margin-top: 15px;">
+                    <button type="button" class="btn-back" onclick="closeModal()" style="width:100%;">Отмена</button>
+                </div>
+            </div>
+
+            <!-- Просмотр информации о команде и скриншотов -->
+            <div id="teamInfoView" style="display:none; text-align: left;">
+                <div class="player-group">
+                    <label>Капитан</label>
+                    <div id="infoP1" style="font-size: 0.9em; margin-top: 2px;"></div>
+                    <div id="screenP1"></div>
+                </div>
+                <div class="player-group">
+                    <label>Игрок 2</label>
+                    <div id="infoP2" style="font-size: 0.9em; margin-top: 2px;"></div>
+                    <div id="screenP2"></div>
+                </div>
+                <div class="player-group">
+                    <label>Запасной</label>
+                    <div id="infoSub" style="font-size: 0.9em; margin-top: 2px;"></div>
+                    <div id="screenSub"></div>
+                </div>
+                <div style="margin-top: 15px;">
+                    <button type="button" class="btn-back" onclick="openBusyChoice()" style="width:100%;">Назад</button>
                 </div>
             </div>
 
@@ -83,7 +110,7 @@
                 <p style="font-size: 0.9em; line-height: 1.4;">Для выкупа слота обратитесь в Telegram к администратору:</p>
                 <a href="https://t.me/VankKingX" target="_blank" class="tg-link">@VankKingX</a>
                 <div style="margin-top: 15px;">
-                    <button type="button" class="btn-back" onclick="closeModal()" style="width:100%;">Закрыть</button>
+                    <button type="button" class="btn-back" onclick="openBusyChoice()" style="width:100%;">Назад</button>
                 </div>
             </div>
         </div>
@@ -91,6 +118,7 @@
 
     <script>
         const SHEET_API = 'https://sheetdb.io/api/v1/9mfn5f1lr1hu2';
+        let currentSlotData = null;
 
         async function loadSlots() {
             let bookedSlots = {};
@@ -111,7 +139,9 @@
                 } else if (bookedSlots[i]) {
                     let d = bookedSlots[i];
                     let price = d.price ? d.price + ' ₽' : '100 ₽'; 
-                    grid.innerHTML += '<div class="slot busy" onclick="openBuyoutPrompt('+i+', \''+(d.team_name || 'Занято')+'\')">#'+i+'<br><b>'+(d.team_name || 'Занято')+'</b><span style="font-size:0.8em; opacity:0.9; display:block; margin-top:2px;">1: '+(d.p1||'')+'<br>2: '+(d.p2||'')+'<br>Зап: '+(d.sub||'-')+'</span><span style="color:#ffcc00; font-weight:bold; font-size:0.85em; margin-top:2px;">Выкуп: '+price+'</span></div>';
+                    // Сохраняем данные объекта в кодированном виде или через глобальный массив, передадим объект проще
+                    window['slotData_' + i] = d;
+                    grid.innerHTML += '<div class="slot busy" onclick="openBusyModal('+i+')">#'+i+'<br><b>'+(d.team_name || 'Занято')+'</b><span style="font-size:0.8em; opacity:0.9; display:block; margin-top:2px;">1: '+(d.p1||'')+'<br>2: '+(d.p2||'')+'<br>Зап: '+(d.sub||'-')+'</span><span style="color:#ffcc00; font-weight:bold; font-size:0.85em; margin-top:2px;">Выкуп: '+price+'</span></div>';
                 } else {
                     grid.innerHTML += '<div class="slot free" onclick="openFreeModal('+i+')">#'+i+'<br>Свободен</div>';
                 }
@@ -120,7 +150,8 @@
 
         const modal = document.getElementById('regModal');
         const freeForm = document.getElementById('freeForm');
-        const buyoutPrompt = document.getElementById('buyoutPrompt');
+        const busyChoice = document.getElementById('busyChoice');
+        const teamInfoView = document.getElementById('teamInfoView');
         const buyoutInfo = document.getElementById('buyoutInfo');
         const modalTitle = document.getElementById('modalTitle');
 
@@ -129,20 +160,43 @@
             modalTitle.innerText = 'Регистрация: Слот #' + n;
             document.getElementById('formSlotInput').value = n;
             freeForm.style.display = 'block';
-            buyoutPrompt.style.display = 'none';
+            busyChoice.style.display = 'none';
+            teamInfoView.style.display = 'none';
             buyoutInfo.style.display = 'none';
         }
 
-        function openBuyoutPrompt(n, teamName) {
+        function openBusyModal(n) {
+            currentSlotData = window['slotData_' + n] || {};
             modal.style.display = 'flex';
-            modalTitle.innerText = 'Слот #' + n + ' (' + teamName + ')';
+            modalTitle.innerText = 'Слот #' + n + ' (' + (currentSlotData.team_name || 'Занято') + ')';
+            openBusyChoice();
+        }
+
+        function openBusyChoice() {
             freeForm.style.display = 'none';
-            buyoutPrompt.style.display = 'block';
+            teamInfoView.style.display = 'none';
             buyoutInfo.style.display = 'none';
+            busyChoice.style.display = 'block';
+            modalTitle.innerText = 'Управление слотом';
+        }
+
+        function showTeamInfo() {
+            busyChoice.style.display = 'none';
+            teamInfoView.style.display = 'block';
+            modalTitle.innerText = 'Состав команды';
+
+            document.getElementById('infoP1').innerText = currentSlotData.p1 || 'Не указан';
+            document.getElementById('infoP2').innerText = currentSlotData.p2 || 'Не указан';
+            document.getElementById('infoSub').innerText = currentSlotData.sub || 'Не указан';
+
+            // Отображение ссылок на скриншоты, если они есть в таблице (полям p1_screen, p2_screen, sub_screen или screenshot)
+            document.getElementById('screenP1').innerHTML = currentSlotData.p1_screen ? '<a href="'+currentSlotData.p1_screen+'" target="_blank" class="screen-link">Посмотреть скриншот</a>' : '';
+            document.getElementById('screenP2').innerHTML = currentSlotData.p2_screen ? '<a href="'+currentSlotData.p2_screen+'" target="_blank" class="screen-link">Посмотреть скриншот</a>' : '';
+            document.getElementById('screenSub').innerHTML = currentSlotData.sub_screen ? '<a href="'+currentSlotData.sub_screen+'" target="_blank" class="screen-link">Посмотреть скриншот</a>' : '';
         }
 
         function showBuyoutInfo() {
-            buyoutPrompt.style.display = 'none';
+            busyChoice.style.display = 'none';
             buyoutInfo.style.display = 'block';
             modalTitle.innerText = 'Выкуп слота';
         }
