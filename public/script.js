@@ -1,45 +1,93 @@
+let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+
+const authModal = document.getElementById('authModal');
+const gameContainer = document.getElementById('gameContainer');
+const userNameDisplay = document.getElementById('userNameDisplay');
+const userBalance = document.getElementById('userBalance');
+const authError = document.getElementById('authError');
+
 const openBtn = document.getElementById('openCaseBtn');
 const strip = document.getElementById('rouletteStrip');
 
-// Список возможных предметов для генерации ленты визуально
-const itemsPool = [
-    "АК-47 | Обычный",
-    "АК-47 | Редкий",
-    "АК-47 | Закаленный",
-    "АК-47 | Военный",
-    "АК-47 | Азимов"
-];
+// Проверка сессии при загрузке
+function checkAuth() {
+    if (currentUser) {
+        authModal.style.display = 'none';
+        gameContainer.style.display = 'block';
+        userNameDisplay.innerText = currentUser.username;
+        userBalance.innerText = currentUser.balance;
+    } else {
+        authModal.style.display = 'flex';
+        gameContainer.style.display = 'none';
+    }
+}
+checkAuth();
 
-// Функция заполнения ленты случайными элементами
+// Регистрация
+document.getElementById('registerBtn').addEventListener('click', async () => {
+    const username = document.getElementById('authUsername').value.trim();
+    const password = document.getElementById('authPassword').value.trim();
+
+    const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+        currentUser = data;
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        checkAuth();
+    } else {
+        authError.innerText = data.error;
+    }
+});
+
+// Вход
+document.getElementById('loginBtn').addEventListener('click', async () => {
+    const username = document.getElementById('authUsername').value.trim();
+    const password = document.getElementById('authPassword').value.trim();
+
+    const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+        currentUser = data;
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        checkAuth();
+    } else {
+        authError.innerText = data.error;
+    }
+});
+
+// Анимация рулетки
+const itemsPool = ["АК-47 | Обычный", "АК-47 | Редкий", "АК-47 | Закаленный", "АК-47 | Азимов"];
+
 function createStrip(winningItem) {
     strip.innerHTML = '';
-    // Создаем длинную ленту из 60 предметов, где ближе к концу будет выигрышный элемент
     const totalItems = 60;
-    const winningIndex = 52; // Индекс, на котором остановится рулетка
+    const winningIndex = 52;
 
     for (let i = 0; i < totalItems; i++) {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'roulette-item';
-        
-        // На нужную позицию ставим то, что реально выиграл игрок с сервера
         let itemName = (i === winningIndex) ? winningItem : itemsPool[Math.floor(Math.random() * itemsPool.length)];
         itemDiv.innerText = itemName;
-        
         strip.appendChild(itemDiv);
     }
 
-    // Сбрасываем позицию ленты без анимации на старт
     strip.style.transition = 'none';
     strip.style.transform = 'translateX(0px)';
 
-    // Небольшая задержка перед запуском красивой анимации прокрутки
     setTimeout(() => {
-        const itemWidth = 120; // ширина карточки (110px + отступы по 5px с каждой стороны)
-        // Смещаем ленту так, чтобы победный элемент встал ровно по центру красной линии
+        const itemWidth = 120;
         const containerWidth = document.querySelector('.roulette-container').offsetWidth;
         const targetOffset = (winningIndex * itemWidth) - (containerWidth / 2) + (itemWidth / 2);
-        
-        // Добавляем случайное смещение внутри карточки для реалистичности
         const randomShift = (Math.random() * 60) - 30; 
         const finalPosition = -(targetOffset + randomShift);
 
@@ -48,18 +96,35 @@ function createStrip(winningItem) {
     }, 50);
 }
 
+// Открытие кейса
 openBtn.addEventListener('click', async () => {
+    if (currentUser.balance < 100) {
+        alert('Недостаточно монет!');
+        return;
+    }
+
     openBtn.disabled = true;
 
     try {
-        // Запрос к серверу за результатом
-        const response = await fetch('/open-case');
+        const response = await fetch('/api/open-case', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: currentUser.id })
+        });
         const data = await response.json();
 
-        // Запускаем красивую прокрутку рулетки
+        if (data.error) {
+            alert(data.error);
+            openBtn.disabled = false;
+            return;
+        }
+
+        currentUser.balance = data.newBalance;
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        userBalance.innerText = currentUser.balance;
+
         createStrip(data.item);
 
-        // Разблокируем кнопку после окончания анимации (через 4 секунды)
         setTimeout(() => {
             openBtn.disabled = false;
         }, 4100);
