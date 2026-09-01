@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Roulette</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .roulette-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin-bottom: 20px;
+        }
+
+        .pointer {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 25px solid #f0f6fc;
+            z-index: 10;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            border: 4px solid #30363d;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #238636;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #2ea043;
+        }
+
+        button:disabled {
+            background-color: #21262d;
+            color: #8b949e;
+            cursor: not-allowed;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            min-height: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="roulette-container">
+        <div class="pointer"></div>
+        <canvas id="wheel" width="400" height="400"></canvas>
+    </div>
+
+    <button id="spinBtn" onclick="spinWheel()">Крутить!</button>
+    <div id="result"></div>
+
+    <script>
+        const canvas = document.getElementById('wheel');
+        const ctx = canvas.getContext('2d');
+        const spinBtn = document.getElementById('spinBtn');
+        const resultDiv = document.getElementById('result');
+
+        // Список элементов рулетки (можно изменить под свои задачи)
+        const items = ['Вариант 1', 'Вариант 2', 'Вариант 3', 'Вариант 4', 'Вариант 5', 'Вариант 6'];
+        const colors = ['#238636', '#1f6feb', '#8957e5', '#9e6a03', '#da3633', '#3fb950'];
+        
+        let startAngle = 0;
+        const arc = Math.PI / (items.length / 2);
+        let spinning = false;
+
+        function drawWheel() {
+            const outsideRadius = 180;
+            const textRadius = 120;
+            const insideRadius = 0;
+
+            ctx.clearRect(0, 0, 400, 400);
+            ctx.strokeStyle = '#30363d';
+            ctx.lineWidth = 2;
+
+            for (let i = 0; i < items.length; i++) {
+                const angle = startAngle + i * arc;
+                ctx.fillStyle = colors[i % colors.length];
+
+                ctx.beginPath();
+                ctx.arc(200, 200, outsideRadius, angle, angle + arc, false);
+                ctx.arc(200, 200, insideRadius, angle + arc, angle, true);
+                ctx.stroke();
+                ctx.fill();
+
+                ctx.save();
+                ctx.fillStyle = "#ffffff";
+                ctx.translate(200 + Math.cos(angle + arc / 2) * textRadius, 200 + Math.sin(angle + arc / 2) * textRadius);
+                ctx.rotate(angle + arc / 2 + Math.PI / 2);
+                ctx.font = 'bold 16px sans-serif';
+                ctx.fillText(items[i], -ctx.measureText(items[i]).width / 2, 0);
+                ctx.restore();
+            }
+        }
+
+        let currentAngle = 0;
+        let spinAngleTimeout = null;
+        let spinTime = 0;
+        let spinTimeTotal = 0;
+
+        function spinWheel() {
+            if (spinning) return;
+            spinning = true;
+            spinBtn.disabled = true;
+            resultDiv.textContent = '';
+
+            spinAngleStart = Math.random() * 10 + 10;
+            spinTime = 0;
+            spinTimeTotal = Math.random() * 3000 + 4000; // 4-7 секунд вращения
+            rotateWheel();
+        }
+
+        function rotateWheel() {
+            spinTime += 30;
+            if (spinTime >= spinTimeTotal) {
+                stopRotateWheel();
+                return;
+            }
+            let spinAngle = spinAngleStart - easeOut(spinTime, 0, spinAngleStart, spinTimeTotal);
+            startAngle += (spinAngle * Math.PI / 180);
+            drawWheel();
+            spinAngleTimeout = setTimeout(rotateWheel, 30);
+        }
+
+        function stopRotateWheel() {
+            clearTimeout(spinAngleTimeout);
+            const degrees = startAngle * 180 / Math.PI + 90;
+            const arcd = arc * 180 / Math.PI;
+            const index = Math.floor((360 - (degrees % 360)) / arcd);
+            spinning = false;
+            spinBtn.disabled = false;
+            resultDiv.textContent = `Результат: ${items[index]}`;
+        }
+
+        function easeOut(t, b, c, d) {
+            t /= d;
+            data = t--;
+            return c * (t * t * t + 1) + b;
+        }
+
+        drawWheel();
+    </script>
+</body>
+</html>
