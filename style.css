@@ -11,7 +11,7 @@ body {
     min-height: 100vh;
 }
 
-/* ===== HEADER ===== */
+/* HEADER */
 
 header {
     text-align: center;
@@ -24,8 +24,6 @@ header h1 {
     font-size: 32px;
     font-weight: 900;
     letter-spacing: 3px;
-    color: #ffffff;
-    text-transform: uppercase;
 }
 
 header p {
@@ -34,7 +32,7 @@ header p {
     font-size: 15px;
 }
 
-/* ===== STATS ===== */
+/* STATS */
 
 .stats {
     display: flex;
@@ -57,7 +55,6 @@ header p {
     display: block;
     font-size: 25px;
     font-weight: 900;
-    color: #ffffff;
 }
 
 .stat-label {
@@ -68,7 +65,7 @@ header p {
     text-transform: uppercase;
 }
 
-/* ===== SEARCH ===== */
+/* SEARCH */
 
 .search-box {
     max-width: 600px;
@@ -95,7 +92,7 @@ header p {
     border-color: #66758a;
 }
 
-/* ===== FILTERS ===== */
+/* FILTERS */
 
 .filters {
     display: flex;
@@ -113,4 +110,221 @@ header p {
     background: #111722;
     color: #aeb7c5;
     cursor: pointer;
-    font-size: 13
+    font-size: 13px;
+}
+
+.filter-btn:hover {
+    background: #19202c;
+    color: #ffffff;
+}
+
+.filter-btn.active {
+    background: #ffffff;
+    color: #080b10;
+    border-color: #ffffff;
+}
+
+/* SLOTS */
+
+.slots {
+    width: 100%;
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+
+    display: grid;
+
+    /* Большой экран */
+    grid-template-columns: repeat(13, minmax(0, 1fr));
+
+    gap: 10px;
+}
+
+/* SLOT */
+
+.slot {
+    min-width: 0;
+    background: #10151e;
+    border: 1px solid #27303d;
+    border-radius: 10px;
+    padding: 12px;
+    min-height: 135px;
+}
+
+.slot:hover {
+    border-color: #566273;
+}
+
+/* SLOT NUMBER */
+
+.slot-number {
+    font-size: 12px;
+    color: #697586;
+    font-weight: bold;
+    margin-bottom: 9px;
+}
+
+/* PLAYER */
+
+.player {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 7px 0;
+    border-top: 1px solid #202734;
+}
+
+.player:first-of-type {
+    border-top: none;
+}
+
+.nickname {
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.player-id {
+    color: #667080;
+    font-size: 10px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* BUFFER */
+
+.slot.buffer {
+    opacity: 0.55;
+    background: #0d1118;
+}
+
+.buffer-text {
+    color: #555f6e;
+    font-size: 11px;
+    margin-top: 15px;
+    text-align: center;
+}
+
+/* NO RESULTS */
+
+.no-results {
+    display: none;
+    text-align: center;
+    color: #697586;
+    padding: 40px 20px;
+    font-size: 15px;
+}
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    padding: 25px 20px 35px;
+    color: #505a69;
+    font-size: 12px;
+}
+
+
+/* ================================================= */
+/* ПЛАНШЕТ                                             */
+/* РОВНО 4 ЯЧЕЙКИ В РЯД                               */
+/* ================================================= */
+
+@media (min-width: 601px) and (max-width: 1400px) {
+
+    .slots {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .slot {
+        min-height: 145px;
+        padding: 13px;
+    }
+
+    .nickname {
+        font-size: 14px;
+    }
+
+    .player-id {
+        font-size: 11px;
+    }
+}
+
+
+/* ================================================= */
+/* ТЕЛЕФОН                                             */
+/* ================================================= */
+
+@media (max-width: 600px) {
+
+    header {
+        padding: 22px 15px;
+    }
+
+    header h1 {
+        font-size: 23px;
+        letter-spacing: 2px;
+    }
+
+    header p {
+        font-size: 13px;
+    }
+
+    .stats {
+        padding: 15px;
+        gap: 8px;
+    }
+
+    .stat {
+        min-width: 130px;
+        padding: 11px 15px;
+    }
+
+    .stat-number {
+        font-size: 21px;
+    }
+
+    .search-box {
+        padding: 0 12px;
+    }
+
+    .filters {
+        margin-bottom: 18px;
+    }
+
+    .filter-btn {
+        padding: 8px 13px;
+        font-size: 12px;
+    }
+
+    .slots {
+        padding: 0 10px 30px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .slot {
+        min-height: 125px;
+        padding: 9px;
+        border-radius: 8px;
+    }
+
+    .slot-number {
+        font-size: 11px;
+    }
+
+    .nickname {
+        font-size: 11px;
+    }
+
+    .player-id {
+        font-size: 9px;
+    }
+}
