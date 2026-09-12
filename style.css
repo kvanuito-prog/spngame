@@ -1,632 +1,116 @@
-```css
-@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap');
-
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-:root {
-    --bg: #08090b;
-    --bg-light: #0e1014;
-    --card: #111318;
-    --card-hover: #181b21;
-    --border: #242830;
-    --accent: #ff3b30;
-    --accent-dark: #b91c16;
-    --text: #f4f4f5;
-    --muted: #777d88;
 }
 
 body {
-    background:
-        radial-gradient(
-            circle at 50% -20%,
-            rgba(255, 59, 48, 0.12),
-            transparent 35%
-        ),
-        var(--bg);
-
-    color: var(--text);
-    font-family: 'Rajdhani', sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #080b10;
+    color: #ffffff;
     min-height: 100vh;
 }
 
-/* =========================
-   HEADER
-========================= */
+/* ===== HEADER ===== */
 
-.header {
-    border-bottom: 1px solid var(--border);
-    background: rgba(8, 9, 11, 0.94);
-    backdrop-filter: blur(12px);
-    position: sticky;
-    top: 0;
-    z-index: 10;
+header {
+    text-align: center;
+    padding: 30px 20px 25px;
+    background: #0d1118;
+    border-bottom: 1px solid #252c38;
 }
 
-.header-content {
-    max-width: 1400px;
-    margin: auto;
-    padding: 22px 20px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+header h1 {
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    color: #ffffff;
+    text-transform: uppercase;
 }
 
-.logo {
-    font-size: 30px;
-    font-weight: 700;
-    letter-spacing: 2px;
-}
-
-.logo span {
-    color: var(--accent);
-    margin-left: 8px;
-}
-
-.subtitle {
-    color: var(--muted);
-    margin-top: 3px;
+header p {
+    margin-top: 8px;
+    color: #8d98a8;
     font-size: 15px;
-    letter-spacing: 1px;
 }
 
-/* =========================
-   STATS
-========================= */
+/* ===== STATS ===== */
 
 .stats {
     display: flex;
-    gap: 30px;
+    justify-content: center;
+    gap: 15px;
+    padding: 20px;
+    flex-wrap: wrap;
 }
 
 .stat {
-    text-align: right;
+    min-width: 150px;
+    padding: 14px 20px;
+    background: #111722;
+    border: 1px solid #252e3b;
+    border-radius: 10px;
+    text-align: center;
 }
 
-.stat strong {
+.stat-number {
     display: block;
     font-size: 25px;
-    color: var(--accent);
-    line-height: 1;
+    font-weight: 900;
+    color: #ffffff;
 }
 
-.stat span {
-    color: var(--muted);
-    font-size: 11px;
-    letter-spacing: 1px;
+.stat-label {
+    display: block;
+    margin-top: 4px;
+    color: #7f8998;
+    font-size: 12px;
+    text-transform: uppercase;
 }
 
-/* =========================
-   MAIN
-========================= */
-
-.container {
-    max-width: 1400px;
-    margin: auto;
-    padding: 30px 20px 50px;
-}
-
-/* =========================
-   TOOLBAR
-========================= */
-
-.toolbar {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 25px;
-}
+/* ===== SEARCH ===== */
 
 .search-box {
-    flex: 1;
-    height: 52px;
-
-    background: var(--card);
-    border: 1px solid var(--border);
-
-    display: flex;
-    align-items: center;
-
-    padding: 0 16px;
-
-    transition: 0.2s;
-}
-
-.search-box:focus-within {
-    border-color: var(--accent);
-    box-shadow: 0 0 20px rgba(255, 59, 48, 0.08);
-}
-
-.search-box span {
-    color: var(--accent);
-    font-size: 28px;
-    margin-right: 10px;
+    max-width: 600px;
+    margin: 0 auto 20px;
+    padding: 0 20px;
 }
 
 .search-box input {
     width: 100%;
-
-    border: 0;
-    outline: 0;
-
-    background: transparent;
-    color: white;
-
-    font-family: inherit;
-    font-size: 17px;
+    padding: 14px 18px;
+    background: #111722;
+    border: 1px solid #303948;
+    border-radius: 10px;
+    outline: none;
+    color: #ffffff;
+    font-size: 15px;
 }
 
 .search-box input::placeholder {
-    color: #5f646d;
+    color: #667080;
 }
 
-.filter-buttons {
+.search-box input:focus {
+    border-color: #66758a;
+}
+
+/* ===== FILTERS ===== */
+
+.filters {
     display: flex;
-    gap: 5px;
-
-    background: var(--card);
-    border: 1px solid var(--border);
-
-    padding: 5px;
-}
-
-.filter {
-    border: 0;
-    background: transparent;
-
-    color: var(--muted);
-
-    font-family: inherit;
-    font-weight: 600;
-
-    padding: 0 18px;
-
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.filter:hover,
-.filter.active {
-    background: var(--accent);
-    color: white;
-}
-
-/* =========================
-   SLOTS
-   13 СЛОТОВ В РЯД
-========================= */
-
-.slots {
-    display: grid;
-
-    grid-template-columns: repeat(13, minmax(0, 1fr));
-
+    justify-content: center;
     gap: 8px;
+    margin-bottom: 25px;
+    padding: 0 15px;
+    flex-wrap: wrap;
 }
 
-/* =========================
-   SLOT
-========================= */
-
-.slot {
-    background:
-        linear-gradient(
-            135deg,
-            var(--card),
-            #0d0f13
-        );
-
-    border: 1px solid var(--border);
-
-    min-height: 155px;
-
-    display: flex;
-    flex-direction: column;
-
-    position: relative;
-    overflow: hidden;
-
-    transition: 0.2s;
-}
-
-.slot::before {
-    content: "";
-
-    position: absolute;
-
-    left: 0;
-    top: 0;
-    right: 0;
-
-    height: 2px;
-
-    background: var(--accent);
-
-    opacity: 0.8;
-}
-
-.slot:hover {
-    transform: translateY(-3px);
-
-    border-color: #3a3f48;
-
-    background: var(--card-hover);
-
-    box-shadow:
-        0 8px 30px rgba(0, 0, 0, 0.4),
-        0 0 15px rgba(255, 59, 48, 0.05);
-}
-
-/* =========================
-   SLOT NUMBER
-========================= */
-
-.slot-number {
-    height: 42px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: rgba(255, 255, 255, 0.025);
-
-    border-bottom: 1px solid var(--border);
-
-    color: var(--accent);
-
-    font-size: 25px;
-    font-weight: 700;
-}
-
-/* =========================
-   TEAM
-========================= */
-
-.team {
-    flex: 1;
-
-    padding: 12px 10px;
-
-    display: flex;
-    flex-direction: column;
-
-    justify-content: center;
-
-    gap: 9px;
-}
-
-.player {
-    display: flex;
-
-    align-items: flex-start;
-
-    gap: 7px;
-
-    min-width: 0;
-}
-
-.player-icon {
-    width: 20px;
-    height: 20px;
-
-    border: 1px solid #333842;
-
-    background: #191c21;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    color: var(--accent);
-
-    font-size: 9px;
-
-    flex-shrink: 0;
-}
-
-.player-info {
-    min-width: 0;
-    width: 100%;
-}
-
-.nickname {
-    font-size: 13px;
-
-    font-weight: 600;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-}
-
-.player-id {
-    font-family: monospace;
-
-    color: var(--muted);
-
-    font-size: 8px;
-
-    margin-top: 2px;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-}
-
-.separator {
-    height: 1px;
-
-    background: #202329;
-
-    width: 100%;
-}
-
-/* =========================
-   BUFFER
-========================= */
-
-.slot.buffer {
-    opacity: 0.55;
-}
-
-.slot.buffer::before {
-    background: #555b65;
-}
-
-.buffer-content {
-    flex: 1;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    text-align: center;
-
-    padding: 8px;
-}
-
-.buffer-content strong {
-    display: block;
-
-    font-size: 12px;
-}
-
-.buffer-content span {
-    display: block;
-
-    color: var(--muted);
-
-    font-size: 10px;
-
-    margin-top: 4px;
-}
-
-/* =========================
-   NO RESULTS
-========================= */
-
-.no-results {
-    display: none;
-
-    text-align: center;
-
-    padding: 80px 20px;
-
-    color: var(--muted);
-}
-
-.no-results div {
-    font-size: 50px;
-
-    color: var(--accent);
-}
-
-.no-results h2 {
-    color: white;
-
-    margin-top: 10px;
-}
-
-.no-results p {
-    margin-top: 5px;
-}
-
-/* =========================
-   FOOTER
-========================= */
-
-footer {
-    border-top: 1px solid var(--border);
-
-    color: #555a63;
-
-    padding: 25px;
-
-    text-align: center;
-
-    font-size: 12px;
-
-    letter-spacing: 2px;
-}
-
-footer span:nth-child(1) {
-    color: #777d88;
-}
-
-/* =========================
-   LARGE SCREEN
-========================= */
-
-@media (min-width: 1600px) {
-
-    .header-content,
-    .container {
-        max-width: 1550px;
-    }
-
-    .slots {
-        gap: 10px;
-    }
-
-    .slot {
-        min-height: 165px;
-    }
-
-    .nickname {
-        font-size: 14px;
-    }
-}
-
-/* =========================
-   TABLET
-========================= */
-
-@media (max-width: 1100px) {
-
-    .slots {
-        grid-template-columns: repeat(8, minmax(0, 1fr));
-    }
-
-    .slot {
-        min-height: 150px;
-    }
-}
-
-/* =========================
-   SMALL TABLET
-========================= */
-
-@media (max-width: 800px) {
-
-    .header-content {
-        padding: 18px 15px;
-    }
-
-    .logo {
-        font-size: 22px;
-    }
-
-    .stats {
-        gap: 12px;
-    }
-
-    .stat strong {
-        font-size: 20px;
-    }
-
-    .container {
-        padding: 20px 12px 40px;
-    }
-
-    .toolbar {
-        flex-direction: column;
-    }
-
-    .filter-buttons {
-        height: 45px;
-    }
-
-    .filter {
-        flex: 1;
-    }
-
-    .slots {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-}
-
-/* =========================
-   PHONE
-========================= */
-
-@media (max-width: 550px) {
-
-    .header-content {
-        padding: 15px 12px;
-    }
-
-    .logo {
-        font-size: 19px;
-    }
-
-    .subtitle {
-        font-size: 11px;
-    }
-
-    .stats {
-        display: none;
-    }
-
-    .container {
-        padding: 15px 8px 30px;
-    }
-
-    .slots {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 7px;
-    }
-
-    .slot {
-        min-height: 135px;
-    }
-
-    .slot-number {
-        height: 35px;
-
-        font-size: 21px;
-    }
-
-    .team {
-        padding: 10px 8px;
-
-        gap: 7px;
-    }
-
-    .nickname {
-        font-size: 12px;
-    }
-
-    .player-id {
-        font-size: 7px;
-    }
-
-    .player-icon {
-        width: 18px;
-        height: 18px;
-
-        font-size: 8px;
-    }
-
-    .buffer-content strong {
-        font-size: 10px;
-    }
-
-    .buffer-content span {
-        font-size: 8px;
-    }
-}
-
-/* =========================
-   VERY SMALL PHONE
-========================= */
-
-@media (max-width: 360px) {
-
-    .slots {
-        grid-template-columns: 1fr;
-    }
-
-    .slot {
-        min-height: 125px;
-    }
-}
-```
+.filter-btn {
+    padding: 9px 18px;
+    border: 1px solid #303948;
+    border-radius: 8px;
+    background: #111722;
+    color: #aeb7c5;
+    cursor: pointer;
+    font-size: 13
