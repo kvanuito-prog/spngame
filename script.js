@@ -248,6 +248,295 @@ let currentFilter = "all";
 
 
 /* =========================================================
+   SOUND SYSTEM
+   WEB AUDIO API
+========================================================= */
+
+let audioContext = null;
+
+let soundEnabled = true;
+
+
+/* Создаём AudioContext только после действия пользователя */
+
+function initAudio() {
+
+    if (!audioContext) {
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+        if (!AudioContext) {
+            return;
+        }
+
+        audioContext =
+            new AudioContext();
+    }
+
+    if (audioContext.state === "suspended") {
+        audioContext.resume();
+    }
+}
+
+
+/* ---------------------------------------------------------
+   Базовый цифровой click
+--------------------------------------------------------- */
+
+function playClick(
+    frequency = 520,
+    duration = 0.045,
+    volume = 0.035
+) {
+
+    if (!soundEnabled) {
+        return;
+    }
+
+    initAudio();
+
+    if (!audioContext) {
+        return;
+    }
+
+
+    const oscillator =
+        audioContext.createOscillator();
+
+    const gain =
+        audioContext.createGain();
+
+
+    oscillator.type = "sine";
+
+    oscillator.frequency.setValueAtTime(
+        frequency,
+        audioContext.currentTime
+    );
+
+
+    gain.gain.setValueAtTime(
+        volume,
+        audioContext.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        0.001,
+        audioContext.currentTime + duration
+    );
+
+
+    oscillator.connect(gain);
+
+    gain.connect(
+        audioContext.destination
+    );
+
+
+    oscillator.start();
+
+    oscillator.stop(
+        audioContext.currentTime + duration
+    );
+}
+
+
+/* ---------------------------------------------------------
+   Кнопка
+--------------------------------------------------------- */
+
+function playButtonSound() {
+
+    playClick(
+        520,
+        0.045,
+        0.035
+    );
+
+}
+
+
+/* ---------------------------------------------------------
+   Наведение
+--------------------------------------------------------- */
+
+function playHoverSound() {
+
+    playClick(
+        720,
+        0.025,
+        0.012
+    );
+
+}
+
+
+/* ---------------------------------------------------------
+   Скриншот
+--------------------------------------------------------- */
+
+function playScreenshotSound() {
+
+    if (!soundEnabled) {
+        return;
+    }
+
+    initAudio();
+
+    if (!audioContext) {
+        return;
+    }
+
+
+    const now =
+        audioContext.currentTime;
+
+
+    const oscillator =
+        audioContext.createOscillator();
+
+    const gain =
+        audioContext.createGain();
+
+
+    oscillator.type = "sine";
+
+
+    oscillator.frequency.setValueAtTime(
+        650,
+        now
+    );
+
+    oscillator.frequency.exponentialRampToValueAtTime(
+        950,
+        now + 0.08
+    );
+
+
+    gain.gain.setValueAtTime(
+        0.001,
+        now
+    );
+
+    gain.gain.linearRampToValueAtTime(
+        0.035,
+        now + 0.01
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        0.001,
+        now + 0.12
+    );
+
+
+    oscillator.connect(gain);
+
+    gain.connect(
+        audioContext.destination
+    );
+
+
+    oscillator.start(now);
+
+    oscillator.stop(
+        now + 0.13
+    );
+
+}
+
+
+/* ---------------------------------------------------------
+   Открытие
+--------------------------------------------------------- */
+
+function playOpenSound() {
+
+    if (!soundEnabled) {
+        return;
+    }
+
+    initAudio();
+
+    if (!audioContext) {
+        return;
+    }
+
+
+    const now =
+        audioContext.currentTime;
+
+
+    const oscillator =
+        audioContext.createOscillator();
+
+    const gain =
+        audioContext.createGain();
+
+
+    oscillator.type = "sine";
+
+
+    oscillator.frequency.setValueAtTime(
+        420,
+        now
+    );
+
+    oscillator.frequency.exponentialRampToValueAtTime(
+        760,
+        now + 0.09
+    );
+
+
+    gain.gain.setValueAtTime(
+        0.001,
+        now
+    );
+
+    gain.gain.linearRampToValueAtTime(
+        0.025,
+        now + 0.015
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        0.001,
+        now + 0.14
+    );
+
+
+    oscillator.connect(gain);
+
+    gain.connect(
+        audioContext.destination
+    );
+
+
+    oscillator.start(now);
+
+    oscillator.stop(
+        now + 0.15
+    );
+
+}
+
+
+/* ---------------------------------------------------------
+   Закрытие
+--------------------------------------------------------- */
+
+function playCloseSound() {
+
+    playClick(
+        330,
+        0.06,
+        0.025
+    );
+
+}
+
+
+/* =========================================================
    ESCAPE HTML
 ========================================================= */
 
@@ -269,7 +558,9 @@ function escapeHTML(text) {
 const screenshotModal =
     document.createElement("div");
 
-screenshotModal.id = "screenshotModal";
+screenshotModal.id =
+    "screenshotModal";
+
 
 screenshotModal.innerHTML = `
 
@@ -307,22 +598,29 @@ screenshotModal.innerHTML = `
 
 `;
 
-document.body.appendChild(screenshotModal);
+
+document.body.appendChild(
+    screenshotModal
+);
 
 
 /* =========================================================
-   SCREENSHOT STYLES
+   MODAL CSS
 ========================================================= */
 
 const screenshotStyles =
     document.createElement("style");
 
+
 screenshotStyles.textContent = `
 
     #screenshotModal {
         display: none;
+
         position: fixed;
+
         inset: 0;
+
         z-index: 99999;
 
         align-items: center;
@@ -335,44 +633,77 @@ screenshotStyles.textContent = `
 
 `;
 
-document.head.appendChild(screenshotStyles);
+
+document.head.appendChild(
+    screenshotStyles
+);
 
 
 /* =========================================================
    OPEN SCREENSHOT
 ========================================================= */
 
-function openScreenshot(imagePath, playerName) {
+function openScreenshot(
+    imagePath,
+    playerName
+) {
+
+    playScreenshotSound();
+
 
     const image =
-        document.getElementById("screenshotImage");
+        document.getElementById(
+            "screenshotImage"
+        );
+
 
     const title =
-        document.getElementById("screenshotTitle");
+        document.getElementById(
+            "screenshotTitle"
+        );
+
 
     const error =
-        document.getElementById("screenshotError");
+        document.getElementById(
+            "screenshotError"
+        );
+
 
     title.textContent =
         `СКРИНШОТ • ${playerName}`;
 
-    error.style.display = "none";
 
-    image.style.display = "block";
+    error.style.display =
+        "none";
 
-    image.src = imagePath;
 
-    image.onerror = function () {
+    image.style.display =
+        "block";
 
-        image.style.display = "none";
 
-        error.style.display = "block";
+    image.src =
+        imagePath;
 
-    };
 
-    screenshotModal.classList.add("active");
+    image.onerror =
+        function () {
 
-    document.body.style.overflow = "hidden";
+            image.style.display =
+                "none";
+
+            error.style.display =
+                "block";
+
+        };
+
+
+    screenshotModal.classList.add(
+        "active"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
 }
 
 
@@ -382,26 +713,42 @@ function openScreenshot(imagePath, playerName) {
 
 function closeScreenshot() {
 
-    screenshotModal.classList.remove("active");
+    playCloseSound();
 
-    document.body.style.overflow = "";
+
+    screenshotModal.classList.remove(
+        "active"
+    );
+
+
+    document.body.style.overflow =
+        "";
+
 
     const image =
-        document.getElementById("screenshotImage");
+        document.getElementById(
+            "screenshotImage"
+        );
+
 
     image.src = "";
 }
 
 
 /* =========================================================
-   CLOSE EVENTS
+   MODAL EVENTS
 ========================================================= */
 
 const screenshotClose =
-    screenshotModal.querySelector(".screenshot-close");
+    screenshotModal.querySelector(
+        ".screenshot-close"
+    );
+
 
 const screenshotOverlay =
-    screenshotModal.querySelector(".screenshot-overlay");
+    screenshotModal.querySelector(
+        ".screenshot-overlay"
+    );
 
 
 screenshotClose.addEventListener(
@@ -422,9 +769,13 @@ document.addEventListener(
 
         if (
             event.key === "Escape" &&
-            screenshotModal.classList.contains("active")
+            screenshotModal.classList.contains(
+                "active"
+            )
         ) {
+
             closeScreenshot();
+
         }
 
     }
@@ -448,11 +799,14 @@ function createSlots() {
     const bufferSlot =
         document.createElement("div");
 
+
     bufferSlot.className =
         "slot buffer";
 
+
     bufferSlot.dataset.slot =
         "buffer";
+
 
     bufferSlot.innerHTML = `
 
@@ -466,7 +820,10 @@ function createSlots() {
 
     `;
 
-    slotsContainer.appendChild(bufferSlot);
+
+    slotsContainer.appendChild(
+        bufferSlot
+    );
 
 
     /* -----------------------------------------------------
@@ -482,8 +839,10 @@ function createSlots() {
         const slot =
             document.createElement("div");
 
+
         slot.className =
             "slot";
+
 
         slot.dataset.slot =
             String(slotNumber);
@@ -507,6 +866,7 @@ function createSlots() {
 
                     const playerName =
                         escapeHTML(player[0]);
+
 
                     const playerId =
                         escapeHTML(player[1]);
@@ -559,12 +919,15 @@ function createSlots() {
 
 
         /* -------------------------------------------------
-           EMPTY TEAM SLOT
+           EMPTY SLOT
         ------------------------------------------------- */
 
         else {
 
-            slot.classList.add("buffer");
+            slot.classList.add(
+                "buffer"
+            );
+
 
             slot.innerHTML = `
 
@@ -581,14 +944,12 @@ function createSlots() {
         }
 
 
-        slotsContainer.appendChild(slot);
+        slotsContainer.appendChild(
+            slot
+        );
 
     }
 
-
-    /* -----------------------------------------------------
-       TEAM COUNT
-    ----------------------------------------------------- */
 
     teamCount.textContent =
         Object.keys(teams).length;
@@ -609,7 +970,9 @@ function applyFilters() {
 
     const slots =
         Array.from(
-            slotsContainer.querySelectorAll(".slot")
+            slotsContainer.querySelectorAll(
+                ".slot"
+            )
         );
 
 
@@ -629,7 +992,9 @@ function applyFilters() {
            ALL
         ----------------------------------------------- */
 
-        if (currentFilter === "all") {
+        if (
+            currentFilter === "all"
+        ) {
 
             matchesFilter = true;
 
@@ -637,10 +1002,12 @@ function applyFilters() {
 
 
         /* -----------------------------------------------
-           BUFFER 1–6
+           BUFFER
         ----------------------------------------------- */
 
-        else if (currentFilter === "buffer") {
+        else if (
+            currentFilter === "buffer"
+        ) {
 
             matchesFilter =
                 slotNumber === "buffer";
@@ -649,13 +1016,16 @@ function applyFilters() {
 
 
         /* -----------------------------------------------
-           TEAMS 7–50
+           TEAMS
         ----------------------------------------------- */
 
-        else if (currentFilter === "teams") {
+        else if (
+            currentFilter === "teams"
+        ) {
 
             const number =
                 Number(slotNumber);
+
 
             matchesFilter =
                 number >= 7 &&
@@ -702,7 +1072,9 @@ function applyFilters() {
 ========================================================= */
 
 const filterButtons =
-    document.querySelectorAll(".filter-btn");
+    document.querySelectorAll(
+        ".filter-btn"
+    );
 
 
 filterButtons.forEach(button => {
@@ -711,14 +1083,25 @@ filterButtons.forEach(button => {
         "click",
         function () {
 
-            filterButtons.forEach(btn => {
+            initAudio();
 
-                btn.classList.remove("active");
-
-            });
+            playButtonSound();
 
 
-            this.classList.add("active");
+            filterButtons.forEach(
+                btn => {
+
+                    btn.classList.remove(
+                        "active"
+                    );
+
+                }
+            );
+
+
+            this.classList.add(
+                "active"
+            );
 
 
             currentFilter =
@@ -739,12 +1122,18 @@ filterButtons.forEach(button => {
 
 searchInput.addEventListener(
     "input",
-    applyFilters
+    function () {
+
+        initAudio();
+
+        applyFilters();
+
+    }
 );
 
 
 /* =========================================================
-   SCREENSHOT BUTTON EVENT DELEGATION
+   SCREENSHOT BUTTON
 ========================================================= */
 
 slotsContainer.addEventListener(
@@ -765,6 +1154,7 @@ slotsContainer.addEventListener(
         const imagePath =
             button.dataset.image;
 
+
         const playerName =
             button.dataset.player;
 
@@ -774,6 +1164,113 @@ slotsContainer.addEventListener(
             playerName
         );
 
+    }
+);
+
+
+/* =========================================================
+   HOVER SOUNDS
+========================================================= */
+
+let lastHoverTime = 0;
+
+
+document.addEventListener(
+    "mouseover",
+    function (event) {
+
+        const button =
+            event.target.closest(
+                ".filter-btn, .screenshot-button, .screenshot-close"
+            );
+
+
+        if (!button) {
+            return;
+        }
+
+
+        const now =
+            Date.now();
+
+
+        /* Не даём звуку срабатывать слишком часто */
+
+        if (
+            now - lastHoverTime < 80
+        ) {
+            return;
+        }
+
+
+        lastHoverTime = now;
+
+
+        playHoverSound();
+
+    }
+);
+
+
+/* =========================================================
+   GENERAL BUTTON CLICK SOUND
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const button =
+            event.target.closest(
+                "button"
+            );
+
+
+        if (!button) {
+            return;
+        }
+
+
+        /*
+         * Для этих кнопок звук уже
+         * проигрывается отдельно.
+         */
+
+        if (
+            button.classList.contains(
+                "filter-btn"
+            ) ||
+            button.classList.contains(
+                "screenshot-button"
+            ) ||
+            button.classList.contains(
+                "screenshot-close"
+            )
+        ) {
+            return;
+        }
+
+
+        playButtonSound();
+
+    }
+);
+
+
+/* =========================================================
+   FIRST USER INTERACTION
+   UNLOCK AUDIO
+========================================================= */
+
+document.addEventListener(
+    "pointerdown",
+    function () {
+
+        initAudio();
+
+    },
+    {
+        once: true
     }
 );
 
