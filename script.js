@@ -2,6 +2,17 @@
    SPN CUSTOM ROOM
    TEAM DATA
 ========================================================= */
+const SUPABASE_URL =
+    "https://dgtssaispbiqxeimidjl.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_T-1SkXGZ1cMu_lMq7nML1Q_faYsD9PZ";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
 
 const teams = {
 
