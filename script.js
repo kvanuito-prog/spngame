@@ -3,212 +3,174 @@ const teams = {
         ["Meg神", "584490351"],
         ["даньён", "528554700"]
     ],
-
     8: [
         ["oopsĪKRAKEN", "5394036598"],
         ["oopsĪExtazy47", "5853720512"]
     ],
-
     9: [
         ["require", "5151155671"],
         ["pamiboy", "512038100"]
     ],
-
     10: [
         ["OFF SATURN", "51820970664"],
         ["Chifuyu", "5641119402"]
     ],
-
     11: [
-        ["Petichka", "5237472654"],
-        ["DimaKolyadenko", "553873463"]
+        ["мамочек", "51554361168"],
+        ["DimaKolyadenko", "5624868354"]
     ],
-
     12: [
         ["4RmskINOY", "51681028930"],
         ["4RmskGRKKO", "52097735266"]
     ],
-
     13: [
         ["GD³ Luna", "51748812036"],
         ["GD¹ MILFA", "52225566329"]
     ],
-
     14: [
         ["WhyAlwaywMe777", "5278941372"],
         ["STLēCandy", "51835322672"]
     ],
-
     15: [
         ["WNēlūflosex", "51425126649"],
         ["deloūvremeni", "51382437194"]
     ],
-
     16: [
         ["oops IRON", "5748094922"],
         ["ɢ²EM69", "5237671761"]
     ],
-
     17: [
         ["evoTENSHOOOOOO", "5375243289"],
         ["evoChiefCief", "51406547392"]
     ],
-
     18: [
         ["ES frizz404", "51323130709"],
         ["Lam Mad", "5265708626"]
     ],
-
     19: [
         ["Bad 스티치", "5665385032"],
         ["concentrate", "5581728996"]
     ],
-
     20: [
         ["VSQ DOM1NATOR", "51770964046"],
         ["Deidaraッ¹", "5872474240"]
     ],
-
     21: [
         ["tw1z666", "5359429915"],
         ["BAZAūFACHE", "5914921954"]
     ],
-
     22: [
         ["SOULPAUPAU", "5207392557"],
         ["GGOLEGARH", "51930208709"]
     ],
-
     23: [
         ["VRERIGANhae", "5598208338"],
         ["plBibizyan", "51433899596"]
     ],
-
     24: [
         ["oops Sobaka", "5903084104"],
         ["oops x ray", "5263605707"]
     ],
-
     25: [
         ["DARKēMIROSLAV", "51011480213"],
         ["DARKēBigByba", "51425072167"]
     ],
-
     26: [
         ["SHWT3N", "5253833134"],
         ["nervIEM", "51250268807"]
     ],
-
     27: [
         ["LM eniway", "5617267660"],
         ["p4pēINGUSH", "5412499445"]
     ],
-
     28: [
         ["oops 1", "52199128083"],
         ["oops2", "5487979553"]
     ],
-
     29: [
         ["GHMīBeavisYT", "52158254615"],
         ["rqCHLL404", "5174986925"]
     ],
-
     30: [
         ["NEX2 lvdboost", "5436743907"],
         ["user5191813756537409", "51918137565"]
     ],
-
     31: [
         ["Miracle", "51647808909"],
         ["msnViperr", "5158787550"]
     ],
-
     32: [
         ["iqFkorxx", "5366651176"],
         ["GTVـJ0SK1YY是", "5262171268"]
     ],
-
     33: [
         ["VREXMO炎", "5319151610"],
         ["VRFONIX", "51588467910"]
     ],
-
     34: [
         ["pG丶n3trryyy", "51696664904"],
         ["pG丶maple", "51442937869"]
     ],
-
     35: [
         ["dr 666", "5307849028"],
         ["plGAMOS1337", "5514130614"]
     ],
-
     36: [
         ["TolstiyBegemot", "5315164165"],
         ["R3STOR3", "5103167510"]
     ],
-
     37: [
         ["SharpbI4ēē67", "5345354520"],
         ["BIG・babySPRAY", "5377420304"]
     ],
-
     38: [
         ["dr'4EverYoung", "5246516071"],
         ["dr’Merko", "51211492451"]
     ],
-
     39: [
         ["LyapuhaSila", "51866646716"],
         ["VR666666666666", "5663978460"]
     ],
-
     40: [
         ["AnchorēBlue", "5281969153"],
         ["nghtēvlasik", "5712455956"]
     ],
-
     41: [
         ["pG丶nepolonia", "51794185086"],
         ["pG丶druam", "5841679517"]
     ],
-
     42: [
         ["yrodNaSaturNe", "5472888899"],
         ["amixDead", "5423035816"]
     ],
-
     43: [
         ["Assenii", "51390811229"],
         ["RRNEFFEX", "5544169844"]
     ],
-
     44: [
         ["wzēAugustin", "51540888072"],
         ["wzēVsind", "5417881428"]
     ],
-
+    45: [
+        ["pG丶m", "5838898280"],
+        ["pG丶sayyy", "51910729283"]
+    ],
     46: [
         ["404 takasuma", "5219649493"],
         ["404 ONYX", "51020656726"]
     ],
-
     47: [
         ["404 EKIMKA", "5819227706"],
         ["404 SYSTEM", "51578251736"]
     ],
-
     48: [
         ["CRASHēNÉVERq", "5343160068"],
         ["CRASHēARTHUR", "51300909480"]
     ],
-
     49: [
         ["CRASHēBAÚNTY", "51843815264"],
         ["CRASHērmq17", "51369160383"]
     ],
-
     50: [
         ["CRASHēMRAKヅ", "51477942698"],
         ["CRASHēFORZI", "51816909392"]
@@ -216,9 +178,21 @@ const teams = {
 };
 
 
-/* ================================================= */
-/* ЭКРАНИРОВАНИЕ HTML                                */
-/* ================================================= */
+/* ================================
+   ОСНОВНЫЕ ЭЛЕМЕНТЫ
+================================ */
+
+const slotsContainer = document.getElementById("slots");
+const noResults = document.getElementById("noResults");
+const teamCount = document.getElementById("teamCount");
+const searchInput = document.getElementById("searchInput");
+
+let currentFilter = "all";
+
+
+/* ================================
+   ЭКРАНИРОВАНИЕ HTML
+================================ */
 
 function escapeHTML(text) {
     return String(text)
@@ -230,9 +204,9 @@ function escapeHTML(text) {
 }
 
 
-/* ================================================= */
-/* СОЗДАЁМ ОКНО ДЛЯ СКРИНШОТА                       */
-/* ================================================= */
+/* ================================
+   МОДАЛЬНОЕ ОКНО СКРИНШОТА
+================================ */
 
 const modal = document.createElement("div");
 
@@ -243,12 +217,19 @@ modal.innerHTML = `
 
     <div class="screenshot-window">
 
-        <button class="screenshot-close" id="closeScreenshot">
+        <button
+            class="screenshot-close"
+            id="closeScreenshot"
+            type="button"
+        >
             ✕
         </button>
 
-        <div class="screenshot-title" id="screenshotTitle">
-            Скриншот аккаунта
+        <div
+            class="screenshot-title"
+            id="screenshotTitle"
+        >
+            Аккаунт
         </div>
 
         <img
@@ -257,7 +238,10 @@ modal.innerHTML = `
             alt="Скриншот аккаунта"
         >
 
-        <div class="screenshot-error" id="screenshotError">
+        <div
+            class="screenshot-error"
+            id="screenshotError"
+        >
             Скриншот ещё не загружен
         </div>
 
@@ -267,19 +251,18 @@ modal.innerHTML = `
 document.body.appendChild(modal);
 
 
-/* ================================================= */
-/* СТИЛИ ОКНА СКРИНШОТА                             */
-/* ================================================= */
+/* ================================
+   СТИЛИ МОДАЛЬНОГО ОКНА
+================================ */
 
 const screenshotStyles = document.createElement("style");
 
 screenshotStyles.textContent = `
-
 #screenshotModal {
     display: none;
     position: fixed;
     inset: 0;
-    z-index: 9999;
+    z-index: 99999;
 }
 
 #screenshotModal.active {
@@ -304,12 +287,15 @@ screenshotStyles.textContent = `
     padding: 20px;
 
     background: #10151e;
+
     border: 1px solid #303948;
     border-radius: 14px;
 
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    box-sizing: border-box;
 }
 
 .screenshot-window img {
@@ -327,6 +313,7 @@ screenshotStyles.textContent = `
     width: 100%;
 
     margin-bottom: 15px;
+    padding-right: 45px;
 
     color: #ffffff;
 
@@ -334,6 +321,8 @@ screenshotStyles.textContent = `
     font-weight: 800;
 
     text-align: center;
+
+    box-sizing: border-box;
 }
 
 .screenshot-close {
@@ -370,11 +359,9 @@ screenshotStyles.textContent = `
     color: #7f8998;
 
     font-size: 15px;
+
     text-align: center;
 }
-
-
-/* КНОПКА СКРИНШОТА */
 
 .screenshot-button {
     width: 100%;
@@ -401,9 +388,6 @@ screenshotStyles.textContent = `
     border-color: #566273;
 }
 
-
-/* ТЕЛЕФОН */
-
 @media (max-width: 600px) {
 
     .screenshot-window {
@@ -417,7 +401,6 @@ screenshotStyles.textContent = `
 
     .screenshot-title {
         font-size: 15px;
-        padding-right: 35px;
     }
 
     .screenshot-close {
@@ -425,27 +408,14 @@ screenshotStyles.textContent = `
         height: 34px;
     }
 }
-
 `;
 
 document.head.appendChild(screenshotStyles);
 
 
-/* ================================================= */
-/* ЭЛЕМЕНТЫ СТРАНИЦЫ                                */
-/* ================================================= */
-
-const slotsContainer = document.getElementById("slots");
-const noResults = document.getElementById("noResults");
-const teamCount = document.getElementById("teamCount");
-const searchInput = document.getElementById("searchInput");
-
-let currentFilter = "all";
-
-
-/* ================================================= */
-/* СОЗДАНИЕ СЛОТОВ                                   */
-/* ================================================= */
+/* ================================
+   СОЗДАНИЕ СЛОТОВ 1–50
+================================ */
 
 function createSlots() {
 
@@ -460,9 +430,9 @@ function createSlots() {
         slot.dataset.slot = slotNumber;
 
 
-        /* ----------------------------------------- */
-        /* СЛОТЫ 1–6                                 */
-        /* ----------------------------------------- */
+        /* ============================
+           СЛОТЫ 1–6
+        ============================ */
 
         if (slotNumber >= 1 && slotNumber <= 6) {
 
@@ -480,13 +450,11 @@ function createSlots() {
         }
 
 
-        /* ----------------------------------------- */
-        /* ЗАПОЛНЕННЫЙ СЛОТ                          */
-        /* ----------------------------------------- */
+        /* ============================
+           СЛОТЫ 7–50
+        ============================ */
 
         else if (teams[slotNumber]) {
-
-            const players = teams[slotNumber];
 
             slot.innerHTML = `
                 <div class="slot-number">
@@ -495,59 +463,64 @@ function createSlots() {
             `;
 
 
-            players.forEach((player, playerIndex) => {
+            teams[slotNumber].forEach(
+                (player, playerIndex) => {
 
-                const nickname = player[0];
-                const playerId = player[1];
-
-                /*
-                    Автоматическое имя файла:
-
-                    SLOT 7 + PLAYER 1
-                    = images/7-1.jpg
-
-                    SLOT 7 + PLAYER 2
-                    = images/7-2.jpg
-                */
-
-                const imagePath =
-                    `images/${slotNumber}-${playerIndex + 1}.jpg`;
+                    const nickname = player[0];
+                    const playerId = player[1];
 
 
-                const playerElement =
-                    document.createElement("div");
+                    /*
+                       АВТОМАТИЧЕСКИЙ СКРИНШОТ
 
-                playerElement.className = "player";
+                       7-1.jpg = первый игрок SLOT 7
+                       7-2.jpg = второй игрок SLOT 7
 
+                       8-1.jpg = первый игрок SLOT 8
+                       8-2.jpg = второй игрок SLOT 8
 
-                playerElement.innerHTML = `
-                    <div class="nickname">
-                        ${escapeHTML(nickname)}
-                    </div>
+                       и т.д.
+                    */
 
-                    <div class="player-id">
-                        ID: ${escapeHTML(playerId)}
-                    </div>
-
-                    <button
-                        class="screenshot-button"
-                        type="button"
-                        data-image="${imagePath}"
-                        data-player="${escapeHTML(nickname)}"
-                    >
-                        📷 Скриншот
-                    </button>
-                `;
+                    const imagePath =
+                        `images/${slotNumber}-${playerIndex + 1}.jpg`;
 
 
-                slot.appendChild(playerElement);
-            });
+                    const playerElement =
+                        document.createElement("div");
+
+                    playerElement.className = "player";
+
+
+                    playerElement.innerHTML = `
+                        <div class="nickname">
+                            ${escapeHTML(nickname)}
+                        </div>
+
+                        <div class="player-id">
+                            ID: ${escapeHTML(playerId)}
+                        </div>
+
+                        <button
+                            class="screenshot-button"
+                            type="button"
+                            data-image="${imagePath}"
+                            data-player="${escapeHTML(nickname)}"
+                        >
+                            📷 Скриншот
+                        </button>
+                    `;
+
+
+                    slot.appendChild(playerElement);
+                }
+            );
         }
 
 
-        /* ----------------------------------------- */
-        /* ПУСТОЙ СЛОТ                                */
-        /* ----------------------------------------- */
+        /* ============================
+           ЕСЛИ СЛОТ ПУСТОЙ
+        ============================ */
 
         else {
 
@@ -576,9 +549,9 @@ function createSlots() {
 }
 
 
-/* ================================================= */
-/* ОТКРЫТИЕ СКРИНШОТА                               */
-/* ================================================= */
+/* ================================
+   ОТКРЫТЬ СКРИНШОТ
+================================ */
 
 function openScreenshot(imagePath, playerName) {
 
@@ -596,11 +569,17 @@ function openScreenshot(imagePath, playerName) {
         `Аккаунт: ${playerName}`;
 
 
-    error.style.display = "none";
-
     image.style.display = "block";
 
-    image.src = imagePath;
+    error.style.display = "none";
+
+
+    image.onload = function () {
+
+        image.style.display = "block";
+
+        error.style.display = "none";
+    };
 
 
     image.onerror = function () {
@@ -611,21 +590,25 @@ function openScreenshot(imagePath, playerName) {
     };
 
 
+    image.src = imagePath;
+
+
     modal.classList.add("active");
 
     document.body.style.overflow = "hidden";
 }
 
 
-/* ================================================= */
-/* ЗАКРЫТИЕ СКРИНШОТА                               */
-/* ================================================= */
+/* ================================
+   ЗАКРЫТЬ СКРИНШОТ
+================================ */
 
 function closeScreenshot() {
 
     modal.classList.remove("active");
 
     document.body.style.overflow = "";
+
 
     const image =
         document.getElementById("screenshotImage");
@@ -634,62 +617,83 @@ function closeScreenshot() {
 }
 
 
-/* Кнопка X */
+/* ================================
+   КНОПКА X
+================================ */
 
 document
     .getElementById("closeScreenshot")
-    .addEventListener("click", closeScreenshot);
+    .addEventListener(
+        "click",
+        closeScreenshot
+    );
 
 
-/* Нажатие на затемнённый фон */
+/* ================================
+   КЛИК ПО ФОНУ
+================================ */
 
 document
     .querySelector(".screenshot-overlay")
-    .addEventListener("click", closeScreenshot);
-
-
-/* Закрытие клавишей ESC */
-
-document.addEventListener("keydown", event => {
-
-    if (event.key === "Escape") {
-        closeScreenshot();
-    }
-
-});
-
-
-/* ================================================= */
-/* КНОПКИ СКРИНШОТОВ                                */
-/* ================================================= */
-
-slotsContainer.addEventListener("click", event => {
-
-    const button =
-        event.target.closest(".screenshot-button");
-
-    if (!button) {
-        return;
-    }
-
-
-    const imagePath =
-        button.dataset.image;
-
-    const playerName =
-        button.dataset.player;
-
-
-    openScreenshot(
-        imagePath,
-        playerName
+    .addEventListener(
+        "click",
+        closeScreenshot
     );
-});
 
 
-/* ================================================= */
-/* ФИЛЬТРЫ                                           */
-/* ================================================= */
+/* ================================
+   ESC
+================================ */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Escape") {
+            closeScreenshot();
+        }
+
+    }
+);
+
+
+/* ================================
+   КНОПКИ СКРИНШОТОВ
+================================ */
+
+slotsContainer.addEventListener(
+    "click",
+    function(event) {
+
+        const button =
+            event.target.closest(
+                ".screenshot-button"
+            );
+
+
+        if (!button) {
+            return;
+        }
+
+
+        const imagePath =
+            button.dataset.image;
+
+        const playerName =
+            button.dataset.player;
+
+
+        openScreenshot(
+            imagePath,
+            playerName
+        );
+    }
+);
+
+
+/* ================================
+   ФИЛЬТРЫ
+================================ */
 
 function applyFilters() {
 
@@ -706,7 +710,7 @@ function applyFilters() {
     let visibleCount = 0;
 
 
-    slots.forEach(slot => {
+    slots.forEach(function(slot) {
 
         const slotNumber =
             Number(slot.dataset.slot);
@@ -715,8 +719,6 @@ function applyFilters() {
         let filterMatch = true;
 
 
-        /* Буферные слоты */
-
         if (currentFilter === "buffer") {
 
             filterMatch =
@@ -724,8 +726,6 @@ function applyFilters() {
                 slotNumber <= 6;
         }
 
-
-        /* Команды */
 
         if (currentFilter === "teams") {
 
@@ -769,39 +769,44 @@ function applyFilters() {
 }
 
 
-/* ================================================= */
-/* КНОПКИ ФИЛЬТРА                                   */
-/* ================================================= */
+/* ================================
+   КНОПКИ ФИЛЬТРОВ
+================================ */
 
 document
     .querySelectorAll(".filter-btn")
-    .forEach(button => {
+    .forEach(function(button) {
 
-        button.addEventListener("click", () => {
+        button.addEventListener(
+            "click",
+            function() {
 
-            document
-                .querySelectorAll(".filter-btn")
-                .forEach(btn => {
-                    btn.classList.remove("active");
-                });
+                document
+                    .querySelectorAll(".filter-btn")
+                    .forEach(function(btn) {
 
+                        btn.classList.remove("active");
 
-            button.classList.add("active");
-
-
-            currentFilter =
-                button.dataset.filter;
+                    });
 
 
-            applyFilters();
-        });
+                button.classList.add("active");
+
+
+                currentFilter =
+                    button.dataset.filter;
+
+
+                applyFilters();
+            }
+        );
 
     });
 
 
-/* ================================================= */
-/* ПОИСК                                             */
-/* ================================================= */
+/* ================================
+   ПОИСК
+================================ */
 
 searchInput.addEventListener(
     "input",
@@ -809,9 +814,9 @@ searchInput.addEventListener(
 );
 
 
-/* ================================================= */
-/* ЗАПУСК                                            */
-/* ================================================= */
+/* ================================
+   ЗАПУСК САЙТА
+================================ */
 
 createSlots();
 
