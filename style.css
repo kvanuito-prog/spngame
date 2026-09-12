@@ -1,5 +1,6 @@
 /* =========================================================
-   SPN CUSTOM ROOM — ESPORTS EDITION
+   SPN CUSTOM ROOM
+   ESPORTS / TOURNAMENT DASHBOARD
 ========================================================= */
 
 * {
@@ -10,21 +11,32 @@
 
 :root {
     --bg: #05070b;
-    --panel: #0b1018;
-    --panel-2: #0e141e;
-    --border: #202b39;
-    --border-hover: #34475c;
+    --bg-soft: #080c12;
+
+    --panel: #0b1017;
+    --panel-2: #0e141d;
+    --panel-3: #111923;
+
+    --border: #1c2733;
+    --border-light: #263443;
 
     --blue: #00a8ff;
-    --blue-dark: #006da8;
-    --cyan: #24d8ff;
+    --cyan: #27dcff;
+    --blue-soft: rgba(0, 168, 255, 0.12);
 
-    --text: #f3f7fb;
-    --text-secondary: #8995a5;
-    --text-muted: #505c6c;
+    --green: #20d99a;
+    --red: #ff4964;
 
-    --danger: #ff3d58;
+    --text: #f4f7fa;
+    --text-2: #a3afbd;
+    --text-3: #647181;
+    --text-4: #3e4a58;
 }
+
+
+/* =========================================================
+   BASE
+========================================================= */
 
 html {
     scroll-behavior: smooth;
@@ -34,6 +46,7 @@ body {
     min-height: 100vh;
 
     font-family:
+        Inter,
         Arial,
         Helvetica,
         sans-serif;
@@ -42,18 +55,56 @@ body {
 
     background:
         radial-gradient(
-            circle at 50% -15%,
-            rgba(0, 168, 255, 0.16),
-            transparent 35%
+            circle at 50% -10%,
+            rgba(0, 168, 255, 0.14),
+            transparent 32%
         ),
         radial-gradient(
-            circle at 100% 50%,
-            rgba(0, 100, 180, 0.07),
-            transparent 30%
+            circle at 100% 35%,
+            rgba(0, 168, 255, 0.045),
+            transparent 25%
         ),
-        var(--bg);
+        linear-gradient(
+            180deg,
+            #05070b 0%,
+            #060910 100%
+        );
 
     overflow-x: hidden;
+}
+
+
+/* тонкая сетка фона */
+
+body::before {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
+
+    opacity: 0.16;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,0.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,0.025) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent 75%
+        );
 }
 
 
@@ -64,25 +115,27 @@ body {
 header {
     position: relative;
 
-    padding: 42px 20px 35px;
+    padding:
+        54px
+        20px
+        42px;
 
     text-align: center;
 
     background:
         linear-gradient(
             180deg,
-            #0b111a 0%,
-            #080c13 75%,
-            #05070b 100%
+            rgba(12,18,27,0.96),
+            rgba(6,9,14,0.92)
         );
 
-    border-bottom: 1px solid #17212d;
+    border-bottom: 1px solid var(--border);
 
-    box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.45);
+    overflow: hidden;
 }
 
-/* декоративные линии */
+
+/* верхняя неоновая линия */
 
 header::before {
     content: "";
@@ -106,8 +159,11 @@ header::before {
         );
 
     box-shadow:
-        0 0 18px rgba(0, 168, 255, 0.7);
+        0 0 20px rgba(0,168,255,0.8);
 }
+
+
+/* центральное свечение */
 
 header::after {
     content: "";
@@ -115,55 +171,84 @@ header::after {
     position: absolute;
 
     left: 50%;
-    bottom: -1px;
+    bottom: -80px;
 
-    width: 260px;
-    height: 2px;
+    width: 420px;
+    height: 160px;
 
     transform: translateX(-50%);
 
-    background: var(--blue);
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(0,168,255,0.15),
+            transparent 70%
+        );
 
-    box-shadow:
-        0 0 15px var(--blue),
-        0 0 35px rgba(0, 168, 255, 0.5);
+    pointer-events: none;
 }
 
 header h1 {
     position: relative;
+    z-index: 2;
 
-    font-size: clamp(30px, 4vw, 52px);
+    font-size:
+        clamp(28px, 4vw, 50px);
 
-    font-weight: 900;
+    font-weight: 950;
 
-    letter-spacing: 5px;
+    letter-spacing: 6px;
 
     text-transform: uppercase;
 
     color: #ffffff;
 
     text-shadow:
-        0 0 20px rgba(0, 168, 255, 0.3);
+        0 0 30px rgba(0,168,255,0.18);
 }
 
+
+/* убираем старый // */
+
 header h1::before {
-    content: "//";
+    content: "";
 
-    margin-right: 14px;
+    display: inline-block;
 
-    color: var(--blue);
+    width: 5px;
+    height: 32px;
 
-    font-size: 0.7em;
+    margin-right: 15px;
+
+    vertical-align: middle;
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--cyan),
+            var(--blue)
+        );
+
+    box-shadow:
+        0 0 18px rgba(0,168,255,0.7);
+
+    transform:
+        skewX(-18deg);
 }
 
 header p {
-    margin-top: 12px;
+    position: relative;
+    z-index: 2;
 
-    color: var(--text-secondary);
+    margin-top: 13px;
 
-    font-size: 13px;
+    color: var(--text-3);
 
-    letter-spacing: 2px;
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 3px;
 
     text-transform: uppercase;
 }
@@ -174,39 +259,52 @@ header p {
 ========================================================= */
 
 .stats {
+    position: relative;
+    z-index: 5;
+
     display: flex;
 
     justify-content: center;
 
-    gap: 12px;
+    gap: 10px;
 
-    margin: 25px auto;
+    width: min(500px, calc(100% - 24px));
 
-    padding: 0 15px;
+    margin:
+        -1px
+        auto
+        22px;
 }
 
 .stat {
     position: relative;
 
-    min-width: 170px;
+    flex: 1;
 
-    padding: 15px 25px;
+    min-width: 0;
+
+    padding:
+        13px
+        20px;
 
     background:
         linear-gradient(
             145deg,
-            rgba(16, 24, 34, 0.95),
-            rgba(8, 13, 20, 0.95)
+            rgba(15,22,31,0.98),
+            rgba(8,12,18,0.98)
         );
 
-    border: 1px solid var(--border);
+    border:
+        1px solid var(--border);
 
-    border-radius: 10px;
+    border-radius: 8px;
 
     text-align: center;
 
     box-shadow:
-        0 8px 30px rgba(0, 0, 0, 0.25);
+        0 12px 30px rgba(0,0,0,0.28);
+
+    overflow: hidden;
 }
 
 .stat::before {
@@ -215,36 +313,42 @@ header p {
     position: absolute;
 
     top: 0;
-    left: 20px;
-    right: 20px;
+    left: 25%;
+    right: 25%;
 
     height: 1px;
 
     background: var(--blue);
 
-    opacity: 0.5;
+    box-shadow:
+        0 0 12px var(--blue);
 }
 
-.stat-value {
+.stat-number {
     display: block;
+
+    font-size: 24px;
+
+    line-height: 1;
+
+    font-weight: 950;
 
     color: #ffffff;
 
-    font-size: 25px;
-
-    font-weight: 900;
+    text-shadow:
+        0 0 15px rgba(0,168,255,0.2);
 }
 
 .stat-label {
     display: block;
 
-    margin-top: 4px;
+    margin-top: 6px;
 
-    color: var(--text-muted);
+    color: var(--text-3);
 
-    font-size: 10px;
+    font-size: 9px;
 
-    font-weight: 700;
+    font-weight: 800;
 
     letter-spacing: 1.5px;
 
@@ -256,18 +360,50 @@ header p {
    SEARCH
 ========================================================= */
 
-.search-container {
-    width: min(720px, calc(100% - 30px));
+.search-box {
+    position: relative;
 
-    margin: 28px auto 18px;
+    width:
+        min(
+            650px,
+            calc(100% - 24px)
+        );
+
+    margin:
+        0
+        auto
+        13px;
+}
+
+.search-box::before {
+    content: "⌕";
+
+    position: absolute;
+
+    left: 15px;
+    top: 50%;
+
+    transform: translateY(-52%);
+
+    color: var(--blue);
+
+    font-size: 20px;
+
+    pointer-events: none;
+
+    z-index: 2;
 }
 
 #searchInput {
     width: 100%;
 
-    height: 50px;
+    height: 47px;
 
-    padding: 0 20px;
+    padding:
+        0
+        18px
+        0
+        43px;
 
     outline: none;
 
@@ -276,31 +412,37 @@ header p {
     background:
         linear-gradient(
             135deg,
-            #0d141e,
+            #0d141d,
             #090e15
         );
 
-    border: 1px solid var(--border);
+    border:
+        1px solid var(--border);
 
-    border-radius: 9px;
+    border-radius: 8px;
 
     font-family: inherit;
 
-    font-size: 14px;
+    font-size: 13px;
 
-    transition: 0.25s;
+    transition:
+        border-color .2s,
+        box-shadow .2s,
+        background .2s;
 }
 
 #searchInput::placeholder {
-    color: #5c6878;
+    color: #536071;
 }
 
 #searchInput:focus {
-    border-color: var(--blue);
+    background: #0d151f;
+
+    border-color: rgba(0,168,255,0.65);
 
     box-shadow:
-        0 0 0 3px rgba(0, 168, 255, 0.08),
-        0 0 25px rgba(0, 168, 255, 0.1);
+        0 0 0 3px rgba(0,168,255,0.06),
+        0 0 30px rgba(0,168,255,0.07);
 }
 
 
@@ -313,47 +455,55 @@ header p {
 
     justify-content: center;
 
-    flex-wrap: wrap;
+    gap: 6px;
 
-    gap: 8px;
+    margin:
+        0
+        auto
+        24px;
 
-    margin: 18px auto 30px;
-
-    padding: 0 15px;
+    padding:
+        0
+        12px;
 }
 
 .filter-btn {
     position: relative;
 
-    padding: 9px 20px;
+    padding:
+        8px
+        18px;
 
-    color: #778494;
+    color: #687586;
 
-    background: #0b1119;
+    background:
+        #090e14;
 
-    border: 1px solid var(--border);
+    border:
+        1px solid var(--border);
 
-    border-radius: 7px;
+    border-radius: 6px;
 
     font-family: inherit;
 
-    font-size: 11px;
+    font-size: 10px;
 
-    font-weight: 800;
+    font-weight: 850;
 
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
 
     cursor: pointer;
 
-    transition: 0.2s;
+    transition:
+        .2s;
 }
 
 .filter-btn:hover {
     color: #ffffff;
 
-    border-color: var(--border-hover);
+    border-color: var(--border-light);
 
-    background: #101823;
+    background: #0e151e;
 }
 
 .filter-btn.active {
@@ -362,34 +512,42 @@ header p {
     background:
         linear-gradient(
             135deg,
-            #087eb9,
-            #07577f
+            #087caf,
+            #07547a
         );
 
-    border-color: var(--blue);
+    border-color:
+        rgba(0,168,255,0.8);
 
     box-shadow:
-        0 0 18px rgba(0, 168, 255, 0.16);
+        0 0 18px rgba(0,168,255,0.12);
 }
 
 
 /* =========================================================
-   SLOTS
+   MAIN / SLOTS
 ========================================================= */
 
 .slots {
-    width: calc(100% - 40px);
+    width:
+        min(
+            1800px,
+            calc(100% - 32px)
+        );
 
-    max-width: 1900px;
-
-    margin: 0 auto;
+    margin:
+        0
+        auto;
 
     display: grid;
 
     grid-template-columns:
-        repeat(10, minmax(0, 1fr));
+        repeat(
+            10,
+            minmax(0, 1fr)
+        );
 
-    gap: 14px;
+    gap: 9px;
 }
 
 
@@ -402,32 +560,33 @@ header p {
 
     min-width: 0;
 
-    padding: 15px;
+    padding: 11px;
 
     background:
         linear-gradient(
             145deg,
-            rgba(15, 22, 32, 0.98),
-            rgba(9, 14, 21, 0.98)
+            rgba(14,21,30,0.98),
+            rgba(8,12,18,0.98)
         );
 
-    border: 1px solid var(--border);
+    border:
+        1px solid var(--border);
 
-    border-radius: 11px;
+    border-radius: 8px;
 
     overflow: hidden;
 
     box-shadow:
-        0 8px 25px rgba(0, 0, 0, 0.25);
+        0 7px 20px rgba(0,0,0,0.25);
 
     transition:
-        transform 0.2s ease,
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
+        transform .18s ease,
+        border-color .18s ease,
+        box-shadow .18s ease;
 }
 
 
-/* угол карточки */
+/* маленький угол */
 
 .slot::after {
     content: "";
@@ -437,22 +596,27 @@ header p {
     top: 0;
     right: 0;
 
-    width: 22px;
-    height: 22px;
+    width: 15px;
+    height: 15px;
 
-    border-top: 2px solid rgba(0, 168, 255, 0.55);
+    border-top:
+        1px solid
+        rgba(0,168,255,0.7);
 
-    border-right: 2px solid rgba(0, 168, 255, 0.55);
+    border-right:
+        1px solid
+        rgba(0,168,255,0.7);
 }
 
 .slot:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
 
-    border-color: var(--border-hover);
+    border-color:
+        #2a3b4d;
 
     box-shadow:
-        0 15px 35px rgba(0, 0, 0, 0.4),
-        0 0 20px rgba(0, 168, 255, 0.05);
+        0 12px 30px rgba(0,0,0,0.4),
+        0 0 18px rgba(0,168,255,0.035);
 }
 
 
@@ -463,23 +627,40 @@ header p {
 .slot-number {
     position: relative;
 
-    padding-bottom: 11px;
+    padding:
+        0
+        0
+        8px;
 
-    color: #687587;
+    color: #778596;
 
-    border-bottom: 1px solid #1c2632;
+    border-bottom:
+        1px solid
+        #19232e;
 
-    font-size: 11px;
+    font-size: 9px;
 
-    font-weight: 900;
+    font-weight: 950;
 
-    letter-spacing: 1.5px;
-
-    text-transform: uppercase;
+    letter-spacing: 1.4px;
 }
 
-.slot-number::first-letter {
-    color: var(--blue);
+.slot-number::before {
+    content: "";
+
+    display: inline-block;
+
+    width: 4px;
+    height: 4px;
+
+    margin-right: 6px;
+
+    vertical-align: middle;
+
+    background: var(--blue);
+
+    box-shadow:
+        0 0 7px var(--blue);
 }
 
 
@@ -490,13 +671,18 @@ header p {
 .player {
     position: relative;
 
-    padding: 13px 0;
+    padding:
+        10px
+        0
+        8px;
 
-    border-bottom: 1px solid #1c2632;
+    border-bottom:
+        1px solid
+        #18212c;
 }
 
 .player:last-child {
-    padding-bottom: 2px;
+    padding-bottom: 0;
 
     border-bottom: none;
 }
@@ -504,13 +690,15 @@ header p {
 .nickname {
     display: block;
 
+    width: 100%;
+
     overflow: hidden;
 
-    color: #f0f4f8;
+    color: #eef3f7;
 
-    font-size: 13px;
+    font-size: 11px;
 
-    font-weight: 800;
+    font-weight: 850;
 
     line-height: 1.3;
 
@@ -520,13 +708,20 @@ header p {
 }
 
 .player-id {
-    margin-top: 5px;
+    margin-top: 4px;
 
-    color: #566274;
+    color: #536071;
 
-    font-size: 9px;
+    font-family:
+        monospace;
 
-    font-weight: 600;
+    font-size: 8px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
 }
 
 
@@ -535,8 +730,6 @@ header p {
 ========================================================= */
 
 .screenshot-button {
-    position: relative;
-
     display: flex;
 
     align-items: center;
@@ -544,69 +737,73 @@ header p {
 
     width: 100%;
 
-    height: 29px;
+    height: 25px;
 
-    margin-top: 9px;
+    margin-top: 7px;
 
-    padding: 0 8px;
+    padding: 0 6px;
 
-    color: #6f7c8d;
+    color: #687687;
 
     background:
-        linear-gradient(
-            180deg,
-            #111a25,
-            #0b121b
-        );
+        #0b121a;
 
-    border: 1px solid #293646;
+    border:
+        1px solid
+        #202d3a;
 
-    border-radius: 6px;
+    border-radius: 5px;
 
     font-family: inherit;
 
-    font-size: 9px;
+    font-size: 8px;
 
-    font-weight: 700;
+    font-weight: 800;
 
     cursor: pointer;
 
-    transition: 0.2s;
+    transition:
+        .18s;
 }
 
 .screenshot-button:hover {
     color: #ffffff;
 
-    border-color: var(--blue);
-
     background:
-        linear-gradient(
-            180deg,
-            #132435,
-            #0d1824
-        );
+        #0e1b27;
+
+    border-color:
+        rgba(0,168,255,0.65);
 
     box-shadow:
-        0 0 14px rgba(0, 168, 255, 0.13);
+        0 0 12px
+        rgba(0,168,255,0.1);
 }
 
 .screenshot-button:active {
-    transform: scale(0.98);
+    transform: scale(.97);
 }
 
 
 /* =========================================================
    BUFFER SLOTS
+   МАКСИМАЛЬНО КОМПАКТНЫЕ
 ========================================================= */
 
 .slot.buffer {
-    min-height: 145px;
+    min-height: 72px;
+
+    padding: 10px;
 
     display: flex;
 
     flex-direction: column;
 
     justify-content: space-between;
+}
+
+.slot.buffer .slot-number {
+    padding-bottom: 6px;
 }
 
 .buffer-text {
@@ -617,15 +814,17 @@ header p {
 
     flex: 1;
 
-    color: #3f4a59;
+    min-height: 25px;
 
-    font-size: 10px;
+    color: #374352;
 
-    font-weight: 700;
+    font-size: 7px;
+
+    font-weight: 800;
+
+    letter-spacing: .8px;
 
     text-transform: uppercase;
-
-    letter-spacing: 1px;
 }
 
 
@@ -636,23 +835,34 @@ header p {
 #noResults {
     display: none;
 
-    width: calc(100% - 40px);
+    width:
+        min(
+            650px,
+            calc(100% - 24px)
+        );
 
-    max-width: 700px;
+    margin:
+        40px
+        auto;
 
-    margin: 50px auto;
+    padding:
+        45px
+        20px;
 
-    padding: 55px 20px;
+    color: var(--text-3);
 
-    color: #596678;
+    background:
+        #0a1017;
 
-    background: #0b1018;
+    border:
+        1px solid
+        var(--border);
 
-    border: 1px solid var(--border);
-
-    border-radius: 12px;
+    border-radius: 10px;
 
     text-align: center;
+
+    font-size: 12px;
 }
 
 
@@ -670,7 +880,6 @@ header p {
     z-index: 99999;
 
     align-items: center;
-
     justify-content: center;
 }
 
@@ -684,9 +893,10 @@ header p {
     inset: 0;
 
     background:
-        rgba(2, 4, 7, 0.94);
+        rgba(2,4,7,.94);
 
-    backdrop-filter: blur(10px);
+    backdrop-filter:
+        blur(12px);
 }
 
 .screenshot-window {
@@ -694,26 +904,34 @@ header p {
 
     z-index: 2;
 
-    width: min(1150px, 94vw);
+    width:
+        min(
+            1150px,
+            94vw
+        );
 
     max-height: 94vh;
 
-    padding: 20px;
+    padding: 18px;
 
     background:
         linear-gradient(
             145deg,
-            #101721,
-            #080d14
+            #101821,
+            #080d13
         );
 
-    border: 1px solid #2a3747;
+    border:
+        1px solid
+        #2a3948;
 
-    border-radius: 14px;
+    border-radius: 12px;
 
     box-shadow:
-        0 30px 100px rgba(0, 0, 0, 0.8),
-        0 0 40px rgba(0, 168, 255, 0.06);
+        0 30px 100px
+        rgba(0,0,0,.85),
+        0 0 40px
+        rgba(0,168,255,.06);
 
     display: flex;
 
@@ -728,8 +946,9 @@ header p {
     position: absolute;
 
     top: -1px;
-    left: 15%;
-    right: 15%;
+
+    left: 20%;
+    right: 20%;
 
     height: 2px;
 
@@ -748,13 +967,15 @@ header p {
 .screenshot-title {
     width: 100%;
 
-    margin-bottom: 16px;
+    margin-bottom: 13px;
 
-    padding: 0 50px;
+    padding:
+        0
+        45px;
 
     color: #ffffff;
 
-    font-size: 17px;
+    font-size: 15px;
 
     font-weight: 900;
 
@@ -770,45 +991,51 @@ header p {
 
     object-fit: contain;
 
-    border-radius: 6px;
+    border-radius: 5px;
 
     box-shadow:
-        0 15px 50px rgba(0, 0, 0, 0.6);
+        0 15px 50px
+        rgba(0,0,0,.65);
 }
 
 .screenshot-close {
     position: absolute;
 
-    top: 12px;
-    right: 12px;
+    top: 10px;
+    right: 10px;
 
     z-index: 5;
 
-    width: 38px;
-    height: 38px;
+    width: 35px;
+    height: 35px;
 
-    color: #aeb8c5;
+    color: #8793a1;
 
-    background: #0c131c;
+    background:
+        #0b1219;
 
-    border: 1px solid #2b3848;
+    border:
+        1px solid
+        #293745;
 
-    border-radius: 8px;
+    border-radius: 7px;
 
-    font-size: 18px;
+    font-size: 16px;
 
     cursor: pointer;
 
-    transition: 0.2s;
+    transition: .2s;
 }
 
 .screenshot-close:hover {
     color: #ffffff;
 
-    border-color: var(--blue);
+    border-color:
+        var(--blue);
 
     box-shadow:
-        0 0 15px rgba(0, 168, 255, 0.2);
+        0 0 15px
+        rgba(0,168,255,.18);
 }
 
 
@@ -817,19 +1044,25 @@ header p {
 ========================================================= */
 
 footer {
-    margin-top: 55px;
+    position: relative;
 
-    padding: 28px 20px;
+    margin-top: 40px;
 
-    color: #465262;
+    padding:
+        25px
+        20px;
 
-    border-top: 1px solid #151e29;
+    color: #35414e;
 
-    font-size: 10px;
+    border-top:
+        1px solid
+        #121b24;
 
-    font-weight: 700;
+    font-size: 8px;
 
-    letter-spacing: 1.5px;
+    font-weight: 800;
+
+    letter-spacing: 2px;
 
     text-align: center;
 
@@ -844,104 +1077,203 @@ footer {
 @media (min-width: 1500px) {
 
     .slots {
-        grid-template-columns:
-            repeat(10, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .slot {
+        padding: 12px;
     }
 }
 
 
 /* =========================================================
-   TABLET — LANDSCAPE
-   4 КАРТОЧКИ В РЯД
+   TABLET
 ========================================================= */
 
 @media (min-width: 601px) and (max-width: 1400px) {
 
     .slots {
         grid-template-columns:
-            repeat(4, minmax(0, 1fr));
+            repeat(4, minmax(0,1fr));
 
-        gap: 14px;
+        gap: 10px;
+
+        width:
+            calc(100% - 24px);
     }
 
     .slot {
-        padding: 15px;
+        padding: 12px;
     }
 
     .nickname {
-        font-size: 13px;
+        font-size: 12px;
     }
 }
 
 
 /* =========================================================
    MOBILE
-   2 КАРТОЧКИ В РЯД
 ========================================================= */
 
 @media (max-width: 600px) {
 
     header {
-        padding: 32px 15px 27px;
+        padding:
+            35px
+            15px
+            30px;
     }
 
     header h1 {
-        font-size: 25px;
+        font-size: 24px;
 
         letter-spacing: 2px;
     }
 
     header h1::before {
-        margin-right: 7px;
+        width: 3px;
+        height: 20px;
+
+        margin-right: 8px;
     }
 
     header p {
-        font-size: 9px;
+        margin-top: 9px;
 
-        letter-spacing: 1px;
+        font-size: 8px;
+
+        letter-spacing: 1.5px;
     }
 
     .stats {
-        gap: 8px;
+        width:
+            calc(100% - 18px);
+
+        margin-bottom: 17px;
     }
 
     .stat {
-        min-width: 130px;
-
-        padding: 12px 10px;
+        padding:
+            11px
+            8px;
     }
 
-    .stat-value {
+    .stat-number {
         font-size: 20px;
     }
 
     .stat-label {
-        font-size: 8px;
+        font-size: 7px;
+
+        letter-spacing: 1px;
     }
 
-    .slots {
-        width: calc(100% - 18px);
-
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-
-        gap: 9px;
+    .search-box {
+        width:
+            calc(100% - 18px);
     }
 
-    .slot {
-        padding: 11px;
+    #searchInput {
+        height: 44px;
 
-        border-radius: 9px;
+        font-size: 12px;
     }
 
-    .slot-number {
-        padding-bottom: 8px;
+    .filters {
+        margin-bottom: 17px;
+    }
+
+    .filter-btn {
+        padding:
+            7px
+            13px;
 
         font-size: 9px;
     }
 
+    .slots {
+        width:
+            calc(100% - 14px);
+
+        grid-template-columns:
+            repeat(2, minmax(0,1fr));
+
+        gap: 7px;
+    }
+
+    .slot {
+        padding: 9px;
+
+        border-radius: 7px;
+    }
+
+    .slot-number {
+        padding-bottom: 7px;
+
+        font-size: 8px;
+    }
+
     .nickname {
-        font-size: 10px;
+        font-size: 9px;
+    }
+
+    .player-id {
+        font-size: 7px;
+    }
+
+    .screenshot-button {
+        height: 23px;
+
+        margin-top: 6px;
+
+        font-size: 7px;
+    }
+
+    .slot.buffer {
+        min-height: 58px;
+
+        padding: 8px;
+    }
+
+    .buffer-text {
+        font-size: 6px;
+    }
+
+    .screenshot-window {
+        width: 96vw;
+
+        padding: 11px;
+    }
+
+    .screenshot-title {
+        font-size: 13px;
+    }
+
+    .screenshot-close {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .slots {
+        grid-template-columns:
+            1fr;
+    }
+
+    .slot {
+        padding: 11px;
+    }
+
+    .nickname {
+        font-size: 11px;
     }
 
     .player-id {
@@ -949,36 +1281,9 @@ footer {
     }
 
     .screenshot-button {
-        height: 27px;
+        height: 25px;
 
         font-size: 8px;
-    }
-
-    .buffer-text {
-        font-size: 8px;
-    }
-
-    .screenshot-window {
-        width: 96vw;
-
-        padding: 12px;
-    }
-
-    .screenshot-title {
-        font-size: 14px;
-    }
-}
-
-
-/* =========================================================
-   VERY SMALL PHONE
-========================================================= */
-
-@media (max-width: 380px) {
-
-    .slots {
-        grid-template-columns:
-            repeat(1, minmax(0, 1fr));
     }
 }
 
@@ -988,8 +1293,8 @@ footer {
 ========================================================= */
 
 ::-webkit-scrollbar {
-    width: 7px;
-    height: 7px;
+    width: 6px;
+    height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -997,22 +1302,25 @@ footer {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #263342;
+    background:
+        #263442;
 
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--blue);
+    background:
+        var(--blue);
 }
 
 
 /* =========================================================
-   TEXT SELECTION
+   SELECTION
 ========================================================= */
 
 ::selection {
     color: #ffffff;
 
-    background: rgba(0, 168, 255, 0.3);
+    background:
+        rgba(0,168,255,.3);
 }
