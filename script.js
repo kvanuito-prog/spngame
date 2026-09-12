@@ -12,9 +12,8 @@
 const SUPABASE_URL =
     "https://dgtssaispbiqxeimidjl.supabase.co";
 
-// ВСТАВЬ СЮДА СВОЙ PUBLISHABLE KEY
 const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_T-1SkXGZ1cMu_lMq7nML1Q_faYsD9PZ";
+    "ТВОЙ_PUBLISHABLE_KEY";
 
 let supabaseClient = null;
 
@@ -30,7 +29,7 @@ try {
         );
     }
 } catch (error) {
-    console.error("SPN: ошибка создания Supabase:", error);
+    console.error("SPN: ошибка Supabase:", error);
 }
 
 
@@ -39,227 +38,182 @@ try {
 // ============================================================
 
 const teams = {
-
     7: [
         ["Meg神", "584490351"],
         ["даньён", "528554700"]
     ],
-
     8: [
         ["oopsĪKRAKEN", "5394036598"],
         ["oopsĪExtazy47", "5853720512"]
     ],
-
     9: [
         ["require", "5151155671"],
         ["pamiboy", "512038100"]
     ],
-
     10: [
         ["OFF SATURN", "51820970664"],
         ["Chifuyu", "5641119402"]
     ],
-
     11: [
         ["мамочек", "51554361168"],
         ["DimaKolyadenko", "5624868354"]
     ],
-
     12: [
         ["4RmskINOY", "51681028930"],
         ["4RmskGRKKO", "52097735266"]
     ],
-
     13: [
         ["GD³ Luna", "51748812036"],
         ["GD¹ MILFA", "52225566329"]
     ],
-
     14: [
         ["WhyAlwaywMe777", "5278941372"],
         ["STLēCandy", "51835322672"]
     ],
-
     15: [
         ["WNēlūflosex", "51425126649"],
         ["deloūvremeni", "51382437194"]
     ],
-
     16: [
         ["oops IRON", "5748094922"],
         ["ɢ²EM69", "5237671761"]
     ],
-
     17: [
         ["evoTENSHOOOOOO", "5375243289"],
         ["evoChiefCief", "51406547392"]
     ],
-
     18: [
         ["ES frizz404", "51323130709"],
         ["Lam Mad", "5265708626"]
     ],
-
     19: [
         ["Bad 스티치", "5665385032"],
         ["concentrate", "5581728996"]
     ],
-
     20: [
         ["VSQ DOM1NATOR", "51770964046"],
         ["Deidaraッ¹", "5872474240"]
     ],
-
     21: [
         ["tw1z666", "5359429915"],
         ["BAZAūFACHE", "5914921954"]
     ],
-
     22: [
         ["SOULPAUPAU", "5207392557"],
         ["GGOLEGARH", "51930208709"]
     ],
-
     23: [
         ["VRERIGANhae", "5598208338"],
         ["plBibizyan", "51433899596"]
     ],
-
     24: [
         ["oops Sobaka", "5903084104"],
         ["oops x ray", "5263605707"]
     ],
-
     25: [
         ["DARKēMIROSLAV", "51011480213"],
         ["DARKēBigByba", "51425072167"]
     ],
-
     26: [
         ["SHWT3N", "5253833134"],
         ["nervIEM", "51250268807"]
     ],
-
     27: [
         ["LM eniway", "5617267660"],
         ["p4pēINGUSH", "5412499445"]
     ],
-
     28: [
         ["oops 1", "52199128083"],
         ["oops2", "5487979553"]
     ],
-
     29: [
         ["GHMīBeavisYT", "52158254615"],
         ["rqCHLL404", "5174986925"]
     ],
-
     30: [
         ["NEX2 lvdboost", "5436743907"],
         ["user5191813756537409", "51918137565"]
     ],
-
     31: [
         ["Miracle", "51647808909"],
         ["msnViperr", "5158787550"]
     ],
-
     32: [
         ["iqFkorxx", "5366651176"],
         ["GTVـJ0SK1YY是", "5262171268"]
     ],
-
     33: [
         ["VREXMO炎", "5319151610"],
         ["VRFONIX", "51588467910"]
     ],
-
     34: [
         ["pG丶n3trryyy", "51696664904"],
         ["pG丶maple", "51442937869"]
     ],
-
     35: [
         ["dr 666", "5307849028"],
         ["plGAMOS1337", "5514130614"]
     ],
-
     36: [
         ["TolstiyBegemot", "5315164165"],
         ["R3STOR3", "5103167510"]
     ],
-
     37: [
         ["SharpbI4ēē67", "5345354520"],
         ["BIG・babySPRAY", "5377420304"]
     ],
-
     38: [
         ["dr'4EverYoung", "5246516071"],
         ["dr’Merko", "51211492451"]
     ],
-
     39: [
         ["LyapuhaSila", "51866646716"],
         ["VR666666666666", "5663978460"]
     ],
-
     40: [
         ["AnchorēBlue", "5281969153"],
         ["nghtēvlasik", "5712455956"]
     ],
-
     41: [
         ["pG丶nepolonia", "51794185086"],
         ["pG丶druam", "5841679517"]
     ],
-
     42: [
         ["yrodNaSaturNe", "5472888899"],
         ["amixDead", "5423035816"]
     ],
-
     43: [
         ["Assenii", "51390811229"],
         ["RRNEFFEX", "5544169844"]
     ],
-
     44: [
         ["wzēAugustin", "51540888072"],
         ["wzēVsind", "5417881428"]
     ],
-
     45: [
         ["pG丶m", "5838898280"],
         ["pG丶sayyy", "51910729283"]
     ],
-
     46: [
         ["404 takasuma", "5219649493"],
         ["404 ONYX", "51020656726"]
     ],
-
     47: [
         ["404 EKIMKA", "5819227706"],
         ["404 SYSTEM", "51578251736"]
     ],
-
     48: [
         ["CRASHēNÉVERq", "5343160068"],
         ["CRASHēARTHUR", "51300909480"]
     ],
-
     49: [
         ["CRASHēBAÚNTY", "51843815264"],
         ["CRASHērmq17", "51369160383"]
     ],
-
     50: [
         ["CRASHēMRAKヅ", "51477942698"],
         ["CRASHēFORZI", "51816909392"]
     ]
-
 };
 
 
@@ -288,15 +242,11 @@ let currentFilter = "all";
 
 function createDebugPanel() {
 
-    const oldPanel =
-        document.getElementById("spnDebug");
-
-    if (oldPanel) {
-        oldPanel.remove();
+    if (document.getElementById("spnDebug")) {
+        return;
     }
 
-    const panel =
-        document.createElement("div");
+    const panel = document.createElement("div");
 
     panel.id = "spnDebug";
 
@@ -307,25 +257,43 @@ function createDebugPanel() {
 
         <div class="spn-debug-row">
             <span>Supabase</span>
-            <strong id="debugSupabase">Проверка...</strong>
+            <strong id="debugSupabase">
+                Проверка...
+            </strong>
         </div>
 
         <div class="spn-debug-row">
             <span>Slots</span>
-            <strong id="debugSlots">—</strong>
+            <strong id="debugSlots">
+                —
+            </strong>
         </div>
 
         <div class="spn-debug-row">
             <span>Players</span>
-            <strong id="debugPlayers">—</strong>
+            <strong id="debugPlayers">
+                —
+            </strong>
+        </div>
+
+        <div class="spn-debug-row">
+            <span>Команды сайта</span>
+            <strong id="debugTeams">
+                ${Object.keys(teams).length}
+            </strong>
         </div>
 
         <div class="spn-debug-row">
             <span>Ошибка</span>
-            <strong id="debugError">Нет</strong>
+            <strong id="debugError">
+                Нет
+            </strong>
         </div>
 
-        <div class="spn-debug-log" id="debugLog">
+        <div
+            class="spn-debug-log"
+            id="debugLog"
+        >
             Запуск проверки...
         </div>
     `;
@@ -333,22 +301,21 @@ function createDebugPanel() {
     document.body.appendChild(panel);
 
 
-    const style =
-        document.createElement("style");
+    const style = document.createElement("style");
 
     style.id = "spnDebugStyle";
 
     style.textContent = `
-
         #spnDebug {
             position: fixed;
-            left: 12px;
-            right: 12px;
-            bottom: 12px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+
             z-index: 999999;
 
             background:
-                rgba(8, 10, 16, 0.97);
+                rgba(7, 9, 15, 0.97);
 
             border:
                 1px solid rgba(0, 255, 170, 0.35);
@@ -357,22 +324,22 @@ function createDebugPanel() {
                 14px;
 
             padding:
-                14px;
+                13px;
 
             color:
-                #ffffff;
+                white;
 
             font-family:
                 Arial, sans-serif;
+
+            font-size:
+                13px;
 
             box-shadow:
                 0 10px 40px rgba(0,0,0,0.5);
 
             backdrop-filter:
                 blur(12px);
-
-            font-size:
-                13px;
         }
 
         .spn-debug-title {
@@ -386,7 +353,7 @@ function createDebugPanel() {
                 1.5px;
 
             margin-bottom:
-                10px;
+                9px;
         }
 
         .spn-debug-row {
@@ -397,13 +364,14 @@ function createDebugPanel() {
                 space-between;
 
             gap:
-                15px;
+                12px;
 
             padding:
                 4px 0;
 
             border-bottom:
-                1px solid rgba(255,255,255,0.06);
+                1px solid
+                rgba(255,255,255,0.06);
         }
 
         .spn-debug-row strong {
@@ -413,7 +381,7 @@ function createDebugPanel() {
 
         .spn-debug-log {
             margin-top:
-                10px;
+                9px;
 
             padding:
                 8px;
@@ -425,7 +393,7 @@ function createDebugPanel() {
                 rgba(255,255,255,0.05);
 
             color:
-                rgba(255,255,255,0.75);
+                rgba(255,255,255,0.72);
 
             word-break:
                 break-word;
@@ -433,14 +401,17 @@ function createDebugPanel() {
             line-height:
                 1.4;
         }
-
     `;
 
     document.head.appendChild(style);
 }
 
 
-function debugSet(id, text, status) {
+function debugSet(
+    id,
+    text,
+    status = null
+) {
 
     const element =
         document.getElementById(id);
@@ -466,11 +437,14 @@ function debugSet(id, text, status) {
 function debugLog(text) {
 
     const element =
-        document.getElementById("debugLog");
+        document.getElementById(
+            "debugLog"
+        );
 
-    if (!element) return;
+    if (element) {
+        element.textContent = text;
+    }
 
-    element.textContent = text;
 }
 
 
@@ -501,7 +475,9 @@ function initAudio() {
             audioContext.state ===
             "suspended"
         ) {
+
             audioContext.resume();
+
         }
 
     } catch (error) {
@@ -517,9 +493,9 @@ function initAudio() {
 
 
 function playTone(
-    frequency = 600,
-    duration = 0.05,
-    volume = 0.025
+    frequency,
+    duration,
+    volume
 ) {
 
     if (!soundEnabled) return;
@@ -603,7 +579,7 @@ function playCloseSound() {
 
 
 // ============================================================
-// HTML SECURITY
+// ESCAPE HTML
 // ============================================================
 
 function escapeHTML(value) {
@@ -639,7 +615,6 @@ function createScreenshotModal() {
         "screenshotModal";
 
     modal.innerHTML = `
-
         <div class="screenshot-backdrop"></div>
 
         <div class="screenshot-window">
@@ -647,7 +622,6 @@ function createScreenshotModal() {
             <button
                 class="screenshot-close"
                 type="button"
-                aria-label="Закрыть"
             >
                 ×
             </button>
@@ -683,13 +657,14 @@ function createScreenshotModal() {
         document.createElement("style");
 
     style.textContent = `
-
         #screenshotModal {
             position: fixed;
             inset: 0;
+
             z-index: 999998;
 
             display: none;
+
             align-items: center;
             justify-content: center;
 
@@ -710,16 +685,21 @@ function createScreenshotModal() {
 
         .screenshot-window {
             position: relative;
+
             z-index: 2;
 
-            width: min(900px, 100%);
-            max-height: 90vh;
+            width:
+                min(900px, 100%);
+
+            max-height:
+                90vh;
 
             background:
                 #10131b;
 
             border:
-                1px solid rgba(255,255,255,0.12);
+                1px solid
+                rgba(255,255,255,0.12);
 
             border-radius:
                 18px;
@@ -727,10 +707,12 @@ function createScreenshotModal() {
             padding:
                 16px;
 
-            overflow: hidden;
+            overflow:
+                hidden;
 
             box-shadow:
-                0 30px 80px rgba(0,0,0,0.65);
+                0 30px 80px
+                rgba(0,0,0,0.65);
         }
 
         .screenshot-title {
@@ -750,10 +732,14 @@ function createScreenshotModal() {
         .screenshot-image-wrap {
             position: relative;
 
-            display: flex;
+            display:
+                flex;
 
-            align-items: center;
-            justify-content: center;
+            align-items:
+                center;
+
+            justify-content:
+                center;
 
             min-height:
                 150px;
@@ -764,11 +750,13 @@ function createScreenshotModal() {
             border-radius:
                 12px;
 
-            overflow: hidden;
+            overflow:
+                hidden;
         }
 
         #screenshotImage {
-            display: block;
+            display:
+                block;
 
             max-width:
                 100%;
@@ -781,7 +769,8 @@ function createScreenshotModal() {
         }
 
         .screenshot-error {
-            display: none;
+            display:
+                none;
 
             padding:
                 30px;
@@ -791,18 +780,29 @@ function createScreenshotModal() {
         }
 
         .screenshot-close {
-            position: absolute;
+            position:
+                absolute;
 
-            top: 10px;
-            right: 10px;
+            top:
+                10px;
 
-            z-index: 5;
+            right:
+                10px;
 
-            width: 36px;
-            height: 36px;
+            z-index:
+                5;
 
-            border: none;
-            border-radius: 50%;
+            width:
+                36px;
+
+            height:
+                36px;
+
+            border:
+                none;
+
+            border-radius:
+                50%;
 
             background:
                 rgba(255,255,255,0.1);
@@ -816,21 +816,24 @@ function createScreenshotModal() {
             cursor:
                 pointer;
         }
-
     `;
 
     document.head.appendChild(style);
 
 
     modal
-        .querySelector(".screenshot-backdrop")
+        .querySelector(
+            ".screenshot-backdrop"
+        )
         .addEventListener(
             "click",
             closeScreenshot
         );
 
     modal
-        .querySelector(".screenshot-close")
+        .querySelector(
+            ".screenshot-close"
+        )
         .addEventListener(
             "click",
             closeScreenshot
@@ -869,13 +872,16 @@ function openScreenshot(
     title.textContent =
         `Скриншот — ${playerName}`;
 
-    image.style.display = "block";
+    image.style.display =
+        "block";
 
-    error.style.display = "none";
+    error.style.display =
+        "none";
 
-    image.src = imagePath;
+    image.src =
+        imagePath;
 
-    image.onerror = function () {
+    image.onerror = () => {
 
         image.style.display =
             "none";
@@ -885,7 +891,9 @@ function openScreenshot(
 
     };
 
-    modal.classList.add("active");
+    modal.classList.add(
+        "active"
+    );
 
     playScreenshotSound();
 
@@ -901,7 +909,9 @@ function closeScreenshot() {
 
     if (!modal) return;
 
-    modal.classList.remove("active");
+    modal.classList.remove(
+        "active"
+    );
 
     playCloseSound();
 
@@ -915,18 +925,22 @@ function closeScreenshot() {
 function createSlots() {
 
     if (!slotsContainer) {
+
         console.error(
-            "SPN: контейнер #slots не найден"
+            "SPN: #slots не найден"
         );
+
         return;
+
     }
+
 
     slotsContainer.innerHTML = "";
 
 
-    // --------------------------------------------------------
-    // ОБЩИЙ БУФЕР 1–6
-    // --------------------------------------------------------
+    // ========================================================
+    // БУФЕР 1–6 — ОДНА КАРТОЧКА
+    // ========================================================
 
     const bufferCard =
         document.createElement("article");
@@ -940,11 +954,13 @@ function createSlots() {
     bufferCard.dataset.search =
         "слоты 1 2 3 4 5 6 буфер буферные";
 
+
     bufferCard.innerHTML = `
 
         <div class="slot-header">
 
-            <div>
+            <div class="slot-header-left">
+
                 <span class="slot-number">
                     01–06
                 </span>
@@ -952,9 +968,11 @@ function createSlots() {
                 <span class="slot-status">
                     БУФЕР
                 </span>
+
             </div>
 
         </div>
+
 
         <div class="buffer-content">
 
@@ -963,6 +981,7 @@ function createSlots() {
             </div>
 
             <div>
+
                 <div class="buffer-title">
                     БУФЕРНЫЕ СЛОТЫ
                 </div>
@@ -971,19 +990,21 @@ function createSlots() {
                     Слоты 1–6 зарезервированы
                     под буфер.
                 </div>
+
             </div>
 
         </div>
     `;
+
 
     slotsContainer.appendChild(
         bufferCard
     );
 
 
-    // --------------------------------------------------------
+    // ========================================================
     // КОМАНДЫ 7–50
-    // --------------------------------------------------------
+    // ========================================================
 
     for (
         let slotNumber = 7;
@@ -995,7 +1016,9 @@ function createSlots() {
             teams[slotNumber];
 
         const card =
-            document.createElement("article");
+            document.createElement(
+                "article"
+            );
 
         card.className =
             "slot-card team-card";
@@ -1003,15 +1026,21 @@ function createSlots() {
         card.dataset.type =
             "team";
 
+
         let searchText =
             `слот ${slotNumber} команда ${slotNumber}`;
+
 
         let playersHTML = "";
 
 
+        // ----------------------------------------------------
+        // ЕСЛИ КОМАНДА ЕСТЬ
+        // ----------------------------------------------------
+
         if (
-            team &&
-            Array.isArray(team)
+            Array.isArray(team) &&
+            team.length > 0
         ) {
 
             team.forEach(
@@ -1029,8 +1058,10 @@ function createSlots() {
                     searchText +=
                         ` ${nickname} ${playerId}`;
 
+
                     const imagePath =
                         `images/${slotNumber}-${playerIndex + 1}.jpg`;
+
 
                     playersHTML += `
 
@@ -1057,6 +1088,7 @@ function createSlots() {
 
                             </div>
 
+
                             <button
                                 class="screenshot-btn"
                                 type="button"
@@ -1068,10 +1100,18 @@ function createSlots() {
 
                         </div>
                     `;
+
                 }
             );
 
-        } else {
+        }
+
+
+        // ----------------------------------------------------
+        // ЕСЛИ КОМАНДЫ НЕТ
+        // ----------------------------------------------------
+
+        else {
 
             playersHTML = `
 
@@ -1098,6 +1138,7 @@ function createSlots() {
                     </div>
 
                 </div>
+
             `;
 
         }
@@ -1106,6 +1147,10 @@ function createSlots() {
         card.dataset.search =
             searchText.toLowerCase();
 
+
+        // ----------------------------------------------------
+        // HTML КАРТОЧКИ
+        // ----------------------------------------------------
 
         card.innerHTML = `
 
@@ -1133,10 +1178,16 @@ function createSlots() {
         `;
 
 
-        slotsContainer.appendChild(card);
+        slotsContainer.appendChild(
+            card
+        );
 
     }
 
+
+    // ========================================================
+    // СЧЁТЧИК
+    // ========================================================
 
     if (teamCount) {
 
@@ -1144,6 +1195,15 @@ function createSlots() {
             Object.keys(teams).length;
 
     }
+
+
+    debugSet(
+        "debugTeams",
+        String(
+            Object.keys(teams).length
+        ),
+        "ok"
+    );
 
 }
 
@@ -1180,8 +1240,6 @@ function applyFilters() {
         let visible = true;
 
 
-        // FILTER
-
         if (
             currentFilter ===
             "buffer"
@@ -1191,6 +1249,7 @@ function applyFilters() {
                 type === "buffer";
 
         }
+
 
         if (
             currentFilter ===
@@ -1202,8 +1261,6 @@ function applyFilters() {
 
         }
 
-
-        // SEARCH
 
         if (
             visible &&
@@ -1219,14 +1276,10 @@ function applyFilters() {
         card.style.display =
             visible
                 ? ""
-                : "block";
+                : "none";
 
-        if (!visible) {
 
-            card.style.display =
-                "none";
-
-        } else {
+        if (visible) {
 
             visibleCount++;
 
@@ -1274,9 +1327,11 @@ document
 
                     });
 
+
                 button.classList.add(
                     "active"
                 );
+
 
                 playButtonSound();
 
@@ -1296,11 +1351,7 @@ if (searchInput) {
 
     searchInput.addEventListener(
         "input",
-        () => {
-
-            applyFilters();
-
-        }
+        applyFilters
     );
 
 }
@@ -1323,15 +1374,10 @@ if (slotsContainer) {
 
             if (!button) return;
 
-            const image =
-                button.dataset.image;
-
-            const player =
-                button.dataset.player;
 
             openScreenshot(
-                image,
-                player
+                button.dataset.image,
+                button.dataset.player
             );
 
         }
@@ -1358,37 +1404,12 @@ if (slotsContainer) {
 
 
 // ============================================================
-// ОБЩИЕ КНОПКИ
-// ============================================================
-
-document.addEventListener(
-    "click",
-    event => {
-
-        const button =
-            event.target.closest(
-                "button"
-            );
-
-        if (!button) return;
-
-        playClick();
-
-    }
-);
-
-
-// ============================================================
-// РАЗБЛОКИРОВКА AUDIO НА ANDROID
+// AUDIO UNLOCK
 // ============================================================
 
 document.addEventListener(
     "pointerdown",
-    () => {
-
-        initAudio();
-
-    },
+    initAudio,
     {
         once: true
     }
@@ -1396,7 +1417,7 @@ document.addEventListener(
 
 
 // ============================================================
-// SUPABASE DEBUG
+// SUPABASE ПРОВЕРКА
 // ============================================================
 
 async function testSupabaseConnection() {
@@ -1408,9 +1429,13 @@ async function testSupabaseConnection() {
     );
 
     debugLog(
-        "Подключаемся к Supabase..."
+        "Проверяем подключение к Supabase..."
     );
 
+
+    // --------------------------------------------------------
+    // SUPABASE JS
+    // --------------------------------------------------------
 
     if (!window.supabase) {
 
@@ -1427,13 +1452,17 @@ async function testSupabaseConnection() {
         );
 
         debugLog(
-            "Не найден window.supabase. Проверь интернет и подключение CDN."
+            "Не найден window.supabase."
         );
 
         return;
 
     }
 
+
+    // --------------------------------------------------------
+    // KEY
+    // --------------------------------------------------------
 
     if (!supabaseClient) {
 
@@ -1450,7 +1479,7 @@ async function testSupabaseConnection() {
         );
 
         debugLog(
-            "В script.js нужно вставить свой publishable key."
+            "Вставь свой publishable key в script.js."
         );
 
         return;
@@ -1458,27 +1487,27 @@ async function testSupabaseConnection() {
     }
 
 
+    // --------------------------------------------------------
+    // SLOTS
+    // --------------------------------------------------------
+
     try {
-
-        debugLog(
-            "Отправляем запрос в таблицу slots..."
-        );
-
 
         const {
             data: slots,
             error: slotsError
-        } = await supabaseClient
-            .from("slots")
-            .select(
-                "slot_number, status, price"
-            )
-            .order(
-                "slot_number",
-                {
-                    ascending: true
-                }
-            );
+        } =
+            await supabaseClient
+                .from("slots")
+                .select(
+                    "slot_number, status, price"
+                )
+                .order(
+                    "slot_number",
+                    {
+                        ascending: true
+                    }
+                );
 
 
         if (slotsError) {
@@ -1488,22 +1517,25 @@ async function testSupabaseConnection() {
                 slotsError
             );
 
+
             debugSet(
                 "debugSupabase",
                 "Ошибка",
                 "error"
             );
 
+
             debugSet(
                 "debugError",
-                slotsError.message ||
-                "Ошибка запроса slots",
+                slotsError.message,
                 "error"
             );
 
+
             debugLog(
-                `Supabase error: ${slotsError.message}`
+                `Ошибка slots: ${slotsError.message}`
             );
+
 
             return;
 
@@ -1520,16 +1552,9 @@ async function testSupabaseConnection() {
         debugSet(
             "debugSlots",
             String(
-                slots
-                    ? slots.length
-                    : 0
+                slots.length
             ),
             "ok"
-        );
-
-
-        debugLog(
-            `Успешно получено ${slots.length} слотов из Supabase.`
         );
 
 
@@ -1540,11 +1565,12 @@ async function testSupabaseConnection() {
         const {
             data: players,
             error: playersError
-        } = await supabaseClient
-            .from("players")
-            .select(
-                "id, slot_id, player_number, nickname, player_id"
-            );
+        } =
+            await supabaseClient
+                .from("players")
+                .select(
+                    "id, slot_id, player_number, nickname, player_id"
+                );
 
 
         if (playersError) {
@@ -1554,22 +1580,25 @@ async function testSupabaseConnection() {
                 playersError
             );
 
+
             debugSet(
                 "debugPlayers",
                 "Ошибка",
                 "error"
             );
 
+
             debugSet(
                 "debugError",
-                playersError.message ||
-                "Ошибка players",
+                playersError.message,
                 "error"
             );
 
+
             debugLog(
-                `Slots работают, но players вернул ошибку: ${playersError.message}`
+                `Slots работают. Players: ${playersError.message}`
             );
+
 
             return;
 
@@ -1579,9 +1608,7 @@ async function testSupabaseConnection() {
         debugSet(
             "debugPlayers",
             String(
-                players
-                    ? players.length
-                    : 0
+                players.length
             ),
             "ok"
         );
@@ -1595,7 +1622,7 @@ async function testSupabaseConnection() {
 
 
         debugLog(
-            `Готово: slots = ${slots.length}, players = ${players.length}.`
+            `Supabase работает. Slots: ${slots.length}, Players: ${players.length}`
         );
 
 
@@ -1611,7 +1638,7 @@ async function testSupabaseConnection() {
     } catch (error) {
 
         console.error(
-            "SPN SUPABASE CONNECTION ERROR:",
+            "SPN SUPABASE ERROR:",
             error
         );
 
@@ -1632,7 +1659,8 @@ async function testSupabaseConnection() {
 
 
         debugLog(
-            `Ошибка JavaScript: ${error.message}`
+            error.message ||
+            "Неизвестная ошибка"
         );
 
     }
@@ -1641,20 +1669,7 @@ async function testSupabaseConnection() {
 
 
 // ============================================================
-// START
-// ============================================================
-
-createDebugPanel();
-
-createSlots();
-
-applyFilters();
-
-testSupabaseConnection();
-
-
-// ============================================================
-// КЛАВИША ESC — ЗАКРЫТЬ СКРИНШОТ
+// ESC
 // ============================================================
 
 document.addEventListener(
@@ -1671,4 +1686,17 @@ document.addEventListener(
 
     }
 );
+
+
+// ============================================================
+// START
+// ============================================================
+
+createDebugPanel();
+
+createSlots();
+
+applyFilters();
+
+testSupabaseConnection();
 ```
