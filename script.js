@@ -169,9 +169,19 @@ const teams = {
         ["nghtēvlasik", "5712455956"]
     ],
 
+    41: [
+        ["pG丶nepolonia", "51794185086"],
+        ["pG丶druam", "5841679517"]
+    ],
+
     42: [
         ["yrodNaSaturNe", "5472888899"],
         ["amixDead", "5423035816"]
+    ],
+
+    43: [
+        ["Assenii", "51390811229"],
+        ["RRNEFFEX", "5544169844"]
     ],
 
     44: [
@@ -206,7 +216,7 @@ const teams = {
 };
 
 
-/* Экранируем HTML */
+/* Экранирование HTML */
 
 function escapeHTML(text) {
     return String(text)
@@ -218,7 +228,7 @@ function escapeHTML(text) {
 }
 
 
-/* Создание слотов */
+/* Элементы страницы */
 
 const slotsContainer = document.getElementById("slots");
 const noResults = document.getElementById("noResults");
@@ -228,6 +238,8 @@ const searchInput = document.getElementById("searchInput");
 let currentFilter = "all";
 
 
+/* Создание всех слотов */
+
 function createSlots() {
 
     slotsContainer.innerHTML = "";
@@ -235,10 +247,14 @@ function createSlots() {
     for (let slotNumber = 1; slotNumber <= 50; slotNumber++) {
 
         const slot = document.createElement("div");
-        slot.className = "slot";
 
-        /* Буферные слоты 1–6 */
-        if (slotNumber <= 6) {
+        slot.className = "slot";
+        slot.dataset.slot = slotNumber;
+
+
+        /* Слоты 1–6 — буферные */
+
+        if (slotNumber >= 1 && slotNumber <= 6) {
 
             slot.classList.add("buffer");
 
@@ -252,7 +268,12 @@ function createSlots() {
                 </div>
             `;
 
-        } else if (teams[slotNumber]) {
+        }
+
+
+        /* Заполненный слот */
+
+        else if (teams[slotNumber]) {
 
             const players = teams[slotNumber];
 
@@ -276,9 +297,12 @@ function createSlots() {
                 `).join("")}
             `;
 
-        } else {
+        }
 
-            /* Пустые слоты: 41, 43, 45 */
+
+        /* Пустой слот */
+
+        else {
 
             slot.classList.add("buffer");
 
@@ -293,16 +317,18 @@ function createSlots() {
             `;
         }
 
-        slot.dataset.slot = slotNumber;
 
         slotsContainer.appendChild(slot);
     }
+
+
+    /* Количество команд */
 
     teamCount.textContent = Object.keys(teams).length;
 }
 
 
-/* Фильтрация */
+/* Фильтры и поиск */
 
 function applyFilters() {
 
@@ -314,37 +340,62 @@ function applyFilters() {
 
     let visibleCount = 0;
 
+
     slots.forEach(slot => {
 
         const slotNumber = Number(slot.dataset.slot);
 
         let filterMatch = true;
 
+
+        /* Буферные 1–6 */
+
         if (currentFilter === "buffer") {
-            filterMatch = slotNumber >= 1 && slotNumber <= 6;
+
+            filterMatch =
+                slotNumber >= 1 &&
+                slotNumber <= 6;
         }
+
+
+        /* Команды 7–50 */
 
         if (currentFilter === "teams") {
-            filterMatch = slotNumber >= 7 && slotNumber <= 50;
+
+            filterMatch =
+                slotNumber >= 7 &&
+                slotNumber <= 50;
         }
 
-        const slotText = slot.textContent.toLowerCase();
+
+        const slotText =
+            slot.textContent.toLowerCase();
+
 
         const searchMatch =
             searchText === "" ||
             slotText.includes(searchText);
 
+
         if (filterMatch && searchMatch) {
+
             slot.style.display = "";
             visibleCount++;
+
         } else {
+
             slot.style.display = "none";
         }
+
     });
 
+
     if (visibleCount === 0) {
+
         noResults.style.display = "block";
+
     } else {
+
         noResults.style.display = "none";
     }
 }
@@ -358,7 +409,10 @@ document.querySelectorAll(".filter-btn").forEach(button => {
 
         document
             .querySelectorAll(".filter-btn")
-            .forEach(btn => btn.classList.remove("active"));
+            .forEach(btn => {
+                btn.classList.remove("active");
+            });
+
 
         button.classList.add("active");
 
@@ -375,7 +429,7 @@ document.querySelectorAll(".filter-btn").forEach(button => {
 searchInput.addEventListener("input", applyFilters);
 
 
-/* Запуск */
+/* Запуск сайта */
 
 createSlots();
 applyFilters();
