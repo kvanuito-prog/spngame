@@ -1,323 +1,823 @@
+/* =========================================
+   SPN CUSTOM ROOM
+   DARK ESPORTS DESIGN
+========================================= */
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #080b10;
-    color: #ffffff;
-    min-height: 100vh;
+html {
+    scroll-behavior: smooth;
 }
 
-/* HEADER */
+body {
+    min-height: 100vh;
+
+    font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    color: #f4f7fb;
+
+    background:
+        radial-gradient(
+            circle at 50% -10%,
+            rgba(0, 170, 255, 0.14),
+            transparent 38%
+        ),
+        radial-gradient(
+            circle at 0% 50%,
+            rgba(120, 50, 255, 0.08),
+            transparent 30%
+        ),
+        #070a0f;
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
 
 header {
+    position: relative;
+
+    padding: 42px 20px 34px;
+
     text-align: center;
-    padding: 30px 20px 25px;
-    background: #0d1118;
-    border-bottom: 1px solid #252c38;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(14, 20, 30, 0.98),
+            rgba(7, 10, 15, 0.96)
+        );
+
+    box-shadow:
+        0 15px 50px rgba(0, 0, 0, 0.35);
+}
+
+header::before {
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+    bottom: -1px;
+
+    width: 180px;
+    height: 2px;
+
+    transform: translateX(-50%);
+
+    background: #00b7ff;
+
+    box-shadow:
+        0 0 8px #00b7ff,
+        0 0 25px rgba(0, 183, 255, 0.8);
 }
 
 header h1 {
-    font-size: 32px;
+    font-size: clamp(28px, 4vw, 48px);
+
     font-weight: 900;
-    letter-spacing: 3px;
+
+    letter-spacing: 4px;
+
+    color: #ffffff;
+
+    text-transform: uppercase;
+
+    text-shadow:
+        0 0 15px rgba(0, 183, 255, 0.35);
 }
 
 header p {
-    margin-top: 8px;
-    color: #8d98a8;
-    font-size: 15px;
+    margin-top: 10px;
+
+    color: #7f8b9d;
+
+    font-size: 14px;
+
+    letter-spacing: 1px;
 }
 
-/* STATS */
+
+/* =========================================
+   STATS
+========================================= */
 
 .stats {
     display: flex;
+
     justify-content: center;
     gap: 15px;
-    padding: 20px;
-    flex-wrap: wrap;
+
+    margin: 25px auto;
+
+    padding: 0 15px;
 }
 
 .stat {
-    min-width: 150px;
-    padding: 14px 20px;
-    background: #111722;
-    border: 1px solid #252e3b;
-    border-radius: 10px;
+    min-width: 160px;
+
+    padding: 15px 22px;
+
+    border: 1px solid rgba(0, 183, 255, 0.16);
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(17, 24, 35, 0.96),
+            rgba(10, 14, 21, 0.96)
+        );
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.2);
+
     text-align: center;
 }
 
-.stat-number {
+.stat-value {
     display: block;
-    font-size: 25px;
+
+    font-size: 24px;
+
     font-weight: 900;
+
+    color: #ffffff;
 }
 
 .stat-label {
     display: block;
+
     margin-top: 4px;
-    color: #7f8998;
-    font-size: 12px;
+
+    color: #6f7b8d;
+
+    font-size: 11px;
+
     text-transform: uppercase;
+
+    letter-spacing: 1px;
 }
 
-/* SEARCH */
 
-.search-box {
-    max-width: 600px;
-    margin: 0 auto 20px;
-    padding: 0 20px;
+/* =========================================
+   SEARCH
+========================================= */
+
+.search-container {
+    width: min(700px, calc(100% - 30px));
+
+    margin: 25px auto;
 }
 
-.search-box input {
+#searchInput {
     width: 100%;
-    padding: 14px 18px;
-    background: #111722;
-    border: 1px solid #303948;
-    border-radius: 10px;
+
+    height: 48px;
+
+    padding: 0 18px;
+
     outline: none;
+
+    border: 1px solid #252f3e;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #111722,
+            #0c1119
+        );
+
     color: #ffffff;
-    font-size: 15px;
+
+    font-size: 14px;
+
+    transition: 0.25s;
 }
 
-.search-box input::placeholder {
-    color: #667080;
+#searchInput::placeholder {
+    color: #657082;
 }
 
-.search-box input:focus {
-    border-color: #66758a;
+#searchInput:focus {
+    border-color: #00aaff;
+
+    box-shadow:
+        0 0 0 3px rgba(0, 170, 255, 0.08),
+        0 0 25px rgba(0, 170, 255, 0.08);
 }
 
-/* FILTERS */
+
+/* =========================================
+   FILTER BUTTONS
+========================================= */
 
 .filters {
     display: flex;
+
     justify-content: center;
+
     gap: 8px;
-    margin-bottom: 25px;
-    padding: 0 15px;
+
     flex-wrap: wrap;
+
+    margin: 20px auto 30px;
+
+    padding: 0 15px;
 }
 
 .filter-btn {
     padding: 9px 18px;
-    border: 1px solid #303948;
+
+    border: 1px solid #263142;
+
     border-radius: 8px;
-    background: #111722;
-    color: #aeb7c5;
+
+    background: #0e141d;
+
+    color: #778396;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
     cursor: pointer;
-    font-size: 13px;
+
+    transition:
+        background 0.2s,
+        color 0.2s,
+        border-color 0.2s,
+        box-shadow 0.2s,
+        transform 0.2s;
 }
 
 .filter-btn:hover {
-    background: #19202c;
     color: #ffffff;
+
+    border-color: #3b4a5e;
+
+    transform: translateY(-1px);
 }
 
 .filter-btn.active {
-    background: #ffffff;
-    color: #080b10;
-    border-color: #ffffff;
+    color: #ffffff;
+
+    border-color: #00aaff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0878ae,
+            #07527a
+        );
+
+    box-shadow:
+        0 0 15px rgba(0, 170, 255, 0.18);
 }
 
-/* SLOTS */
+
+/* =========================================
+   SLOTS GRID
+========================================= */
 
 .slots {
-    width: 100%;
+    width: calc(100% - 40px);
     max-width: 1800px;
+
     margin: 0 auto;
-    padding: 0 20px 40px;
 
     display: grid;
 
-    /* Большой экран */
-    grid-template-columns: repeat(13, minmax(0, 1fr));
+    grid-template-columns:
+        repeat(10, minmax(0, 1fr));
 
-    gap: 10px;
+    gap: 14px;
 }
 
-/* SLOT */
+
+/* =========================================
+   SLOT CARD
+========================================= */
 
 .slot {
+    position: relative;
+
     min-width: 0;
-    background: #10151e;
-    border: 1px solid #27303d;
-    border-radius: 10px;
-    padding: 12px;
-    min-height: 135px;
+
+    padding: 17px;
+
+    border: 1px solid #222c3a;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(18, 24, 34, 0.98),
+            rgba(12, 17, 25, 0.98)
+        );
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.22);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.25s,
+        border-color 0.25s,
+        box-shadow 0.25s;
+}
+
+
+/* верхняя светящаяся линия */
+
+.slot::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 18px;
+    right: 18px;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 174, 255, 0.5),
+            transparent
+        );
 }
 
 .slot:hover {
-    border-color: #566273;
+    transform: translateY(-3px);
+
+    border-color: rgba(0, 170, 255, 0.38);
+
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.32),
+        0 0 20px rgba(0, 170, 255, 0.06);
 }
 
-/* SLOT NUMBER */
+
+/* =========================================
+   SLOT NUMBER
+========================================= */
 
 .slot-number {
+    padding-bottom: 11px;
+
+    border-bottom: 1px solid #202a37;
+
+    color: #728095;
+
     font-size: 12px;
-    color: #697586;
-    font-weight: bold;
-    margin-bottom: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.2px;
+
+    text-transform: uppercase;
 }
 
-/* PLAYER */
+
+/* =========================================
+   PLAYER
+========================================= */
 
 .player {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    padding: 7px 0;
-    border-top: 1px solid #202734;
+    position: relative;
+
+    padding: 12px 0;
+
+    border-bottom: 1px solid #202733;
 }
 
-.player:first-of-type {
-    border-top: none;
+.player:last-child {
+    border-bottom: none;
+
+    padding-bottom: 2px;
 }
 
 .nickname {
-    color: #ffffff;
-    font-size: 13px;
-    font-weight: 700;
+    overflow: hidden;
+
+    color: #f3f6fa;
+
+    font-size: 14px;
+
+    font-weight: 800;
+
+    line-height: 1.3;
+
+    text-overflow: ellipsis;
 
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .player-id {
-    color: #667080;
+    margin-top: 5px;
+
+    color: #596577;
+
     font-size: 10px;
 
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    line-height: 1.2;
 }
 
-/* BUFFER */
+
+/* =========================================
+   SCREENSHOT BUTTON
+========================================= */
+
+.screenshot-button {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    min-height: 30px;
+
+    margin-top: 9px;
+
+    padding: 5px 8px;
+
+    border: 1px solid #293547;
+
+    border-radius: 7px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #121a25,
+            #0d141e
+        );
+
+    color: #778497;
+
+    font-family: inherit;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        0.2s;
+}
+
+.screenshot-button:hover {
+    color: #ffffff;
+
+    border-color: #00aaff;
+
+    background:
+        linear-gradient(
+            180deg,
+            #142536,
+            #101b28
+        );
+
+    box-shadow:
+        0 0 12px rgba(0, 170, 255, 0.12);
+}
+
+.screenshot-button:active {
+    transform: scale(0.98);
+}
+
+
+/* =========================================
+   BUFFER SLOTS
+========================================= */
 
 .slot.buffer {
-    opacity: 0.55;
-    background: #0d1118;
+    min-height: 150px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
 }
 
 .buffer-text {
-    color: #555f6e;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex: 1;
+
+    color: #414c5c;
+
     font-size: 11px;
-    margin-top: 15px;
+
+    font-weight: 600;
+
     text-align: center;
 }
 
-/* NO RESULTS */
 
-.no-results {
+/* =========================================
+   NO RESULTS
+========================================= */
+
+#noResults {
     display: none;
+
+    width: calc(100% - 40px);
+
+    margin: 40px auto;
+
+    padding: 50px 20px;
+
+    border: 1px solid #202a37;
+
+    border-radius: 12px;
+
+    color: #596577;
+
     text-align: center;
-    color: #697586;
-    padding: 40px 20px;
-    font-size: 15px;
 }
 
-/* FOOTER */
+
+/* =========================================
+   FOOTER
+========================================= */
 
 footer {
+    margin-top: 50px;
+
+    padding: 25px 20px;
+
+    border-top: 1px solid #161e29;
+
+    color: #4e5969;
+
+    font-size: 11px;
+
     text-align: center;
-    padding: 25px 20px 35px;
-    color: #505a69;
-    font-size: 12px;
+
+    letter-spacing: 1px;
 }
 
 
-/* ================================================= */
-/* ПЛАНШЕТ                                             */
-/* РОВНО 4 ЯЧЕЙКИ В РЯД                               */
-/* ================================================= */
+/* =========================================
+   SCREENSHOT MODAL
+========================================= */
+
+#screenshotModal {
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 99999;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+#screenshotModal.active {
+    display: flex;
+}
+
+.screenshot-overlay {
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        rgba(2, 5, 9, 0.92);
+
+    backdrop-filter: blur(7px);
+}
+
+.screenshot-window {
+    position: relative;
+
+    z-index: 2;
+
+    width: min(1100px, 94vw);
+
+    max-height: 94vh;
+
+    padding: 18px;
+
+    border: 1px solid #293547;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #121923,
+            #0a0f16
+        );
+
+    box-shadow:
+        0 25px 80px rgba(0, 0, 0, 0.7),
+        0 0 35px rgba(0, 170, 255, 0.06);
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+}
+
+.screenshot-title {
+    width: 100%;
+
+    margin-bottom: 15px;
+
+    padding: 0 50px;
+
+    color: #ffffff;
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+    text-align: center;
+}
+
+.screenshot-window img {
+    display: block;
+
+    max-width: 100%;
+
+    max-height: 78vh;
+
+    object-fit: contain;
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+.screenshot-close {
+    position: absolute;
+
+    top: 10px;
+    right: 10px;
+
+    z-index: 5;
+
+    width: 38px;
+    height: 38px;
+
+    border: 1px solid #303b4c;
+
+    border-radius: 9px;
+
+    background: #101722;
+
+    color: #ffffff;
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.screenshot-close:hover {
+    border-color: #00aaff;
+
+    background: #162333;
+
+    box-shadow:
+        0 0 15px rgba(0, 170, 255, 0.12);
+}
+
+.screenshot-error {
+    display: none;
+
+    padding: 60px 20px;
+
+    color: #626e80;
+
+    font-size: 14px;
+
+    text-align: center;
+}
+
+
+/* =========================================
+   DESKTOP
+========================================= */
+
+@media (min-width: 1500px) {
+
+    .slots {
+        grid-template-columns:
+            repeat(10, minmax(0, 1fr));
+    }
+}
+
+
+/* =========================================
+   TABLETS / LANDSCAPE
+   ВСЕГДА 4 ЯЧЕЙКИ
+========================================= */
 
 @media (min-width: 601px) and (max-width: 1400px) {
 
     .slots {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 12px;
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+
+        gap: 14px;
     }
 
     .slot {
-        min-height: 145px;
-        padding: 13px;
+        padding: 15px;
     }
 
     .nickname {
-        font-size: 14px;
-    }
-
-    .player-id {
-        font-size: 11px;
+        font-size: 13px;
     }
 }
 
 
-/* ================================================= */
-/* ТЕЛЕФОН                                             */
-/* ================================================= */
+/* =========================================
+   MOBILE
+========================================= */
 
 @media (max-width: 600px) {
 
     header {
-        padding: 22px 15px;
+        padding: 30px 15px 25px;
     }
 
     header h1 {
-        font-size: 23px;
+        font-size: 25px;
+
         letter-spacing: 2px;
     }
 
     header p {
-        font-size: 13px;
+        font-size: 11px;
     }
 
     .stats {
-        padding: 15px;
         gap: 8px;
     }
 
     .stat {
         min-width: 130px;
-        padding: 11px 15px;
+
+        padding: 12px;
     }
 
-    .stat-number {
-        font-size: 21px;
-    }
-
-    .search-box {
-        padding: 0 12px;
-    }
-
-    .filters {
-        margin-bottom: 18px;
-    }
-
-    .filter-btn {
-        padding: 8px 13px;
-        font-size: 12px;
+    .stat-value {
+        font-size: 20px;
     }
 
     .slots {
-        padding: 0 10px 30px;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
+        width: calc(100% - 20px);
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 9px;
     }
 
     .slot {
-        min-height: 125px;
-        padding: 9px;
-        border-radius: 8px;
+        padding: 11px;
+
+        border-radius: 10px;
     }
 
     .slot-number {
-        font-size: 11px;
+        font-size: 9px;
+
+        padding-bottom: 8px;
     }
 
     .nickname {
@@ -325,6 +825,68 @@ footer {
     }
 
     .player-id {
+        font-size: 8px;
+    }
+
+    .screenshot-button {
+        min-height: 27px;
+
         font-size: 9px;
     }
+
+    .buffer-text {
+        font-size: 9px;
+    }
+}
+
+
+/* =========================================
+   VERY SMALL PHONES
+========================================= */
+
+@media (max-width: 380px) {
+
+    .slots {
+        grid-template-columns:
+            repeat(1, minmax(0, 1fr));
+    }
+
+    .slot {
+        padding: 13px;
+    }
+}
+
+
+/* =========================================
+   SELECTION
+========================================= */
+
+::selection {
+    background: rgba(0, 170, 255, 0.35);
+
+    color: #ffffff;
+}
+
+
+/* =========================================
+   SCROLLBAR
+========================================= */
+
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+::-webkit-scrollbar-track {
+    background: #080b10;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #273344;
+
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #00aaff;
 }
