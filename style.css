@@ -1,3 +1,4 @@
+```css
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap');
 
 * {
@@ -10,29 +11,35 @@
     --bg: #08090b;
     --bg-light: #0e1014;
     --card: #111318;
-    --card-hover: #16191f;
+    --card-hover: #181b21;
     --border: #242830;
     --accent: #ff3b30;
     --accent-dark: #b91c16;
     --text: #f4f4f5;
     --muted: #777d88;
-    --green: #4ade80;
 }
 
 body {
     background:
-        radial-gradient(circle at 50% -20%, rgba(255, 59, 48, 0.12), transparent 35%),
+        radial-gradient(
+            circle at 50% -20%,
+            rgba(255, 59, 48, 0.12),
+            transparent 35%
+        ),
         var(--bg);
+
     color: var(--text);
     font-family: 'Rajdhani', sans-serif;
     min-height: 100vh;
 }
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 
 .header {
     border-bottom: 1px solid var(--border);
-    background: rgba(8, 9, 11, 0.92);
+    background: rgba(8, 9, 11, 0.94);
     backdrop-filter: blur(12px);
     position: sticky;
     top: 0;
@@ -40,9 +47,10 @@ body {
 }
 
 .header-content {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: auto;
     padding: 22px 20px;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -67,7 +75,9 @@ body {
     letter-spacing: 1px;
 }
 
-/* STATS */
+/* =========================
+   STATS
+========================= */
 
 .stats {
     display: flex;
@@ -91,15 +101,19 @@ body {
     letter-spacing: 1px;
 }
 
-/* MAIN */
+/* =========================
+   MAIN
+========================= */
 
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: auto;
     padding: 30px 20px 50px;
 }
 
-/* TOOLBAR */
+/* =========================
+   TOOLBAR
+========================= */
 
 .toolbar {
     display: flex;
@@ -110,11 +124,15 @@ body {
 .search-box {
     flex: 1;
     height: 52px;
+
     background: var(--card);
     border: 1px solid var(--border);
+
     display: flex;
     align-items: center;
+
     padding: 0 16px;
+
     transition: 0.2s;
 }
 
@@ -131,10 +149,13 @@ body {
 
 .search-box input {
     width: 100%;
+
     border: 0;
     outline: 0;
+
     background: transparent;
     color: white;
+
     font-family: inherit;
     font-size: 17px;
 }
@@ -146,18 +167,24 @@ body {
 .filter-buttons {
     display: flex;
     gap: 5px;
+
     background: var(--card);
     border: 1px solid var(--border);
+
     padding: 5px;
 }
 
 .filter {
     border: 0;
     background: transparent;
+
     color: var(--muted);
+
     font-family: inherit;
     font-weight: 600;
+
     padding: 0 18px;
+
     cursor: pointer;
     transition: 0.2s;
 }
@@ -168,123 +195,186 @@ body {
     color: white;
 }
 
-/* SLOTS */
+/* =========================
+   SLOTS
+   13 СЛОТОВ В РЯД
+========================= */
 
 .slots {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+
+    grid-template-columns: repeat(13, minmax(0, 1fr));
+
+    gap: 8px;
 }
 
+/* =========================
+   SLOT
+========================= */
+
 .slot {
-    background: linear-gradient(135deg, var(--card), #0d0f13);
+    background:
+        linear-gradient(
+            135deg,
+            var(--card),
+            #0d0f13
+        );
+
     border: 1px solid var(--border);
-    min-height: 130px;
+
+    min-height: 155px;
+
     display: flex;
+    flex-direction: column;
+
     position: relative;
     overflow: hidden;
+
     transition: 0.2s;
 }
 
 .slot::before {
     content: "";
+
     position: absolute;
+
     left: 0;
     top: 0;
-    bottom: 0;
-    width: 3px;
+    right: 0;
+
+    height: 2px;
+
     background: var(--accent);
+
     opacity: 0.8;
 }
 
 .slot:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+
     border-color: #3a3f48;
+
     background: var(--card-hover);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.4),
+        0 0 15px rgba(255, 59, 48, 0.05);
 }
 
-/* SLOT NUMBER */
+/* =========================
+   SLOT NUMBER
+========================= */
 
 .slot-number {
-    width: 82px;
-    flex-shrink: 0;
+    height: 42px;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255,255,255,0.015);
-    border-right: 1px solid var(--border);
+
+    background: rgba(255, 255, 255, 0.025);
+
+    border-bottom: 1px solid var(--border);
+
     color: var(--accent);
-    font-size: 34px;
+
+    font-size: 25px;
     font-weight: 700;
 }
 
-.slot-number small {
-    font-size: 12px;
-    color: var(--muted);
-    margin-left: 2px;
-}
-
-/* TEAM */
+/* =========================
+   TEAM
+========================= */
 
 .team {
     flex: 1;
-    padding: 18px 20px;
+
+    padding: 12px 10px;
+
     display: flex;
     flex-direction: column;
+
     justify-content: center;
-    gap: 10px;
+
+    gap: 9px;
 }
 
 .player {
     display: flex;
-    align-items: center;
-    gap: 12px;
+
+    align-items: flex-start;
+
+    gap: 7px;
+
     min-width: 0;
 }
 
 .player-icon {
-    width: 28px;
-    height: 28px;
+    width: 20px;
+    height: 20px;
+
     border: 1px solid #333842;
+
     background: #191c21;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     color: var(--accent);
-    font-size: 13px;
+
+    font-size: 9px;
+
     flex-shrink: 0;
 }
 
 .player-info {
     min-width: 0;
+    width: 100%;
 }
 
 .nickname {
-    font-size: 17px;
+    font-size: 13px;
+
     font-weight: 600;
+
     white-space: nowrap;
+
     overflow: hidden;
+
     text-overflow: ellipsis;
 }
 
 .player-id {
     font-family: monospace;
+
     color: var(--muted);
-    font-size: 11px;
-    margin-top: 1px;
+
+    font-size: 8px;
+
+    margin-top: 2px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
 }
 
 .separator {
     height: 1px;
+
     background: #202329;
-    margin-left: 40px;
+
+    width: 100%;
 }
 
-/* BUFFER */
+/* =========================
+   BUFFER
+========================= */
 
 .slot.buffer {
-    opacity: 0.6;
+    opacity: 0.55;
 }
 
 .slot.buffer::before {
@@ -292,38 +382,57 @@ body {
 }
 
 .buffer-content {
+    flex: 1;
+
     display: flex;
+
     align-items: center;
-    padding: 20px;
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 8px;
 }
 
 .buffer-content strong {
-    font-size: 18px;
+    display: block;
+
+    font-size: 12px;
 }
 
 .buffer-content span {
     display: block;
+
     color: var(--muted);
-    font-size: 13px;
-    margin-top: 3px;
+
+    font-size: 10px;
+
+    margin-top: 4px;
 }
 
-/* NO RESULTS */
+/* =========================
+   NO RESULTS
+========================= */
 
 .no-results {
     display: none;
+
     text-align: center;
+
     padding: 80px 20px;
+
     color: var(--muted);
 }
 
 .no-results div {
     font-size: 50px;
+
     color: var(--accent);
 }
 
 .no-results h2 {
     color: white;
+
     margin-top: 10px;
 }
 
@@ -331,14 +440,21 @@ body {
     margin-top: 5px;
 }
 
-/* FOOTER */
+/* =========================
+   FOOTER
+========================= */
 
 footer {
     border-top: 1px solid var(--border);
+
     color: #555a63;
+
     padding: 25px;
+
     text-align: center;
+
     font-size: 12px;
+
     letter-spacing: 2px;
 }
 
@@ -346,20 +462,57 @@ footer span:nth-child(1) {
     color: #777d88;
 }
 
-/* MOBILE */
+/* =========================
+   LARGE SCREEN
+========================= */
 
-@media (max-width: 750px) {
+@media (min-width: 1600px) {
+
+    .header-content,
+    .container {
+        max-width: 1550px;
+    }
+
+    .slots {
+        gap: 10px;
+    }
+
+    .slot {
+        min-height: 165px;
+    }
+
+    .nickname {
+        font-size: 14px;
+    }
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 1100px) {
+
+    .slots {
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+    }
+
+    .slot {
+        min-height: 150px;
+    }
+}
+
+/* =========================
+   SMALL TABLET
+========================= */
+
+@media (max-width: 800px) {
 
     .header-content {
         padding: 18px 15px;
     }
 
     .logo {
-        font-size: 21px;
-    }
-
-    .subtitle {
-        font-size: 12px;
+        font-size: 22px;
     }
 
     .stats {
@@ -387,42 +540,93 @@ footer span:nth-child(1) {
     }
 
     .slots {
-        grid-template-columns: 1fr;
-    }
-
-    .slot-number {
-        width: 65px;
-        font-size: 27px;
-    }
-
-    .team {
-        padding: 15px;
-    }
-
-    .nickname {
-        font-size: 15px;
-    }
-
-    .player-id {
-        font-size: 10px;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 }
 
-@media (max-width: 420px) {
+/* =========================
+   PHONE
+========================= */
+
+@media (max-width: 550px) {
+
+    .header-content {
+        padding: 15px 12px;
+    }
+
+    .logo {
+        font-size: 19px;
+    }
+
+    .subtitle {
+        font-size: 11px;
+    }
 
     .stats {
         display: none;
     }
 
+    .container {
+        padding: 15px 8px 30px;
+    }
+
+    .slots {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+    }
+
     .slot {
-        min-height: 120px;
+        min-height: 135px;
     }
 
     .slot-number {
-        width: 55px;
+        height: 35px;
+
+        font-size: 21px;
     }
 
     .team {
-        padding: 12px;
+        padding: 10px 8px;
+
+        gap: 7px;
     }
-  }
+
+    .nickname {
+        font-size: 12px;
+    }
+
+    .player-id {
+        font-size: 7px;
+    }
+
+    .player-icon {
+        width: 18px;
+        height: 18px;
+
+        font-size: 8px;
+    }
+
+    .buffer-content strong {
+        font-size: 10px;
+    }
+
+    .buffer-content span {
+        font-size: 8px;
+    }
+}
+
+/* =========================
+   VERY SMALL PHONE
+========================= */
+
+@media (max-width: 360px) {
+
+    .slots {
+        grid-template-columns: 1fr;
+    }
+
+    .slot {
+        min-height: 125px;
+    }
+}
+```
