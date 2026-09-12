@@ -3,67 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PUBG Tournament — Slots</title>
+    <title>PUBG TOURNAMENT</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<header class="header">
-    <div class="header-content">
-        <div>
-            <div class="logo">PUBG<span>TOURNAMENT</span></div>
-            <p class="subtitle">Список слотов и участников</p>
-        </div>
-
-        <div class="stats">
-            <div class="stat">
-                <strong id="teamCount">0</strong>
-                <span>КОМАНД</span>
-            </div>
-            <div class="stat">
-                <strong>50</strong>
-                <span>СЛОТОВ</span>
-            </div>
-        </div>
-    </div>
+<header>
+    <h1>PUBG TOURNAMENT</h1>
+    <p>Список слотов и участников</p>
 </header>
 
-<main class="container">
-
-    <div class="toolbar">
-        <div class="search-box">
-            <span>⌕</span>
-            <input
-                type="text"
-                id="search"
-                placeholder="Поиск по нику или ID..."
-                autocomplete="off"
-            >
-        </div>
-
-        <div class="filter-buttons">
-            <button class="filter active" data-filter="all">Все</button>
-            <button class="filter" data-filter="buffer">1–6</button>
-            <button class="filter" data-filter="teams">7–50</button>
-        </div>
+<section class="stats">
+    <div class="stat">
+        <span class="stat-number" id="teamCount">0</span>
+        <span class="stat-label">Команд</span>
     </div>
 
-    <section id="slots" class="slots"></section>
-
-    <div id="noResults" class="no-results">
-        <div>⌕</div>
-        <h2>Ничего не найдено</h2>
-        <p>Попробуй изменить запрос</p>
+    <div class="stat">
+        <span class="stat-number">50</span>
+        <span class="stat-label">Слотов</span>
     </div>
+</section>
 
+<div class="search-box">
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="Поиск по нику или ID..."
+    >
+</div>
+
+<div class="filters">
+    <button class="filter-btn active" data-filter="all">Все</button>
+    <button class="filter-btn" data-filter="buffer">1–6</button>
+    <button class="filter-btn" data-filter="teams">7–50</button>
+</div>
+
+<main>
+    <div class="slots" id="slots"></div>
+
+    <div class="no-results" id="noResults">
+        Ничего не найдено
+    </div>
 </main>
 
 <footer>
-    <span>PUBG TOURNAMENT</span>
-    <span>•</span>
-    <span>PLAYER SLOTS</span>
+    PUBG TOURNAMENT
 </footer>
 
 <script src="script.js"></script>
+
 </body>
 </html>
