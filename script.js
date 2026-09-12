@@ -216,7 +216,9 @@ const teams = {
 };
 
 
-/* Экранирование HTML */
+/* ================================================= */
+/* ЭКРАНИРОВАНИЕ HTML                                */
+/* ================================================= */
 
 function escapeHTML(text) {
     return String(text)
@@ -228,7 +230,210 @@ function escapeHTML(text) {
 }
 
 
-/* Элементы страницы */
+/* ================================================= */
+/* СОЗДАЁМ ОКНО ДЛЯ СКРИНШОТА                       */
+/* ================================================= */
+
+const modal = document.createElement("div");
+
+modal.id = "screenshotModal";
+
+modal.innerHTML = `
+    <div class="screenshot-overlay"></div>
+
+    <div class="screenshot-window">
+
+        <button class="screenshot-close" id="closeScreenshot">
+            ✕
+        </button>
+
+        <div class="screenshot-title" id="screenshotTitle">
+            Скриншот аккаунта
+        </div>
+
+        <img
+            id="screenshotImage"
+            src=""
+            alt="Скриншот аккаунта"
+        >
+
+        <div class="screenshot-error" id="screenshotError">
+            Скриншот ещё не загружен
+        </div>
+
+    </div>
+`;
+
+document.body.appendChild(modal);
+
+
+/* ================================================= */
+/* СТИЛИ ОКНА СКРИНШОТА                             */
+/* ================================================= */
+
+const screenshotStyles = document.createElement("style");
+
+screenshotStyles.textContent = `
+
+#screenshotModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+}
+
+#screenshotModal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.screenshot-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+}
+
+.screenshot-window {
+    position: relative;
+    z-index: 2;
+
+    width: min(95vw, 1100px);
+    max-height: 95vh;
+
+    padding: 20px;
+
+    background: #10151e;
+    border: 1px solid #303948;
+    border-radius: 14px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.screenshot-window img {
+    display: block;
+
+    max-width: 100%;
+    max-height: 78vh;
+
+    object-fit: contain;
+
+    border-radius: 8px;
+}
+
+.screenshot-title {
+    width: 100%;
+
+    margin-bottom: 15px;
+
+    color: #ffffff;
+
+    font-size: 18px;
+    font-weight: 800;
+
+    text-align: center;
+}
+
+.screenshot-close {
+    position: absolute;
+
+    top: 10px;
+    right: 10px;
+
+    width: 38px;
+    height: 38px;
+
+    border: 1px solid #303948;
+    border-radius: 8px;
+
+    background: #111722;
+    color: #ffffff;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+    z-index: 5;
+}
+
+.screenshot-close:hover {
+    background: #252e3b;
+}
+
+.screenshot-error {
+    display: none;
+
+    padding: 40px 20px;
+
+    color: #7f8998;
+
+    font-size: 15px;
+    text-align: center;
+}
+
+
+/* КНОПКА СКРИНШОТА */
+
+.screenshot-button {
+    width: 100%;
+
+    margin-top: 6px;
+    padding: 5px 7px;
+
+    border: 1px solid #303948;
+    border-radius: 6px;
+
+    background: #111722;
+    color: #8994a5;
+
+    font-size: 10px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.screenshot-button:hover {
+    background: #1b2330;
+    color: #ffffff;
+    border-color: #566273;
+}
+
+
+/* ТЕЛЕФОН */
+
+@media (max-width: 600px) {
+
+    .screenshot-window {
+        width: 96vw;
+        padding: 12px;
+    }
+
+    .screenshot-window img {
+        max-height: 75vh;
+    }
+
+    .screenshot-title {
+        font-size: 15px;
+        padding-right: 35px;
+    }
+
+    .screenshot-close {
+        width: 34px;
+        height: 34px;
+    }
+}
+
+`;
+
+document.head.appendChild(screenshotStyles);
+
+
+/* ================================================= */
+/* ЭЛЕМЕНТЫ СТРАНИЦЫ                                */
+/* ================================================= */
 
 const slotsContainer = document.getElementById("slots");
 const noResults = document.getElementById("noResults");
@@ -238,7 +443,9 @@ const searchInput = document.getElementById("searchInput");
 let currentFilter = "all";
 
 
-/* Создание всех слотов */
+/* ================================================= */
+/* СОЗДАНИЕ СЛОТОВ                                   */
+/* ================================================= */
 
 function createSlots() {
 
@@ -249,10 +456,13 @@ function createSlots() {
         const slot = document.createElement("div");
 
         slot.className = "slot";
+
         slot.dataset.slot = slotNumber;
 
 
-        /* Слоты 1–6 — буферные */
+        /* ----------------------------------------- */
+        /* СЛОТЫ 1–6                                 */
+        /* ----------------------------------------- */
 
         if (slotNumber >= 1 && slotNumber <= 6) {
 
@@ -267,11 +477,12 @@ function createSlots() {
                     Буферный слот
                 </div>
             `;
-
         }
 
 
-        /* Заполненный слот */
+        /* ----------------------------------------- */
+        /* ЗАПОЛНЕННЫЙ СЛОТ                          */
+        /* ----------------------------------------- */
 
         else if (teams[slotNumber]) {
 
@@ -281,26 +492,62 @@ function createSlots() {
                 <div class="slot-number">
                     SLOT ${slotNumber}
                 </div>
-
-                ${players.map(player => `
-                    <div class="player">
-
-                        <div class="nickname">
-                            ${escapeHTML(player[0])}
-                        </div>
-
-                        <div class="player-id">
-                            ID: ${escapeHTML(player[1])}
-                        </div>
-
-                    </div>
-                `).join("")}
             `;
 
+
+            players.forEach((player, playerIndex) => {
+
+                const nickname = player[0];
+                const playerId = player[1];
+
+                /*
+                    Автоматическое имя файла:
+
+                    SLOT 7 + PLAYER 1
+                    = images/7-1.jpg
+
+                    SLOT 7 + PLAYER 2
+                    = images/7-2.jpg
+                */
+
+                const imagePath =
+                    `images/${slotNumber}-${playerIndex + 1}.jpg`;
+
+
+                const playerElement =
+                    document.createElement("div");
+
+                playerElement.className = "player";
+
+
+                playerElement.innerHTML = `
+                    <div class="nickname">
+                        ${escapeHTML(nickname)}
+                    </div>
+
+                    <div class="player-id">
+                        ID: ${escapeHTML(playerId)}
+                    </div>
+
+                    <button
+                        class="screenshot-button"
+                        type="button"
+                        data-image="${imagePath}"
+                        data-player="${escapeHTML(nickname)}"
+                    >
+                        📷 Скриншот
+                    </button>
+                `;
+
+
+                slot.appendChild(playerElement);
+            });
         }
 
 
-        /* Пустой слот */
+        /* ----------------------------------------- */
+        /* ПУСТОЙ СЛОТ                                */
+        /* ----------------------------------------- */
 
         else {
 
@@ -324,31 +571,151 @@ function createSlots() {
 
     /* Количество команд */
 
-    teamCount.textContent = Object.keys(teams).length;
+    teamCount.textContent =
+        Object.keys(teams).length;
 }
 
 
-/* Фильтры и поиск */
+/* ================================================= */
+/* ОТКРЫТИЕ СКРИНШОТА                               */
+/* ================================================= */
+
+function openScreenshot(imagePath, playerName) {
+
+    const image =
+        document.getElementById("screenshotImage");
+
+    const title =
+        document.getElementById("screenshotTitle");
+
+    const error =
+        document.getElementById("screenshotError");
+
+
+    title.textContent =
+        `Аккаунт: ${playerName}`;
+
+
+    error.style.display = "none";
+
+    image.style.display = "block";
+
+    image.src = imagePath;
+
+
+    image.onerror = function () {
+
+        image.style.display = "none";
+
+        error.style.display = "block";
+    };
+
+
+    modal.classList.add("active");
+
+    document.body.style.overflow = "hidden";
+}
+
+
+/* ================================================= */
+/* ЗАКРЫТИЕ СКРИНШОТА                               */
+/* ================================================= */
+
+function closeScreenshot() {
+
+    modal.classList.remove("active");
+
+    document.body.style.overflow = "";
+
+    const image =
+        document.getElementById("screenshotImage");
+
+    image.src = "";
+}
+
+
+/* Кнопка X */
+
+document
+    .getElementById("closeScreenshot")
+    .addEventListener("click", closeScreenshot);
+
+
+/* Нажатие на затемнённый фон */
+
+document
+    .querySelector(".screenshot-overlay")
+    .addEventListener("click", closeScreenshot);
+
+
+/* Закрытие клавишей ESC */
+
+document.addEventListener("keydown", event => {
+
+    if (event.key === "Escape") {
+        closeScreenshot();
+    }
+
+});
+
+
+/* ================================================= */
+/* КНОПКИ СКРИНШОТОВ                                */
+/* ================================================= */
+
+slotsContainer.addEventListener("click", event => {
+
+    const button =
+        event.target.closest(".screenshot-button");
+
+    if (!button) {
+        return;
+    }
+
+
+    const imagePath =
+        button.dataset.image;
+
+    const playerName =
+        button.dataset.player;
+
+
+    openScreenshot(
+        imagePath,
+        playerName
+    );
+});
+
+
+/* ================================================= */
+/* ФИЛЬТРЫ                                           */
+/* ================================================= */
 
 function applyFilters() {
 
-    const searchText = searchInput.value
-        .toLowerCase()
-        .trim();
+    const searchText =
+        searchInput.value
+            .toLowerCase()
+            .trim();
 
-    const slots = document.querySelectorAll(".slot");
+
+    const slots =
+        document.querySelectorAll(".slot");
+
 
     let visibleCount = 0;
 
 
     slots.forEach(slot => {
 
-        const slotNumber = Number(slot.dataset.slot);
+        const slotNumber =
+            Number(slot.dataset.slot);
+
 
         let filterMatch = true;
 
 
-        /* Буферные 1–6 */
+        /* Буферные слоты */
 
         if (currentFilter === "buffer") {
 
@@ -358,7 +725,7 @@ function applyFilters() {
         }
 
 
-        /* Команды 7–50 */
+        /* Команды */
 
         if (currentFilter === "teams") {
 
@@ -380,6 +747,7 @@ function applyFilters() {
         if (filterMatch && searchMatch) {
 
             slot.style.display = "";
+
             visibleCount++;
 
         } else {
@@ -401,35 +769,50 @@ function applyFilters() {
 }
 
 
-/* Кнопки фильтра */
+/* ================================================= */
+/* КНОПКИ ФИЛЬТРА                                   */
+/* ================================================= */
 
-document.querySelectorAll(".filter-btn").forEach(button => {
+document
+    .querySelectorAll(".filter-btn")
+    .forEach(button => {
 
-    button.addEventListener("click", () => {
+        button.addEventListener("click", () => {
 
-        document
-            .querySelectorAll(".filter-btn")
-            .forEach(btn => {
-                btn.classList.remove("active");
-            });
+            document
+                .querySelectorAll(".filter-btn")
+                .forEach(btn => {
+                    btn.classList.remove("active");
+                });
 
 
-        button.classList.add("active");
+            button.classList.add("active");
 
-        currentFilter = button.dataset.filter;
 
-        applyFilters();
+            currentFilter =
+                button.dataset.filter;
+
+
+            applyFilters();
+        });
+
     });
 
-});
+
+/* ================================================= */
+/* ПОИСК                                             */
+/* ================================================= */
+
+searchInput.addEventListener(
+    "input",
+    applyFilters
+);
 
 
-/* Поиск */
-
-searchInput.addEventListener("input", applyFilters);
-
-
-/* Запуск сайта */
+/* ================================================= */
+/* ЗАПУСК                                            */
+/* ================================================= */
 
 createSlots();
+
 applyFilters();
