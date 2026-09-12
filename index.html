@@ -3,18 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> SPN CUSTOM ROOM </title>
-    <link rel="stylesheet" href="style.css">
+
+    <title>SPN CUSTOM ROOM</title>
+
+    <link rel="stylesheet" href="style.css?v=3">
 </head>
 
 <body>
 
 <header>
+    <div class="header-line"></div>
+
     <h1>SPN CUSTOM ROOM</h1>
-    <p>Список слотов и участников</p>
+
+    <p>ESPORTS TOURNAMENT • CUSTOM ROOM</p>
 </header>
 
+
 <section class="stats">
+
     <div class="stat">
         <span class="stat-number" id="teamCount">0</span>
         <span class="stat-label">Команд</span>
@@ -24,35 +31,69 @@
         <span class="stat-number">50</span>
         <span class="stat-label">Слотов</span>
     </div>
+
 </section>
 
-<div class="search-box">
+
+<div class="search-container">
+
     <input
         type="text"
         id="searchInput"
         placeholder="Поиск по нику или ID..."
+        autocomplete="off"
     >
+
 </div>
+
 
 <div class="filters">
-    <button class="filter-btn active" data-filter="all">Все</button>
-    <button class="filter-btn" data-filter="buffer">1–6</button>
-    <button class="filter-btn" data-filter="teams">7–50</button>
+
+    <button
+        class="filter-btn active"
+        data-filter="all"
+        type="button"
+    >
+        ВСЕ
+    </button>
+
+    <button
+        class="filter-btn"
+        data-filter="buffer"
+        type="button"
+    >
+        БУФЕР 1–6
+    </button>
+
+    <button
+        class="filter-btn"
+        data-filter="teams"
+        type="button"
+    >
+        КОМАНДЫ 7–50
+    </button>
+
 </div>
 
+
 <main>
+
     <div class="slots" id="slots"></div>
 
     <div class="no-results" id="noResults">
-        Ничего не найдено
+        <strong>Ничего не найдено</strong>
+        <span>Попробуйте изменить запрос</span>
     </div>
+
 </main>
 
+
 <footer>
-    PUBG TOURNAMENT
+    SPN CUSTOM ROOM
 </footer>
 
-<script src="script.js"></script>
+
+<script src="script.js?v=3"></script>
 
 </body>
 </html>
