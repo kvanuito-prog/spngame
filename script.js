@@ -1,225 +1,284 @@
-```javascript
-// ============================================================
-// SPN CUSTOM ROOM
-// script.js
-// ============================================================
+/* =========================================================
+   SPN CUSTOM ROOM
+   Supabase + Slots + Search + Filters + Screenshots
+========================================================= */
 
 
-// ============================================================
-// SUPABASE
-// ============================================================
+/* =========================================================
+   SUPABASE
+========================================================= */
 
 const SUPABASE_URL =
     "https://dgtssaispbiqxeimidjl.supabase.co";
 
+
 const SUPABASE_PUBLISHABLE_KEY =
-    "ТВОЙ_PUBLISHABLE_KEY";
+    "sb_publishable_T-1SkXGZ1cMu_lMq7nML1Q_faYsD9PZ";
+
 
 let supabaseClient = null;
 
+
 try {
+
     if (
         window.supabase &&
-        SUPABASE_PUBLISHABLE_KEY &&
-        SUPABASE_PUBLISHABLE_KEY !== "ТВОЙ_PUBLISHABLE_KEY"
+        SUPABASE_URL &&
+        SUPABASE_PUBLISHABLE_KEY
     ) {
-        supabaseClient = window.supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_PUBLISHABLE_KEY
-        );
+
+        supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_PUBLISHABLE_KEY
+            );
+
     }
+
 } catch (error) {
-    console.error("SPN: ошибка Supabase:", error);
+
+    console.error(
+        "SPN: Supabase initialization error:",
+        error
+    );
+
 }
 
 
-// ============================================================
-// КОМАНДЫ 7–50
-// ============================================================
+/* =========================================================
+   LOCAL TEAM DATA
+   Используется как fallback, пока players
+   ещё не заполнены в Supabase.
+========================================================= */
 
 const teams = {
+
     7: [
         ["Meg神", "584490351"],
         ["даньён", "528554700"]
     ],
+
     8: [
         ["oopsĪKRAKEN", "5394036598"],
         ["oopsĪExtazy47", "5853720512"]
     ],
+
     9: [
         ["require", "5151155671"],
         ["pamiboy", "512038100"]
     ],
+
     10: [
         ["OFF SATURN", "51820970664"],
         ["Chifuyu", "5641119402"]
     ],
+
     11: [
         ["мамочек", "51554361168"],
         ["DimaKolyadenko", "5624868354"]
     ],
+
     12: [
         ["4RmskINOY", "51681028930"],
         ["4RmskGRKKO", "52097735266"]
     ],
+
     13: [
         ["GD³ Luna", "51748812036"],
         ["GD¹ MILFA", "52225566329"]
     ],
+
     14: [
         ["WhyAlwaywMe777", "5278941372"],
         ["STLēCandy", "51835322672"]
     ],
+
     15: [
         ["WNēlūflosex", "51425126649"],
         ["deloūvremeni", "51382437194"]
     ],
+
     16: [
         ["oops IRON", "5748094922"],
         ["ɢ²EM69", "5237671761"]
     ],
+
     17: [
         ["evoTENSHOOOOOO", "5375243289"],
         ["evoChiefCief", "51406547392"]
     ],
+
     18: [
         ["ES frizz404", "51323130709"],
         ["Lam Mad", "5265708626"]
     ],
+
     19: [
         ["Bad 스티치", "5665385032"],
         ["concentrate", "5581728996"]
     ],
+
     20: [
         ["VSQ DOM1NATOR", "51770964046"],
         ["Deidaraッ¹", "5872474240"]
     ],
+
     21: [
         ["tw1z666", "5359429915"],
         ["BAZAūFACHE", "5914921954"]
     ],
+
     22: [
         ["SOULPAUPAU", "5207392557"],
         ["GGOLEGARH", "51930208709"]
     ],
+
     23: [
         ["VRERIGANhae", "5598208338"],
         ["plBibizyan", "51433899596"]
     ],
+
     24: [
         ["oops Sobaka", "5903084104"],
         ["oops x ray", "5263605707"]
     ],
+
     25: [
         ["DARKēMIROSLAV", "51011480213"],
         ["DARKēBigByba", "51425072167"]
     ],
+
     26: [
         ["SHWT3N", "5253833134"],
         ["nervIEM", "51250268807"]
     ],
+
     27: [
         ["LM eniway", "5617267660"],
         ["p4pēINGUSH", "5412499445"]
     ],
+
     28: [
         ["oops 1", "52199128083"],
         ["oops2", "5487979553"]
     ],
+
     29: [
         ["GHMīBeavisYT", "52158254615"],
         ["rqCHLL404", "5174986925"]
     ],
+
     30: [
         ["NEX2 lvdboost", "5436743907"],
         ["user5191813756537409", "51918137565"]
     ],
+
     31: [
         ["Miracle", "51647808909"],
         ["msnViperr", "5158787550"]
     ],
+
     32: [
         ["iqFkorxx", "5366651176"],
         ["GTVـJ0SK1YY是", "5262171268"]
     ],
+
     33: [
         ["VREXMO炎", "5319151610"],
         ["VRFONIX", "51588467910"]
     ],
+
     34: [
         ["pG丶n3trryyy", "51696664904"],
         ["pG丶maple", "51442937869"]
     ],
+
     35: [
         ["dr 666", "5307849028"],
         ["plGAMOS1337", "5514130614"]
     ],
+
     36: [
         ["TolstiyBegemot", "5315164165"],
         ["R3STOR3", "5103167510"]
     ],
+
     37: [
         ["SharpbI4ēē67", "5345354520"],
         ["BIG・babySPRAY", "5377420304"]
     ],
+
     38: [
         ["dr'4EverYoung", "5246516071"],
         ["dr’Merko", "51211492451"]
     ],
+
     39: [
         ["LyapuhaSila", "51866646716"],
         ["VR666666666666", "5663978460"]
     ],
+
     40: [
         ["AnchorēBlue", "5281969153"],
         ["nghtēvlasik", "5712455956"]
     ],
+
     41: [
         ["pG丶nepolonia", "51794185086"],
         ["pG丶druam", "5841679517"]
     ],
+
     42: [
         ["yrodNaSaturNe", "5472888899"],
         ["amixDead", "5423035816"]
     ],
+
     43: [
         ["Assenii", "51390811229"],
         ["RRNEFFEX", "5544169844"]
     ],
+
     44: [
         ["wzēAugustin", "51540888072"],
         ["wzēVsind", "5417881428"]
     ],
+
     45: [
         ["pG丶m", "5838898280"],
         ["pG丶sayyy", "51910729283"]
     ],
+
     46: [
         ["404 takasuma", "5219649493"],
         ["404 ONYX", "51020656726"]
     ],
+
     47: [
         ["404 EKIMKA", "5819227706"],
         ["404 SYSTEM", "51578251736"]
     ],
+
     48: [
         ["CRASHēNÉVERq", "5343160068"],
         ["CRASHēARTHUR", "51300909480"]
     ],
+
     49: [
         ["CRASHēBAÚNTY", "51843815264"],
         ["CRASHērmq17", "51369160383"]
     ],
+
     50: [
         ["CRASHēMRAKヅ", "51477942698"],
         ["CRASHēFORZI", "51816909392"]
     ]
+
 };
 
 
-// ============================================================
-// DOM
-// ============================================================
+/* =========================================================
+   DOM
+========================================================= */
 
 const slotsContainer =
     document.getElementById("slots");
@@ -230,281 +289,115 @@ const noResults =
 const teamCount =
     document.getElementById("teamCount");
 
+const slotCount =
+    document.getElementById("slotCount");
+
+const databaseStatus =
+    document.getElementById("databaseStatus");
+
+const databaseMessage =
+    document.getElementById("databaseMessage");
+
+const databaseMessageText =
+    document.getElementById("databaseMessageText");
+
 const searchInput =
     document.getElementById("searchInput");
 
+const clearSearch =
+    document.getElementById("clearSearch");
+
+const filterButtons =
+    document.querySelectorAll(".filter-btn");
+
+const screenshotModal =
+    document.getElementById("screenshotModal");
+
+const screenshotClose =
+    document.getElementById("screenshotClose");
+
+const screenshotImage =
+    document.getElementById("screenshotImage");
+
+const screenshotTitle =
+    document.getElementById("screenshotTitle");
+
+const screenshotError =
+    document.getElementById("screenshotError");
+
+
 let currentFilter = "all";
 
+let databaseSlots = [];
 
-// ============================================================
-// DEBUG PANEL
-// ============================================================
-
-function createDebugPanel() {
-
-    if (document.getElementById("spnDebug")) {
-        return;
-    }
-
-    const panel = document.createElement("div");
-
-    panel.id = "spnDebug";
-
-    panel.innerHTML = `
-        <div class="spn-debug-title">
-            SPN DEBUG
-        </div>
-
-        <div class="spn-debug-row">
-            <span>Supabase</span>
-            <strong id="debugSupabase">
-                Проверка...
-            </strong>
-        </div>
-
-        <div class="spn-debug-row">
-            <span>Slots</span>
-            <strong id="debugSlots">
-                —
-            </strong>
-        </div>
-
-        <div class="spn-debug-row">
-            <span>Players</span>
-            <strong id="debugPlayers">
-                —
-            </strong>
-        </div>
-
-        <div class="spn-debug-row">
-            <span>Команды сайта</span>
-            <strong id="debugTeams">
-                ${Object.keys(teams).length}
-            </strong>
-        </div>
-
-        <div class="spn-debug-row">
-            <span>Ошибка</span>
-            <strong id="debugError">
-                Нет
-            </strong>
-        </div>
-
-        <div
-            class="spn-debug-log"
-            id="debugLog"
-        >
-            Запуск проверки...
-        </div>
-    `;
-
-    document.body.appendChild(panel);
+let databasePlayers = [];
 
 
-    const style = document.createElement("style");
-
-    style.id = "spnDebugStyle";
-
-    style.textContent = `
-        #spnDebug {
-            position: fixed;
-            left: 10px;
-            right: 10px;
-            bottom: 10px;
-
-            z-index: 999999;
-
-            background:
-                rgba(7, 9, 15, 0.97);
-
-            border:
-                1px solid rgba(0, 255, 170, 0.35);
-
-            border-radius:
-                14px;
-
-            padding:
-                13px;
-
-            color:
-                white;
-
-            font-family:
-                Arial, sans-serif;
-
-            font-size:
-                13px;
-
-            box-shadow:
-                0 10px 40px rgba(0,0,0,0.5);
-
-            backdrop-filter:
-                blur(12px);
-        }
-
-        .spn-debug-title {
-            font-size:
-                15px;
-
-            font-weight:
-                900;
-
-            letter-spacing:
-                1.5px;
-
-            margin-bottom:
-                9px;
-        }
-
-        .spn-debug-row {
-            display:
-                flex;
-
-            justify-content:
-                space-between;
-
-            gap:
-                12px;
-
-            padding:
-                4px 0;
-
-            border-bottom:
-                1px solid
-                rgba(255,255,255,0.06);
-        }
-
-        .spn-debug-row strong {
-            font-weight:
-                800;
-        }
-
-        .spn-debug-log {
-            margin-top:
-                9px;
-
-            padding:
-                8px;
-
-            border-radius:
-                8px;
-
-            background:
-                rgba(255,255,255,0.05);
-
-            color:
-                rgba(255,255,255,0.72);
-
-            word-break:
-                break-word;
-
-            line-height:
-                1.4;
-        }
-    `;
-
-    document.head.appendChild(style);
-}
-
-
-function debugSet(
-    id,
-    text,
-    status = null
-) {
-
-    const element =
-        document.getElementById(id);
-
-    if (!element) return;
-
-    element.textContent = text;
-
-    if (status === "ok") {
-        element.style.color = "#00ff9d";
-    }
-
-    if (status === "error") {
-        element.style.color = "#ff4d67";
-    }
-
-    if (status === "warning") {
-        element.style.color = "#ffd166";
-    }
-}
-
-
-function debugLog(text) {
-
-    const element =
-        document.getElementById(
-            "debugLog"
-        );
-
-    if (element) {
-        element.textContent = text;
-    }
-
-}
-
-
-// ============================================================
-// AUDIO
-// ============================================================
+/* =========================================================
+   AUDIO
+========================================================= */
 
 let audioContext = null;
 
-let soundEnabled = true;
+let audioUnlocked = false;
 
 
 function initAudio() {
 
+    if (audioContext) {
+        return;
+    }
+
     try {
 
-        if (!audioContext) {
-
-            audioContext =
-                new (
-                    window.AudioContext ||
-                    window.webkitAudioContext
-                )();
-
-        }
-
-        if (
-            audioContext.state ===
-            "suspended"
-        ) {
-
-            audioContext.resume();
-
-        }
+        audioContext =
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
 
     } catch (error) {
 
-        console.warn(
-            "SPN AUDIO ERROR:",
-            error
-        );
+        return;
 
     }
+
+}
+
+
+function unlockAudio() {
+
+    initAudio();
+
+    if (!audioContext) {
+        return;
+    }
+
+    if (
+        audioContext.state === "suspended"
+    ) {
+
+        audioContext.resume().catch(() => {});
+
+    }
+
+    audioUnlocked = true;
 
 }
 
 
 function playTone(
-    frequency,
-    duration,
-    volume
+    frequency = 500,
+    duration = 0.045,
+    volume = 0.025,
+    type = "sine"
 ) {
 
-    if (!soundEnabled) return;
+    if (!audioUnlocked || !audioContext) {
+        return;
+    }
 
     try {
-
-        initAudio();
-
-        if (!audioContext) return;
 
         const oscillator =
             audioContext.createOscillator();
@@ -512,7 +405,7 @@ function playTone(
         const gain =
             audioContext.createGain();
 
-        oscillator.type = "sine";
+        oscillator.type = type;
 
         oscillator.frequency.value =
             frequency;
@@ -524,67 +417,89 @@ function playTone(
 
         gain.gain.exponentialRampToValueAtTime(
             0.001,
-            audioContext.currentTime +
-            duration
+            audioContext.currentTime + duration
         );
 
         oscillator.connect(gain);
 
-        gain.connect(
-            audioContext.destination
-        );
+        gain.connect(audioContext.destination);
 
         oscillator.start();
 
         oscillator.stop(
-            audioContext.currentTime +
-            duration
+            audioContext.currentTime + duration
         );
 
-    } catch (error) {
-
-        console.warn(
-            "SPN SOUND ERROR:",
-            error
-        );
-
-    }
+    } catch (error) {}
 
 }
 
 
 function playClick() {
-    playTone(700, 0.045, 0.025);
+
+    playTone(
+        520,
+        0.045,
+        0.018,
+        "sine"
+    );
+
 }
 
 
 function playButtonSound() {
-    playTone(850, 0.055, 0.03);
-}
 
+    playTone(
+        650,
+        0.055,
+        0.018,
+        "sine"
+    );
 
-function playHoverSound() {
-    playTone(500, 0.025, 0.012);
 }
 
 
 function playScreenshotSound() {
-    playTone(1000, 0.08, 0.035);
+
+    playTone(
+        760,
+        0.06,
+        0.02,
+        "triangle"
+    );
+
 }
 
 
 function playCloseSound() {
-    playTone(350, 0.05, 0.02);
+
+    playTone(
+        350,
+        0.045,
+        0.015,
+        "sine"
+    );
+
 }
 
 
-// ============================================================
-// ESCAPE HTML
-// ============================================================
+document.addEventListener(
+    "pointerdown",
+    unlockAudio,
+    {
+        once: true,
+        passive: true
+    }
+);
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
 
 function escapeHTML(value) {
 
-    return String(value)
+    return String(value ?? "")
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
@@ -594,576 +509,495 @@ function escapeHTML(value) {
 }
 
 
-// ============================================================
-// SCREENSHOT MODAL
-// ============================================================
+function formatPrice(price) {
 
-function createScreenshotModal() {
+    const number =
+        Number(price);
 
     if (
-        document.getElementById(
-            "screenshotModal"
-        )
+        !Number.isFinite(number)
     ) {
-        return;
+
+        return "100 ₽";
+
     }
 
-    const modal =
-        document.createElement("div");
+    return (
+        number.toLocaleString("ru-RU")
+        + " ₽"
+    );
 
-    modal.id =
-        "screenshotModal";
+}
 
-    modal.innerHTML = `
-        <div class="screenshot-backdrop"></div>
 
-        <div class="screenshot-window">
+function getLocalTeam(slotNumber) {
 
-            <button
-                class="screenshot-close"
-                type="button"
-            >
-                ×
-            </button>
+    return teams[slotNumber] || [];
 
-            <div
-                class="screenshot-title"
-                id="screenshotTitle"
-            ></div>
+}
 
-            <div class="screenshot-image-wrap">
 
-                <img
-                    id="screenshotImage"
-                    alt=""
-                >
+function getPlayersForSlot(slotId) {
 
-                <div
-                    id="screenshotError"
-                    class="screenshot-error"
-                >
-                    Скриншот не найден
+    return databasePlayers
+        .filter(
+            player =>
+                player.slot_id === slotId
+        )
+        .sort(
+            (a, b) =>
+                Number(a.player_number) -
+                Number(b.player_number)
+        );
+
+}
+
+
+/* =========================================================
+   DATABASE STATUS
+========================================================= */
+
+function setDatabaseStatus(
+    state,
+    text
+) {
+
+    databaseMessage.classList.remove(
+        "connected",
+        "error"
+    );
+
+    if (state === "connected") {
+
+        databaseMessage.classList.add(
+            "connected"
+        );
+
+        databaseStatus.textContent =
+            "OK";
+
+    } else if (state === "error") {
+
+        databaseMessage.classList.add(
+            "error"
+        );
+
+        databaseStatus.textContent =
+            "!";
+
+    } else {
+
+        databaseStatus.textContent =
+            "…";
+
+    }
+
+    databaseMessageText.textContent =
+        text;
+
+}
+
+
+/* =========================================================
+   GET SLOTS FROM SUPABASE
+========================================================= */
+
+async function loadDatabase() {
+
+    if (!supabaseClient) {
+
+        setDatabaseStatus(
+            "error",
+            "Supabase не инициализирован"
+        );
+
+        createSlots([]);
+
+        return;
+
+    }
+
+
+    setDatabaseStatus(
+        "loading",
+        "Загрузка данных..."
+    );
+
+
+    try {
+
+        const {
+            data: slots,
+            error: slotsError
+        } = await supabaseClient
+            .from("slots")
+            .select(
+                "id, slot_number, status, team_name, price, buyout_count"
+            )
+            .order(
+                "slot_number",
+                {
+                    ascending: true
+                }
+            );
+
+
+        if (slotsError) {
+
+            throw slotsError;
+
+        }
+
+
+        databaseSlots =
+            Array.isArray(slots)
+                ? slots
+                : [];
+
+
+        const {
+            data: players,
+            error: playersError
+        } = await supabaseClient
+            .from("players")
+            .select(
+                "id, slot_id, player_number, nickname, player_id, screenshot_path"
+            );
+
+
+        if (playersError) {
+
+            console.warn(
+                "Players error:",
+                playersError
+            );
+
+            databasePlayers = [];
+
+        } else {
+
+            databasePlayers =
+                Array.isArray(players)
+                    ? players
+                    : [];
+
+        }
+
+
+        setDatabaseStatus(
+            "connected",
+            `Supabase подключен • ${databaseSlots.length} слотов • ${databasePlayers.length} игроков`
+        );
+
+
+        createSlots(
+            databaseSlots
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "SPN database error:",
+            error
+        );
+
+
+        setDatabaseStatus(
+            "error",
+            "Не удалось загрузить Supabase • используются данные сайта"
+        );
+
+
+        databaseSlots = [];
+
+        databasePlayers = [];
+
+        createSlots([]);
+
+    }
+
+}
+
+
+/* =========================================================
+   FIND SLOT DATA
+========================================================= */
+
+function getSlotData(slotNumber) {
+
+    return databaseSlots.find(
+        slot =>
+            Number(slot.slot_number) ===
+            Number(slotNumber)
+    ) || null;
+
+}
+
+
+/* =========================================================
+   PLAYER HTML
+========================================================= */
+
+function createPlayerHTML(
+    player,
+    playerNumber,
+    slotNumber
+) {
+
+    if (!player) {
+
+        return `
+            <div class="player">
+
+                <div class="player-number">
+                    ${playerNumber}
+                </div>
+
+                <div class="player-info">
+
+                    <span class="player-empty">
+                        СВОБОДНО
+                    </span>
+
+                </div>
+
+            </div>
+        `;
+
+    }
+
+
+    const nickname =
+        player.nickname || "Без ника";
+
+    const playerId =
+        player.player_id || "—";
+
+
+    let screenshotPath =
+        player.screenshot_path;
+
+
+    if (!screenshotPath) {
+
+        screenshotPath =
+            `images/${slotNumber}-${playerNumber}.jpg`;
+
+    }
+
+
+    return `
+        <div class="player">
+
+            <div class="player-number">
+                ${playerNumber}
+            </div>
+
+            <div class="player-info">
+
+                <div class="player-main">
+
+                    <span class="player-name">
+                        ${escapeHTML(nickname)}
+                    </span>
+
+                    <span class="player-id">
+                        ID: ${escapeHTML(playerId)}
+                    </span>
+
                 </div>
 
             </div>
 
+            <button
+                type="button"
+                class="screenshot-btn"
+                data-image="${escapeHTML(screenshotPath)}"
+                data-player="${escapeHTML(nickname)}"
+                title="Открыть скриншот"
+            >
+                IMG
+            </button>
+
         </div>
     `;
 
-    document.body.appendChild(modal);
-
-
-    const style =
-        document.createElement("style");
-
-    style.textContent = `
-        #screenshotModal {
-            position: fixed;
-            inset: 0;
-
-            z-index: 999998;
-
-            display: none;
-
-            align-items: center;
-            justify-content: center;
-
-            padding: 20px;
-        }
-
-        #screenshotModal.active {
-            display: flex;
-        }
-
-        .screenshot-backdrop {
-            position: absolute;
-            inset: 0;
-
-            background:
-                rgba(0,0,0,0.88);
-        }
-
-        .screenshot-window {
-            position: relative;
-
-            z-index: 2;
-
-            width:
-                min(900px, 100%);
-
-            max-height:
-                90vh;
-
-            background:
-                #10131b;
-
-            border:
-                1px solid
-                rgba(255,255,255,0.12);
-
-            border-radius:
-                18px;
-
-            padding:
-                16px;
-
-            overflow:
-                hidden;
-
-            box-shadow:
-                0 30px 80px
-                rgba(0,0,0,0.65);
-        }
-
-        .screenshot-title {
-            font-size:
-                16px;
-
-            font-weight:
-                800;
-
-            margin-bottom:
-                12px;
-
-            padding-right:
-                40px;
-        }
-
-        .screenshot-image-wrap {
-            position: relative;
-
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            justify-content:
-                center;
-
-            min-height:
-                150px;
-
-            background:
-                #080a0f;
-
-            border-radius:
-                12px;
-
-            overflow:
-                hidden;
-        }
-
-        #screenshotImage {
-            display:
-                block;
-
-            max-width:
-                100%;
-
-            max-height:
-                75vh;
-
-            object-fit:
-                contain;
-        }
-
-        .screenshot-error {
-            display:
-                none;
-
-            padding:
-                30px;
-
-            color:
-                rgba(255,255,255,0.65);
-        }
-
-        .screenshot-close {
-            position:
-                absolute;
-
-            top:
-                10px;
-
-            right:
-                10px;
-
-            z-index:
-                5;
-
-            width:
-                36px;
-
-            height:
-                36px;
-
-            border:
-                none;
-
-            border-radius:
-                50%;
-
-            background:
-                rgba(255,255,255,0.1);
-
-            color:
-                white;
-
-            font-size:
-                24px;
-
-            cursor:
-                pointer;
-        }
-    `;
-
-    document.head.appendChild(style);
-
-
-    modal
-        .querySelector(
-            ".screenshot-backdrop"
-        )
-        .addEventListener(
-            "click",
-            closeScreenshot
-        );
-
-    modal
-        .querySelector(
-            ".screenshot-close"
-        )
-        .addEventListener(
-            "click",
-            closeScreenshot
-        );
-
 }
 
 
-function openScreenshot(
-    imagePath,
-    playerName
-) {
+/* =========================================================
+   CREATE BUFFER
+========================================================= */
 
-    createScreenshotModal();
+function createBufferCard() {
 
-    const modal =
-        document.getElementById(
-            "screenshotModal"
-        );
+    return `
+        <article
+            class="slot-card buffer-card"
+            data-type="buffer"
+            data-search="буфер buffer 1 2 3 4 5 6"
+        >
 
-    const image =
-        document.getElementById(
-            "screenshotImage"
-        );
+            <div class="slot-header">
 
-    const title =
-        document.getElementById(
-            "screenshotTitle"
-        );
+                <div class="slot-number-wrap">
 
-    const error =
-        document.getElementById(
-            "screenshotError"
-        );
+                    <span class="slot-label">
+                        BUFFER
+                    </span>
 
-    title.textContent =
-        `Скриншот — ${playerName}`;
+                    <span class="slot-number">
+                        1–6
+                    </span>
 
-    image.style.display =
-        "block";
-
-    error.style.display =
-        "none";
-
-    image.src =
-        imagePath;
-
-    image.onerror = () => {
-
-        image.style.display =
-            "none";
-
-        error.style.display =
-            "block";
-
-    };
-
-    modal.classList.add(
-        "active"
-    );
-
-    playScreenshotSound();
-
-}
-
-
-function closeScreenshot() {
-
-    const modal =
-        document.getElementById(
-            "screenshotModal"
-        );
-
-    if (!modal) return;
-
-    modal.classList.remove(
-        "active"
-    );
-
-    playCloseSound();
-
-}
-
-
-// ============================================================
-// СОЗДАНИЕ СЛОТОВ
-// ============================================================
-
-function createSlots() {
-
-    if (!slotsContainer) {
-
-        console.error(
-            "SPN: #slots не найден"
-        );
-
-        return;
-
-    }
-
-
-    slotsContainer.innerHTML = "";
-
-
-    // ========================================================
-    // БУФЕР 1–6 — ОДНА КАРТОЧКА
-    // ========================================================
-
-    const bufferCard =
-        document.createElement("article");
-
-    bufferCard.className =
-        "slot-card buffer-card";
-
-    bufferCard.dataset.type =
-        "buffer";
-
-    bufferCard.dataset.search =
-        "слоты 1 2 3 4 5 6 буфер буферные";
-
-
-    bufferCard.innerHTML = `
-
-        <div class="slot-header">
-
-            <div class="slot-header-left">
-
-                <span class="slot-number">
-                    01–06
-                </span>
+                </div>
 
                 <span class="slot-status">
-                    БУФЕР
+                    BUFFER
                 </span>
 
             </div>
 
-        </div>
 
+            <div class="buffer-content">
 
-        <div class="buffer-content">
-
-            <div class="buffer-icon">
-                ⛨
-            </div>
-
-            <div>
+                <div class="buffer-icon">
+                    ◈
+                </div>
 
                 <div class="buffer-title">
                     БУФЕРНЫЕ СЛОТЫ
                 </div>
 
-                <div class="buffer-text">
-                    Слоты 1–6 зарезервированы
-                    под буфер.
+                <div class="buffer-subtitle">
+                    Резервные позиции 1–6
+                    для организации кастомной комнаты
                 </div>
 
             </div>
 
-        </div>
+        </article>
     `;
 
-
-    slotsContainer.appendChild(
-        bufferCard
-    );
+}
 
 
-    // ========================================================
-    // КОМАНДЫ 7–50
-    // ========================================================
+/* =========================================================
+   CREATE TEAM CARD
+========================================================= */
 
-    for (
-        let slotNumber = 7;
-        slotNumber <= 50;
-        slotNumber++
-    ) {
+function createTeamCard(
+    slotNumber
+) {
 
-        const team =
-            teams[slotNumber];
-
-        const card =
-            document.createElement(
-                "article"
-            );
-
-        card.className =
-            "slot-card team-card";
-
-        card.dataset.type =
-            "team";
+    const dbSlot =
+        getSlotData(slotNumber);
 
 
-        let searchText =
-            `слот ${slotNumber} команда ${slotNumber}`;
+    const localTeam =
+        getLocalTeam(slotNumber);
 
 
-        let playersHTML = "";
+    const dbPlayers =
+        dbSlot
+            ? getPlayersForSlot(dbSlot.id)
+            : [];
 
 
-        // ----------------------------------------------------
-        // ЕСЛИ КОМАНДА ЕСТЬ
-        // ----------------------------------------------------
-
-        if (
-            Array.isArray(team) &&
-            team.length > 0
-        ) {
-
-            team.forEach(
-                (
-                    player,
-                    playerIndex
-                ) => {
-
-                    const nickname =
-                        player[0];
-
-                    const playerId =
-                        player[1];
-
-                    searchText +=
-                        ` ${nickname} ${playerId}`;
+    let players;
 
 
-                    const imagePath =
-                        `images/${slotNumber}-${playerIndex + 1}.jpg`;
+    if (dbPlayers.length > 0) {
 
+        players = [
+            dbPlayers[0] || null,
+            dbPlayers[1] || null
+        ];
 
-                    playersHTML += `
+    } else {
 
-                        <div class="player">
-
-                            <div class="player-info">
-
-                                <div class="player-number">
-                                    ${playerIndex + 1}
-                                </div>
-
-                                <div class="player-main">
-
-                                    <div class="player-name">
-                                        ${escapeHTML(nickname)}
-                                    </div>
-
-                                    <div class="player-id">
-                                        ID:
-                                        ${escapeHTML(playerId)}
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-                            <button
-                                class="screenshot-btn"
-                                type="button"
-                                data-image="${escapeHTML(imagePath)}"
-                                data-player="${escapeHTML(nickname)}"
-                            >
-                                СКРИН
-                            </button>
-
-                        </div>
-                    `;
-
+        players = [
+            localTeam[0]
+                ? {
+                    nickname: localTeam[0][0],
+                    player_id: localTeam[0][1]
                 }
-            );
+                : null,
 
-        }
+            localTeam[1]
+                ? {
+                    nickname: localTeam[1][0],
+                    player_id: localTeam[1][1]
+                }
+                : null
+        ];
 
-
-        // ----------------------------------------------------
-        // ЕСЛИ КОМАНДЫ НЕТ
-        // ----------------------------------------------------
-
-        else {
-
-            playersHTML = `
-
-                <div class="player empty-player">
-
-                    <div class="player-info">
-
-                        <div class="player-number">
-                            —
-                        </div>
-
-                        <div class="player-main">
-
-                            <div class="player-name">
-                                СВОБОДНО
-                            </div>
-
-                            <div class="player-id">
-                                Место свободно
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            `;
-
-        }
+    }
 
 
-        card.dataset.search =
-            searchText.toLowerCase();
+    const price =
+        dbSlot?.price ?? 100;
 
 
-        // ----------------------------------------------------
-        // HTML КАРТОЧКИ
-        // ----------------------------------------------------
+    const buyoutCount =
+        dbSlot?.buyout_count ?? 0;
 
-        card.innerHTML = `
+
+    const teamName =
+        dbSlot?.team_name ||
+        "";
+
+
+    const playerSearch =
+        players
+            .filter(Boolean)
+            .map(
+                player =>
+                    `${player.nickname || ""} ${player.player_id || ""}`
+            )
+            .join(" ");
+
+
+    const searchText =
+        `
+        ${slotNumber}
+        ${teamName}
+        ${playerSearch}
+        `.toLowerCase();
+
+
+    return `
+        <article
+            class="slot-card team-card"
+            data-type="team"
+            data-slot="${slotNumber}"
+            data-search="${escapeHTML(searchText)}"
+        >
 
             <div class="slot-header">
 
-                <div class="slot-header-left">
+                <div class="slot-number-wrap">
 
-                    <span class="slot-number">
-                        ${String(slotNumber).padStart(2, "0")}
+                    <span class="slot-label">
+                        SLOT
                     </span>
 
-                    <span class="slot-status">
-                        КОМАНДА
+                    <span class="slot-number">
+                        ${slotNumber}
+                    </span>
+
+                </div>
+
+
+                <div class="team-price">
+
+                    <span class="price-value">
+                        ${formatPrice(price)}
+                    </span>
+
+                    <span class="price-label">
+                        KICK
                     </span>
 
                 </div>
@@ -1172,59 +1006,139 @@ function createSlots() {
 
 
             <div class="players">
-                ${playersHTML}
+
+                ${createPlayerHTML(
+                    players[0],
+                    1,
+                    slotNumber
+                )}
+
+                ${createPlayerHTML(
+                    players[1],
+                    2,
+                    slotNumber
+                )}
+
             </div>
 
-        `;
 
+            <div class="team-actions">
 
-        slotsContainer.appendChild(
-            card
-        );
+                <button
+                    type="button"
+                    class="kick-button"
+                    data-slot="${slotNumber}"
+                    data-price="${price}"
+                    data-buyouts="${buyoutCount}"
+                >
+                    KICK • ${formatPrice(price)}
+                </button>
 
-    }
+            </div>
 
-
-    // ========================================================
-    // СЧЁТЧИК
-    // ========================================================
-
-    if (teamCount) {
-
-        teamCount.textContent =
-            Object.keys(teams).length;
-
-    }
-
-
-    debugSet(
-        "debugTeams",
-        String(
-            Object.keys(teams).length
-        ),
-        "ok"
-    );
+        </article>
+    `;
 
 }
 
 
-// ============================================================
-// ФИЛЬТРЫ
-// ============================================================
+/* =========================================================
+   CREATE ALL SLOTS
+========================================================= */
+
+function createSlots(
+    slotsFromDatabase = []
+) {
+
+    slotsContainer.innerHTML = "";
+
+
+    const fragment =
+        document.createDocumentFragment();
+
+
+    const temporary =
+        document.createElement("div");
+
+
+    temporary.innerHTML =
+        createBufferCard();
+
+
+    while (
+        temporary.firstElementChild
+    ) {
+
+        fragment.appendChild(
+            temporary.firstElementChild
+        );
+
+    }
+
+
+    for (
+        let slotNumber = 7;
+        slotNumber <= 50;
+        slotNumber++
+    ) {
+
+        temporary.innerHTML =
+            createTeamCard(slotNumber);
+
+
+        while (
+            temporary.firstElementChild
+        ) {
+
+            fragment.appendChild(
+                temporary.firstElementChild
+            );
+
+        }
+
+    }
+
+
+    slotsContainer.appendChild(
+        fragment
+    );
+
+
+    const count =
+        Object.keys(teams).length;
+
+
+    teamCount.textContent =
+        count;
+
+
+    slotCount.textContent =
+        slotsFromDatabase.length ||
+        50;
+
+
+    applyFilters();
+
+}
+
+
+/* =========================================================
+   FILTERING
+========================================================= */
 
 function applyFilters() {
 
+    const query =
+        searchInput.value
+            .trim()
+            .toLowerCase();
+
+
     const cards =
-        document.querySelectorAll(
+        slotsContainer.querySelectorAll(
             ".slot-card"
         );
 
-    const query =
-        searchInput
-            ? searchInput.value
-                .trim()
-                .toLowerCase()
-            : "";
 
     let visibleCount = 0;
 
@@ -1232,45 +1146,44 @@ function applyFilters() {
     cards.forEach(card => {
 
         const type =
-            card.dataset.type || "";
+            card.dataset.type;
 
-        const text =
-            card.dataset.search || "";
 
-        let visible = true;
+        const searchText =
+            (
+                card.dataset.search ||
+                ""
+            ).toLowerCase();
+
+
+        let typeMatch = true;
 
 
         if (
-            currentFilter ===
-            "buffer"
+            currentFilter === "buffer"
         ) {
 
-            visible =
+            typeMatch =
                 type === "buffer";
 
-        }
-
-
-        if (
-            currentFilter ===
-            "teams"
+        } else if (
+            currentFilter === "teams"
         ) {
 
-            visible =
+            typeMatch =
                 type === "team";
 
         }
 
 
-        if (
-            visible &&
-            query &&
-            !text.includes(query)
-        ) {
+        const searchMatch =
+            !query ||
+            searchText.includes(query);
 
-            visible = false;
 
-        }
+        const visible =
+            typeMatch &&
+            searchMatch;
 
 
         card.style.display =
@@ -1288,44 +1201,42 @@ function applyFilters() {
     });
 
 
-    if (noResults) {
+    noResults.classList.toggle(
+        "visible",
+        visibleCount === 0
+    );
 
-        noResults.style.display =
-            visibleCount === 0
-                ? "flex"
-                : "none";
 
-    }
+    clearSearch.classList.toggle(
+        "visible",
+        Boolean(query)
+    );
 
 }
 
 
-// ============================================================
-// FILTER BUTTONS
-// ============================================================
+/* =========================================================
+   FILTER BUTTONS
+========================================================= */
 
-document
-    .querySelectorAll(".filter-btn")
-    .forEach(button => {
+filterButtons.forEach(
+    button => {
 
         button.addEventListener(
             "click",
             () => {
 
-                currentFilter =
-                    button.dataset.filter;
+                unlockAudio();
 
-                document
-                    .querySelectorAll(
-                        ".filter-btn"
-                    )
-                    .forEach(btn => {
+                playButtonSound();
 
-                        btn.classList.remove(
+
+                filterButtons.forEach(
+                    item =>
+                        item.classList.remove(
                             "active"
-                        );
-
-                    });
+                        )
+                );
 
 
                 button.classList.add(
@@ -1333,351 +1244,168 @@ document
                 );
 
 
-                playButtonSound();
+                currentFilter =
+                    button.dataset.filter;
+
 
                 applyFilters();
 
             }
         );
 
-    });
-
-
-// ============================================================
-// SEARCH
-// ============================================================
-
-if (searchInput) {
-
-    searchInput.addEventListener(
-        "input",
-        applyFilters
-    );
-
-}
-
-
-// ============================================================
-// SCREENSHOT BUTTONS
-// ============================================================
-
-if (slotsContainer) {
-
-    slotsContainer.addEventListener(
-        "click",
-        event => {
-
-            const button =
-                event.target.closest(
-                    ".screenshot-btn"
-                );
-
-            if (!button) return;
-
-
-            openScreenshot(
-                button.dataset.image,
-                button.dataset.player
-            );
-
-        }
-    );
-
-
-    slotsContainer.addEventListener(
-        "mouseover",
-        event => {
-
-            const button =
-                event.target.closest(
-                    "button"
-                );
-
-            if (!button) return;
-
-            playHoverSound();
-
-        }
-    );
-
-}
-
-
-// ============================================================
-// AUDIO UNLOCK
-// ============================================================
-
-document.addEventListener(
-    "pointerdown",
-    initAudio,
-    {
-        once: true
     }
 );
 
 
-// ============================================================
-// SUPABASE ПРОВЕРКА
-// ============================================================
+/* =========================================================
+   SEARCH
+========================================================= */
 
-async function testSupabaseConnection() {
+searchInput.addEventListener(
+    "input",
+    () => {
 
-    debugSet(
-        "debugSupabase",
-        "Проверка...",
-        "warning"
+        applyFilters();
+
+    }
+);
+
+
+clearSearch.addEventListener(
+    "click",
+    () => {
+
+        unlockAudio();
+
+        playClick();
+
+        searchInput.value = "";
+
+        searchInput.focus();
+
+        applyFilters();
+
+    }
+);
+
+
+/* =========================================================
+   SCREENSHOT
+========================================================= */
+
+function openScreenshot(
+    imagePath,
+    playerName
+) {
+
+    unlockAudio();
+
+    playScreenshotSound();
+
+
+    screenshotTitle.textContent =
+        playerName ||
+        "Скриншот игрока";
+
+
+    screenshotError.classList.remove(
+        "visible"
     );
 
-    debugLog(
-        "Проверяем подключение к Supabase..."
+
+    screenshotImage.style.display =
+        "block";
+
+
+    screenshotImage.src =
+        imagePath;
+
+
+    screenshotModal.classList.add(
+        "open"
     );
 
 
-    // --------------------------------------------------------
-    // SUPABASE JS
-    // --------------------------------------------------------
-
-    if (!window.supabase) {
-
-        debugSet(
-            "debugSupabase",
-            "Ошибка",
-            "error"
-        );
-
-        debugSet(
-            "debugError",
-            "Supabase JS не загружен",
-            "error"
-        );
-
-        debugLog(
-            "Не найден window.supabase."
-        );
-
-        return;
-
-    }
-
-
-    // --------------------------------------------------------
-    // KEY
-    // --------------------------------------------------------
-
-    if (!supabaseClient) {
-
-        debugSet(
-            "debugSupabase",
-            "Нет ключа",
-            "error"
-        );
-
-        debugSet(
-            "debugError",
-            "Publishable key не указан",
-            "error"
-        );
-
-        debugLog(
-            "Вставь свой publishable key в script.js."
-        );
-
-        return;
-
-    }
-
-
-    // --------------------------------------------------------
-    // SLOTS
-    // --------------------------------------------------------
-
-    try {
-
-        const {
-            data: slots,
-            error: slotsError
-        } =
-            await supabaseClient
-                .from("slots")
-                .select(
-                    "slot_number, status, price"
-                )
-                .order(
-                    "slot_number",
-                    {
-                        ascending: true
-                    }
-                );
-
-
-        if (slotsError) {
-
-            console.error(
-                "SPN SUPABASE SLOTS ERROR:",
-                slotsError
-            );
-
-
-            debugSet(
-                "debugSupabase",
-                "Ошибка",
-                "error"
-            );
-
-
-            debugSet(
-                "debugError",
-                slotsError.message,
-                "error"
-            );
-
-
-            debugLog(
-                `Ошибка slots: ${slotsError.message}`
-            );
-
-
-            return;
-
-        }
-
-
-        debugSet(
-            "debugSupabase",
-            "Подключено ✓",
-            "ok"
-        );
-
-
-        debugSet(
-            "debugSlots",
-            String(
-                slots.length
-            ),
-            "ok"
-        );
-
-
-        // ----------------------------------------------------
-        // PLAYERS
-        // ----------------------------------------------------
-
-        const {
-            data: players,
-            error: playersError
-        } =
-            await supabaseClient
-                .from("players")
-                .select(
-                    "id, slot_id, player_number, nickname, player_id"
-                );
-
-
-        if (playersError) {
-
-            console.error(
-                "SPN SUPABASE PLAYERS ERROR:",
-                playersError
-            );
-
-
-            debugSet(
-                "debugPlayers",
-                "Ошибка",
-                "error"
-            );
-
-
-            debugSet(
-                "debugError",
-                playersError.message,
-                "error"
-            );
-
-
-            debugLog(
-                `Slots работают. Players: ${playersError.message}`
-            );
-
-
-            return;
-
-        }
-
-
-        debugSet(
-            "debugPlayers",
-            String(
-                players.length
-            ),
-            "ok"
-        );
-
-
-        debugSet(
-            "debugError",
-            "Нет",
-            "ok"
-        );
-
-
-        debugLog(
-            `Supabase работает. Slots: ${slots.length}, Players: ${players.length}`
-        );
-
-
-        console.log(
-            "SPN SUPABASE OK:",
-            {
-                slots,
-                players
-            }
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "SPN SUPABASE ERROR:",
-            error
-        );
-
-
-        debugSet(
-            "debugSupabase",
-            "Ошибка",
-            "error"
-        );
-
-
-        debugSet(
-            "debugError",
-            error.message ||
-            "Неизвестная ошибка",
-            "error"
-        );
-
-
-        debugLog(
-            error.message ||
-            "Неизвестная ошибка"
-        );
-
-    }
+    screenshotModal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
 
 }
 
 
-// ============================================================
-// ESC
-// ============================================================
+function closeScreenshot() {
 
-document.addEventListener(
-    "keydown",
+    playCloseSound();
+
+
+    screenshotModal.classList.remove(
+        "open"
+    );
+
+
+    screenshotModal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    screenshotImage.src = "";
+
+}
+
+
+/* Image error */
+
+screenshotImage.addEventListener(
+    "error",
+    () => {
+
+        screenshotImage.style.display =
+            "none";
+
+        screenshotError.classList.add(
+            "visible"
+        );
+
+    }
+);
+
+
+/* Image loaded */
+
+screenshotImage.addEventListener(
+    "load",
+    () => {
+
+        screenshotImage.style.display =
+            "block";
+
+        screenshotError.classList.remove(
+            "visible"
+        );
+
+    }
+);
+
+
+/* Close button */
+
+screenshotClose.addEventListener(
+    "click",
+    closeScreenshot
+);
+
+
+/* Click outside */
+
+screenshotModal.addEventListener(
+    "click",
     event => {
 
         if (
-            event.key === "Escape"
+            event.target ===
+            screenshotModal
         ) {
 
             closeScreenshot();
@@ -1688,15 +1416,185 @@ document.addEventListener(
 );
 
 
-// ============================================================
-// START
-// ============================================================
+/* =========================================================
+   KICK
+========================================================= */
 
-createDebugPanel();
+function openKickInfo(
+    slotNumber,
+    price,
+    buyoutCount
+) {
 
-createSlots();
+    unlockAudio();
 
-applyFilters();
+    playClick();
 
-testSupabaseConnection();
-```
+
+    const formattedPrice =
+        formatPrice(price);
+
+
+    const nextPrice =
+        formatPrice(
+            Number(price) * 2
+        );
+
+
+    const message =
+        `Хотите кикнуть команду и занять слот №${slotNumber}?\n\n` +
+        `Цена слота: ${formattedPrice}\n` +
+        `После покупки следующая цена: ${nextPrice}\n\n` +
+        `Для покупки обращайтесь в Telegram:\n` +
+        `@VankKingX`;
+
+
+    alert(message);
+
+}
+
+
+/* =========================================================
+   DELEGATED CLICK EVENTS
+========================================================= */
+
+slotsContainer.addEventListener(
+    "click",
+    event => {
+
+        const screenshotButton =
+            event.target.closest(
+                ".screenshot-btn"
+            );
+
+
+        if (screenshotButton) {
+
+            openScreenshot(
+                screenshotButton.dataset.image,
+                screenshotButton.dataset.player
+            );
+
+            return;
+
+        }
+
+
+        const kickButton =
+            event.target.closest(
+                ".kick-button"
+            );
+
+
+        if (kickButton) {
+
+            openKickInfo(
+                Number(
+                    kickButton.dataset.slot
+                ),
+
+                Number(
+                    kickButton.dataset.price
+                ),
+
+                Number(
+                    kickButton.dataset.buyouts
+                )
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   BUTTON HOVER SOUND
+========================================================= */
+
+let lastHoverButton = null;
+
+
+slotsContainer.addEventListener(
+    "mouseover",
+    event => {
+
+        const button =
+            event.target.closest(
+                "button"
+            );
+
+
+        if (!button) {
+            return;
+        }
+
+
+        if (
+            lastHoverButton === button
+        ) {
+
+            return;
+
+        }
+
+
+        lastHoverButton =
+            button;
+
+
+        unlockAudio();
+
+        playTone(
+            720,
+            0.025,
+            0.008,
+            "sine"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   ESC
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            if (
+                screenshotModal.classList.contains(
+                    "open"
+                )
+            ) {
+
+                closeScreenshot();
+
+            }
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   START
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        createSlots([]);
+
+        loadDatabase();
+
+    }
+);
