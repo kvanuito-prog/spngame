@@ -1,0 +1,526 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(0, 170, 255, 0.10),
+            transparent 35%
+        ),
+        #05070c;
+
+    color: #f2f6ff;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+
+.admin-bg {
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            rgba(255,255,255,0.015) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,0.015) 1px,
+            transparent 1px
+        );
+
+    background-size: 32px 32px;
+}
+
+
+.admin-header {
+    position: relative;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 28px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+
+    background: rgba(5,7,12,0.88);
+
+    backdrop-filter: blur(12px);
+}
+
+
+.admin-logo {
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.22em;
+
+    color: #64d9ff;
+}
+
+
+.admin-title {
+    margin-top: 4px;
+
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+}
+
+
+.admin-subtitle {
+    margin-top: 4px;
+
+    color: #76839a;
+
+    font-size: 11px;
+    letter-spacing: 0.16em;
+}
+
+
+.logout-button {
+    border: 1px solid rgba(255,255,255,0.12);
+
+    background: rgba(255,255,255,0.04);
+
+    color: #dce6f5;
+
+    padding: 11px 16px;
+
+    border-radius: 8px;
+
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+}
+
+.logout-button:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+
+.admin-main {
+    position: relative;
+
+    width: min(1100px, calc(100% - 28px));
+
+    margin: 0 auto;
+
+    padding: 35px 0 70px;
+}
+
+
+.login-section {
+    display: flex;
+
+    justify-content: center;
+
+    padding-top: 8vh;
+}
+
+
+.login-card {
+    width: min(430px, 100%);
+
+    padding: 30px;
+
+    border: 1px solid rgba(100,217,255,0.14);
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(20,28,42,0.92),
+            rgba(8,11,18,0.96)
+        );
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,0.45);
+}
+
+
+.login-label,
+.panel-label {
+    color: #64d9ff;
+
+    font-size: 10px;
+    font-weight: 900;
+
+    letter-spacing: 0.2em;
+}
+
+
+.login-card h1,
+.panel-top h1 {
+    margin: 8px 0 5px;
+
+    font-size: 30px;
+}
+
+
+.login-description {
+    margin: 0 0 25px;
+
+    color: #77849a;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+#loginForm {
+    display: grid;
+    gap: 16px;
+}
+
+
+#loginForm label {
+    display: grid;
+    gap: 7px;
+
+    color: #8390a5;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 0.12em;
+}
+
+
+#loginForm input,
+.player-editor input,
+.team-name-input {
+    width: 100%;
+
+    border: 1px solid rgba(255,255,255,0.10);
+
+    outline: none;
+
+    border-radius: 8px;
+
+    padding: 13px 14px;
+
+    background: rgba(0,0,0,0.30);
+
+    color: #fff;
+
+    font-size: 14px;
+}
+
+
+#loginForm input:focus,
+.player-editor input:focus,
+.team-name-input:focus {
+    border-color: rgba(100,217,255,0.55);
+
+    box-shadow:
+        0 0 0 3px rgba(100,217,255,0.06);
+}
+
+
+.primary-button,
+.save-button {
+    border: 0;
+
+    border-radius: 8px;
+
+    padding: 13px 16px;
+
+    background: #64d9ff;
+
+    color: #031018;
+
+    font-weight: 900;
+
+    letter-spacing: 0.08em;
+}
+
+
+.primary-button:hover,
+.save-button:hover {
+    filter: brightness(1.08);
+}
+
+
+.message {
+    min-height: 18px;
+
+    margin-top: 14px;
+
+    color: #ff7d8c;
+
+    font-size: 12px;
+}
+
+
+.panel-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    gap: 20px;
+
+    margin-bottom: 25px;
+}
+
+
+.panel-top h1 {
+    margin-bottom: 3px;
+}
+
+
+#userEmail {
+    margin: 0;
+
+    color: #66748b;
+
+    font-size: 12px;
+}
+
+
+.database-message {
+    padding: 9px 12px;
+
+    border: 1px solid rgba(100,217,255,0.15);
+
+    border-radius: 8px;
+
+    color: #64d9ff;
+
+    font-size: 11px;
+}
+
+
+.slots-list {
+    display: grid;
+    gap: 14px;
+}
+
+
+.admin-slot {
+    border: 1px solid rgba(255,255,255,0.08);
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(19,25,37,0.94),
+            rgba(8,11,17,0.96)
+        );
+
+    overflow: hidden;
+}
+
+
+.slot-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 15px 17px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+
+.slot-title {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+.slot-label {
+    color: #6f7d92;
+
+    font-size: 9px;
+    font-weight: 900;
+
+    letter-spacing: 0.16em;
+}
+
+
+.slot-number {
+    font-size: 18px;
+    font-weight: 900;
+}
+
+
+.slot-price {
+    color: #64d9ff;
+
+    font-size: 12px;
+    font-weight: 900;
+}
+
+
+.team-name-wrap {
+    padding: 15px 17px 5px;
+}
+
+
+.field-label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #748197;
+
+    font-size: 9px;
+    font-weight: 900;
+
+    letter-spacing: 0.14em;
+}
+
+
+.players-edit {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 12px;
+
+    padding: 12px 17px 17px;
+}
+
+
+.player-editor {
+    padding: 14px;
+
+    border: 1px solid rgba(255,255,255,0.07);
+
+    border-radius: 10px;
+
+    background: rgba(0,0,0,0.18);
+}
+
+
+.player-editor-title {
+    margin-bottom: 12px;
+
+    color: #64d9ff;
+
+    font-size: 10px;
+    font-weight: 900;
+
+    letter-spacing: 0.1em;
+}
+
+
+.player-editor label {
+    display: grid;
+
+    gap: 6px;
+
+    margin-bottom: 10px;
+
+    color: #748197;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 0.1em;
+}
+
+
+.save-row {
+    display: flex;
+
+    justify-content: flex-end;
+
+    padding: 0 17px 17px;
+}
+
+
+.save-button {
+    min-width: 130px;
+
+    font-size: 11px;
+}
+
+
+.save-button.saved {
+    background: #63e6a5;
+}
+
+
+.save-button.error {
+    background: #ff7180;
+
+    color: #190407;
+}
+
+
+@media (max-width: 700px) {
+
+    .admin-header {
+        padding: 18px;
+    }
+
+    .admin-title {
+        font-size: 16px;
+    }
+
+    .admin-main {
+        width: min(100% - 20px, 1100px);
+
+        padding-top: 22px;
+    }
+
+    .panel-top {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .players-edit {
+        grid-template-columns: 1fr;
+    }
+
+    .login-card {
+        padding: 22px;
+    }
+
+    .slot-top {
+        padding: 13px;
+    }
+
+    .team-name-wrap,
+    .players-edit {
+        padding-left: 13px;
+        padding-right: 13px;
+    }
+
+    .save-row {
+        padding-left: 13px;
+        padding-right: 13px;
+    }
+
+  }
