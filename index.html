@@ -2,22 +2,30 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WORLD 10×10 — Земля</title>
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0,
+               maximum-scale=1.0, user-scalable=no">
+
+<title>WORLD 10×10</title>
 
 <style>
 * {
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 html,
 body {
     margin: 0;
+    width: 100%;
     min-height: 100%;
+
     background: #05070b;
-    color: #f3f7fb;
+    color: #fff;
+
     font-family: Arial, sans-serif;
-    overflow-x: hidden;
+
+    overflow: hidden;
 }
 
 body {
@@ -27,182 +35,195 @@ body {
 
 .game {
     width: 100%;
-    max-width: 1200px;
-    padding: 20px;
-}
-
-header {
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-h1 {
-    margin: 0;
-    font-size: clamp(25px, 5vw, 44px);
-    letter-spacing: 2px;
-}
-
-.subtitle {
-    margin-top: 7px;
-    color: #8d9aaa;
-    font-size: 14px;
-}
-
-/* PANEL */
-
-.panel {
-    background: #0b1018;
-    border: 1px solid #182433;
-    border-radius: 16px;
+    max-width: 1100px;
     padding: 15px;
 }
 
-/* EARTH */
+.header {
+    text-align: center;
+    margin-bottom: 12px;
+}
 
-.earth-area {
-    height: min(72vw, 650px);
-    min-height: 390px;
+.header h1 {
+    margin: 0;
+    font-size: clamp(24px, 5vw, 42px);
+}
+
+.header p {
+    margin: 5px 0 0;
+    color: #8290a0;
+}
+
+
+/* ==================================================
+   СЦЕНА
+================================================== */
+
+.scene {
+    position: relative;
+
+    width: 100%;
+    height: min(75vh, 680px);
+
+    min-height: 420px;
 
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
 
     overflow: hidden;
-    position: relative;
+
+    border-radius: 20px;
 
     background:
         radial-gradient(
-            circle at center,
-            #101d2b 0%,
-            #071019 45%,
-            #030509 100%
+            circle,
+            #102334 0%,
+            #07111b 40%,
+            #020407 100%
         );
 
-    border-radius: 16px;
+    border: 1px solid #182636;
+
+    touch-action: none;
+
+    user-select: none;
 }
 
+
+/* ==================================================
+   ЗЕМЛЯ
+================================================== */
+
 .earth {
-    width: min(78vw, 520px);
-    height: min(78vw, 520px);
-
-    max-width: 520px;
-    max-height: 520px;
-
     position: relative;
+
+    width: min(78vw, 560px);
+    height: min(78vw, 560px);
+
+    max-width: 560px;
+    max-height: 560px;
 
     border-radius: 50%;
 
     overflow: hidden;
 
-    cursor: grab;
-
     background:
         radial-gradient(
-            circle at 35% 30%,
-            #4e9bc0 0%,
-            #17617e 35%,
-            #0b354c 68%,
+            circle at 32% 27%,
+            #4d9fc3 0%,
+            #236e8d 30%,
+            #0b3d55 62%,
             #031522 100%
         );
 
     box-shadow:
-        inset -45px -30px 80px rgba(0,0,0,.65),
-        inset 25px 15px 50px rgba(255,255,255,.08),
-        0 0 70px rgba(0,150,255,.20);
+        inset -70px -25px 100px rgba(0,0,0,.7),
+        inset 25px 15px 60px rgba(255,255,255,.1),
+        0 0 70px rgba(0,150,255,.25);
+
+    /*
+        Очень важно:
+        Земля сама не имеет pointer-events.
+        Управляет сценой.
+    */
+
+    pointer-events: none;
 }
 
-.earth:active {
-    cursor: grabbing;
-}
 
-/*
-    Условительные материки.
-    Позже сюда подключим настоящие геоданные.
-*/
+/* ==================================================
+   МАТЕРИКИ
+================================================== */
 
 .land {
     position: absolute;
-    inset: 8%;
+
+    inset: 7%;
 
     background:
-        linear-gradient(
-            125deg,
-            transparent 0% 10%,
-            #657653 11% 23%,
-            transparent 24% 32%,
-            #8b875e 33% 43%,
-            transparent 44% 51%,
-            #56734e 52% 64%,
-            transparent 65% 72%,
-            #71815b 73% 82%,
-            transparent 83%
+        radial-gradient(
+            ellipse at 25% 30%,
+            #73835a 0 13%,
+            transparent 14%
+        ),
+        radial-gradient(
+            ellipse at 55% 35%,
+            #8c875b 0 14%,
+            transparent 15%
+        ),
+        radial-gradient(
+            ellipse at 70% 60%,
+            #59724e 0 18%,
+            transparent 19%
+        ),
+        radial-gradient(
+            ellipse at 40% 70%,
+            #71815b 0 15%,
+            transparent 16%
         );
 
+    opacity: .95;
+
     clip-path: polygon(
-        4% 30%,
-        15% 18%,
-        27% 21%,
-        35% 10%,
+        4% 32%,
+        13% 20%,
+        27% 22%,
+        36% 10%,
         49% 16%,
-        58% 29%,
+        59% 29%,
         72% 25%,
-        86% 35%,
+        86% 36%,
         96% 49%,
         82% 57%,
         88% 70%,
-        70% 74%,
+        70% 75%,
         58% 91%,
         43% 77%,
         29% 84%,
         20% 67%,
         7% 57%
     );
-
-    opacity: .95;
 }
 
-/* GRID */
+
+/* ==================================================
+   СЕТКА
+================================================== */
 
 .grid {
     position: absolute;
+
     inset: 0;
 
     background-image:
         linear-gradient(
-            rgba(255,255,255,.18) 1px,
+            rgba(255,255,255,.16) 1px,
             transparent 1px
         ),
         linear-gradient(
             90deg,
-            rgba(255,255,255,.18) 1px,
+            rgba(255,255,255,.16) 1px,
             transparent 1px
         );
 
-    background-size: 16px 16px;
+    background-size: 18px 18px;
 
-    opacity: .42;
-
-    pointer-events: none;
+    opacity: .38;
 }
 
-/* ATMOSPHERE */
 
-.atmosphere {
+/* ==================================================
+   КЛЕТКИ
+================================================== */
+
+.cells {
     position: absolute;
-    inset: -1px;
 
-    border-radius: 50%;
+    inset: 0;
 
-    pointer-events: none;
-
-    box-shadow:
-        inset 0 0 35px rgba(80,190,255,.25),
-        inset -35px -15px 65px rgba(0,0,0,.55);
-
-    z-index: 20;
+    z-index: 5;
 }
-
-/* CELLS */
 
 .cell {
     position: absolute;
@@ -210,147 +231,180 @@ h1 {
     width: 34px;
     height: 34px;
 
-    border: 1px solid rgba(255,255,255,.25);
-
-    background: rgba(255,255,255,.025);
+    padding: 0;
 
     border-radius: 3px;
 
+    border: 1px solid rgba(255,255,255,.3);
+
+    background: rgba(0,0,0,.04);
+
+    pointer-events: auto;
+
     cursor: pointer;
 
-    z-index: 10;
-
     transition:
-        background .12s,
-        border-color .12s,
-        transform .12s;
+        background .1s,
+        border-color .1s,
+        transform .1s;
 }
 
 .cell:hover {
-    background: rgba(0,168,255,.35);
+    background: rgba(0,168,255,.4);
+
     border-color: #24d8ff;
-    transform: scale(1.08);
 }
 
 .cell.selected {
-    background: rgba(0,168,255,.65);
-    border-color: #ffffff;
-    box-shadow: 0 0 12px rgba(36,216,255,.8);
+    background: rgba(0,168,255,.75);
+
+    border-color: white;
+
+    box-shadow:
+        0 0 15px
+        rgba(36,216,255,.8);
 }
 
-/* INFO */
+
+/* ==================================================
+   АТМОСФЕРА
+================================================== */
+
+.atmosphere {
+    position: absolute;
+
+    inset: 0;
+
+    border-radius: 50%;
+
+    z-index: 20;
+
+    pointer-events: none;
+
+    box-shadow:
+        inset -50px -20px 80px
+        rgba(0,0,0,.55),
+
+        inset 0 0 35px
+        rgba(80,200,255,.25);
+}
+
+
+/* ==================================================
+   ИНФОРМАЦИЯ
+================================================== */
 
 .info {
-    margin-top: 15px;
+    margin-top: 12px;
 
     display: grid;
 
     grid-template-columns:
         repeat(4, 1fr);
 
-    gap: 10px;
+    gap: 8px;
 }
 
-.info-box {
-    background: #0e141e;
+.box {
+    padding: 10px;
+
+    border-radius: 10px;
+
+    background: #0b1018;
 
     border: 1px solid #182433;
-
-    border-radius: 12px;
-
-    padding: 13px;
 }
 
 .label {
-    color: #758397;
-    font-size: 12px;
+    color: #718095;
+
+    font-size: 11px;
 }
 
 .value {
-    margin-top: 5px;
-
-    font-size: 18px;
-
-    font-weight: bold;
+    margin-top: 4px;
 
     color: #24d8ff;
+
+    font-size: 17px;
+
+    font-weight: bold;
 }
 
-.selection {
-    margin-top: 12px;
+.selected {
+    margin-top: 10px;
 
-    padding: 14px;
+    padding: 12px;
 
-    background: #080d14;
-
-    border: 1px solid #1a2c3c;
-
-    border-radius: 12px;
+    border-radius: 10px;
 
     text-align: center;
 
-    font-size: 14px;
+    background: #0b1018;
+
+    border: 1px solid #182433;
+
+    color: #8d9aaa;
 }
 
-.selection span {
+.selected span {
     color: #24d8ff;
+
     font-weight: bold;
 }
 
-/* MOBILE */
 
-@media (max-width: 700px) {
+/* ==================================================
+   МОБИЛЬНЫЕ
+================================================== */
+
+@media(max-width:700px) {
 
     .game {
-        padding: 10px;
+        padding: 8px;
     }
 
-    .earth-area {
-        min-height: 340px;
+    .scene {
+        height: 62vh;
+        min-height: 330px;
+    }
+
+    .earth {
+        width: 78vw;
+        height: 78vw;
+    }
+
+    .cell {
+        width: 25px;
+        height: 25px;
     }
 
     .info {
         grid-template-columns:
             repeat(2, 1fr);
     }
-
-    .cell {
-        width: 27px;
-        height: 27px;
-    }
-
 }
 
-@media (max-width: 400px) {
-
-    .earth-area {
-        min-height: 300px;
-    }
-
-    .info {
-        grid-template-columns: 1fr 1fr;
-    }
-
-}
 </style>
 </head>
+
 
 <body>
 
 <div class="game">
 
-<header>
-    <h1>🌍 WORLD 10×10</h1>
+    <div class="header">
 
-    <div class="subtitle">
-        Глобальная игровая карта Земли
+        <h1>🌍 WORLD 10×10</h1>
+
+        <p>
+            Потяни Землю пальцем, чтобы вращать
+        </p>
+
     </div>
-</header>
 
 
-<div class="panel">
-
-    <div class="earth-area">
+    <div class="scene" id="scene">
 
         <div class="earth" id="earth">
 
@@ -358,13 +412,7 @@ h1 {
 
             <div class="grid"></div>
 
-            <!--
-                Временные клетки.
-                Позже система будет создавать реальные
-                клетки по координатам Земли.
-            -->
-
-            <div id="cells"></div>
+            <div class="cells" id="cells"></div>
 
             <div class="atmosphere"></div>
 
@@ -375,18 +423,21 @@ h1 {
 
     <div class="info">
 
-        <div class="info-box">
+        <div class="box">
+
             <div class="label">
-                РАЗМЕР КЛЕТКИ
+                РАЗМЕР
             </div>
 
             <div class="value">
                 10 × 10 м
             </div>
+
         </div>
 
 
-        <div class="info-box">
+        <div class="box">
+
             <div class="label">
                 ПЛОЩАДЬ
             </div>
@@ -394,245 +445,220 @@ h1 {
             <div class="value">
                 100 м²
             </div>
+
         </div>
 
 
-        <div class="info-box">
+        <div class="box">
+
             <div class="label">
-                СУША
+                КЛЕТОК СУШИ
             </div>
 
             <div class="value">
                 ≈ 1,49 трлн
             </div>
+
         </div>
 
 
-        <div class="info-box">
+        <div class="box">
+
             <div class="label">
                 ВЫБРАНО
             </div>
 
-            <div class="value" id="selectedNumber">
+            <div
+                class="value"
+                id="counter">
                 0
             </div>
+
         </div>
 
     </div>
 
 
-    <div class="selection" id="selection">
-        Нажми на квадрат Земли, чтобы выбрать территорию.
-    </div>
+    <div
+        class="selected"
+        id="selected">
 
-</div>
+        Выбери квадрат на Земле
+
+    </div>
 
 </div>
 
 
 <script>
 
-/*
-====================================================
-WORLD 10×10
-====================================================
+/* ==================================================
+   WORLD 10×10
+================================================== */
 
-Каждая игровая клетка:
+const scene =
+    document.getElementById("scene");
 
-10 × 10 метров
-100 квадратных метров
+const earth =
+    document.getElementById("earth");
 
-В дальнейшем каждая клетка получит:
+const cells =
+    document.getElementById("cells");
 
-ID
-X
-Y
-широту
-долготу
-владельца
-статус
-цвет
-====================================================
-*/
+const selected =
+    document.getElementById("selected");
+
+const counter =
+    document.getElementById("counter");
 
 
-const earth = document.getElementById("earth");
-const cellsContainer = document.getElementById("cells");
+/* ==================================================
+   СОЗДАЁМ ДЕМОНСТРАЦИОННЫЕ КЛЕТКИ
+================================================== */
 
-const selection = document.getElementById("selection");
-const selectedNumber =
-    document.getElementById("selectedNumber");
+const size = 8;
 
-
-let selectedCell = null;
+let number = 0;
 
 
-/*
-====================================================
-СОЗДАЁМ ТЕСТОВУЮ СЕТКУ
-====================================================
+for (let y = 0; y < size; y++) {
 
-Это НЕ вся Земля.
+    for (let x = 0; x < size; x++) {
 
-Это только визуальная демонстрация.
+        number++;
 
-В настоящей версии клетки не будут
-создаваться все одновременно.
-====================================================
-*/
-
-
-const GRID_SIZE = 7;
-
-let cellNumber = 0;
-
-
-for (let y = 0; y < GRID_SIZE; y++) {
-
-    for (let x = 0; x < GRID_SIZE; x++) {
-
-        cellNumber++;
 
         const cell =
             document.createElement("button");
 
-        cell.className = "cell";
-
         cell.type = "button";
 
-
-        /*
-            Расположение клетки
-        */
-
-        const left =
-            25 + x * 7.5;
-
-        const top =
-            25 + y * 7.5;
-
-
-        cell.style.left = left + "%";
-        cell.style.top = top + "%";
+        cell.className = "cell";
 
 
         /*
-            Уникальный ID клетки
+            Позиция
         */
 
-        const cellId =
+        cell.style.left =
+            (20 + x * 7.5) + "%";
+
+        cell.style.top =
+            (20 + y * 7.5) + "%";
+
+
+        /*
+            ID клетки
+        */
+
+        const id =
             "CELL-" +
-            String(cellNumber)
+            String(number)
                 .padStart(6, "0");
 
 
-        cell.dataset.id = cellId;
+        cell.dataset.id = id;
 
         cell.dataset.x = x;
+
         cell.dataset.y = y;
 
 
-        cell.setAttribute(
-            "aria-label",
-            "Клетка " + cellId
-        );
-
-
         /*
-            Клик по клетке
+            Выбор клетки
         */
 
         cell.addEventListener(
+            "pointerdown",
+            function(event) {
+
+                event.stopPropagation();
+
+            }
+        );
+
+
+        cell.addEventListener(
             "click",
-            function (event) {
+            function(event) {
 
                 event.stopPropagation();
 
 
-                /*
-                    Снимаем предыдущий выбор
-                */
-
                 document
-                    .querySelectorAll(".cell.selected")
-                    .forEach(function (item) {
+                    .querySelectorAll(
+                        ".cell.selected"
+                    )
+                    .forEach(function(c) {
 
-                        item.classList.remove(
+                        c.classList.remove(
                             "selected"
                         );
 
                     });
 
 
-                /*
-                    Выбираем новую
-                */
-
-                cell.classList.add("selected");
-
-                selectedCell = cell;
+                cell.classList.add(
+                    "selected"
+                );
 
 
-                /*
-                    Показываем информацию
-                */
-
-                selection.innerHTML =
-                    "Выбрана территория: " +
+                selected.innerHTML =
+                    "Выбрана клетка " +
 
                     "<span>" +
-                    cellId +
+                    id +
                     "</span>" +
 
                     " • X: " +
                     x +
 
                     " • Y: " +
-                    y +
-
-                    " • 10×10 м";
+                    y;
 
 
-                selectedNumber.textContent =
-                    cellNumber;
+                counter.textContent =
+                    number;
 
             }
         );
 
 
-        cellsContainer.appendChild(cell);
+        cells.appendChild(cell);
 
     }
 
 }
 
 
-/*
-====================================================
-ВРАЩЕНИЕ ЗЕМЛИ
-====================================================
-*/
-
+/* ==================================================
+   ВРАЩЕНИЕ
+================================================== */
 
 let dragging = false;
 
 let lastX = 0;
-let rotation = 0;
+let lastY = 0;
+
+let rotationX = 0;
+let rotationY = 0;
 
 
-earth.addEventListener(
+/*
+    Начало движения
+*/
+
+scene.addEventListener(
     "pointerdown",
-    function (event) {
+    function(event) {
 
         /*
-            Если нажали на клетку,
-            не начинаем вращение.
+            Если нажата клетка —
+            не вращаем.
         */
 
         if (
-            event.target.classList.contains(
-                "cell"
-            )
+            event.target.closest(".cell")
         ) {
             return;
         }
@@ -640,9 +666,13 @@ earth.addEventListener(
 
         dragging = true;
 
+
         lastX = event.clientX;
 
-        earth.setPointerCapture(
+        lastY = event.clientY;
+
+
+        scene.setPointerCapture(
             event.pointerId
         );
 
@@ -650,51 +680,149 @@ earth.addEventListener(
 );
 
 
-earth.addEventListener(
+/*
+    Движение пальца / мыши
+*/
+
+scene.addEventListener(
     "pointermove",
-    function (event) {
+    function(event) {
 
-        if (!dragging) return;
+        if (!dragging) {
+            return;
+        }
 
 
-        const difference =
+        const dx =
             event.clientX - lastX;
 
 
-        rotation += difference * 0.35;
+        const dy =
+            event.clientY - lastY;
 
 
-        lastX = event.clientX;
+        lastX =
+            event.clientX;
 
+
+        lastY =
+            event.clientY;
+
+
+        rotationY +=
+            dx * 0.45;
+
+
+        rotationX -=
+            dy * 0.25;
+
+
+        /*
+            Ограничиваем наклон
+        */
+
+        rotationX =
+            Math.max(
+                -45,
+                Math.min(
+                    45,
+                    rotationX
+                )
+            );
+
+
+        /*
+            ВАЖНО:
+            используем transform
+            только здесь
+        */
 
         earth.style.transform =
+            "perspective(900px) " +
+
+            "rotateX(" +
+            rotationX +
+            "deg) " +
+
             "rotateY(" +
-            rotation +
+            rotationY +
             "deg)";
 
     }
 );
 
 
-earth.addEventListener(
+/*
+    Конец движения
+*/
+
+function stopDragging() {
+
+    dragging = false;
+
+}
+
+
+scene.addEventListener(
     "pointerup",
-    function () {
-
-        dragging = false;
-
-    }
+    stopDragging
 );
 
-
-earth.addEventListener(
+scene.addEventListener(
     "pointercancel",
-    function () {
-
-        dragging = false;
-
-    }
+    stopDragging
 );
 
+scene.addEventListener(
+    "pointerleave",
+    stopDragging
+);
+
+
+/* ==================================================
+   МАСШТАБ КОЛЕСОМ
+================================================== */
+
+let scale = 1;
+
+
+scene.addEventListener(
+    "wheel",
+    function(event) {
+
+        event.preventDefault();
+
+
+        scale +=
+            event.deltaY > 0
+                ? -0.08
+                : 0.08;
+
+
+        scale =
+            Math.max(
+                0.65,
+                Math.min(
+                    1.8,
+                    scale
+                )
+            );
+
+
+        earth.style.width =
+            `min(78vw, 560px)`;
+
+        earth.style.height =
+            `min(78vw, 560px)`;
+
+        earth.style.scale =
+            scale;
+
+    },
+    {
+        passive: false
+    }
+);
 
 </script>
 
