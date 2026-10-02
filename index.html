@@ -285,7 +285,7 @@
     assassin:  { icon: '🗡', short: 'Ассасин',  label: '🗡 Ассасин',  css: 'assassin',  desc: 'Дубль → реролл ×2.' },
     barbarian: { icon: '⚔', short: 'Варвар',   label: '⚔ Варвар',   css: 'barbarian', desc: 'Дубль → стан.' },
     vampire:   { icon: '🧛', short: 'Вампир',   label: '🧛 Вампир',   css: 'vampire',   desc: 'Дубль → укус: урон + хил.' },
-    joker:     { icon: '🎲', short: 'Джокер',   label: '🎲 Джокер',   css: 'joker',     desc: 'HP-триггер → ×1.5 или ×3.' },
+    joker:     { icon: '🎲', short: 'Джокер',   label: '🎲 Джокер',   css: 'joker',     desc: 'HP-триггер → ×2 или ×3.' },
     druid:     { icon: '🐉', short: 'Друид',    label: '🐉 Друид',    css: 'druid',     desc: 'Дубль → суммон.' },
     berserker: { icon: '🔥', short: 'Берсерк',  label: '🔥 Берсерк',  css: 'berserker', desc: 'Мало HP → бонус.' }
   };
@@ -331,7 +331,7 @@
   var hp1 = MAX_HP, hp2 = MAX_HP;
   var gameOver = false;
   var stunned = { 1: false, 2: false };
-  var jokerBuff = { 1: 0, 2: 0 };   // 0 = нет, 1.5 = круглое, 3 = красивое
+  var jokerBuff = { 1: 0, 2: 0 };   // 0 = нет, 2 = круглое, 3 = красивое
   var summons = { 1: null, 2: null };
   var autoPlay = false, autoTimer = null;
 
@@ -341,7 +341,6 @@
   };
 
   // ============ ТРИГГЕРЫ ДЖОКЕРА ============
-  // Красивое — все цифры одинаковые, длина >= 2 (11, 22, ..., 999)
   function isBeautiful(n) {
     if (n <= 0) return false;
     var s = String(n);
@@ -349,7 +348,6 @@
     for (var i = 1; i < s.length; i++) if (s[i] !== s[0]) return false;
     return true;
   }
-  // Круглое — 10, 20, ..., 90, 100, 200, ..., 900
   function isRound(n) {
     if (n <= 0) return false;
     if (n >= 10 && n <= 90 && n % 10 === 0) return true;
@@ -407,7 +405,7 @@
       if (beautiful(h1) || beautiful(h2)) {
         if (3 > cur) jb[p] = 3;
       } else if (round(h1) || round(h2)) {
-        if (1.5 > cur) jb[p] = 1.5;
+        if (2 > cur) jb[p] = 2;
       }
     }
 
@@ -636,7 +634,7 @@
         badge.textContent = '🎲 x3';
         badge.className = 'buff-badge tier3';
       } else {
-        badge.textContent = '🎲 x1.5';
+        badge.textContent = '🎲 x2';
         badge.className = 'buff-badge tier15';
       }
     } else {
@@ -691,7 +689,7 @@
     if (isCrit) extraClass = ' crit';
     else if (heal) extraClass = ' vampire';
     else if (jokerMult === 3) extraClass = ' joker';
-    else if (jokerMult === 1.5) extraClass = ' joker15';
+    else if (jokerMult === 2) extraClass = ' joker15';
     else if (rageBonus > 0) extraClass = ' rage';
     else if (summonInfo) extraClass = ' summon-attack';
     else if (isDouble) extraClass = ' double';
@@ -705,7 +703,7 @@
     var suffix = '';
     if (isCrit) suffix = ' 💥 КРИТ×2';
     else if (jokerMult === 3) suffix = ' 🎲×3';
-    else if (jokerMult === 1.5) suffix = ' 🎲×1.5';
+    else if (jokerMult === 2) suffix = ' 🎲×2';
     else if (heal) suffix = ' 🧛 +' + heal;
     if (rageBonus > 0) suffix += ' 🩸+' + rageBonus;
     if (stunCaused) suffix += ' ⚡';
@@ -756,14 +754,13 @@
   }
   function trimLog() { while (logList.children.length > MAX_LOG) logList.removeChild(logList.lastChild); }
 
-  // ============ ПРОВЕРКА ДЖОКЕРА ============
   function checkJokerBuffs() {
     [1, 2].forEach(function(p) {
       if (classes[p] !== 'joker') return;
       var cur = jokerBuff[p];
       var newBuff = 0;
       if (isBeautiful(hp1) || isBeautiful(hp2)) newBuff = 3;
-      else if (isRound(hp1) || isRound(hp2)) newBuff = 1.5;
+      else if (isRound(hp1) || isRound(hp2)) newBuff = 2;
       if (newBuff > cur) {
         jokerBuff[p] = newBuff;
         addJokerBuffLog(p, newBuff);
