@@ -66,6 +66,17 @@
     <div class="progress-track"><div class="progress-fill" id="simProgress"></div></div>
     <div class="sim-counter" id="simCounter">Осталось игроков: 0</div>
     <div class="sim-log" id="simLog"></div>
+    <button class="btn" id="watchBtn" style="display:none; margin-top:16px;">▶ СМОТРЕТЬ БОИ</button>
+  </div>
+</div>
+
+<!-- РЕЗУЛЬТАТ МАТЧА -->
+<div class="overlay" id="matchResultOverlay">
+  <div class="match-result-card">
+    <div class="mr-title">Матч завершён</div>
+    <div class="mr-winner" id="mrWinner">—</div>
+    <div class="mr-score" id="mrScore">2 : 0</div>
+    <div class="mr-loser" id="mrLoser">—</div>
   </div>
 </div>
 
@@ -77,14 +88,8 @@
     <div class="champion-name" id="championName">—</div>
     <div class="champion-class" id="championClass">—</div>
     <div class="podium">
-      <div class="podium-row" id="podiumSilver">
-        <span class="medal">🥈</span>
-        <span class="pname-txt">—</span>
-      </div>
-      <div class="podium-row" id="podiumBronze">
-        <span class="medal">🥉</span>
-        <span class="pname-txt">—</span>
-      </div>
+      <div class="podium-row" id="podiumSilver"><span class="medal">🥈</span><span class="pname-txt">—</span></div>
+      <div class="podium-row" id="podiumBronze"><span class="medal">🥉</span><span class="pname-txt">—</span></div>
     </div>
     <div class="tournament-stats" id="tournamentStats"></div>
     <button class="btn" id="btnNewTournament">НОВЫЙ ТУРНИР</button>
@@ -111,13 +116,18 @@
 </div>
 
 <div id="app">
+  <div class="match-banner" id="matchBanner" style="display:none;">
+    <span class="mb-info" id="matchInfo">Матч 1</span>
+    <span class="mb-score" id="matchScore">0 : 0</span>
+  </div>
+
   <div class="players">
     <div class="player" id="p1">
       <div class="weak-badge" id="weak1">💜 −20%</div>
       <div class="buff-badge" id="buff1">🎲 x3</div>
       <div class="rage-badge" id="rage1">🩸 +0</div>
       <div class="stun-badge">⚡ СТАН</div>
-      <div class="pname">Игрок 1</div>
+      <div class="pname" id="pname1">Игрок 1</div>
       <div class="pclass" id="pclass1">—</div>
       <div class="hp-bar"><div class="hp-fill" id="hpFill1"></div></div>
       <div class="hp-val" id="hpVal1">1000</div>
@@ -132,7 +142,7 @@
       <div class="buff-badge" id="buff2">🎲 x3</div>
       <div class="rage-badge" id="rage2">🩸 +0</div>
       <div class="stun-badge">⚡ СТАН</div>
-      <div class="pname">Игрок 2</div>
+      <div class="pname" id="pname2">Игрок 2</div>
       <div class="pclass" id="pclass2">—</div>
       <div class="hp-bar"><div class="hp-fill" id="hpFill2"></div></div>
       <div class="hp-val" id="hpVal2">1000</div>
@@ -166,7 +176,7 @@
 
   <div class="controls">
     <button class="control-btn start" id="battleBtn">▶ НАЧАТЬ БОЙ</button>
-    <button class="control-btn stop hidden" id="exitBtn">✕ В МЕНЮ</button>
+    <button class="control-btn stop hidden" id="exitBtn">✕ ВЫЙТИ</button>
   </div>
 
   <div class="hint" id="hint">Выбери классы и начни бой</div>
