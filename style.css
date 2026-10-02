@@ -286,6 +286,7 @@ html, body {
 .log-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
 .log-list::-webkit-scrollbar-thumb { background: rgba(74,222,128,0.35); border-radius: 3px; }
 
+/* ===== Базовые записи ===== */
 .log-entry {
   display: flex; align-items: center; gap: 8px;
   padding: 6px 12px 6px 10px;
@@ -305,21 +306,84 @@ html, body {
 .log-entry .who { font-size: 12px; font-weight: 700; }
 .log-entry .who.p1 { color: #4ade80; } .log-entry .who.p2 { color: #60a5fa; }
 .log-entry .dmg { margin-left: auto; font-weight: 800; color: #f87171; font-size: 13px; }
-.log-entry.double .dmg { color: #fbbf24; }
-.log-entry.weak { background: rgba(168,85,247,0.10); border-left-color: #a855f7; }
-.log-entry.weak .dmg { color: #c084fc; }
-.log-entry.crit { background: rgba(239,68,68,0.10); border-left-color: #ef4444; }
-.log-entry.crit .dmg { color: #ef4444; text-shadow: 0 0 8px rgba(239,68,68,0.7); }
-.log-entry.vampire { background: rgba(168,85,247,0.10); border-left-color: #a855f7; }
-.log-entry.vampire .dmg { color: #a855f7; }
-.log-entry.joker { background: rgba(16,185,129,0.10); border-left-color: #10b981; }
-.log-entry.joker .dmg { color: #10b981; }
-.log-entry.joker15 { background: rgba(251,191,36,0.10); border-left-color: #fbbf24; }
-.log-entry.joker15 .dmg { color: #fbbf24; }
-.log-entry.rage { background: rgba(220,38,38,0.10); border-left-color: #dc2626; }
-.log-entry.rage .dmg { color: #dc2626; }
-.log-entry.summon-attack { background: rgba(217,119,6,0.08); border-left-color: #d97706; }
-.log-entry.summon-attack .who { color: #fbbf24; } .log-entry.summon-attack .dmg { color: #fbbf24; }
+
+/* ===== Атака: 3 строки ===== */
+.log-entry.attack {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+  padding: 8px 12px 8px 10px;
+}
+.log-entry.attack .le-head,
+.log-entry.attack .le-calc,
+.log-entry.attack .le-hp { display: flex; align-items: center; gap: 6px; }
+
+.log-entry.attack .idx { color: #6b7a99; font-size: 11px; min-width: 30px; font-weight: 700; }
+.log-entry.attack .le-dice {
+  color: #cbd5e1;
+  font-size: 11px;
+  font-weight: 800;
+  background: rgba(255,255,255,0.08);
+  padding: 1px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.log-entry.attack .le-route { font-size: 12px; font-weight: 700; }
+.log-entry.attack .le-route .p1 { color: #4ade80; }
+.log-entry.attack .le-route .p2 { color: #60a5fa; }
+.log-entry.attack .le-route .arrow { color: #6b7a99; margin: 0 3px; font-weight: 400; }
+
+.log-entry.attack .le-calc { padding-left: 38px; }
+.log-entry.attack .le-formula { color: #94a3b8; font-size: 11px; }
+.log-entry.attack .le-dmg {
+  margin-left: auto;
+  font-weight: 900;
+  color: #f87171;
+  font-size: 14px;
+}
+
+.log-entry.attack .le-hp { padding-left: 38px; font-size: 11px; }
+.log-entry.attack .le-hp .hp-label { color: #64748b; font-weight: 700; font-size: 10px; letter-spacing: 1px; }
+.log-entry.attack .le-hp .hp-before { color: #94a3b8; font-weight: 600; }
+.log-entry.attack .le-hp .hp-arrow { color: #475569; margin: 0 2px; }
+.log-entry.attack .le-hp .hp-after { color: #4ade80; font-weight: 800; }
+.log-entry.attack .le-hp .hp-after.low { color: #fbbf24; }
+.log-entry.attack .le-hp .hp-after.critical { color: #ef4444; }
+
+/* Типы атак */
+.log-entry.attack.crit { background: rgba(239,68,68,0.10); border-left-color: #ef4444; }
+.log-entry.attack.crit .le-dmg { color: #ef4444; text-shadow: 0 0 8px rgba(239,68,68,0.7); }
+.log-entry.attack.crit .le-dice { background: rgba(239,68,68,0.18); border-color: rgba(239,68,68,0.35); color: #fca5a5; }
+
+.log-entry.attack.vampire { background: rgba(168,85,247,0.10); border-left-color: #a855f7; }
+.log-entry.attack.vampire .le-dmg { color: #a855f7; }
+.log-entry.attack.vampire .le-dice { background: rgba(168,85,247,0.18); border-color: rgba(168,85,247,0.35); color: #d8b4fe; }
+
+.log-entry.attack.joker { background: rgba(16,185,129,0.10); border-left-color: #10b981; }
+.log-entry.attack.joker .le-dmg { color: #10b981; }
+.log-entry.attack.joker .le-dice { background: rgba(16,185,129,0.18); border-color: rgba(16,185,129,0.35); color: #6ee7b7; }
+
+.log-entry.attack.joker15 { background: rgba(251,191,36,0.10); border-left-color: #fbbf24; }
+.log-entry.attack.joker15 .le-dmg { color: #fbbf24; }
+.log-entry.attack.joker15 .le-dice { background: rgba(251,191,36,0.18); border-color: rgba(251,191,36,0.35); color: #fcd34d; }
+
+.log-entry.attack.rage { background: rgba(220,38,38,0.10); border-left-color: #dc2626; }
+.log-entry.attack.rage .le-dmg { color: #dc2626; }
+
+.log-entry.attack.weak { background: rgba(168,85,247,0.10); border-left-color: #a855f7; }
+.log-entry.attack.weak .le-dmg { color: #c084fc; }
+
+.log-entry.attack.summon-attack { background: rgba(217,119,6,0.08); border-left-color: #d97706; }
+.log-entry.attack.summon-attack .le-route,
+.log-entry.attack.summon-attack .le-route .p1,
+.log-entry.attack.summon-attack .le-route .p2 { color: #fbbf24; }
+.log-entry.attack.summon-attack .le-dmg { color: #fbbf24; }
+
+.log-entry.attack.double .le-dice { background: rgba(251,191,36,0.15); border-color: rgba(251,191,36,0.35); color: #fcd34d; }
+
+/* ===== Простые записи ===== */
 .log-entry.buff { background: rgba(16,185,129,0.08); border-left-color: #10b981; }
 .log-entry.buff .who { color: #10b981; } .log-entry.buff .dmg { color: #10b981; letter-spacing: 1.5px; }
 .log-entry.buff15 { background: rgba(251,191,36,0.08); border-left-color: #fbbf24; }
@@ -592,6 +656,17 @@ input[type="range"].speed-slider::-moz-range-thumb {
   .log-entry .idx { font-size: 10px; min-width: 24px; }
   .log-entry .who { font-size: 11px; }
   .log-entry .dmg { font-size: 12px; }
+  .log-entry.attack { padding: 5px 8px; }
+  .log-entry.attack .le-calc,
+  .log-entry.attack .le-hp { padding-left: 26px; font-size: 10px; }
+  .log-entry.attack .le-dmg { font-size: 12px; }
+  .log-entry.attack .le-dice { font-size: 10px; padding: 0 4px; }
+  .log-entry.attack .le-route { font-size: 11px; }
+  .log-entry.attack .le-formula { font-size: 10px; }
+  .log-entry.attack .le-hp .hp-label,
+  .log-entry.attack .le-hp .hp-before,
+  .log-entry.attack .le-hp .hp-arrow,
+  .log-entry.attack .le-hp .hp-after { font-size: 10px; }
   .speed-box { padding: 4px 10px 6px; border-radius: 9px; }
   .speed-header { margin-bottom: 1px; }
   .speed-label { font-size: 9px; }
@@ -616,6 +691,11 @@ input[type="range"].speed-slider::-moz-range-thumb {
   .result { font-size: 22px; min-height: 26px; line-height: 26px; letter-spacing: 3px; }
   .log-wrap { min-height: 36px; }
   .log-entry { padding: 2px 6px; font-size: 10px; }
+  .log-entry.attack { padding: 3px 6px; }
+  .log-entry.attack .le-calc,
+  .log-entry.attack .le-hp { padding-left: 22px; font-size: 9px; }
+  .log-entry.attack .le-dmg { font-size: 11px; }
+  .log-entry.attack .le-dice { font-size: 9px; padding: 0 3px; }
   .control-btn { padding: 6px; font-size: 12px; }
   .hint { font-size: 8px; min-height: 9px; }
   .speed-box { padding: 3px 8px 4px; }
