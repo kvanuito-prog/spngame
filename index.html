@@ -25,29 +25,34 @@
     flex-direction: column;
     height: 100vh;
     height: 100dvh;
-    padding: 12px;
-    gap: 14px;
+    padding: 10px;
+    gap: 10px;
   }
 
   /* --- Игроки --- */
   .players {
     display: flex;
-    gap: 10px;
-    justify-content: space-between;
+    gap: 8px;
+    flex-shrink: 0;
   }
   .player {
     flex: 1;
     background: rgba(255,255,255,0.05);
     border: 2px solid rgba(255,255,255,0.08);
-    border-radius: 12px;
-    padding: 10px 12px;
+    border-radius: 10px;
+    padding: 8px 10px;
     transition: all 0.25s ease;
     min-width: 0;
   }
   .player.active {
     border-color: #4ade80;
-    box-shadow: 0 0 20px rgba(74,222,128,0.35);
+    box-shadow: 0 0 16px rgba(74,222,128,0.35);
     background: rgba(74,222,128,0.08);
+  }
+  .player.active.p2-active {
+    border-color: #60a5fa;
+    box-shadow: 0 0 16px rgba(96,165,250,0.35);
+    background: rgba(96,165,250,0.08);
   }
   .player.dead {
     border-color: #ef4444;
@@ -55,36 +60,37 @@
     filter: grayscale(0.7);
   }
   .pname {
-    font-size: 13px;
+    font-size: 11px;
     letter-spacing: 1.5px;
     text-transform: uppercase;
     color: #8892b0;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
   .player.active .pname { color: #4ade80; }
+  .player.active.p2-active .pname { color: #60a5fa; }
   .hp-bar {
     width: 100%;
-    height: 10px;
+    height: 8px;
     background: rgba(0,0,0,0.4);
-    border-radius: 5px;
+    border-radius: 4px;
     overflow: hidden;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
   }
   .hp-fill {
     height: 100%;
     width: 100%;
     background: linear-gradient(90deg, #22c55e, #4ade80);
-    border-radius: 5px;
+    border-radius: 4px;
     transition: width 0.4s ease, background 0.4s ease;
   }
   .hp-fill.low {
     background: linear-gradient(90deg, #ef4444, #f87171);
   }
   .hp-val {
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 800;
     font-variant-numeric: tabular-nums;
     color: #e0e6f0;
@@ -93,20 +99,22 @@
   /* --- Кубики --- */
   .dice-row {
     display: flex;
-    gap: 20px;
+    gap: 16px;
     justify-content: center;
-    margin-top: 6px;
+    flex-shrink: 0;
+    margin: 4px 0;
   }
   .die {
-    width: min(24vw, 100px);
-    height: min(24vw, 100px);
-    background: linear-gradient(145deg, #ffffff, #d8d8d8);
-    border-radius: 14px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.5), inset 0 -5px 10px rgba(0,0,0,0.15);
+    width: 80px;
+    height: 80px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5), inset 0 -4px 8px rgba(0,0,0,0.15);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    padding: 12%;
+    padding: 10px;
+    position: relative;
   }
   .die.spinning { animation: shake 0.12s infinite; }
   @keyframes shake {
@@ -114,62 +122,73 @@
     50%  { transform: rotate(5deg) scale(0.97); }
     100% { transform: rotate(-5deg) scale(1.03); }
   }
-  .pip { display: flex; align-items: center; justify-content: center; }
+  .pip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
   .pip::after {
     content: "";
-    width: 62%; height: 62%;
+    display: block;
+    width: 14px;
+    height: 14px;
     background: #1a1a1a;
     border-radius: 50%;
-    box-shadow: inset 0 2px 3px rgba(0,0,0,0.6);
   }
+  .pip.hidden-pip::after { display: none; }
 
   /* --- Результат --- */
   .result {
     text-align: center;
-    font-size: clamp(36px, 10vw, 64px);
+    font-size: 44px;
     font-weight: 800;
     letter-spacing: 6px;
     color: #4ade80;
     text-shadow: 0 0 25px rgba(74,222,128,0.5);
     font-variant-numeric: tabular-nums;
-    min-height: 1.1em;
+    min-height: 52px;
+    line-height: 52px;
     transition: color 0.3s ease;
+    flex-shrink: 0;
   }
   .result.p2 { color: #60a5fa; text-shadow: 0 0 25px rgba(96,165,250,0.5); }
   .result.double { color: #fbbf24; text-shadow: 0 0 25px rgba(251,191,36,0.6); }
 
   /* --- Лог --- */
   .log-wrap {
-    flex: 1;
-    min-height: 0;
+    flex: 1 1 auto;
+    min-height: 80px;
     display: flex;
     flex-direction: column;
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
   }
   .log-title {
-    padding: 8px 12px;
-    font-size: 11px;
+    padding: 6px 10px;
+    font-size: 10px;
     letter-spacing: 2px;
     text-transform: uppercase;
     color: #8892b0;
     border-bottom: 1px solid rgba(255,255,255,0.06);
     background: rgba(0,0,0,0.15);
+    flex-shrink: 0;
   }
   .log-list {
-    flex: 1;
+    flex: 1 1 auto;
     overflow-y: auto;
-    padding: 4px 0;
+    padding: 2px 0;
     -webkit-overflow-scrolling: touch;
+    min-height: 0;
   }
   .log-entry {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 7px 12px;
-    font-size: 14px;
+    padding: 6px 10px;
+    font-size: 13px;
     border-bottom: 1px solid rgba(255,255,255,0.04);
     animation: slideIn 0.25s ease;
     font-variant-numeric: tabular-nums;
@@ -178,7 +197,7 @@
     from { opacity: 0; transform: translateY(-6px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-  .log-entry .idx { color: #6b7a99; font-size: 12px; min-width: 32px; }
+  .log-entry .idx { color: #6b7a99; font-size: 11px; min-width: 28px; }
   .log-entry .who { font-size: 12px; font-weight: 700; }
   .log-entry .who.p1 { color: #4ade80; }
   .log-entry .who.p2 { color: #60a5fa; }
@@ -188,9 +207,9 @@
   .hint {
     text-align: center;
     color: #8892b0;
-    font-size: 12px;
+    font-size: 11px;
     letter-spacing: 1px;
-    padding-bottom: 4px;
+    flex-shrink: 0;
   }
 
   /* --- Game Over --- */
@@ -208,29 +227,29 @@
     background: linear-gradient(160deg, #1e2a4a, #0f1729);
     border: 2px solid rgba(74,222,128,0.4);
     border-radius: 20px;
-    padding: 32px 28px;
+    padding: 28px 24px;
     text-align: center;
     max-width: 360px;
     width: 100%;
     box-shadow: 0 20px 60px rgba(0,0,0,0.6);
   }
   .overlay-title {
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 800;
     margin-bottom: 10px;
     color: #4ade80;
   }
   .overlay-sub {
-    font-size: 14px;
+    font-size: 13px;
     color: #8892b0;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
   .btn {
     background: linear-gradient(145deg, #4ade80, #22c55e);
     color: #0a0f1e;
     border: none;
     padding: 14px 28px;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 800;
     border-radius: 12px;
     cursor: pointer;
@@ -240,6 +259,21 @@
     transition: transform 0.1s ease;
   }
   .btn:active { transform: scale(0.97); }
+
+  /* --- Планшет / широкий экран --- */
+  @media (min-width: 700px) {
+    #app {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 16px;
+      gap: 14px;
+    }
+    .die { width: 100px; height: 100px; padding: 12px; }
+    .pip::after { width: 18px; height: 18px; }
+    .result { font-size: 56px; min-height: 66px; line-height: 66px; }
+    .hp-val { font-size: 20px; }
+    .pname { font-size: 13px; }
+  }
 </style>
 </head>
 <body>
@@ -269,7 +303,7 @@
     <div class="log-list" id="logList"></div>
   </div>
 
-  <div class="hint" id="hint">Тап по экрану — бросок Игрока 1</div>
+  <div class="hint" id="hint">Тап — бросок Игрока 1</div>
 </div>
 
 <div class="overlay" id="overlay">
@@ -281,25 +315,25 @@
 </div>
 
 <script>
-  const dieEls = [document.getElementById('die1'), document.getElementById('die2')];
-  const resultEl = document.getElementById('result');
-  const logList = document.getElementById('logList');
-  const hintEl = document.getElementById('hint');
-  const overlay = document.getElementById('overlay');
-  const overlayTitle = document.getElementById('overlayTitle');
-  const overlaySub = document.getElementById('overlaySub');
+  var dieEls = [document.getElementById('die1'), document.getElementById('die2')];
+  var resultEl = document.getElementById('result');
+  var logList = document.getElementById('logList');
+  var hintEl = document.getElementById('hint');
+  var overlay = document.getElementById('overlay');
+  var overlayTitle = document.getElementById('overlayTitle');
+  var overlaySub = document.getElementById('overlaySub');
 
-  const MAX_HP = 1000;
-  const MAX_LOG = 60;
+  var MAX_HP = 1000;
+  var MAX_LOG = 60;
 
-  let rolling = false;
-  let rollNumber = 0;
-  let turn = 1;
-  let hp1 = MAX_HP;
-  let hp2 = MAX_HP;
-  let gameOver = false;
+  var rolling = false;
+  var rollNumber = 0;
+  var turn = 1;
+  var hp1 = MAX_HP;
+  var hp2 = MAX_HP;
+  var gameOver = false;
 
-  const pipPositions = {
+  var pipPositions = {
     1: [4],
     2: [0, 8],
     3: [0, 4, 8],
@@ -310,11 +344,15 @@
 
   function renderDie(el, value) {
     el.innerHTML = '';
-    const pips = pipPositions[value];
-    for (let i = 0; i < 9; i++) {
-      const cell = document.createElement('div');
+    var pips = pipPositions[value] || [];
+    for (var i = 0; i < 9; i++) {
+      var cell = document.createElement('div');
       cell.className = 'pip';
-      if (!pips.includes(i)) cell.style.visibility = 'hidden';
+      var show = false;
+      for (var j = 0; j < pips.length; j++) {
+        if (pips[j] === i) { show = true; break; }
+      }
+      if (!show) cell.className += ' hidden-pip';
       el.appendChild(cell);
     }
   }
@@ -327,32 +365,43 @@
     document.getElementById('hpVal1').textContent = hp1;
     document.getElementById('hpVal2').textContent = hp2;
 
-    const fill1 = document.getElementById('hpFill1');
-    const fill2 = document.getElementById('hpFill2');
+    var fill1 = document.getElementById('hpFill1');
+    var fill2 = document.getElementById('hpFill2');
     fill1.style.width = (hp1 / MAX_HP * 100) + '%';
     fill2.style.width = (hp2 / MAX_HP * 100) + '%';
-    fill1.classList.toggle('low', hp1 / MAX_HP < 0.3);
-    fill2.classList.toggle('low', hp2 / MAX_HP < 0.3);
+    fill1.className = 'hp-fill' + (hp1 / MAX_HP < 0.3 ? ' low' : '');
+    fill2.className = 'hp-fill' + (hp2 / MAX_HP < 0.3 ? ' low' : '');
 
-    const p1 = document.getElementById('p1');
-    const p2 = document.getElementById('p2');
-    p1.classList.toggle('active', turn === 1 && !gameOver);
-    p2.classList.toggle('active', turn === 2 && !gameOver);
-    p1.classList.toggle('dead', hp1 <= 0);
-    p2.classList.toggle('dead', hp2 <= 0);
+    var p1 = document.getElementById('p1');
+    var p2 = document.getElementById('p2');
+    p1.className = 'player';
+    p2.className = 'player';
+    if (!gameOver) {
+      if (turn === 1) p1.className += ' active';
+      if (turn === 2) p2.className += ' active p2-active';
+    }
+    if (hp1 <= 0) p1.className += ' dead';
+    if (hp2 <= 0) p2.className += ' dead';
 
-    hintEl.textContent = gameOver ? '' : `Тап по экрану — бросок Игрока ${turn}`;
+    hintEl.textContent = gameOver ? 'Игра окончена' : 'Тап — бросок Игрока ' + turn;
   }
 
   function addLogEntry(number, attacker, dmg, isDouble) {
-    const entry = document.createElement('div');
+    var entry = document.createElement('div');
     entry.className = 'log-entry' + (isDouble ? ' double' : '');
-    entry.innerHTML = `
-      <span class="idx">#${number}</span>
-      <span class="who p${attacker}">Игрок ${attacker}</span>
-      <span class="dmg">−${dmg}</span>
-    `;
-    logList.prepend(entry);
+    var idx = document.createElement('span');
+    idx.className = 'idx';
+    idx.textContent = '#' + number;
+    var who = document.createElement('span');
+    who.className = 'who p' + attacker;
+    who.textContent = 'Игрок ' + attacker;
+    var dmgEl = document.createElement('span');
+    dmgEl.className = 'dmg';
+    dmgEl.textContent = '−' + dmg + (isDouble ? ' ★' : '');
+    entry.appendChild(idx);
+    entry.appendChild(who);
+    entry.appendChild(dmgEl);
+    logList.insertBefore(entry, logList.firstChild);
     while (logList.children.length > MAX_LOG) {
       logList.removeChild(logList.lastChild);
     }
@@ -362,16 +411,16 @@
     if (rolling || gameOver) return;
     rolling = true;
 
-    dieEls.forEach(el => el.classList.add('spinning'));
+    dieEls.forEach(function(el) { el.classList.add('spinning'); });
     resultEl.textContent = '— —';
     resultEl.className = 'result';
 
-    const spinDuration = 900;
-    const interval = 70;
-    const start = performance.now();
+    var spinDuration = 900;
+    var interval = 70;
+    var start = performance.now();
 
-    const timer = setInterval(() => {
-      dieEls.forEach(el => renderDie(el, randomDie()));
+    var timer = setInterval(function() {
+      dieEls.forEach(function(el) { renderDie(el, randomDie()); });
       if (performance.now() - start >= spinDuration) {
         clearInterval(timer);
         finish();
@@ -379,20 +428,19 @@
     }, interval);
 
     function finish() {
-      const v1 = randomDie();
-      const v2 = randomDie();
-      const dmg = v1 * 10 + v2;
-      const isDouble = v1 === v2;
+      var v1 = randomDie();
+      var v2 = randomDie();
+      var dmg = v1 * 10 + v2;
+      var isDouble = v1 === v2;
 
       renderDie(dieEls[0], v1);
       renderDie(dieEls[1], v2);
-      dieEls.forEach(el => el.classList.remove('spinning'));
+      dieEls.forEach(function(el) { el.classList.remove('spinning'); });
 
       rollNumber++;
       resultEl.textContent = String(dmg);
       resultEl.className = 'result' + (isDouble ? ' double' : (turn === 2 ? ' p2' : ''));
 
-      // Наносим урон защитнику
       if (turn === 1) {
         hp2 = Math.max(0, hp2 - dmg);
       } else {
@@ -415,10 +463,10 @@
   }
 
   function showGameOver() {
-    const winner = hp1 <= 0 ? 2 : 1;
-    overlayTitle.textContent = `Игрок ${winner} победил!`;
+    var winner = hp1 <= 0 ? 2 : 1;
+    overlayTitle.textContent = 'Игрок ' + winner + ' победил!';
     overlayTitle.style.color = winner === 1 ? '#4ade80' : '#60a5fa';
-    overlaySub.textContent = `Игрок 1: ${hp1} HP  ·  Игрок 2: ${hp2} HP`;
+    overlaySub.textContent = 'Игрок 1: ' + hp1 + ' HP  ·  Игрок 2: ' + hp2 + ' HP';
     overlay.classList.add('show');
   }
 
@@ -433,30 +481,31 @@
     resultEl.textContent = '— —';
     resultEl.className = 'result';
     overlay.classList.remove('show');
-    dieEls.forEach(el => renderDie(el, randomDie()));
+    dieEls.forEach(function(el) { renderDie(el, randomDie()); });
     updatePlayersUI();
   }
 
   // Обработчики
-  document.body.addEventListener('click', (e) => {
+  document.body.addEventListener('click', function(e) {
     if (e.target.closest('.log-wrap')) return;
     if (e.target.closest('.btn')) return;
+    if (e.target.closest('.overlay')) return;
     roll();
   });
-  document.body.addEventListener('touchstart', (e) => {
+  document.body.addEventListener('touchstart', function(e) {
     if (e.target.closest('.log-wrap')) return;
     if (e.target.closest('.btn')) return;
+    if (e.target.closest('.overlay')) return;
     e.preventDefault();
     roll();
   }, { passive: false });
 
-  document.getElementById('restartBtn').addEventListener('click', (e) => {
+  document.getElementById('restartBtn').addEventListener('click', function(e) {
     e.stopPropagation();
     resetGame();
   });
 
-  // Старт
-  dieEls.forEach(el => renderDie(el, randomDie()));
+  dieEls.forEach(function(el) { renderDie(el, randomDie()); });
   updatePlayersUI();
 </script>
 </body>
