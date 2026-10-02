@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Кубики</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Кубики — Битва</title>
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body {
@@ -20,44 +23,98 @@
   #app {
     display: flex;
     flex-direction: column;
-    align-items: center;
     height: 100vh;
     height: 100dvh;
-    padding: 16px;
-    gap: 18px;
+    padding: 12px;
+    gap: 14px;
+  }
+
+  /* --- Игроки --- */
+  .players {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+  }
+  .player {
+    flex: 1;
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 10px 12px;
+    transition: all 0.25s ease;
+    min-width: 0;
+  }
+  .player.active {
+    border-color: #4ade80;
+    box-shadow: 0 0 20px rgba(74,222,128,0.35);
+    background: rgba(74,222,128,0.08);
+  }
+  .player.dead {
+    border-color: #ef4444;
+    opacity: 0.5;
+    filter: grayscale(0.7);
+  }
+  .pname {
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #8892b0;
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .player.active .pname { color: #4ade80; }
+  .hp-bar {
+    width: 100%;
+    height: 10px;
+    background: rgba(0,0,0,0.4);
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 6px;
+  }
+  .hp-fill {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #22c55e, #4ade80);
+    border-radius: 5px;
+    transition: width 0.4s ease, background 0.4s ease;
+  }
+  .hp-fill.low {
+    background: linear-gradient(90deg, #ef4444, #f87171);
+  }
+  .hp-val {
+    font-size: 20px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: #e0e6f0;
   }
 
   /* --- Кубики --- */
   .dice-row {
     display: flex;
-    gap: 24px;
-    margin-top: 10px;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 6px;
   }
   .die {
-    width: min(30vw, 120px);
-    height: min(30vw, 120px);
+    width: min(24vw, 100px);
+    height: min(24vw, 100px);
     background: linear-gradient(145deg, #ffffff, #d8d8d8);
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 -6px 12px rgba(0,0,0,0.15);
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5), inset 0 -5px 10px rgba(0,0,0,0.15);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     padding: 12%;
-    transition: transform 0.15s ease;
   }
-  .die.spinning {
-    animation: shake 0.12s infinite;
-  }
+  .die.spinning { animation: shake 0.12s infinite; }
   @keyframes shake {
     0%   { transform: rotate(-5deg) scale(1.03); }
     50%  { transform: rotate(5deg) scale(0.97); }
     100% { transform: rotate(-5deg) scale(1.03); }
   }
-  .pip {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  .pip { display: flex; align-items: center; justify-content: center; }
   .pip::after {
     content: "";
     width: 62%; height: 62%;
@@ -68,32 +125,33 @@
 
   /* --- Результат --- */
   .result {
-    font-size: clamp(44px, 12vw, 80px);
+    text-align: center;
+    font-size: clamp(36px, 10vw, 64px);
     font-weight: 800;
     letter-spacing: 6px;
     color: #4ade80;
-    text-shadow: 0 0 30px rgba(74,222,128,0.5);
+    text-shadow: 0 0 25px rgba(74,222,128,0.5);
     font-variant-numeric: tabular-nums;
     min-height: 1.1em;
     transition: color 0.3s ease;
   }
+  .result.p2 { color: #60a5fa; text-shadow: 0 0 25px rgba(96,165,250,0.5); }
+  .result.double { color: #fbbf24; text-shadow: 0 0 25px rgba(251,191,36,0.6); }
 
   /* --- Лог --- */
   .log-wrap {
-    width: 100%;
-    max-width: 420px;
     flex: 1;
+    min-height: 0;
     display: flex;
     flex-direction: column;
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 14px;
+    border-radius: 12px;
     overflow: hidden;
-    min-height: 0;
   }
   .log-title {
-    padding: 10px 14px;
-    font-size: 12px;
+    padding: 8px 12px;
+    font-size: 11px;
     letter-spacing: 2px;
     text-transform: uppercase;
     color: #8892b0;
@@ -103,77 +161,143 @@
   .log-list {
     flex: 1;
     overflow-y: auto;
-    padding: 6px 0;
+    padding: 4px 0;
     -webkit-overflow-scrolling: touch;
   }
   .log-entry {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 8px 14px;
-    font-size: 15px;
+    gap: 8px;
+    padding: 7px 12px;
+    font-size: 14px;
     border-bottom: 1px solid rgba(255,255,255,0.04);
-    font-variant-numeric: tabular-nums;
     animation: slideIn 0.25s ease;
+    font-variant-numeric: tabular-nums;
   }
   @keyframes slideIn {
-    from { opacity: 0; transform: translateY(-8px); }
+    from { opacity: 0; transform: translateY(-6px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-  .log-entry .idx {
-    color: #6b7a99;
-    font-size: 13px;
-    min-width: 44px;
-  }
-  .log-entry .val {
-    color: #e0e6f0;
-    font-weight: 700;
-    font-size: 17px;
-    letter-spacing: 2px;
-    margin-left: auto;
-    margin-right: 10px;
-  }
-  .log-entry .tag {
-    font-size: 12px;
-    color: #fbbf24;
-    min-width: 60px;
-    text-align: right;
-  }
-  .log-entry.double .val { color: #fbbf24; }
-  .log-entry.double { background: rgba(251,191,36,0.06); }
+  .log-entry .idx { color: #6b7a99; font-size: 12px; min-width: 32px; }
+  .log-entry .who { font-size: 12px; font-weight: 700; }
+  .log-entry .who.p1 { color: #4ade80; }
+  .log-entry .who.p2 { color: #60a5fa; }
+  .log-entry .dmg { margin-left: auto; font-weight: 700; color: #f87171; }
+  .log-entry.double .dmg { color: #fbbf24; }
 
   .hint {
+    text-align: center;
     color: #8892b0;
     font-size: 12px;
     letter-spacing: 1px;
     padding-bottom: 4px;
   }
+
+  /* --- Game Over --- */
+  .overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+  }
+  .overlay.show { display: flex; }
+  .overlay-card {
+    background: linear-gradient(160deg, #1e2a4a, #0f1729);
+    border: 2px solid rgba(74,222,128,0.4);
+    border-radius: 20px;
+    padding: 32px 28px;
+    text-align: center;
+    max-width: 360px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  }
+  .overlay-title {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: #4ade80;
+  }
+  .overlay-sub {
+    font-size: 14px;
+    color: #8892b0;
+    margin-bottom: 24px;
+  }
+  .btn {
+    background: linear-gradient(145deg, #4ade80, #22c55e);
+    color: #0a0f1e;
+    border: none;
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 800;
+    border-radius: 12px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    width: 100%;
+    font-family: inherit;
+    transition: transform 0.1s ease;
+  }
+  .btn:active { transform: scale(0.97); }
 </style>
 </head>
 <body>
 <div id="app">
+  <div class="players">
+    <div class="player" id="p1">
+      <div class="pname">Игрок 1</div>
+      <div class="hp-bar"><div class="hp-fill" id="hpFill1"></div></div>
+      <div class="hp-val" id="hpVal1">1000</div>
+    </div>
+    <div class="player" id="p2">
+      <div class="pname">Игрок 2</div>
+      <div class="hp-bar"><div class="hp-fill" id="hpFill2"></div></div>
+      <div class="hp-val" id="hpVal2">1000</div>
+    </div>
+  </div>
+
   <div class="dice-row">
     <div class="die" id="die1"></div>
     <div class="die" id="die2"></div>
   </div>
+
   <div class="result" id="result">— —</div>
 
   <div class="log-wrap">
-    <div class="log-title">История бросков</div>
+    <div class="log-title">История</div>
     <div class="log-list" id="logList"></div>
   </div>
 
-  <div class="hint">Тап по экрану — бросок</div>
+  <div class="hint" id="hint">Тап по экрану — бросок Игрока 1</div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="overlay-card">
+    <div class="overlay-title" id="overlayTitle">Победа!</div>
+    <div class="overlay-sub" id="overlaySub"></div>
+    <button class="btn" id="restartBtn">Играть снова</button>
+  </div>
 </div>
 
 <script>
-  const dieEls  = [document.getElementById('die1'), document.getElementById('die2')];
+  const dieEls = [document.getElementById('die1'), document.getElementById('die2')];
   const resultEl = document.getElementById('result');
-  const logList  = document.getElementById('logList');
+  const logList = document.getElementById('logList');
+  const hintEl = document.getElementById('hint');
+  const overlay = document.getElementById('overlay');
+  const overlayTitle = document.getElementById('overlayTitle');
+  const overlaySub = document.getElementById('overlaySub');
+
+  const MAX_HP = 1000;
+  const MAX_LOG = 60;
 
   let rolling = false;
   let rollNumber = 0;
-  const MAX_LOG = 50; // максимум записей в логе
+  let turn = 1;
+  let hp1 = MAX_HP;
+  let hp2 = MAX_HP;
+  let gameOver = false;
 
   const pipPositions = {
     1: [4],
@@ -199,31 +323,48 @@
     return Math.floor(Math.random() * 6) + 1;
   }
 
-  function addLogEntry(number, v1, v2) {
-    const isDouble = v1 === v2;
+  function updatePlayersUI() {
+    document.getElementById('hpVal1').textContent = hp1;
+    document.getElementById('hpVal2').textContent = hp2;
+
+    const fill1 = document.getElementById('hpFill1');
+    const fill2 = document.getElementById('hpFill2');
+    fill1.style.width = (hp1 / MAX_HP * 100) + '%';
+    fill2.style.width = (hp2 / MAX_HP * 100) + '%';
+    fill1.classList.toggle('low', hp1 / MAX_HP < 0.3);
+    fill2.classList.toggle('low', hp2 / MAX_HP < 0.3);
+
+    const p1 = document.getElementById('p1');
+    const p2 = document.getElementById('p2');
+    p1.classList.toggle('active', turn === 1 && !gameOver);
+    p2.classList.toggle('active', turn === 2 && !gameOver);
+    p1.classList.toggle('dead', hp1 <= 0);
+    p2.classList.toggle('dead', hp2 <= 0);
+
+    hintEl.textContent = gameOver ? '' : `Тап по экрану — бросок Игрока ${turn}`;
+  }
+
+  function addLogEntry(number, attacker, dmg, isDouble) {
     const entry = document.createElement('div');
     entry.className = 'log-entry' + (isDouble ? ' double' : '');
     entry.innerHTML = `
       <span class="idx">#${number}</span>
-      <span class="val">${v1}${v2}</span>
-      <span class="tag">${isDouble ? '★ дубль' : ''}</span>
+      <span class="who p${attacker}">Игрок ${attacker}</span>
+      <span class="dmg">−${dmg}</span>
     `;
-    // Новые — сверху
     logList.prepend(entry);
-
-    // Обрезаем лишние
     while (logList.children.length > MAX_LOG) {
       logList.removeChild(logList.lastChild);
     }
   }
 
   function roll() {
-    if (rolling) return;
+    if (rolling || gameOver) return;
     rolling = true;
 
     dieEls.forEach(el => el.classList.add('spinning'));
     resultEl.textContent = '— —';
-    resultEl.style.color = '#4ade80';
+    resultEl.className = 'result';
 
     const spinDuration = 900;
     const interval = 70;
@@ -240,28 +381,83 @@
     function finish() {
       const v1 = randomDie();
       const v2 = randomDie();
+      const dmg = v1 * 10 + v2;
+      const isDouble = v1 === v2;
 
       renderDie(dieEls[0], v1);
       renderDie(dieEls[1], v2);
       dieEls.forEach(el => el.classList.remove('spinning'));
 
       rollNumber++;
-      resultEl.textContent = `${v1}${v2}`;
-      resultEl.style.color = (v1 === v2) ? '#fbbf24' : '#4ade80';
+      resultEl.textContent = String(dmg);
+      resultEl.className = 'result' + (isDouble ? ' double' : (turn === 2 ? ' p2' : ''));
 
-      addLogEntry(rollNumber, v1, v2);
+      // Наносим урон защитнику
+      if (turn === 1) {
+        hp2 = Math.max(0, hp2 - dmg);
+      } else {
+        hp1 = Math.max(0, hp1 - dmg);
+      }
+
+      addLogEntry(rollNumber, turn, dmg, isDouble);
+
+      if (hp1 <= 0 || hp2 <= 0) {
+        gameOver = true;
+        updatePlayersUI();
+        showGameOver();
+      } else {
+        turn = turn === 1 ? 2 : 1;
+        updatePlayersUI();
+      }
+
       rolling = false;
     }
   }
 
-  // Стартовый вид
-  dieEls.forEach(el => renderDie(el, randomDie()));
+  function showGameOver() {
+    const winner = hp1 <= 0 ? 2 : 1;
+    overlayTitle.textContent = `Игрок ${winner} победил!`;
+    overlayTitle.style.color = winner === 1 ? '#4ade80' : '#60a5fa';
+    overlaySub.textContent = `Игрок 1: ${hp1} HP  ·  Игрок 2: ${hp2} HP`;
+    overlay.classList.add('show');
+  }
 
-  document.body.addEventListener('click', roll);
+  function resetGame() {
+    hp1 = MAX_HP;
+    hp2 = MAX_HP;
+    turn = 1;
+    rollNumber = 0;
+    gameOver = false;
+    rolling = false;
+    logList.innerHTML = '';
+    resultEl.textContent = '— —';
+    resultEl.className = 'result';
+    overlay.classList.remove('show');
+    dieEls.forEach(el => renderDie(el, randomDie()));
+    updatePlayersUI();
+  }
+
+  // Обработчики
+  document.body.addEventListener('click', (e) => {
+    if (e.target.closest('.log-wrap')) return;
+    if (e.target.closest('.btn')) return;
+    roll();
+  });
   document.body.addEventListener('touchstart', (e) => {
+    if (e.target.closest('.log-wrap')) return;
+    if (e.target.closest('.btn')) return;
     e.preventDefault();
     roll();
   }, { passive: false });
+
+  document.getElementById('restartBtn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    resetGame();
+  });
+
+  // Старт
+  dieEls.forEach(el => renderDie(el, randomDie()));
+  updatePlayersUI();
 </script>
 </body>
 </html>
