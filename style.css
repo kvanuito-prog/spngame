@@ -880,3 +880,179 @@ input[type="range"].speed-slider::-moz-range-thumb { width: 26px; height: 26px; 
 }
 
 #matchResultOverlay { background: rgba(0,0,0,0.7); }
+/* ============ СЕТКА ТУРНИРА ============ */
+.bracket-card {
+  background: linear-gradient(160deg, rgba(30,42,74,0.98), rgba(15,23,41,0.98));
+  border: 2px solid rgba(96,165,250,0.4);
+  border-radius: 20px;
+  padding: 12px 10px;
+  max-width: 100%;
+  width: 100%;
+  max-height: calc(100dvh - 20px);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 60px rgba(96,165,250,0.15);
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  animation: cardIn 0.35s cubic-bezier(.2,.8,.3,1);
+}
+.bracket-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 4px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
+  gap: 8px;
+}
+.bracket-title {
+  font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+  color: #60a5fa; font-weight: 800;
+  flex: 1; text-align: center;
+}
+.bracket-zoom {
+  font-size: 12px; font-weight: 800; color: #8892b0;
+  min-width: 42px; text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.bracket-scroll {
+  flex: 1 1 auto;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 12px;
+  background: rgba(0,0,0,0.4);
+  border-radius: 12px;
+  margin: 10px 0;
+  min-height: 0;
+  scrollbar-width: thin;
+}
+.bracket-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+.bracket-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.15); }
+.bracket-scroll::-webkit-scrollbar-thumb { background: rgba(96,165,250,0.35); border-radius: 3px; }
+
+.bracket-grid {
+  position: relative;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+.bracket-match {
+  position: absolute;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.bracket-match.round-current {
+  border-color: rgba(96,165,250,0.55);
+  box-shadow: 0 0 8px rgba(96,165,250,0.4);
+}
+
+.bracket-slot {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  font-size: 8px;
+  font-weight: 700;
+  color: #cbd5e1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1;
+  min-height: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.bracket-slot:last-child { border-bottom: none; }
+.bracket-slot.winner {
+  color: #4ade80;
+  background: linear-gradient(90deg, rgba(74,222,128,0.15), transparent);
+  text-shadow: 0 0 4px rgba(74,222,128,0.5);
+}
+.bracket-slot.loser {
+  color: #64748b;
+  opacity: 0.65;
+}
+.bracket-slot.empty { color: #475569; }
+
+/* Цветная полоска класса слева */
+.bracket-slot.assassin  { border-left: 2px solid #ef4444; }
+.bracket-slot.barbarian { border-left: 2px solid #f59e0b; }
+.bracket-slot.vampire   { border-left: 2px solid #a855f7; }
+.bracket-slot.joker     { border-left: 2px solid #10b981; }
+.bracket-slot.druid     { border-left: 2px solid #22c55e; }
+.bracket-slot.berserker { border-left: 2px solid #dc2626; }
+
+.bracket-round-label {
+  position: absolute;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #60a5fa;
+  text-align: center;
+  pointer-events: none;
+}
+
+.bracket-connector {
+  position: absolute;
+  border-color: rgba(255,255,255,0.12);
+  border-style: solid;
+  border-width: 0;
+  pointer-events: none;
+}
+/* Верхняя горизонталь — right top */
+.bracket-connector.h-top {
+  border-top-width: 1px;
+  border-right-width: 1px;
+}
+/* Нижняя — right bottom */
+.bracket-connector.h-bot {
+  border-bottom-width: 1px;
+  border-right-width: 1px;
+}
+/* Дочерняя — bottom top */
+.bracket-connector.h-mid {
+  border-bottom-width: 1px;
+}
+
+.bracket-legend {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  padding: 8px 0;
+  font-size: 10px;
+  color: #8892b0;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+.bl-item { display: flex; align-items: center; gap: 5px; }
+.bl-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.15); }
+.winner-sw { background: rgba(74,222,128,0.35); border-color: rgba(74,222,128,0.6); }
+.loser-sw { background: rgba(100,116,139,0.3); }
+.empty-sw { background: transparent; }
+
+.bracket-controls {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  padding-top: 8px;
+  flex-shrink: 0;
+}
+.bracket-controls .tool-btn {
+  flex: 0 0 60px;
+  font-size: 14px;
+  padding: 8px;
+  min-height: 36px;
+}
+
+/* ============ ТЕЛЕФОН В АЛЬБОМЕ ============ */
+@media (orientation: landscape) and (max-height: 550px) {
+  .bracket-card { padding: 8px 8px; max-height: calc(100dvh - 10px); }
+  .bracket-header { padding-bottom: 6px; }
+  .bracket-title { font-size: 11px; }
+  .bracket-scroll { padding: 8px; margin: 6px 0; }
+  .bracket-legend { font-size: 9px; padding: 5px 0; gap: 10px; }
+  .bracket-slot { font-size: 7px; padding: 0 3px; }
+  }
