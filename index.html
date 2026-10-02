@@ -16,7 +16,6 @@
 <div class="bg-gradient"></div>
 <div class="version-badge" id="versionBadge">v—</div>
 
-<!-- ГЛАВНОЕ МЕНЮ -->
 <div class="overlay show" id="menuOverlay">
   <div class="overlay-card">
     <div class="menu-logo">🎲</div>
@@ -27,7 +26,6 @@
   </div>
 </div>
 
-<!-- НАСТРОЙКА -->
 <div class="overlay" id="setupOverlay">
   <div class="overlay-card">
     <div class="select-title">Новый турнир</div>
@@ -39,7 +37,6 @@
   </div>
 </div>
 
-<!-- СПИСОК ИГРОКОВ -->
 <div class="overlay" id="playersOverlay">
   <div class="players-card">
     <div class="players-header">
@@ -58,7 +55,6 @@
   </div>
 </div>
 
-<!-- СИМУЛЯЦИЯ -->
 <div class="overlay" id="simOverlay">
   <div class="overlay-card">
     <div class="select-title" id="simTitle">Симуляция</div>
@@ -70,7 +66,6 @@
   </div>
 </div>
 
-<!-- РЕЗУЛЬТАТ МАТЧА -->
 <div class="overlay" id="matchResultOverlay">
   <div class="match-result-card">
     <div class="mr-title">Матч завершён</div>
@@ -80,7 +75,6 @@
   </div>
 </div>
 
-<!-- ЧЕМПИОН -->
 <div class="overlay" id="championOverlay">
   <div class="overlay-card">
     <div class="champion-crown">🏆</div>
@@ -92,12 +86,35 @@
       <div class="podium-row" id="podiumBronze"><span class="medal">🥉</span><span class="pname-txt">—</span></div>
     </div>
     <div class="tournament-stats" id="tournamentStats"></div>
-    <button class="btn" id="btnNewTournament">НОВЫЙ ТУРНИР</button>
+    <button class="btn" id="btnShowBracket" style="margin-bottom:10px;">📊 СЕТКА ТУРНИРА</button>
+    <button class="btn btn-secondary" id="btnNewTournament">НОВЫЙ ТУРНИР</button>
     <button class="btn btn-secondary" id="btnChampionMenu">В МЕНЮ</button>
   </div>
 </div>
 
-<!-- БЫСТРАЯ ИГРА -->
+<!-- СЕТКА ТУРНИРА -->
+<div class="overlay" id="bracketOverlay">
+  <div class="bracket-card">
+    <div class="bracket-header">
+      <button class="back-btn" id="bracketBackBtn">←</button>
+      <div class="bracket-title">СЕТКА ТУРНИРА</div>
+      <div class="bracket-zoom" id="bracketZoom">1.0×</div>
+    </div>
+    <div class="bracket-scroll" id="bracketScroll">
+      <div class="bracket-grid" id="bracketGrid"></div>
+    </div>
+    <div class="bracket-legend">
+      <span class="bl-item"><span class="bl-swatch winner-sw"></span>Победитель</span>
+      <span class="bl-item"><span class="bl-swatch loser-sw"></span>Проигравший</span>
+      <span class="bl-item"><span class="bl-swatch empty-sw"></span>Пусто</span>
+    </div>
+    <div class="bracket-controls">
+      <button class="tool-btn" id="bracketZoomOut">🔍−</button>
+      <button class="tool-btn" id="bracketZoomIn">🔍+</button>
+    </div>
+  </div>
+</div>
+
 <div class="overlay" id="selectOverlay">
   <div class="overlay-card">
     <div class="select-title">Выбор классов</div>
