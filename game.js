@@ -105,7 +105,7 @@ var testResultBody = document.getElementById('testResultBody');
 var testSub = document.getElementById('testSub');
 
 var MAX_HP = 1000;
-var MAX_LOG = 80;
+var MAX_LOG = 60;
 var speed = 4;
 
 function getSpinDuration()  { return Math.max(70, 900 / speed); }
@@ -219,23 +219,14 @@ function simulateBattle(c1, c2) {
       var r1 = r6(), r2 = r6();
       dmg = Math.round((r1 * 10 + r2) * ASSASSIN_CRIT);
     } else if (cls === 'barbarian') {
-      if (db) {
-        stunCause = true;
-        weak[a] = true;
-      }
-      if (weak[a]) {
-        dmg = Math.floor(base * BARB_WEAK_MULT);
-        weak[a] = false;
-      }
+      if (db) { stunCause = true; weak[a] = true; }
+      if (weak[a]) { dmg = Math.floor(base * BARB_WEAK_MULT); weak[a] = false; }
     } else if (cls === 'vampire' && db) {
       var b1 = r6(), b2 = r6();
       dmg = b1 * 10 + b2;
       heal = dmg;
     } else if (cls === 'joker') {
-      if (jb[a] > 0) {
-        dmg = Math.round(base * jb[a]);
-        jb[a] = 0;
-      }
+      if (jb[a] > 0) { dmg = Math.round(base * jb[a]); jb[a] = 0; }
     } else if (cls === 'berserker') {
       var myHp = a === 1 ? h1 : h2;
       dmg = base + bers(myHp);
@@ -343,9 +334,7 @@ function runBalanceTest() {
 
     html += '<div class="matrix-title">Класс против класса</div>';
     html += '<div class="matrix-scroll"><table class="matrix-table"><thead><tr><th></th>';
-    C.forEach(function(c) {
-      html += '<th>' + CLASSES[c].icon + '</th>';
-    });
+    C.forEach(function(c) { html += '<th>' + CLASSES[c].icon + '</th>'; });
     html += '</tr></thead><tbody>';
 
     C.forEach(function(row) {
@@ -363,7 +352,6 @@ function runBalanceTest() {
     });
 
     html += '</tbody></table></div>';
-
     testResultBody.innerHTML = html;
   }, 100);
 }
@@ -527,88 +515,111 @@ function updatePlayersUI() {
 
 function setHint(text) { hintEl.textContent = text; }
 
-function addLogEntry(number, attacker, dmg, isDouble, stunCaused, isCrit, heal, jokerMult, summonInfo, rageBonus, isWeak) {
+// ============ ЛОГ АТАКИ (3 строки) ============
+function addAttackLog(m) {
   var entry = document.createElement('div');
-  var extraClass = '';
-  if (isWeak) extraClass = ' weak';
-  else if (isCrit) extraClass = ' crit';
-  else if (heal) extraClass = ' vampire';
-  else if (jokerMult === JOKER_BEAUTIFUL_MULT) extraClass = ' joker';
-  else if (jokerMult === JOKER_ROUND_MULT) extraClass = ' joker15';
-  else if (rageBonus > 0) extraClass = ' rage';
-  else if (summonInfo) extraClass = ' summon-attack';
-  else if (isDouble) extraClass = ' double';
-  entry.className = 'log-entry' + extraClass;
+  var extra = '';
+  if (m.isWeak) extra = ' weak';
+  else if (m.isCrit) extra = ' crit';
+  else if (m.heal) extra = ' vampire';
+  else if (m.jokerMult === JOKER_BEAUTIFUL_MULT) extra = ' joker';
+  else if (m.jokerMult === JOKER_ROUND_MULT) extra = ' joker15';
+  else if (m.rageBonus > 0) extra = ' rage';
+  else if (m.summonInfo) extra = ' summon-attack';
+  else if (m.isDouble) extra = ' double';
+  entry.className = 'log-entry attack' + extra;
 
-  var idx = document.createElement('span'); idx.className = 'idx'; idx.textContent = '#' + number;
-  var who = document.createElement('span'); who.className = 'who p' + attacker;
-  who.textContent = summonInfo ? summonInfo.icon + ' И' + attacker : 'Игрок ' + attacker;
-  var dmgEl = document.createElement('span'); dmgEl.className = 'dmg';
+  var attackerLabel;
+  if (m.summonInfo) {
+    attackerLabel = '<span class="p1">' + m.summonInfo.icon + ' ' + m.summonInfo.name + ' И' + m.attacker + '</span>';
+  } else {
+    attackerLabel = '<span class="p1">Игрок ' + m.attacker + '</span>';
+  }
 
-  var suffix = '';
-  if (isWeak) suffix = ' 💜 −20%';
-  else if (isCrit) suffix = ' 💥 КРИТ×1.9';
-  else if (jokerMult === JOKER_BEAUTIFUL_MULT) suffix = ' 🎲×' + JOKER_BEAUTIFUL_MULT;
-  else if (jokerMult === JOKER_ROUND_MULT) suffix = ' 🎲×' + JOKER_ROUND_MULT;
-  else if (heal) suffix = ' 🧛 +' + heal;
-  if (rageBonus > 0) suffix += ' 🩸+' + rageBonus;
-  if (stunCaused) suffix += ' ⚡';
-  dmgEl.textContent = '−' + dmg + suffix;
+  var hpPct = m.defHpAfter / MAX_HP;
+  var hpClass = '';
+  if (m.defHpAfter <= 0) hpClass = ' critical';
+  else if (hpPct < 0.3) hpClass = ' low';
 
-  entry.appendChild(idx); entry.appendChild(who); entry.appendChild(dmgEl);
+  var extraFormula = '';
+  if (m.heal > 0) extraFormula += ' · 🧛 +' + m.heal;
+  if (m.stunCaused) extraFormula += ' · ⚡стан';
+
+  entry.innerHTML =
+    '<div class="le-head">' +
+      '<span class="idx">#' + m.number + '</span>' +
+      '<span class="le-dice">[' + m.v1 + '|' + m.v2 + ']</span>' +
+      '<span class="le-route">' + attackerLabel + '<span class="arrow">→</span><span class="p2">Игрок ' + m.defender + '</span></span>' +
+    '</div>' +
+    '<div class="le-calc">' +
+      '<span class="le-formula">' + m.formula + extraFormula + '</span>' +
+      '<span class="le-dmg">−' + m.dmg + '</span>' +
+    '</div>' +
+    '<div class="le-hp">' +
+      '<span class="hp-label">HP</span>' +
+      '<span class="hp-before">' + m.defHpBefore + '</span>' +
+      '<span class="hp-arrow">→</span>' +
+      '<span class="hp-after' + hpClass + '">' + m.defHpAfter + '</span>' +
+    '</div>';
+
   logList.insertBefore(entry, logList.firstChild);
   trimLog();
 }
 
+// ============ ПРОСТЫЕ ЗАПИСИ ============
 function addStunSkipLog(playerNum) {
   var entry = document.createElement('div');
   entry.className = 'log-entry stun';
-  var idx = document.createElement('span'); idx.className = 'idx'; idx.textContent = '⚡';
-  var who = document.createElement('span'); who.className = 'who'; who.textContent = 'Игрок ' + playerNum + ' оглушён';
-  var dmgEl = document.createElement('span'); dmgEl.className = 'dmg'; dmgEl.textContent = 'ПРОПУСК';
-  entry.appendChild(idx); entry.appendChild(who); entry.appendChild(dmgEl);
-  logList.insertBefore(entry, logList.firstChild); trimLog();
+  entry.innerHTML =
+    '<span class="idx" style="color:#fbbf24">⚡</span>' +
+    '<span class="who">Игрок ' + playerNum + ' оглушён</span>' +
+    '<span class="dmg">ПРОПУСК</span>';
+  logList.insertBefore(entry, logList.firstChild);
+  trimLog();
 }
 
 function addCoinLog(firstPlayer) {
   var entry = document.createElement('div');
   entry.className = 'log-entry coin';
-  var who = document.createElement('span'); who.className = 'who';
   var coinName = firstPlayer === 1 ? 'Орёл' : 'Решка';
-  who.textContent = '🪙 ' + coinName + ' — первым ходит Игрок ' + firstPlayer;
-  entry.appendChild(who);
-  logList.insertBefore(entry, logList.firstChild); trimLog();
+  entry.innerHTML = '<span class="who">🪙 ' + coinName + ' — первым ходит Игрок ' + firstPlayer + '</span>';
+  logList.insertBefore(entry, logList.firstChild);
+  trimLog();
 }
 
 function addJokerBuffLog(p, mult) {
   var entry = document.createElement('div');
   entry.className = 'log-entry ' + (mult === JOKER_BEAUTIFUL_MULT ? 'buff' : 'buff15');
-  var idx = document.createElement('span'); idx.className = 'idx'; idx.textContent = '🎲';
-  var who = document.createElement('span'); who.className = 'who'; who.textContent = 'Джокер Игрок ' + p;
-  var dmgEl = document.createElement('span'); dmgEl.className = 'dmg';
-  dmgEl.textContent = '×' + mult + ' ГОТОВ';
-  entry.appendChild(idx); entry.appendChild(who); entry.appendChild(dmgEl);
-  logList.insertBefore(entry, logList.firstChild); trimLog();
+  entry.innerHTML =
+    '<span class="idx" style="color:#10b981">🎲</span>' +
+    '<span class="who">Джокер Игрок ' + p + '</span>' +
+    '<span class="dmg">×' + mult + ' ГОТОВ</span>';
+  logList.insertBefore(entry, logList.firstChild);
+  trimLog();
 }
+
 function addSummonLog(p, info) {
-  var entry = document.createElement('div'); entry.className = 'log-entry summon';
-  var idx = document.createElement('span'); idx.className = 'idx'; idx.textContent = '✨';
-  var who = document.createElement('span'); who.className = 'who p' + p; who.textContent = 'И' + p + ' призвал';
-  var dmgEl = document.createElement('span'); dmgEl.className = 'dmg';
-  dmgEl.textContent = info.icon + ' ' + info.name + ' · ' + info.hp + ' HP';
-  entry.appendChild(idx); entry.appendChild(who); entry.appendChild(dmgEl);
-  logList.insertBefore(entry, logList.firstChild); trimLog();
+  var entry = document.createElement('div');
+  entry.className = 'log-entry summon';
+  entry.innerHTML =
+    '<span class="idx" style="color:#22c55e">✨</span>' +
+    '<span class="who p' + p + '">И' + p + ' призвал</span>' +
+    '<span class="dmg">' + info.icon + ' ' + info.name + ' · ' + info.hp + ' HP</span>';
+  logList.insertBefore(entry, logList.firstChild);
+  trimLog();
 }
+
 function addSummonDeathLog(defender, killed, overflow) {
-  var entry = document.createElement('div'); entry.className = 'log-entry summon-death';
-  var idx = document.createElement('span'); idx.className = 'idx'; idx.textContent = '💀';
-  var who = document.createElement('span'); who.className = 'who';
-  who.textContent = killed.icon + ' ' + killed.name + ' И' + defender + ' погиб';
-  var dmgEl = document.createElement('span'); dmgEl.className = 'dmg';
-  dmgEl.textContent = overflow > 0 ? overflow + ' → И' + defender : '';
-  entry.appendChild(idx); entry.appendChild(who); entry.appendChild(dmgEl);
-  logList.insertBefore(entry, logList.firstChild); trimLog();
+  var entry = document.createElement('div');
+  entry.className = 'log-entry summon-death';
+  entry.innerHTML =
+    '<span class="idx" style="color:#f87171">💀</span>' +
+    '<span class="who">' + killed.icon + ' ' + killed.name + ' И' + defender + ' погиб</span>' +
+    '<span class="dmg">' + (overflow > 0 ? overflow + ' → И' + defender : '') + '</span>';
+  logList.insertBefore(entry, logList.firstChild);
+  trimLog();
 }
+
 function trimLog() { while (logList.children.length > MAX_LOG) logList.removeChild(logList.lastChild); }
 
 function checkJokerBuffs() {
@@ -675,6 +686,7 @@ function roll() {
     var cls = classes[attacker];
     var isDouble = v1 === v2;
     var baseDmg = v1 * 10 + v2;
+    var formula = String(baseDmg);
 
     resultEl.textContent = String(baseDmg);
     resultEl.className = 'result' + (isDouble ? ' double' : (attacker === 2 ? ' p2' : ''));
@@ -689,7 +701,8 @@ function roll() {
         setDieGlow('summon');
         setTimeout(function() { setDieGlow(null); }, 600);
         setHint(s.icon + ' ' + s.name + ' атакует!');
-        applyHit(attacker, defender, sd, isDouble, stunB, false, 0, 0, { icon: s.icon, name: s.name }, 0, false);
+        var summonFormula = s.mult === 1.0 ? String(baseDmg) : baseDmg + ' ×' + s.mult;
+        applyHit(attacker, defender, sd, isDouble, stunB, false, 0, 0, { icon: s.icon, name: s.name }, 0, false, v1, v2, summonFormula);
         return;
       }
       if (isDouble) {
@@ -704,7 +717,7 @@ function roll() {
           return;
         }
       }
-      applyHit(attacker, defender, baseDmg, isDouble, false, false, 0, 0, null, 0, false);
+      applyHit(attacker, defender, baseDmg, isDouble, false, false, 0, 0, null, 0, false, v1, v2, formula);
       return;
     }
 
@@ -712,12 +725,13 @@ function roll() {
       setHint('🗡 Дубль! Переброс на крит...');
       setTimeout(function() {
         spinDice(function(r1, r2) {
-          var critDmg = Math.round((r1 * 10 + r2) * ASSASSIN_CRIT);
+          var critBase = r1 * 10 + r2;
+          var critDmg = Math.round(critBase * ASSASSIN_CRIT);
           resultEl.textContent = critDmg + '';
           resultEl.className = 'result crit';
           setDieGlow('crit');
           setTimeout(function() { setDieGlow(null); }, 600);
-          applyHit(attacker, defender, critDmg, false, false, true, 0, 0, null, 0, false);
+          applyHit(attacker, defender, critDmg, false, false, true, 0, 0, null, 0, false, r1, r2, critBase + ' ×' + ASSASSIN_CRIT);
         });
       }, getCritPause());
       return;
@@ -732,7 +746,7 @@ function roll() {
           resultEl.className = 'result vampire';
           setDieGlow('vampire');
           setTimeout(function() { setDieGlow(null); }, 600);
-          applyHit(attacker, defender, bite, false, false, false, bite, 0, null, 0, false);
+          applyHit(attacker, defender, bite, false, false, false, bite, 0, null, 0, false, r1, r2, String(bite));
         });
       }, getCritPause());
       return;
@@ -749,6 +763,7 @@ function roll() {
       setDieGlow(jokerMult === JOKER_BEAUTIFUL_MULT ? 'joker' : 'joker15');
       setTimeout(function() { setDieGlow(null); }, 700);
       setHint('🎲 Джокер ×' + jokerMult + '!');
+      formula = baseDmg + ' ×' + jokerMult;
     }
 
     var rageBonus = 0;
@@ -761,6 +776,7 @@ function roll() {
         setDieGlow('rage');
         setTimeout(function() { setDieGlow(null); }, 600);
         setHint('🔥 Ярость +' + rageBonus + '!');
+        formula = baseDmg + ' +' + rageBonus;
       }
     }
 
@@ -774,6 +790,7 @@ function roll() {
         resultEl.textContent = dmg + '';
         resultEl.className = 'result weak';
         setHint('💜 Удар ослаблен на 20%');
+        formula = baseDmg + ' ×0.8';
       }
       if (isDouble && hp1 > 0 && hp2 > 0) {
         stunned[defender] = true;
@@ -782,7 +799,7 @@ function roll() {
       }
     }
 
-    applyHit(attacker, defender, dmg, isDouble, stunCaused, false, 0, jokerMult, null, rageBonus, isWeak);
+    applyHit(attacker, defender, dmg, isDouble, stunCaused, false, 0, jokerMult, null, rageBonus, isWeak, v1, v2, formula);
   });
 }
 
@@ -823,9 +840,12 @@ function finishTurnAfterAction(attacker, defender, extraDelay) {
   }
 }
 
-function applyHit(attacker, defender, dmg, isDouble, stunCaused, isCrit, heal, jokerMult, summonInfo, rageBonus, isWeak) {
+function applyHit(attacker, defender, dmg, isDouble, stunCaused, isCrit, heal, jokerMult, summonInfo, rageBonus, isWeak, v1, v2, formula) {
   rollNumber++;
+
+  var defHpBefore = defender === 1 ? hp1 : hp2;
   var dr = dealDamage(defender, dmg);
+  var defHpAfter = defender === 1 ? hp1 : hp2;
 
   var floatType = '';
   if (isCrit) floatType = 'crit';
@@ -836,7 +856,25 @@ function applyHit(attacker, defender, dmg, isDouble, stunCaused, isCrit, heal, j
     setTimeout(function() { showFloatingDamage(attacker, heal, 'heal'); }, 150);
   }
 
-  addLogEntry(rollNumber, attacker, dmg, isDouble, stunCaused, isCrit, heal, jokerMult, summonInfo, rageBonus, isWeak);
+  addAttackLog({
+    number: rollNumber,
+    attacker: attacker,
+    defender: defender,
+    dmg: dmg,
+    v1: v1, v2: v2,
+    formula: formula,
+    isCrit: isCrit,
+    isWeak: isWeak,
+    heal: heal,
+    jokerMult: jokerMult,
+    rageBonus: rageBonus,
+    stunCaused: stunCaused,
+    summonInfo: summonInfo,
+    isDouble: isDouble,
+    defHpBefore: defHpBefore,
+    defHpAfter: defHpAfter
+  });
+
   if (dr.summonDied) addSummonDeathLog(defender, dr.killed, dr.toPlayer);
   if (heal > 0) {
     if (attacker === 1) hp1 = Math.min(MAX_HP, hp1 + heal);
