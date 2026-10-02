@@ -21,7 +21,8 @@
   #app {
     display: flex; flex-direction: column;
     height: 100vh; height: 100dvh;
-    padding: 10px; gap: 8px;
+    padding: 8px; gap: 6px;
+    overflow: hidden;
   }
 
   /* --- Игроки --- */
@@ -30,7 +31,7 @@
     flex: 1;
     background: rgba(255,255,255,0.05);
     border: 2px solid rgba(255,255,255,0.08);
-    border-radius: 10px; padding: 8px 10px;
+    border-radius: 10px; padding: 6px 10px;
     transition: all 0.25s ease;
     min-width: 0; position: relative; overflow: hidden;
   }
@@ -47,47 +48,47 @@
   }
   .player.dead { border-color: #ef4444; opacity: 0.5; filter: grayscale(0.7); }
   .pname {
-    font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+    font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
     color: #8892b0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .player.active .pname { color: #4ade80; }
   .player.active.p2-active .pname { color: #60a5fa; }
   .player.stunned .pname { color: #fbbf24 !important; }
-  .pclass { font-size: 10px; letter-spacing: 1px; margin: 2px 0 6px; font-weight: 700; opacity: 0.9; }
+  .pclass { font-size: 10px; letter-spacing: 1px; margin: 1px 0 4px; font-weight: 700; opacity: 0.9; }
   .pclass.assassin { color: #ef4444; }
   .pclass.barbarian { color: #f59e0b; }
-  .hp-bar { width: 100%; height: 8px; background: rgba(0,0,0,0.4); border-radius: 4px; overflow: hidden; margin-bottom: 4px; }
+  .hp-bar { width: 100%; height: 7px; background: rgba(0,0,0,0.4); border-radius: 4px; overflow: hidden; margin-bottom: 2px; }
   .hp-fill {
     height: 100%; width: 100%;
     background: linear-gradient(90deg, #22c55e, #4ade80);
     border-radius: 4px; transition: width 0.4s ease, background 0.4s ease;
   }
   .hp-fill.low { background: linear-gradient(90deg, #ef4444, #f87171); }
-  .hp-val { font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; color: #e0e6f0; }
+  .hp-val { font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; color: #e0e6f0; }
   .stun-badge {
-    position: absolute; top: 6px; right: 6px;
+    position: absolute; top: 4px; right: 4px;
     background: #fbbf24; color: #1a1a1a;
-    font-size: 10px; font-weight: 800;
-    padding: 2px 6px; border-radius: 6px; letter-spacing: 1px;
+    font-size: 9px; font-weight: 800;
+    padding: 2px 5px; border-radius: 5px; letter-spacing: 1px;
     display: none;
   }
   .player.stunned .stun-badge { display: block; }
 
   /* --- Кубики --- */
-  .dice-row { display: flex; gap: 16px; justify-content: center; flex-shrink: 0; margin: 2px 0; }
+  .dice-row { display: flex; gap: 14px; justify-content: center; flex-shrink: 0; margin: 2px 0; }
   .die {
-    width: 76px; height: 76px;
-    background: #ffffff; border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.5), inset 0 -4px 8px rgba(0,0,0,0.15);
+    width: 64px; height: 64px;
+    background: #ffffff; border-radius: 10px;
+    box-shadow: 0 5px 16px rgba(0,0,0,0.5), inset 0 -3px 6px rgba(0,0,0,0.15);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    padding: 10px;
+    padding: 8px;
     transition: box-shadow 0.2s ease;
   }
   .die.spinning { animation: shake 0.12s infinite; }
   .die.crit-glow {
-    box-shadow: 0 0 30px rgba(239,68,68,0.9), 0 0 60px rgba(251,191,36,0.5), inset 0 -4px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 0 30px rgba(239,68,68,0.9), 0 0 60px rgba(251,191,36,0.5), inset 0 -3px 6px rgba(0,0,0,0.15);
     background: #fff2e6;
   }
   @keyframes shake {
@@ -96,16 +97,16 @@
     100% { transform: rotate(-5deg) scale(1.03); }
   }
   .pip { display: flex; align-items: center; justify-content: center; }
-  .pip::after { content: ""; display: block; width: 14px; height: 14px; background: #1a1a1a; border-radius: 50%; }
+  .pip::after { content: ""; display: block; width: 11px; height: 11px; background: #1a1a1a; border-radius: 50%; }
   .pip.hidden-pip::after { display: none; }
 
   /* --- Результат --- */
   .result {
-    text-align: center; font-size: 40px; font-weight: 800;
-    letter-spacing: 6px; color: #4ade80;
+    text-align: center; font-size: 34px; font-weight: 800;
+    letter-spacing: 5px; color: #4ade80;
     text-shadow: 0 0 25px rgba(74,222,128,0.5);
     font-variant-numeric: tabular-nums;
-    min-height: 48px; line-height: 48px;
+    min-height: 40px; line-height: 40px;
     transition: color 0.3s ease;
     flex-shrink: 0;
   }
@@ -124,28 +125,36 @@
 
   /* --- Лог --- */
   .log-wrap {
-    flex: 1 1 auto; min-height: 60px;
+    flex: 1 1 auto;
+    min-height: 140px;
     display: flex; flex-direction: column;
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: 10px; overflow: hidden;
   }
   .log-title {
-    padding: 6px 10px; font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    padding: 5px 10px; font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
     color: #8892b0; border-bottom: 1px solid rgba(255,255,255,0.06);
     background: rgba(0,0,0,0.15); flex-shrink: 0;
   }
-  .log-list { flex: 1 1 auto; overflow-y: auto; padding: 2px 0; -webkit-overflow-scrolling: touch; min-height: 0; }
+  .log-list {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 2px 0;
+    min-height: 0;
+    scrollbar-width: thin;
+  }
+  .log-list::-webkit-scrollbar { width: 6px; }
+  .log-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+  .log-list::-webkit-scrollbar-thumb { background: rgba(74,222,128,0.3); border-radius: 3px; }
+
   .log-entry {
     display: flex; align-items: center; gap: 8px;
-    padding: 6px 10px; font-size: 13px;
+    padding: 5px 10px; font-size: 12px;
     border-bottom: 1px solid rgba(255,255,255,0.04);
-    animation: slideIn 0.25s ease;
     font-variant-numeric: tabular-nums;
-  }
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(-6px); }
-    to   { opacity: 1; transform: translateY(0); }
+    flex-shrink: 0;
   }
   .log-entry .idx { color: #6b7a99; font-size: 11px; min-width: 28px; }
   .log-entry .who { font-size: 12px; font-weight: 700; }
@@ -160,7 +169,7 @@
   .log-entry.crit .dmg {
     color: #ef4444;
     text-shadow: 0 0 8px rgba(239,68,68,0.9);
-    font-size: 14px;
+    font-size: 13px;
   }
   .log-entry.stun { background: rgba(251,191,36,0.10); }
   .log-entry.stun .who { color: #fbbf24; }
@@ -172,34 +181,34 @@
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: 10px;
-    padding: 8px 14px 10px;
+    padding: 6px 12px 8px;
   }
-  .speed-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+  .speed-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px; }
   .speed-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #8892b0; }
   .speed-value {
-    font-size: 18px; font-weight: 800; color: #4ade80;
+    font-size: 16px; font-weight: 800; color: #4ade80;
     letter-spacing: 1px; font-variant-numeric: tabular-nums;
   }
-  .speed-value::after { content: "×"; font-size: 13px; margin-left: 1px; opacity: 0.7; }
+  .speed-value::after { content: "×"; font-size: 12px; margin-left: 1px; opacity: 0.7; }
 
   input[type="range"].speed-slider {
     -webkit-appearance: none; appearance: none;
     width: 100%; height: 6px;
     background: rgba(255,255,255,0.1);
     border-radius: 3px; outline: none;
-    margin: 6px 0 0;
+    margin: 4px 0 0;
     touch-action: manipulation;
   }
   input[type="range"].speed-slider::-webkit-slider-thumb {
     -webkit-appearance: none; appearance: none;
-    width: 26px; height: 26px; border-radius: 50%;
+    width: 24px; height: 24px; border-radius: 50%;
     background: radial-gradient(circle at 35% 30%, #6ee7a3, #4ade80);
     cursor: pointer;
     box-shadow: 0 0 12px rgba(74,222,128,0.6), 0 2px 6px rgba(0,0,0,0.5);
     border: 2px solid #0a0f1e;
   }
   input[type="range"].speed-slider::-moz-range-thumb {
-    width: 26px; height: 26px; border-radius: 50%;
+    width: 24px; height: 24px; border-radius: 50%;
     background: #4ade80; cursor: pointer;
     border: 2px solid #0a0f1e;
     box-shadow: 0 0 12px rgba(74,222,128,0.6);
@@ -208,9 +217,9 @@
   /* --- Кнопки --- */
   .controls { display: flex; gap: 8px; flex-shrink: 0; }
   .control-btn {
-    flex: 1; padding: 15px;
-    font-size: 15px; font-weight: 800;
-    border: none; border-radius: 12px;
+    flex: 1; padding: 12px;
+    font-size: 14px; font-weight: 800;
+    border: none; border-radius: 10px;
     cursor: pointer; letter-spacing: 1.5px;
     font-family: inherit;
     color: #0a0f1e;
@@ -222,8 +231,8 @@
   .control-btn.hidden { display: none; }
 
   .hint {
-    text-align: center; color: #8892b0; font-size: 11px;
-    letter-spacing: 1px; flex-shrink: 0; min-height: 14px;
+    text-align: center; color: #8892b0; font-size: 10px;
+    letter-spacing: 1px; flex-shrink: 0; min-height: 12px;
   }
 
   /* --- Overlays --- */
@@ -238,18 +247,18 @@
   .overlay-card {
     background: linear-gradient(160deg, #1e2a4a, #0f1729);
     border: 2px solid rgba(74,222,128,0.4);
-    border-radius: 20px; padding: 24px 20px;
+    border-radius: 20px; padding: 22px 18px;
     text-align: center; max-width: 420px; width: 100%;
     box-shadow: 0 20px 60px rgba(0,0,0,0.6);
     margin: auto;
   }
-  .overlay-title { font-size: 24px; font-weight: 800; margin-bottom: 10px; color: #4ade80; }
-  .overlay-sub { font-size: 13px; color: #8892b0; margin-bottom: 20px; }
+  .overlay-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; color: #4ade80; }
+  .overlay-sub { font-size: 12px; color: #8892b0; margin-bottom: 16px; }
   .btn {
     background: linear-gradient(145deg, #4ade80, #22c55e);
     color: #0a0f1e; border: none;
-    padding: 14px 28px; font-size: 15px; font-weight: 800;
-    border-radius: 12px; cursor: pointer; letter-spacing: 1px;
+    padding: 12px 24px; font-size: 14px; font-weight: 800;
+    border-radius: 10px; cursor: pointer; letter-spacing: 1px;
     width: 100%; font-family: inherit;
     transition: transform 0.1s ease;
   }
@@ -258,48 +267,22 @@
     background: transparent;
     border: 2px solid rgba(74,222,128,0.45);
     color: #4ade80;
-    margin-top: 10px;
+    margin-top: 8px;
   }
-  .btn-secondary:active { transform: scale(0.97); }
 
   /* --- Экран выбора классов --- */
-  .select-title {
-    font-size: 20px;
-    font-weight: 800;
-    margin-bottom: 4px;
-    color: #fff;
-  }
-  .select-subtitle {
-    font-size: 12px;
-    color: #8892b0;
-    margin-bottom: 18px;
-    letter-spacing: 1px;
-  }
-  .select-row {
-    margin-bottom: 14px;
-    text-align: left;
-  }
-  .select-pname {
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-    font-weight: 700;
-  }
+  .select-title { font-size: 20px; font-weight: 800; margin-bottom: 4px; color: #fff; }
+  .select-subtitle { font-size: 12px; color: #8892b0; margin-bottom: 16px; letter-spacing: 1px; }
+  .select-row { margin-bottom: 12px; text-align: left; }
+  .select-pname { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; font-weight: 700; }
   .select-pname.p1 { color: #4ade80; }
   .select-pname.p2 { color: #60a5fa; }
-  .select-list {
-    display: flex;
-    gap: 8px;
-  }
+  .select-list { display: flex; gap: 8px; }
   .class-card {
-    flex: 1;
-    padding: 10px 8px;
+    flex: 1; padding: 10px 8px;
     border: 2px solid rgba(255,255,255,0.1);
-    border-radius: 10px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    border-radius: 10px; text-align: center;
+    cursor: pointer; transition: all 0.2s ease;
     background: rgba(255,255,255,0.03);
     min-width: 0;
   }
@@ -308,33 +291,21 @@
     background: rgba(74,222,128,0.12);
     box-shadow: 0 0 16px rgba(74,222,128,0.35);
   }
-  .class-card .icon {
-    font-size: 26px;
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-  .class-card .cname {
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0.5px;
-    margin-bottom: 4px;
-  }
+  .class-card .icon { font-size: 26px; line-height: 1; margin-bottom: 4px; }
+  .class-card .cname { font-size: 12px; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 4px; }
   .class-card.selected .cname { color: #4ade80; }
-  .class-card .cdesc {
-    font-size: 9.5px;
-    line-height: 1.3;
-    color: #8892b0;
-  }
+  .class-card .cdesc { font-size: 9.5px; line-height: 1.3; color: #8892b0; }
 
   /* --- Планшет --- */
   @media (min-width: 700px) {
-    #app { max-width: 720px; margin: 0 auto; padding: 16px; gap: 12px; }
-    .die { width: 100px; height: 100px; padding: 12px; }
-    .pip::after { width: 18px; height: 18px; }
-    .result { font-size: 56px; min-height: 66px; line-height: 66px; }
-    .hp-val { font-size: 20px; }
-    .pname { font-size: 13px; }
+    #app { max-width: 720px; margin: 0 auto; padding: 12px; gap: 8px; }
+    .die { width: 78px; height: 78px; padding: 10px; }
+    .pip::after { width: 13px; height: 13px; }
+    .result { font-size: 44px; min-height: 52px; line-height: 52px; }
+    .hp-val { font-size: 18px; }
+    .pname { font-size: 12px; }
     .pclass { font-size: 11px; }
+    .log-wrap { min-height: 170px; }
     .class-card .icon { font-size: 32px; }
     .class-card .cname { font-size: 14px; }
     .class-card .cdesc { font-size: 11px; }
@@ -363,7 +334,7 @@
   </div>
 </div>
 
-<!-- ОСНОВНОЙ ЭКРАН ИГРЫ -->
+<!-- ОСНОВНОЙ ЭКРАН -->
 <div id="app">
   <div class="players">
     <div class="player" id="p1">
@@ -438,9 +409,7 @@
     }
   };
 
-  // Текущие классы в бою
   var classes = { 1: 'assassin', 2: 'barbarian' };
-  // Временный выбор в экране
   var pendingClasses = { 1: 'assassin', 2: 'barbarian' };
 
   // ============ ЭЛЕМЕНТЫ ============
@@ -481,7 +450,7 @@
     4: [0, 2, 6, 8], 5: [0, 2, 4, 6, 8], 6: [0, 2, 3, 5, 6, 8]
   };
 
-  // ============ РЕНДЕР КУБИКОВ ============
+  // ============ КУБИКИ ============
   function renderDie(el, value) {
     el.innerHTML = '';
     var pips = pipPositions[value] || [];
@@ -502,7 +471,7 @@
     });
   }
 
-  // ============ ЭКРАН ВЫБОРА КЛАССОВ ============
+  // ============ ЭКРАН ВЫБОРА ============
   function renderSelectionUI() {
     ['1', '2'].forEach(function(p) {
       var container = document.querySelector('.select-list[data-player="' + p + '"]');
@@ -613,7 +582,7 @@
     while (logList.children.length > MAX_LOG) logList.removeChild(logList.lastChild);
   }
 
-  // ============ СПИН КУБИКОВ ============
+  // ============ СПИН ============
   function spinDice(callback) {
     dieEls.forEach(function(el) { el.classList.add('spinning'); });
     resultEl.textContent = '— —';
@@ -638,7 +607,7 @@
     }, frameInterval);
   }
 
-  // ============ ОСНОВНОЙ БРОСОК ============
+  // ============ БРОСОК ============
   function roll() {
     if (rolling || gameOver) return;
     rolling = true;
@@ -653,7 +622,7 @@
       resultEl.textContent = String(dmg);
       resultEl.className = 'result' + (isDouble ? ' double' : (attacker === 2 ? ' p2' : ''));
 
-      // === Ассасин ===
+      // Ассасин
       if (cls === 'assassin' && isDouble) {
         setHint('🗡 Дубль! Переброс на крит...');
         setTimeout(function() {
@@ -669,7 +638,7 @@
         return;
       }
 
-      // === Варвар ===
+      // Варвар
       var stunCaused = false;
       if (cls === 'barbarian' && isDouble && hp1 > 0 && hp2 > 0) {
         stunned[defender] = true;
