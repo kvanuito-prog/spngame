@@ -351,7 +351,7 @@
     assassin:  { icon: '🗡', short: 'Ассасин',  label: '🗡 Ассасин',  css: 'assassin',  desc: 'Дубль → реролл ×1.9.' },
     barbarian: { icon: '⚔', short: 'Варвар',   label: '⚔ Варвар',   css: 'barbarian', desc: 'Дубль → стан. След. удар −20%.' },
     vampire:   { icon: '🧛', short: 'Вампир',   label: '🧛 Вампир',   css: 'vampire',   desc: 'Дубль → укус: урон + хил.' },
-    joker:     { icon: '🎲', short: 'Джокер',   label: '🎲 Джокер',   css: 'joker',     desc: 'HP-триггер → ×2 или ×3.' },
+    joker:     { icon: '🎲', short: 'Джокер',   label: '🎲 Джокер',   css: 'joker',     desc: 'HP-триггер → ×2.5 или ×3.5.' },
     druid:     { icon: '🐉', short: 'Друид',    label: '🐉 Друид',    css: 'druid',     desc: 'Дубль → суммон.' },
     berserker: { icon: '🔥', short: 'Берсерк',  label: '🔥 Берсерк',  css: 'berserker', desc: 'Мало HP → бонус.' }
   };
@@ -365,8 +365,10 @@
     66: { type: 'bear', name: 'Медведь', icon: '🐻', hp: 132, mult: 1.0, canStun: true  }
   };
 
-  var BARB_WEAK_MULT = 0.8;  // −20%
-  var ASSASSIN_CRIT = 1.9;   // было ×2
+  var BARB_WEAK_MULT = 0.8;   // −20%
+  var ASSASSIN_CRIT = 1.9;    // крит Ассасина
+  var JOKER_ROUND_MULT = 2.5; // круглое HP
+  var JOKER_BEAUTIFUL_MULT = 3.5; // красивое HP
 
   var classes = { 1: 'assassin', 2: 'barbarian' };
   var pendingClasses = { 1: 'assassin', 2: 'barbarian' };
@@ -478,9 +480,9 @@
       if ((p === 1 ? c1 : c2) !== 'joker') return;
       var cur = jb[p];
       if (beautiful(h1) || beautiful(h2)) {
-        if (3 > cur) jb[p] = 3;
+        if (JOKER_BEAUTIFUL_MULT > cur) jb[p] = JOKER_BEAUTIFUL_MULT;
       } else if (round(h1) || round(h2)) {
-        if (2 > cur) jb[p] = 2;
+        if (JOKER_ROUND_MULT > cur) jb[p] = JOKER_ROUND_MULT;
       }
     }
 
@@ -745,11 +747,11 @@
     var badge = document.getElementById('buff' + p);
     if (classes[p] === 'joker' && !gameOver && jokerBuff[p] > 0) {
       el.classList.add('has-buff');
-      if (jokerBuff[p] === 3) {
-        badge.textContent = '🎲 x3';
+      if (jokerBuff[p] === JOKER_BEAUTIFUL_MULT) {
+        badge.textContent = '🎲 x' + JOKER_BEAUTIFUL_MULT;
         badge.className = 'buff-badge tier3';
       } else {
-        badge.textContent = '🎲 x2';
+        badge.textContent = '🎲 x' + JOKER_ROUND_MULT;
         badge.className = 'buff-badge tier15';
       }
     } else {
@@ -815,8 +817,8 @@
     if (isWeak) extraClass = ' weak';
     else if (isCrit) extraClass = ' crit';
     else if (heal) extraClass = ' vampire';
-    else if (jokerMult === 3) extraClass = ' joker';
-    else if (jokerMult === 2) extraClass = ' joker15';
+    else if (jokerMult === JOKER_BEAUTIFUL_MULT) extraClass = ' joker';
+    else if (jokerMult === JOKER_ROUND_MULT) extraClass = ' joker15';
     else if (rageBonus > 0) extraClass = ' rage';
     else if (summonInfo) extraClass = ' summon-attack';
     else if (isDouble) extraClass = ' double';
@@ -830,8 +832,8 @@
     var suffix = '';
     if (isWeak) suffix = ' 💜 −20%';
     else if (isCrit) suffix = ' 💥 КРИТ×1.9';
-    else if (jokerMult === 3) suffix = ' 🎲×3';
-    else if (jokerMult === 2) suffix = ' 🎲×2';
+    else if (jokerMult === JOKER_BEAUTIFUL_MULT) suffix = ' 🎲×' + JOKER_BEAUTIFUL_MULT;
+    else if (jokerMult === JOKER_ROUND_MULT) suffix = ' 🎲×' + JOKER_ROUND_MULT;
     else if (heal) suffix = ' 🧛 +' + heal;
     if (rageBonus > 0) suffix += ' 🩸+' + rageBonus;
     if (stunCaused) suffix += ' ⚡';
@@ -864,7 +866,7 @@
 
   function addJokerBuffLog(p, mult) {
     var entry = document.createElement('div');
-    entry.className = 'log-entry ' + (mult === 3 ? 'buff' : 'buff15');
+    entry.className = 'log-entry ' + (mult === JOKER_BEAUTIFUL_MULT ? 'buff' : 'buff15');
     var idx = document.createElement('span'); idx.className = 'idx'; idx.textContent = '🎲';
     var who = document.createElement('span'); who.className = 'who'; who.textContent = 'Джокер Игрок ' + p;
     var dmgEl = document.createElement('span'); dmgEl.className = 'dmg';
@@ -898,8 +900,8 @@
       if (classes[p] !== 'joker') return;
       var cur = jokerBuff[p];
       var newBuff = 0;
-      if (isBeautiful(hp1) || isBeautiful(hp2)) newBuff = 3;
-      else if (isRound(hp1) || isRound(hp2)) newBuff = 2;
+      if (isBeautiful(hp1) || isBeautiful(hp2)) newBuff = JOKER_BEAUTIFUL_MULT;
+      else if (isRound(hp1) || isRound(hp2)) newBuff = JOKER_ROUND_MULT;
       if (newBuff > cur) {
         jokerBuff[p] = newBuff;
         addJokerBuffLog(p, newBuff);
@@ -1029,8 +1031,8 @@
         dmg = Math.round(baseDmg * jokerMult);
         jokerBuff[attacker] = 0;
         resultEl.textContent = dmg + '';
-        resultEl.className = 'result ' + (jokerMult === 3 ? 'joker' : 'joker15');
-        setDieGlow(jokerMult === 3 ? 'joker' : 'joker15');
+        resultEl.className = 'result ' + (jokerMult === JOKER_BEAUTIFUL_MULT ? 'joker' : 'joker15');
+        setDieGlow(jokerMult === JOKER_BEAUTIFUL_MULT ? 'joker' : 'joker15');
         setTimeout(function() { setDieGlow(null); }, 700);
         setHint('🎲 Джокер ×' + jokerMult + '!');
       }
