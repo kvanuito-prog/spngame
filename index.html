@@ -10,7 +10,6 @@
 :root{
     --bg:#05070b;
     --panel:#0b1018;
-    --panel2:#0e141e;
     --blue:#00a8ff;
     --cyan:#24d8ff;
     --text:#f3f7fb;
@@ -18,6 +17,7 @@
     --danger:#ff3d58;
     --green:#36e28c;
     --yellow:#ffd34d;
+    --purple:#b66cff;
 }
 
 *{
@@ -40,7 +40,7 @@ body{
     font-family:Arial,Helvetica,sans-serif;
 }
 
-button,input{
+button,input,select{
     font-family:inherit;
 }
 
@@ -51,28 +51,28 @@ button{
 .page{
     width:100%;
     height:100vh;
-    padding:10px;
+    padding:8px;
     display:flex;
     flex-direction:column;
-    gap:8px;
+    gap:6px;
 }
 
 /* HEADER */
 
 .header{
-    min-height:58px;
+    min-height:52px;
     background:linear-gradient(135deg,#0b111b,#101925);
     border:1px solid rgba(0,168,255,.22);
     border-radius:12px;
     display:flex;
     align-items:center;
     justify-content:space-between;
-    padding:8px 16px;
+    padding:7px 15px;
     box-shadow:0 8px 30px rgba(0,0,0,.35);
 }
 
 .logo{
-    font-size:24px;
+    font-size:23px;
     font-weight:900;
     letter-spacing:2px;
 }
@@ -86,90 +86,100 @@ button{
 }
 
 .round-title{
-    font-size:12px;
+    font-size:11px;
     color:var(--muted);
     font-weight:800;
     letter-spacing:1px;
 }
 
 .score{
-    font-size:23px;
+    font-size:22px;
     font-weight:900;
     color:var(--cyan);
-    line-height:24px;
+    line-height:23px;
 }
 
 .status{
-    min-width:170px;
+    min-width:190px;
     text-align:right;
-    font-size:12px;
+    font-size:11px;
     color:var(--green);
     font-weight:900;
-    letter-spacing:.8px;
+    letter-spacing:.7px;
 }
 
-/* NAMES */
+/* SETUP */
 
 .names-panel{
     background:var(--panel);
     border:1px solid rgba(255,255,255,.07);
-    border-radius:12px;
-    padding:8px 12px;
+    border-radius:11px;
+    padding:6px 10px;
     display:flex;
     align-items:center;
     justify-content:center;
-    gap:10px;
+    gap:7px;
+}
+
+.setup-box{
+    display:flex;
+    align-items:center;
+    gap:6px;
 }
 
 .name-input{
-    width:220px;
-    height:38px;
+    width:175px;
+    height:34px;
     background:#060a10;
     border:1px solid rgba(0,168,255,.25);
-    border-radius:8px;
+    border-radius:7px;
     outline:none;
     color:white;
-    padding:0 12px;
-    font-size:13px;
+    padding:0 10px;
+    font-size:12px;
     font-weight:800;
     text-align:center;
 }
 
 .name-input:focus{
     border-color:var(--cyan);
-    box-shadow:0 0 15px rgba(0,168,255,.12);
 }
 
-.name-input::placeholder{
-    color:#667384;
+.class-select{
+    width:125px;
+    height:34px;
+    background:#060a10;
+    border:1px solid rgba(0,168,255,.25);
+    border-radius:7px;
+    color:white;
+    padding:0 7px;
+    font-size:11px;
+    font-weight:800;
+    outline:none;
 }
 
 .start-button{
-    height:38px;
-    padding:0 18px;
+    height:34px;
+    padding:0 16px;
     border:0;
-    border-radius:8px;
+    border-radius:7px;
     color:white;
+    font-size:11px;
     font-weight:900;
     background:linear-gradient(135deg,#087cb5,#00a8ff);
-    box-shadow:0 5px 18px rgba(0,168,255,.18);
-}
-
-.start-button:hover{
-    filter:brightness(1.12);
 }
 
 /* COIN */
 
 .coin-panel{
-    min-height:50px;
+    min-height:43px;
     background:var(--panel);
     border:1px solid rgba(255,255,255,.07);
-    border-radius:12px;
+    border-radius:11px;
     display:flex;
     align-items:center;
     justify-content:center;
-    gap:12px;
+    gap:10px;
 }
 
 .coin-button{
@@ -177,14 +187,9 @@ button{
     background:linear-gradient(135deg,#087cb5,#00a8ff);
     color:white;
     font-weight:900;
-    padding:9px 20px;
-    border-radius:9px;
-    transition:.2s;
-}
-
-.coin-button:hover:not(:disabled){
-    transform:translateY(-1px);
-    filter:brightness(1.12);
+    font-size:11px;
+    padding:7px 18px;
+    border-radius:8px;
 }
 
 .coin-button:disabled{
@@ -195,7 +200,7 @@ button{
 .coin-result{
     min-width:220px;
     text-align:center;
-    font-size:12px;
+    font-size:11px;
     font-weight:900;
     color:var(--yellow);
     letter-spacing:1px;
@@ -207,8 +212,8 @@ button{
     flex:1;
     min-height:0;
     display:grid;
-    grid-template-columns:minmax(240px,1fr) minmax(300px,1.15fr) minmax(240px,1fr);
-    gap:10px;
+    grid-template-columns:minmax(240px,1fr) minmax(310px,1.15fr) minmax(240px,1fr);
+    gap:8px;
 }
 
 .player-card,
@@ -216,14 +221,14 @@ button{
     min-height:0;
     background:linear-gradient(160deg,#0b1018,#080d14);
     border:1px solid rgba(255,255,255,.07);
-    border-radius:14px;
+    border-radius:13px;
     overflow:hidden;
 }
 
 .player-card{
     display:flex;
     flex-direction:column;
-    padding:14px;
+    padding:12px;
     position:relative;
 }
 
@@ -236,56 +241,59 @@ button{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:8px;
+    margin-bottom:5px;
 }
 
 .player-number{
-    font-size:11px;
+    font-size:10px;
     color:var(--muted);
     font-weight:900;
     letter-spacing:1px;
 }
 
 .player-name{
-    font-size:22px;
+    font-size:21px;
     font-weight:900;
-    margin-bottom:4px;
     white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;
 }
 
 .class-name{
-    font-size:12px;
+    font-size:11px;
     color:var(--cyan);
-    font-weight:800;
-    margin-bottom:18px;
+    font-weight:900;
+    margin-top:3px;
+    margin-bottom:13px;
+}
+
+.class-name.assassin{
+    color:var(--purple);
 }
 
 .hp-row{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:7px;
+    margin-bottom:6px;
 }
 
 .hp-label{
-    font-size:11px;
+    font-size:10px;
     color:var(--muted);
     font-weight:800;
 }
 
 .hp-value{
-    font-size:18px;
+    font-size:17px;
     font-weight:900;
 }
 
 .hp-bar{
-    height:13px;
+    height:12px;
     background:#1b222c;
     border-radius:20px;
     overflow:hidden;
-    border:1px solid rgba(255,255,255,.05);
 }
 
 .hp-fill{
@@ -297,14 +305,14 @@ button{
 
 .turn-label,
 .stun-label{
-    min-height:30px;
+    min-height:28px;
     display:flex;
     align-items:center;
     justify-content:center;
     border-radius:7px;
-    font-size:11px;
+    font-size:10px;
     font-weight:900;
-    letter-spacing:.7px;
+    letter-spacing:.5px;
 }
 
 .turn-label{
@@ -319,7 +327,7 @@ button{
 }
 
 .stun-label{
-    margin-top:7px;
+    margin-top:5px;
     background:rgba(255,211,77,.08);
     color:#69717d;
 }
@@ -330,17 +338,17 @@ button{
 }
 
 .controls{
-    margin-top:7px;
+    margin-top:5px;
 }
 
 .kick-button{
     width:100%;
-    padding:7px;
+    padding:6px;
     border-radius:7px;
     border:1px solid rgba(255,61,88,.3);
     background:rgba(255,61,88,.07);
     color:#ff6b7d;
-    font-size:10px;
+    font-size:9px;
     font-weight:900;
 }
 
@@ -350,42 +358,41 @@ button{
     display:flex;
     flex-direction:column;
     align-items:center;
-    padding:12px;
+    padding:9px;
 }
 
 .arena-turn{
-    height:30px;
+    height:29px;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:14px;
+    font-size:13px;
     font-weight:900;
     color:var(--cyan);
-    letter-spacing:1px;
+    letter-spacing:.8px;
     text-align:center;
 }
 
 .dice-area{
-    flex:0 0 auto;
     display:flex;
     align-items:center;
     justify-content:center;
-    gap:18px;
-    margin-top:4px;
+    gap:17px;
+    margin-top:3px;
 }
 
 .dice{
-    width:74px;
-    height:74px;
+    width:70px;
+    height:70px;
     background:#fff;
-    border-radius:13px;
+    border-radius:12px;
     box-shadow:
         0 7px 22px rgba(0,0,0,.4),
         inset 0 0 0 2px rgba(0,0,0,.08);
     display:grid;
     grid-template-columns:repeat(3,1fr);
     grid-template-rows:repeat(3,1fr);
-    padding:10px;
+    padding:9px;
 }
 
 .dot{
@@ -408,46 +415,61 @@ button{
 .pos9{grid-area:3/3}
 
 .result-number{
-    margin-top:8px;
-    height:42px;
-    font-size:38px;
-    line-height:42px;
+    margin-top:6px;
+    height:38px;
+    font-size:35px;
+    line-height:38px;
     font-weight:1000;
-    color:white;
 }
 
 .damage-text{
-    height:25px;
+    height:23px;
     color:var(--danger);
-    font-size:13px;
+    font-size:12px;
     font-weight:900;
+    text-align:center;
+}
+
+.critical-text{
+    height:22px;
+    color:var(--purple);
+    font-size:13px;
+    font-weight:1000;
+    letter-spacing:1px;
+    opacity:0;
+    transition:.2s;
+}
+
+.critical-text.visible{
+    opacity:1;
+    text-shadow:0 0 14px rgba(182,108,255,.7);
 }
 
 .log{
     width:100%;
     flex:1;
-    min-height:80px;
-    margin-top:8px;
+    min-height:65px;
+    margin-top:5px;
     background:#060a10;
     border:1px solid rgba(255,255,255,.06);
-    border-radius:9px;
-    padding:7px;
+    border-radius:8px;
+    padding:6px;
     overflow:hidden;
     display:flex;
     flex-direction:column;
-    gap:5px;
+    gap:4px;
 }
 
 .log-entry{
-    font-size:10px;
-    line-height:13px;
+    font-size:9px;
+    line-height:12px;
     color:#aeb8c5;
-    padding:4px 6px;
+    padding:3px 5px;
     border-left:2px solid rgba(0,168,255,.45);
     background:rgba(255,255,255,.015);
 }
 
-/* OVERLAY */
+/* WINNER */
 
 .overlay{
     position:fixed;
@@ -475,11 +497,10 @@ button{
     border-radius:16px;
     padding:25px;
     text-align:center;
-    box-shadow:0 20px 70px rgba(0,0,0,.6);
 }
 
 .winner-title{
-    font-size:27px;
+    font-size:26px;
     font-weight:1000;
     margin-bottom:8px;
 }
@@ -500,8 +521,6 @@ button{
     font-weight:900;
 }
 
-/* MOBILE / TABLET */
-
 @media (orientation:portrait){
     html,body{
         overflow:auto;
@@ -518,39 +537,49 @@ button{
 }
 
 @media (max-height:650px) and (orientation:landscape){
+
     .page{
-        padding:7px;
-        gap:5px;
+        padding:6px;
+        gap:4px;
     }
 
     .header{
-        min-height:45px;
-        padding:5px 12px;
-    }
-
-    .logo{
-        font-size:20px;
-    }
-
-    .names-panel{
+        min-height:43px;
         padding:5px 10px;
     }
 
+    .logo{
+        font-size:19px;
+    }
+
+    .names-panel{
+        padding:4px 8px;
+    }
+
     .name-input,
+    .class-select,
     .start-button{
-        height:32px;
+        height:30px;
+    }
+
+    .name-input{
+        width:155px;
+    }
+
+    .class-select{
+        width:112px;
     }
 
     .coin-panel{
-        min-height:40px;
+        min-height:37px;
     }
 
     .coin-button{
-        padding:6px 15px;
+        padding:6px 14px;
     }
 
     .player-card{
-        padding:10px;
+        padding:9px;
     }
 
     .player-name{
@@ -558,28 +587,28 @@ button{
     }
 
     .class-name{
-        margin-bottom:9px;
+        margin-bottom:8px;
     }
 
     .dice{
-        width:60px;
-        height:60px;
-        padding:8px;
+        width:58px;
+        height:58px;
+        padding:7px;
     }
 
     .dot{
-        width:10px;
-        height:10px;
+        width:9px;
+        height:9px;
     }
 
     .result-number{
-        font-size:31px;
-        height:34px;
-        line-height:34px;
+        font-size:29px;
+        height:31px;
+        line-height:31px;
     }
 
     .log{
-        min-height:55px;
+        min-height:50px;
     }
 }
 </style>
@@ -589,152 +618,347 @@ button{
 
 <div class="page">
 
-    <header class="header">
-        <div class="logo">SPN <span>BATTLE</span></div>
+<header class="header">
 
-        <div class="header-center">
-            <div class="round-title" id="roundTitle">РАУНД 1 / 3</div>
-            <div class="score" id="score">0 : 0</div>
+    <div class="logo">
+        SPN <span>BATTLE</span>
+    </div>
+
+    <div class="header-center">
+        <div class="round-title" id="roundTitle">
+            РАУНД 1 / 3
         </div>
 
-        <div class="status" id="status">ВВЕДИТЕ НИКИ</div>
-    </header>
+        <div class="score" id="score">
+            0 : 0
+        </div>
+    </div>
 
-    <!-- ВВОД НИКОВ -->
-    <section class="names-panel" id="namesPanel">
+    <div class="status" id="status">
+        ВВЕДИТЕ НИКИ
+    </div>
+
+</header>
+
+
+<!-- НАСТРОЙКА БОЯ -->
+
+<section class="names-panel" id="namesPanel">
+
+    <div class="setup-box">
+
         <input
             class="name-input"
             id="name1Input"
-            type="text"
             maxlength="20"
             placeholder="НИК ИГРОКА 1"
             autocomplete="off"
         >
 
-        <button class="start-button" id="startGameButton">
-            НАЧАТЬ БОЙ
-        </button>
+        <select class="class-select" id="class1Select">
+            <option value="barbar">ВАРВАР</option>
+            <option value="assassin">АССАСИН</option>
+        </select>
+
+    </div>
+
+
+    <button class="start-button" id="startGameButton">
+        НАЧАТЬ БОЙ
+    </button>
+
+
+    <div class="setup-box">
 
         <input
             class="name-input"
             id="name2Input"
-            type="text"
             maxlength="20"
             placeholder="НИК ИГРОКА 2"
             autocomplete="off"
         >
-    </section>
 
-    <!-- ОРЕЛ / РЕШКА -->
-    <section class="coin-panel">
-        <button class="coin-button" id="coinButton" disabled>
-            ОРЕЛ / РЕШКА
+        <select class="class-select" id="class2Select">
+            <option value="barbar">ВАРВАР</option>
+            <option value="assassin">АССАСИН</option>
+        </select>
+
+    </div>
+
+</section>
+
+
+<!-- ОРЕЛ / РЕШКА -->
+
+<section class="coin-panel">
+
+    <button
+        class="coin-button"
+        id="coinButton"
+        disabled
+    >
+        ОРЕЛ / РЕШКА
+    </button>
+
+    <div
+        class="coin-result"
+        id="coinResult"
+    >
+        СНАЧАЛА ВВЕДИТЕ НИКИ
+    </div>
+
+</section>
+
+
+<main class="battle">
+
+
+<!-- PLAYER 1 -->
+
+<section class="player-card" id="player1">
+
+    <div class="player-top">
+
+        <div class="player-number">
+            ИГРОК 1
+        </div>
+
+    </div>
+
+    <div
+        class="player-name"
+        id="player1Name"
+    >
+        ИГРОК 1
+    </div>
+
+    <div
+        class="class-name"
+        id="class1Name"
+    >
+        ВАРВАР
+    </div>
+
+    <div class="hp-row">
+
+        <div class="hp-label">
+            ЗДОРОВЬЕ
+        </div>
+
+        <div
+            class="hp-value"
+            id="hp1Text"
+        >
+            1000
+        </div>
+
+    </div>
+
+    <div class="hp-bar">
+
+        <div
+            class="hp-fill"
+            id="hp1Bar"
+        ></div>
+
+    </div>
+
+    <div
+        class="turn-label"
+        id="turn1"
+    >
+        НЕ В ХОДУ
+    </div>
+
+    <div
+        class="stun-label"
+        id="stun1"
+    >
+        НЕ ОГЛУШЁН
+    </div>
+
+    <div class="controls">
+
+        <button
+            class="kick-button"
+            onclick="kickMessage()"
+        >
+            КИК / ЗАНЯТЬ СЛОТ
         </button>
 
-        <div class="coin-result" id="coinResult">СНАЧАЛА ВВЕДИТЕ НИКИ</div>
-    </section>
+    </div>
 
-    <main class="battle">
+</section>
 
-        <!-- ИГРОК 1 -->
-        <section class="player-card" id="player1">
 
-            <div class="player-top">
-                <div class="player-number">ИГРОК 1</div>
-            </div>
+<!-- ARENA -->
 
-            <div class="player-name" id="player1Name">ИГРОК 1</div>
-            <div class="class-name">ВАРВАР</div>
+<section class="arena">
 
-            <div class="hp-row">
-                <div class="hp-label">ЗДОРОВЬЕ</div>
-                <div class="hp-value" id="hp1Text">1000</div>
-            </div>
+    <div
+        class="arena-turn"
+        id="arenaTurn"
+    >
+        ОЖИДАНИЕ
+    </div>
 
-            <div class="hp-bar">
-                <div class="hp-fill" id="hp1Bar"></div>
-            </div>
 
-            <div class="turn-label" id="turn1">НЕ В ХОДУ</div>
-            <div class="stun-label" id="stun1">НЕ ОГЛУШЁН</div>
+    <div class="dice-area">
 
-            <div class="controls">
-                <button class="kick-button" onclick="kickMessage()">
-                    КИК / ЗАНЯТЬ СЛОТ
-                </button>
-            </div>
+        <div
+            class="dice"
+            id="dice1"
+        ></div>
 
-        </section>
+        <div
+            class="dice"
+            id="dice2"
+        ></div>
 
-        <!-- ЦЕНТР -->
-        <section class="arena">
+    </div>
 
-            <div class="arena-turn" id="arenaTurn">
-                ОЖИДАНИЕ
-            </div>
 
-            <div class="dice-area">
-                <div class="dice" id="dice1"></div>
-                <div class="dice" id="dice2"></div>
-            </div>
+    <div
+        class="result-number"
+        id="resultNumber"
+    >
+        —
+    </div>
 
-            <div class="result-number" id="resultNumber">—</div>
 
-            <div class="damage-text" id="damageText">
-                ОЖИДАНИЕ БРОСКА
-            </div>
+    <div
+        class="critical-text"
+        id="criticalText"
+    >
+        ⚡ КРИТИЧЕСКИЙ УРОН!
+    </div>
 
-            <div class="log" id="log"></div>
 
-        </section>
+    <div
+        class="damage-text"
+        id="damageText"
+    >
+        ОЖИДАНИЕ БРОСКА
+    </div>
 
-        <!-- ИГРОК 2 -->
-        <section class="player-card" id="player2">
 
-            <div class="player-top">
-                <div class="player-number">ИГРОК 2</div>
-            </div>
+    <div
+        class="log"
+        id="log"
+    ></div>
 
-            <div class="player-name" id="player2Name">ИГРОК 2</div>
-            <div class="class-name">ВАРВАР</div>
+</section>
 
-            <div class="hp-row">
-                <div class="hp-label">ЗДОРОВЬЕ</div>
-                <div class="hp-value" id="hp2Text">1000</div>
-            </div>
 
-            <div class="hp-bar">
-                <div class="hp-fill" id="hp2Bar"></div>
-            </div>
+<!-- PLAYER 2 -->
 
-            <div class="turn-label" id="turn2">НЕ В ХОДУ</div>
-            <div class="stun-label" id="stun2">НЕ ОГЛУШЁН</div>
+<section class="player-card" id="player2">
 
-            <div class="controls">
-                <button class="kick-button" onclick="kickMessage()">
-                    КИК / ЗАНЯТЬ СЛОТ
-                </button>
-            </div>
+    <div class="player-top">
 
-        </section>
+        <div class="player-number">
+            ИГРОК 2
+        </div>
 
-    </main>
+    </div>
+
+    <div
+        class="player-name"
+        id="player2Name"
+    >
+        ИГРОК 2
+    </div>
+
+    <div
+        class="class-name"
+        id="class2Name"
+    >
+        ВАРВАР
+    </div>
+
+    <div class="hp-row">
+
+        <div class="hp-label">
+            ЗДОРОВЬЕ
+        </div>
+
+        <div
+            class="hp-value"
+            id="hp2Text"
+        >
+            1000
+        </div>
+
+    </div>
+
+    <div class="hp-bar">
+
+        <div
+            class="hp-fill"
+            id="hp2Bar"
+        ></div>
+
+    </div>
+
+    <div
+        class="turn-label"
+        id="turn2"
+    >
+        НЕ В ХОДУ
+    </div>
+
+    <div
+        class="stun-label"
+        id="stun2"
+    >
+        НЕ ОГЛУШЁН
+    </div>
+
+    <div class="controls">
+
+        <button
+            class="kick-button"
+            onclick="kickMessage()"
+        >
+            КИК / ЗАНЯТЬ СЛОТ
+        </button>
+
+    </div>
+
+</section>
+
+</main>
+
 </div>
 
-<!-- ПОБЕДИТЕЛЬ -->
-<div class="overlay" id="winnerOverlay">
+
+<!-- WINNER -->
+
+<div
+    class="overlay"
+    id="winnerOverlay"
+>
 
     <div class="winner-box">
 
-        <div class="winner-title" id="winnerTitle">
+        <div
+            class="winner-title"
+            id="winnerTitle"
+        >
             ПОБЕДИТЕЛЬ
         </div>
 
-        <div class="winner-score" id="winnerScore">
+        <div
+            class="winner-score"
+            id="winnerScore"
+        >
             2 : 0
         </div>
 
-        <button class="restart" id="winnerClose">
+        <button
+            class="restart"
+            id="winnerClose"
+        >
             НОВЫЙ БОЙ
         </button>
 
@@ -742,12 +966,25 @@ button{
 
 </div>
 
+
 <script>
+
+/* =========================
+   CONSTANTS
+========================= */
+
 const MAX_HP = 1000;
 
 const TURN_DELAY = 900;
+
 const DICE_ANIMATION_TIME = 550;
+
 const NEXT_ROUND_DELAY = 1800;
+
+
+/* =========================
+   STATE
+========================= */
 
 let hp1 = MAX_HP;
 let hp2 = MAX_HP;
@@ -756,6 +993,7 @@ let score1 = 0;
 let score2 = 0;
 
 let currentRound = 1;
+
 let currentPlayer = 1;
 
 let stunned1 = false;
@@ -771,74 +1009,154 @@ let previousRoundLoser = null;
 let playerName1 = "ИГРОК 1";
 let playerName2 = "ИГРОК 2";
 
+let playerClass1 = "barbar";
+let playerClass2 = "barbar";
+
 let battleTimer = null;
 let diceTimer = null;
 let nextRoundTimer = null;
 let coinTimer = null;
 
 let audioContext = null;
+
 let soundEnabled = true;
 
-/* ELEMENTS */
 
-const namesPanel = document.getElementById("namesPanel");
+/* =========================
+   ELEMENTS
+========================= */
 
-const name1Input = document.getElementById("name1Input");
-const name2Input = document.getElementById("name2Input");
-const startGameButton = document.getElementById("startGameButton");
+const namesPanel =
+    document.getElementById("namesPanel");
 
-const coinButton = document.getElementById("coinButton");
-const coinResult = document.getElementById("coinResult");
+const name1Input =
+    document.getElementById("name1Input");
 
-const roundTitle = document.getElementById("roundTitle");
-const score = document.getElementById("score");
-const status = document.getElementById("status");
+const name2Input =
+    document.getElementById("name2Input");
 
-const arenaTurn = document.getElementById("arenaTurn");
+const class1Select =
+    document.getElementById("class1Select");
 
-const hp1Text = document.getElementById("hp1Text");
-const hp2Text = document.getElementById("hp2Text");
+const class2Select =
+    document.getElementById("class2Select");
 
-const hp1Bar = document.getElementById("hp1Bar");
-const hp2Bar = document.getElementById("hp2Bar");
+const startGameButton =
+    document.getElementById("startGameButton");
 
-const player1 = document.getElementById("player1");
-const player2 = document.getElementById("player2");
+const coinButton =
+    document.getElementById("coinButton");
 
-const player1Name = document.getElementById("player1Name");
-const player2Name = document.getElementById("player2Name");
+const coinResult =
+    document.getElementById("coinResult");
 
-const turn1 = document.getElementById("turn1");
-const turn2 = document.getElementById("turn2");
+const roundTitle =
+    document.getElementById("roundTitle");
 
-const stun1 = document.getElementById("stun1");
-const stun2 = document.getElementById("stun2");
+const score =
+    document.getElementById("score");
 
-const dice1 = document.getElementById("dice1");
-const dice2 = document.getElementById("dice2");
+const status =
+    document.getElementById("status");
 
-const resultNumber = document.getElementById("resultNumber");
-const damageText = document.getElementById("damageText");
+const arenaTurn =
+    document.getElementById("arenaTurn");
 
-const log = document.getElementById("log");
+const hp1Text =
+    document.getElementById("hp1Text");
 
-const winnerOverlay = document.getElementById("winnerOverlay");
-const winnerTitle = document.getElementById("winnerTitle");
-const winnerScore = document.getElementById("winnerScore");
-const winnerClose = document.getElementById("winnerClose");
+const hp2Text =
+    document.getElementById("hp2Text");
 
-/* DICE */
+const hp1Bar =
+    document.getElementById("hp1Bar");
+
+const hp2Bar =
+    document.getElementById("hp2Bar");
+
+const player1 =
+    document.getElementById("player1");
+
+const player2 =
+    document.getElementById("player2");
+
+const player1Name =
+    document.getElementById("player1Name");
+
+const player2Name =
+    document.getElementById("player2Name");
+
+const class1Name =
+    document.getElementById("class1Name");
+
+const class2Name =
+    document.getElementById("class2Name");
+
+const turn1 =
+    document.getElementById("turn1");
+
+const turn2 =
+    document.getElementById("turn2");
+
+const stun1 =
+    document.getElementById("stun1");
+
+const stun2 =
+    document.getElementById("stun2");
+
+const dice1 =
+    document.getElementById("dice1");
+
+const dice2 =
+    document.getElementById("dice2");
+
+const resultNumber =
+    document.getElementById("resultNumber");
+
+const damageText =
+    document.getElementById("damageText");
+
+const criticalText =
+    document.getElementById("criticalText");
+
+const log =
+    document.getElementById("log");
+
+const winnerOverlay =
+    document.getElementById("winnerOverlay");
+
+const winnerTitle =
+    document.getElementById("winnerTitle");
+
+const winnerScore =
+    document.getElementById("winnerScore");
+
+const winnerClose =
+    document.getElementById("winnerClose");
+
+
+/* =========================
+   DICE
+========================= */
 
 const dicePatterns = {
+
     1:[5],
+
     2:[1,9],
+
     3:[1,5,9],
+
     4:[1,3,7,9],
+
     5:[1,3,5,7,9],
+
     6:[1,3,4,6,7,9]
+
 };
 
-function drawDice(element, number){
+
+function drawDice(element,number){
 
     element.innerHTML = "";
 
@@ -846,15 +1164,49 @@ function drawDice(element, number){
 
     dicePatterns[number].forEach(position => {
 
-        const dot = document.createElement("span");
+        const dot =
+            document.createElement("span");
 
-        dot.className = `dot pos${position}`;
+        dot.className =
+            `dot pos${position}`;
 
         element.appendChild(dot);
+
     });
 }
 
-/* SOUND */
+
+/* =========================
+   PLAYER INFO
+========================= */
+
+function getPlayerName(player){
+
+    return player === 1
+        ? playerName1
+        : playerName2;
+}
+
+
+function getPlayerClass(player){
+
+    return player === 1
+        ? playerClass1
+        : playerClass2;
+}
+
+
+function getClassName(player){
+
+    return getPlayerClass(player) === "assassin"
+        ? "АССАСИН"
+        : "ВАРВАР";
+}
+
+
+/* =========================
+   SOUND
+========================= */
 
 function initAudio(){
 
@@ -863,29 +1215,42 @@ function initAudio(){
     if(!audioContext){
 
         audioContext =
-            new (window.AudioContext || window.webkitAudioContext)();
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+
     }
 
     if(audioContext.state === "suspended"){
+
         audioContext.resume();
+
     }
 }
 
+
 function playClick(
-    frequency = 520,
-    duration = .045,
-    volume = .035
+    frequency=520,
+    duration=.045,
+    volume=.035
 ){
 
     if(!soundEnabled) return;
 
     initAudio();
 
-    const oscillator = audioContext.createOscillator();
-    const gain = audioContext.createGain();
+    const oscillator =
+        audioContext.createOscillator();
 
-    oscillator.frequency.value = frequency;
-    oscillator.type = "sine";
+    const gain =
+        audioContext.createGain();
+
+    oscillator.frequency.value =
+        frequency;
+
+    oscillator.type =
+        "sine";
 
     gain.gain.setValueAtTime(
         volume,
@@ -898,7 +1263,10 @@ function playClick(
     );
 
     oscillator.connect(gain);
-    gain.connect(audioContext.destination);
+
+    gain.connect(
+        audioContext.destination
+    );
 
     oscillator.start();
 
@@ -907,13 +1275,28 @@ function playClick(
     );
 }
 
+
 function playButtonSound(){
-    playClick(520,.045,.035);
+
+    playClick(
+        520,
+        .045,
+        .035
+    );
+
 }
 
+
 function playHoverSound(){
-    playClick(720,.025,.012);
+
+    playClick(
+        720,
+        .025,
+        .012
+    );
+
 }
+
 
 function playOpenSound(){
 
@@ -921,10 +1304,14 @@ function playOpenSound(){
 
     initAudio();
 
-    const oscillator = audioContext.createOscillator();
-    const gain = audioContext.createGain();
+    const oscillator =
+        audioContext.createOscillator();
 
-    oscillator.type = "sine";
+    const gain =
+        audioContext.createGain();
+
+    oscillator.type =
+        "sine";
 
     oscillator.frequency.setValueAtTime(
         420,
@@ -947,7 +1334,10 @@ function playOpenSound(){
     );
 
     oscillator.connect(gain);
-    gain.connect(audioContext.destination);
+
+    gain.connect(
+        audioContext.destination
+    );
 
     oscillator.start();
 
@@ -956,38 +1346,106 @@ function playOpenSound(){
     );
 }
 
+
+function playCriticalSound(){
+
+    if(!soundEnabled) return;
+
+    initAudio();
+
+    const oscillator =
+        audioContext.createOscillator();
+
+    const gain =
+        audioContext.createGain();
+
+    oscillator.type =
+        "triangle";
+
+    oscillator.frequency.setValueAtTime(
+        500,
+        audioContext.currentTime
+    );
+
+    oscillator.frequency.linearRampToValueAtTime(
+        1100,
+        audioContext.currentTime + .18
+    );
+
+    gain.gain.setValueAtTime(
+        .045,
+        audioContext.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        .001,
+        audioContext.currentTime + .25
+    );
+
+    oscillator.connect(gain);
+
+    gain.connect(
+        audioContext.destination
+    );
+
+    oscillator.start();
+
+    oscillator.stop(
+        audioContext.currentTime + .25
+    );
+}
+
+
 function playCloseSound(){
-    playClick(330,.06,.025);
+
+    playClick(
+        330,
+        .06,
+        .025
+    );
+
 }
 
-/* HELPERS */
 
-function getPlayerName(player){
-
-    return player === 1
-        ? playerName1
-        : playerName2;
-}
+/* =========================
+   LOG
+========================= */
 
 function addLog(message){
 
-    const entry = document.createElement("div");
+    const entry =
+        document.createElement("div");
 
-    entry.className = "log-entry";
-    entry.textContent = message;
+    entry.className =
+        "log-entry";
+
+    entry.textContent =
+        message;
 
     log.prepend(entry);
 
     while(log.children.length > 9){
-        log.removeChild(log.lastChild);
+
+        log.removeChild(
+            log.lastChild
+        );
+
     }
 }
+
+
+/* =========================
+   TIMERS
+========================= */
 
 function clearTimers(){
 
     clearTimeout(battleTimer);
+
     clearTimeout(diceTimer);
+
     clearTimeout(nextRoundTimer);
+
     clearInterval(coinTimer);
 
     battleTimer = null;
@@ -996,12 +1454,19 @@ function clearTimers(){
     coinTimer = null;
 }
 
-/* UI */
+
+/* =========================
+   UI
+========================= */
 
 function updateUI(){
 
-    hp1Text.textContent = Math.max(0,hp1);
-    hp2Text.textContent = Math.max(0,hp2);
+    hp1Text.textContent =
+        Math.max(0,hp1);
+
+    hp2Text.textContent =
+        Math.max(0,hp2);
+
 
     hp1Bar.style.width =
         `${Math.max(0,hp1 / MAX_HP * 100)}%`;
@@ -1009,11 +1474,14 @@ function updateUI(){
     hp2Bar.style.width =
         `${Math.max(0,hp2 / MAX_HP * 100)}%`;
 
+
     score.textContent =
         `${score1} : ${score2}`;
 
+
     roundTitle.textContent =
         `РАУНД ${currentRound} / 3`;
+
 
     player1.classList.toggle(
         "active",
@@ -1025,6 +1493,7 @@ function updateUI(){
         gameStarted && currentPlayer === 2
     );
 
+
     turn1.textContent =
         gameStarted && currentPlayer === 1
             ? `ХОД: ${playerName1}`
@@ -1034,6 +1503,7 @@ function updateUI(){
         gameStarted && currentPlayer === 2
             ? `ХОД: ${playerName2}`
             : "НЕ В ХОДУ";
+
 
     stun1.textContent =
         stunned1
@@ -1045,6 +1515,7 @@ function updateUI(){
             ? "ОГЛУШЁН • ХОД ПРОПУСКАЕТ"
             : "НЕ ОГЛУШЁН";
 
+
     stun1.classList.toggle(
         "visible",
         stunned1
@@ -1055,6 +1526,7 @@ function updateUI(){
         stunned2
     );
 
+
     if(gameStarted){
 
         status.textContent =
@@ -1062,10 +1534,14 @@ function updateUI(){
 
         arenaTurn.textContent =
             `ХОД: ${getPlayerName(currentPlayer)}`;
+
     }
 }
 
-/* RESET ROUND */
+
+/* =========================
+   RESET ROUND
+========================= */
 
 function resetRoundState(){
 
@@ -1080,18 +1556,26 @@ function resetRoundState(){
 
     currentPlayer = 1;
 
+    criticalText.classList.remove(
+        "visible"
+    );
+
     drawDice(dice1,0);
     drawDice(dice2,0);
 
-    resultNumber.textContent = "—";
+    resultNumber.textContent =
+        "—";
 
     damageText.textContent =
         "ОЖИДАНИЕ БРОСКА";
 }
 
-/* START ROUND */
 
-function startRound(mode = "manual"){
+/* =========================
+   START ROUND
+========================= */
+
+function startRound(mode="manual"){
 
     clearTimers();
 
@@ -1099,9 +1583,11 @@ function startRound(mode = "manual"){
 
     updateUI();
 
+
     addLog(
-        `⚔️ Начинается раунд ${currentRound}. HP ${playerName1} и ${playerName2} восстановлены до 1000.`
+        `⚔️ Начинается раунд ${currentRound}. HP восстановлены до 1000.`
     );
+
 
     /* ROUND 1 */
 
@@ -1119,11 +1605,12 @@ function startRound(mode = "manual"){
             "ОЖИДАНИЕ";
 
         addLog(
-            `🪙 Нажмите «ОРЕЛ / РЕШКА», чтобы определить, кто начинает.`
+            "🪙 Нажмите «ОРЕЛ / РЕШКА», чтобы определить первого игрока."
         );
 
         return;
     }
+
 
     /* ROUND 2 */
 
@@ -1134,14 +1621,6 @@ function startRound(mode = "manual"){
         currentPlayer =
             previousRoundLoser;
 
-        /*
-          ВАЖНО:
-          Эта надпись показывается только
-          во время перехода к началу раунда.
-          После старта первого броска UI
-          снова показывает обычный ход.
-        */
-
         coinResult.textContent =
             "ПРАВО НЕУДАЧНИКА";
 
@@ -1149,7 +1628,7 @@ function startRound(mode = "manual"){
             `ПЕРВЫМ ХОДИТ ${getPlayerName(currentPlayer)}`;
 
         arenaTurn.textContent =
-            `ПРАВО НЕУДАЧНИКА`;
+            "ПРАВО НЕУДАЧНИКА";
 
         addLog(
             `⚔️ Право неудачника: ${getPlayerName(currentPlayer)} проиграл прошлый раунд и начинает этот раунд.`
@@ -1159,10 +1638,6 @@ function startRound(mode = "manual"){
 
         updateUI();
 
-        /*
-          Через небольшую паузу надпись
-          «ПРАВО НЕУДАЧНИКА» исчезнет.
-        */
 
         battleTimer = setTimeout(() => {
 
@@ -1174,6 +1649,7 @@ function startRound(mode = "manual"){
 
             updateUI();
 
+
             battleTimer = setTimeout(() => {
 
                 automaticTurn();
@@ -1184,6 +1660,7 @@ function startRound(mode = "manual"){
 
         return;
     }
+
 
     /* ROUND 3 */
 
@@ -1206,11 +1683,13 @@ function startRound(mode = "manual"){
 
         runAutomaticCoinToss();
 
-        return;
     }
 }
 
-/* ROUND 1 COIN */
+
+/* =========================
+   ROUND 1 COIN
+========================= */
 
 function determineFirstPlayer(){
 
@@ -1224,15 +1703,18 @@ function determineFirstPlayer(){
 
     playButtonSound();
 
+
     const result =
         Math.random() < .5
             ? "ОРЕЛ"
             : "РЕШКА";
 
+
     currentPlayer =
         result === "ОРЕЛ"
             ? 1
             : 2;
+
 
     coinResult.textContent =
         result;
@@ -1241,11 +1723,14 @@ function determineFirstPlayer(){
 
     coinButton.disabled = true;
 
+
     addLog(
         `🪙 Выпало ${result}. ${getPlayerName(currentPlayer)} получает право первого броска.`
     );
 
+
     updateUI();
+
 
     battleTimer = setTimeout(() => {
 
@@ -1254,13 +1739,17 @@ function determineFirstPlayer(){
     },TURN_DELAY);
 }
 
-/* ROUND 3 AUTO COIN */
+
+/* =========================
+   ROUND 3 AUTO COIN
+========================= */
 
 function runAutomaticCoinToss(){
 
     let flips = 0;
 
     const totalFlips = 12;
+
 
     coinTimer = setInterval(() => {
 
@@ -1269,8 +1758,10 @@ function runAutomaticCoinToss(){
                 ? "ОРЕЛ"
                 : "РЕШКА";
 
+
         coinResult.textContent =
             visualResult;
+
 
         playClick(
             visualResult === "ОРЕЛ"
@@ -1280,23 +1771,30 @@ function runAutomaticCoinToss(){
             .018
         );
 
+
         flips++;
+
 
         if(flips >= totalFlips){
 
-            clearInterval(coinTimer);
+            clearInterval(
+                coinTimer
+            );
 
             coinTimer = null;
+
 
             const result =
                 Math.random() < .5
                     ? "ОРЕЛ"
                     : "РЕШКА";
 
+
             currentPlayer =
                 result === "ОРЕЛ"
                     ? 1
                     : 2;
+
 
             coinResult.textContent =
                 result;
@@ -1305,23 +1803,30 @@ function runAutomaticCoinToss(){
 
             playOpenSound();
 
+
             addLog(
                 `🎲 Автоматическая жеребьёвка: выпало ${result}. ${getPlayerName(currentPlayer)} начинает решающий раунд.`
             );
 
+
             updateUI();
+
 
             battleTimer = setTimeout(() => {
 
                 automaticTurn();
 
             },TURN_DELAY);
+
         }
 
     },120);
 }
 
-/* AUTOMATIC TURN */
+
+/* =========================
+   AUTOMATIC TURN
+========================= */
 
 function automaticTurn(){
 
@@ -1329,16 +1834,19 @@ function automaticTurn(){
        battleFinished ||
        roundFinished) return;
 
+
     const stunned =
         currentPlayer === 1
             ? stunned1
             : stunned2;
+
 
     if(stunned){
 
         addLog(
             `💫 ${getPlayerName(currentPlayer)} оглушён и пропускает ход.`
         );
+
 
         if(currentPlayer === 1){
 
@@ -1347,9 +1855,12 @@ function automaticTurn(){
         }else{
 
             stunned2 = false;
+
         }
 
+
         updateUI();
+
 
         battleTimer = setTimeout(() => {
 
@@ -1358,7 +1869,9 @@ function automaticTurn(){
                     ? 2
                     : 1;
 
+
             updateUI();
+
 
             battleTimer = setTimeout(() => {
 
@@ -1368,13 +1881,18 @@ function automaticTurn(){
 
         },650);
 
+
         return;
     }
+
 
     rollDiceAutomatically();
 }
 
-/* DICE */
+
+/* =========================
+   DICE ROLL
+========================= */
 
 function rollDiceAutomatically(){
 
@@ -1382,10 +1900,13 @@ function rollDiceAutomatically(){
        battleFinished ||
        roundFinished) return;
 
+
     const rollingPlayer =
         currentPlayer;
 
+
     let elapsed = 0;
+
 
     diceTimer = setInterval(() => {
 
@@ -1393,12 +1914,15 @@ function rollDiceAutomatically(){
            battleFinished ||
            roundFinished){
 
-            clearInterval(diceTimer);
+            clearInterval(
+                diceTimer
+            );
 
             diceTimer = null;
 
             return;
         }
+
 
         const temp1 =
             Math.floor(Math.random()*6)+1;
@@ -1406,33 +1930,58 @@ function rollDiceAutomatically(){
         const temp2 =
             Math.floor(Math.random()*6)+1;
 
-        drawDice(dice1,temp1);
-        drawDice(dice2,temp2);
+
+        drawDice(
+            dice1,
+            temp1
+        );
+
+        drawDice(
+            dice2,
+            temp2
+        );
+
 
         resultNumber.textContent =
             `${temp1}${temp2}`;
 
+
         elapsed += 90;
+
 
         if(elapsed >= DICE_ANIMATION_TIME){
 
-            clearInterval(diceTimer);
+            clearInterval(
+                diceTimer
+            );
 
             diceTimer = null;
 
-            finishDiceRoll(rollingPlayer);
+
+            finishDiceRoll(
+                rollingPlayer,
+                false
+            );
+
         }
 
     },90);
 }
 
-/* FINISH DICE */
 
-function finishDiceRoll(rollingPlayer){
+/* =========================
+   FINISH NORMAL ROLL
+========================= */
+
+function finishDiceRoll(
+    rollingPlayer,
+    criticalRoll
+){
 
     if(!gameStarted ||
        battleFinished ||
        roundFinished) return;
+
 
     const die1 =
         Math.floor(Math.random()*6)+1;
@@ -1440,31 +1989,130 @@ function finishDiceRoll(rollingPlayer){
     const die2 =
         Math.floor(Math.random()*6)+1;
 
-    drawDice(dice1,die1);
-    drawDice(dice2,die2);
+
+    drawDice(
+        dice1,
+        die1
+    );
+
+    drawDice(
+        dice2,
+        die2
+    );
+
 
     const result =
         die1 * 10 + die2;
 
+
     resultNumber.textContent =
         result;
 
-    damageText.textContent =
-        `УРОН: ${result}`;
 
-    playClick(560,.06,.03);
+    const isDouble =
+        die1 === die2;
+
+
+    /*
+       АССАСИН + ДУБЛЬ
+       Дубль НЕ наносит обычный урон.
+       Вместо этого запускается критический
+       дополнительный бросок.
+    */
+
+    if(
+        isDouble &&
+        getPlayerClass(rollingPlayer) === "assassin" &&
+        !criticalRoll
+    ){
+
+        criticalText.classList.add(
+            "visible"
+        );
+
+        damageText.textContent =
+            "⚡ КРИТ! НОВЫЙ БРОСОК ×2";
+
+        playCriticalSound();
+
+
+        addLog(
+            `⚡ КРИТИЧЕСКИЙ УРОН! ${getPlayerName(rollingPlayer)} выбросил дубль ${result}. Этот бросок не наносит урон — следующий бросок будет удвоен.`
+        );
+
+
+        updateUI();
+
+
+        /*
+           Дополнительный бросок.
+           Он является частью текущего хода.
+        */
+
+        battleTimer = setTimeout(() => {
+
+            criticalRollDice(
+                rollingPlayer
+            );
+
+        },750);
+
+
+        return;
+    }
+
+
+    /*
+       ОБЫЧНЫЙ УРОН
+       Для варвара дубль наносит урон
+       и дополнительно оглушает.
+       Для критического броска ассасина
+       итог уже умножен заранее.
+    */
+
+    let damage =
+        result;
+
+
+    if(
+        criticalRoll
+    ){
+
+        damage =
+            result * 2;
+
+        addLog(
+            `💥 КРИТИЧЕСКИЙ БРОСОК: ${result} × 2 = ${damage} урона!`
+        );
+
+    }
+
+
+    damageText.textContent =
+        `УРОН: ${damage}`;
+
+
+    playClick(
+        criticalRoll
+            ? 780
+            : 560,
+        .06,
+        .03
+    );
+
 
     const targetPlayer =
         rollingPlayer === 1
             ? 2
             : 1;
 
+
     if(targetPlayer === 1){
 
         hp1 =
             Math.max(
                 0,
-                hp1 - result
+                hp1 - damage
             );
 
     }else{
@@ -1472,20 +2120,28 @@ function finishDiceRoll(rollingPlayer){
         hp2 =
             Math.max(
                 0,
-                hp2 - result
+                hp2 - damage
             );
+
     }
 
+
     addLog(
-        `${getPlayerName(rollingPlayer)} выбросил ${result} и нанёс ${result} урона ${getPlayerName(targetPlayer)}.`
+        `${getPlayerName(rollingPlayer)} выбросил ${result}${criticalRoll ? ` × 2 = ${damage}` : ""} и нанёс ${damage} урона ${getPlayerName(targetPlayer)}.`
     );
 
-    /* DOUBLE / STUN */
 
-    const isDouble =
-        die1 === die2;
+    /*
+       Варварский дубль.
+       Критический бросок ассасина сюда
+       не попадает, потому что он уже был
+       обработан отдельно.
+    */
 
-    if(isDouble){
+    if(
+        isDouble &&
+        getPlayerClass(rollingPlayer) === "barbar"
+    ){
 
         if(targetPlayer === 1){
 
@@ -1494,41 +2150,56 @@ function finishDiceRoll(rollingPlayer){
         }else{
 
             stunned2 = true;
+
         }
+
 
         addLog(
             `🔥 ДУБЛЬ ${result}! ${getPlayerName(rollingPlayer)} оглушил ${getPlayerName(targetPlayer)}. Следующий ход будет пропущен.`
         );
     }
 
+
+    criticalText.classList.remove(
+        "visible"
+    );
+
+
     updateUI();
 
-    /* ROUND END */
 
-    if(hp1 <= 0 || hp2 <= 0){
+    if(
+        hp1 <= 0 ||
+        hp2 <= 0
+    ){
 
         const winner =
             hp1 <= 0
                 ? 2
                 : 1;
 
+
         battleTimer = setTimeout(() => {
 
-            finishRound(winner);
+            finishRound(
+                winner
+            );
 
         },700);
+
 
         return;
     }
 
-    /* NEXT PLAYER */
 
     currentPlayer =
         currentPlayer === 1
             ? 2
             : 1;
 
+
     updateUI();
+
 
     battleTimer = setTimeout(() => {
 
@@ -1537,24 +2208,132 @@ function finishDiceRoll(rollingPlayer){
     },TURN_DELAY);
 }
 
-/* FINISH ROUND */
 
-function finishRound(roundWinner){
+/* =========================
+   CRITICAL DICE
+========================= */
 
-    if(roundFinished ||
-       battleFinished) return;
+function criticalRollDice(
+    rollingPlayer
+){
+
+    if(!gameStarted ||
+       battleFinished ||
+       roundFinished) return;
+
+
+    let elapsed = 0;
+
+
+    criticalText.classList.add(
+        "visible"
+    );
+
+
+    damageText.textContent =
+        "КРИТИЧЕСКИЙ БРОСОК...";
+
+
+    /*
+       Показываем анимацию нового
+       набора костей.
+    */
+
+    diceTimer = setInterval(() => {
+
+        if(!gameStarted ||
+           battleFinished ||
+           roundFinished){
+
+            clearInterval(
+                diceTimer
+            );
+
+            diceTimer = null;
+
+            return;
+        }
+
+
+        const temp1 =
+            Math.floor(Math.random()*6)+1;
+
+        const temp2 =
+            Math.floor(Math.random()*6)+1;
+
+
+        drawDice(
+            dice1,
+            temp1
+        );
+
+        drawDice(
+            dice2,
+            temp2
+        );
+
+
+        resultNumber.textContent =
+            `${temp1}${temp2}`;
+
+
+        elapsed += 90;
+
+
+        if(elapsed >= DICE_ANIMATION_TIME){
+
+            clearInterval(
+                diceTimer
+            );
+
+            diceTimer = null;
+
+
+            /*
+               ВАЖНО:
+               второй бросок не может снова
+               активировать крит.
+            */
+
+            finishDiceRoll(
+                rollingPlayer,
+                true
+            );
+
+        }
+
+    },90);
+}
+
+
+/* =========================
+   FINISH ROUND
+========================= */
+
+function finishRound(
+    roundWinner
+){
+
+    if(
+        roundFinished ||
+        battleFinished
+    ) return;
+
 
     roundFinished = true;
 
     gameStarted = false;
 
+
     previousRoundWinner =
         roundWinner;
+
 
     previousRoundLoser =
         roundWinner === 1
             ? 2
             : 1;
+
 
     if(roundWinner === 1){
 
@@ -1563,38 +2342,58 @@ function finishRound(roundWinner){
     }else{
 
         score2++;
+
     }
+
 
     addLog(
         `🏆 Раунд ${currentRound} завершён. Победил ${getPlayerName(roundWinner)}. Счёт серии: ${score1} : ${score2}.`
     );
 
+
     updateUI();
 
-    /* SERIES WIN */
 
-    if(score1 >= 2 || score2 >= 2){
+    /*
+       ПОБЕДА В СЕРИИ
+    */
+
+    if(
+        score1 >= 2 ||
+        score2 >= 2
+    ){
 
         battleFinished = true;
+
 
         winnerTitle.textContent =
             `ПОБЕДИТЕЛЬ: ${getPlayerName(roundWinner)}`;
 
+
         winnerScore.textContent =
             `СЧЁТ СЕРИИ ${score1} : ${score2}`;
 
+
         nextRoundTimer = setTimeout(() => {
 
-            winnerOverlay.classList.add("visible");
+            winnerOverlay.classList.add(
+                "visible"
+            );
 
         },800);
+
 
         return;
     }
 
+
     currentRound++;
 
-    /* ROUND 2 */
+
+    /*
+       РАУНД 2
+       НАЧИНАЕТ ПРОИГРАВШИЙ
+    */
 
     if(currentRound === 2){
 
@@ -1602,16 +2401,24 @@ function finishRound(roundWinner){
             `⚔️ Следующий раунд начнётся с права неудачника — ${getPlayerName(previousRoundLoser)} начнёт первым.`
         );
 
+
         nextRoundTimer = setTimeout(() => {
 
-            startRound("loser");
+            startRound(
+                "loser"
+            );
 
         },NEXT_ROUND_DELAY);
+
 
         return;
     }
 
-    /* ROUND 3 */
+
+    /*
+       РАУНД 3
+       АВТОМАТИЧЕСКАЯ ЖЕРЕБЬЁВКА
+    */
 
     if(currentRound === 3){
 
@@ -1619,15 +2426,21 @@ function finishRound(roundWinner){
             "🎲 Счёт 1 : 1. Начинается решающий третий раунд."
         );
 
+
         nextRoundTimer = setTimeout(() => {
 
-            startRound("autoCoin");
+            startRound(
+                "autoCoin"
+            );
 
         },NEXT_ROUND_DELAY);
     }
 }
 
-/* NEW GAME */
+
+/* =========================
+   START NEW GAME
+========================= */
 
 function startNewGame(){
 
@@ -1637,11 +2450,23 @@ function startNewGame(){
     const enteredName2 =
         name2Input.value.trim();
 
+
     playerName1 =
-        enteredName1 || "ИГРОК 1";
+        enteredName1 ||
+        "ИГРОК 1";
+
 
     playerName2 =
-        enteredName2 || "ИГРОК 2";
+        enteredName2 ||
+        "ИГРОК 2";
+
+
+    playerClass1 =
+        class1Select.value;
+
+    playerClass2 =
+        class2Select.value;
+
 
     player1Name.textContent =
         playerName1;
@@ -1649,8 +2474,28 @@ function startNewGame(){
     player2Name.textContent =
         playerName2;
 
+
+    class1Name.textContent =
+        getClassName(1);
+
+    class2Name.textContent =
+        getClassName(2);
+
+
+    class1Name.classList.toggle(
+        "assassin",
+        playerClass1 === "assassin"
+    );
+
+    class2Name.classList.toggle(
+        "assassin",
+        playerClass2 === "assassin"
+    );
+
+
     namesPanel.style.display =
         "none";
+
 
     score1 = 0;
     score2 = 0;
@@ -1666,32 +2511,55 @@ function startNewGame(){
     battleFinished = false;
     roundFinished = false;
 
+
     winnerOverlay.classList.remove(
         "visible"
     );
 
+
     log.innerHTML = "";
+
+
+    addLog(
+        `⚔️ ${playerName1} — ${getClassName(1)}.`
+    );
+
+    addLog(
+        `⚔️ ${playerName2} — ${getClassName(2)}.`
+    );
+
+
+    coinButton.disabled =
+        false;
+
 
     status.textContent =
         "ГОТОВНОСТЬ";
 
-    coinButton.disabled = false;
 
-    startRound("manual");
+    startRound(
+        "manual"
+    );
 }
 
-/* RESTART */
+
+/* =========================
+   RESTART
+========================= */
 
 function restartGame(){
 
     clearTimers();
 
+
     winnerOverlay.classList.remove(
         "visible"
     );
 
+
     namesPanel.style.display =
         "flex";
+
 
     score1 = 0;
     score2 = 0;
@@ -1706,35 +2574,40 @@ function restartGame(){
     battleFinished = false;
     roundFinished = false;
 
+
     log.innerHTML = "";
 
-    coinButton.disabled = true;
+
+    coinButton.disabled =
+        true;
+
 
     coinResult.textContent =
         "СНАЧАЛА ВВЕДИТЕ НИКИ";
 
+
     status.textContent =
         "ВВЕДИТЕ НИКИ";
+
 
     arenaTurn.textContent =
         "ОЖИДАНИЕ";
 
-    name1Input.value =
-        playerName1;
-
-    name2Input.value =
-        playerName2;
 
     updateUI();
 }
 
-/* KICK */
+
+/* =========================
+   KICK
+========================= */
 
 function kickMessage(){
 
     initAudio();
 
     playButtonSound();
+
 
     alert(
         "Хотите кикнуть команду и занять этот слот?\n\n" +
@@ -1743,7 +2616,10 @@ function kickMessage(){
     );
 }
 
-/* EVENTS */
+
+/* =========================
+   EVENTS
+========================= */
 
 startGameButton.addEventListener(
     "click",
@@ -1754,13 +2630,16 @@ startGameButton.addEventListener(
         playButtonSound();
 
         startNewGame();
+
     }
 );
+
 
 coinButton.addEventListener(
     "click",
     determineFirstPlayer
 );
+
 
 winnerClose.addEventListener(
     "click",
@@ -1769,47 +2648,69 @@ winnerClose.addEventListener(
         playCloseSound();
 
         restartGame();
+
     }
 );
+
 
 coinButton.addEventListener(
     "mouseenter",
     () => {
 
         if(!coinButton.disabled){
+
             playHoverSound();
+
         }
+
     }
 );
 
-/* ENTER IN NAME */
+
+/* ENTER */
 
 name1Input.addEventListener(
     "keydown",
     event => {
 
         if(event.key === "Enter"){
+
             name2Input.focus();
+
         }
+
     }
 );
+
 
 name2Input.addEventListener(
     "keydown",
     event => {
 
         if(event.key === "Enter"){
+
             startNewGame();
+
         }
+
     }
 );
 
+
 /* INITIAL */
 
-drawDice(dice1,1);
-drawDice(dice2,1);
+drawDice(
+    dice1,
+    1
+);
+
+drawDice(
+    dice2,
+    1
+);
 
 updateUI();
+
 </script>
 
 </body>
