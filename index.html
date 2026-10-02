@@ -1,734 +1,517 @@
-```html
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
 <title>SPN BATTLE</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
+:root{
+    --bg:#05070b;
+    --panel:#0b1018;
+    --panel2:#0e141e;
+    --blue:#00a8ff;
+    --cyan:#24d8ff;
+    --text:#f3f7fb;
+    --muted:#8793a3;
+    --danger:#ff3d58;
+    --green:#36e28c;
+    --yellow:#ffd34d;
 }
 
-html,
-body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: #05070b;
-    color: #f3f7fb;
-    font-family: Arial, Helvetica, sans-serif;
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
-body {
-    min-height: 100vh;
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
 }
 
-button {
-    font: inherit;
-}
-
-.game {
-    width: 100%;
-    height: 100vh;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    padding: 10px 14px;
-    overflow: hidden;
-}
-
-/* ================= HEADER ================= */
-
-.header {
-    flex: 0 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-    height: 54px;
-    padding: 0 18px;
-    border: 1px solid #172231;
-    border-radius: 14px;
-    background: linear-gradient(135deg, #0c131d, #080d15);
-    box-shadow: 0 8px 30px rgba(0,0,0,.3);
-}
-
-.logo {
-    font-size: clamp(22px, 2.2vw, 34px);
-    font-weight: 900;
-    letter-spacing: 2px;
-    color: #24d8ff;
-    text-shadow: 0 0 18px rgba(36,216,255,.25);
-}
-
-.round-info {
-    text-align: center;
-    line-height: 1.1;
-}
-
-.round-title {
-    font-size: clamp(13px, 1.3vw, 19px);
-    font-weight: 800;
-    color: #8ea5bb;
-}
-
-.score {
-    margin-top: 3px;
-    font-size: clamp(18px, 1.8vw, 27px);
-    font-weight: 900;
-    color: #fff;
-}
-
-.status {
-    min-width: 150px;
-    text-align: right;
-    font-size: clamp(11px, 1.1vw, 15px);
-    font-weight: 800;
-    color: #647b91;
-}
-
-/* ================= COIN ================= */
-
-.coin-panel {
-    flex: 0 0 auto;
-    height: 82px;
-    margin: 8px 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    border: 1px solid #172231;
-    border-radius: 14px;
-    background: #080d15;
-}
-
-.coin-label {
-    font-size: clamp(11px, 1.1vw, 15px);
-    color: #7890a7;
-    font-weight: 800;
-    text-transform: uppercase;
-}
-
-.coin-button {
-    min-width: 150px;
-    height: 52px;
-    padding: 0 24px;
-    border: 1px solid #008acb;
-    border-radius: 11px;
-    background: linear-gradient(135deg, #008dcc, #006a9d);
-    color: white;
-    font-size: clamp(15px, 1.4vw, 20px);
-    font-weight: 900;
-    letter-spacing: .8px;
-    cursor: pointer;
-    box-shadow: 0 0 20px rgba(0,168,255,.16);
-    transition: .15s ease;
-}
-
-.coin-button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 0 26px rgba(0,168,255,.28);
-}
-
-.coin-button:active {
-    transform: scale(.97);
-}
-
-.coin-button:disabled {
-    opacity: .5;
-    cursor: default;
-    transform: none;
-}
-
-.coin-result {
-    min-width: 110px;
-    text-align: center;
-    font-size: clamp(13px, 1.3vw, 18px);
-    font-weight: 900;
-    color: #24d8ff;
-}
-
-/* ================= BATTLE ================= */
-
-.battle {
-    flex: 1 1 auto;
-    min-height: 0;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(300px, .7fr) minmax(0, 1fr);
-    gap: 10px;
-}
-
-.player {
-    min-width: 0;
-    min-height: 0;
-    padding: clamp(10px, 1.2vw, 18px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border: 1px solid #172231;
-    border-radius: 16px;
+body{
     background:
-        radial-gradient(circle at top, rgba(0,168,255,.07), transparent 50%),
-        #090e16;
-    box-shadow: 0 10px 35px rgba(0,0,0,.28);
-    position: relative;
-    overflow: hidden;
+        radial-gradient(circle at 50% 20%, rgba(0,168,255,.08), transparent 35%),
+        linear-gradient(135deg,#03050a,#07101a 50%,#03050a);
+    color:var(--text);
+    font-family:Arial,Helvetica,sans-serif;
 }
 
-.player.active {
-    border-color: #00a8ff;
+button{
+    font-family:inherit;
+}
+
+.page{
+    width:100%;
+    height:100vh;
+    padding:10px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.header{
+    min-height:58px;
+    background:linear-gradient(135deg,#0b111b,#101925);
+    border:1px solid rgba(0,168,255,.22);
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:8px 16px;
+    box-shadow:0 8px 30px rgba(0,0,0,.35);
+}
+
+.logo{
+    font-size:24px;
+    font-weight:900;
+    letter-spacing:2px;
+}
+
+.logo span{
+    color:var(--cyan);
+}
+
+.header-center{
+    text-align:center;
+}
+
+.round-title{
+    font-size:12px;
+    color:var(--muted);
+    font-weight:800;
+    letter-spacing:1px;
+}
+
+.score{
+    font-size:23px;
+    font-weight:900;
+    color:var(--cyan);
+    line-height:24px;
+}
+
+.status{
+    min-width:150px;
+    text-align:right;
+    font-size:12px;
+    color:var(--green);
+    font-weight:900;
+    letter-spacing:.8px;
+}
+
+.coin-panel{
+    min-height:54px;
+    background:var(--panel);
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+}
+
+.coin-button{
+    border:1px solid rgba(0,168,255,.45);
+    background:linear-gradient(135deg,#087cb5,#00a8ff);
+    color:white;
+    font-weight:900;
+    padding:10px 20px;
+    border-radius:9px;
+    cursor:pointer;
+    transition:.2s;
+    box-shadow:0 5px 18px rgba(0,168,255,.18);
+}
+
+.coin-button:hover:not(:disabled){
+    transform:translateY(-1px);
+    filter:brightness(1.12);
+}
+
+.coin-button:disabled{
+    opacity:.35;
+    cursor:not-allowed;
+}
+
+.coin-result{
+    min-width:170px;
+    text-align:center;
+    font-size:13px;
+    font-weight:900;
+    color:var(--yellow);
+    letter-spacing:1px;
+}
+
+.battle{
+    flex:1;
+    min-height:0;
+    display:grid;
+    grid-template-columns:minmax(240px,1fr) minmax(300px,1.15fr) minmax(240px,1fr);
+    gap:10px;
+}
+
+.player-card,
+.arena{
+    min-height:0;
+    background:linear-gradient(160deg,#0b1018,#080d14);
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:14px;
+    overflow:hidden;
+}
+
+.player-card{
+    display:flex;
+    flex-direction:column;
+    padding:14px;
+    position:relative;
+}
+
+.player-card.active{
+    border-color:rgba(0,168,255,.6);
+    box-shadow:0 0 28px rgba(0,168,255,.12);
+}
+
+.player-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+}
+
+.player-number{
+    font-size:12px;
+    color:var(--muted);
+    font-weight:900;
+    letter-spacing:1px;
+}
+
+.player-name{
+    font-size:23px;
+    font-weight:900;
+    margin-bottom:4px;
+}
+
+.class-name{
+    font-size:12px;
+    color:var(--cyan);
+    font-weight:800;
+    margin-bottom:18px;
+}
+
+.hp-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:7px;
+}
+
+.hp-label{
+    font-size:11px;
+    color:var(--muted);
+    font-weight:800;
+}
+
+.hp-value{
+    font-size:18px;
+    font-weight:900;
+}
+
+.hp-bar{
+    height:13px;
+    background:#1b222c;
+    border-radius:20px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.05);
+}
+
+.hp-fill{
+    height:100%;
+    width:100%;
+    background:linear-gradient(90deg,#20d27b,#63f1ad);
+    transition:width .35s ease;
+}
+
+.turn-label,
+.stun-label{
+    margin-top:auto;
+    min-height:30px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:7px;
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:.7px;
+}
+
+.turn-label{
+    background:rgba(0,168,255,.08);
+    color:#6b7a8b;
+}
+
+.player-card.active .turn-label{
+    background:rgba(0,168,255,.16);
+    color:var(--cyan);
+}
+
+.stun-label{
+    margin-top:7px;
+    background:rgba(255,211,77,.08);
+    color:#69717d;
+}
+
+.stun-label.visible{
+    color:var(--yellow);
+    background:rgba(255,211,77,.14);
+}
+
+.arena{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:12px;
+}
+
+.arena-turn{
+    height:30px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:14px;
+    font-weight:900;
+    color:var(--cyan);
+    letter-spacing:1px;
+    text-align:center;
+}
+
+.dice-area{
+    flex:0 0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:18px;
+    margin-top:4px;
+}
+
+.dice{
+    width:74px;
+    height:74px;
+    background:#fff;
+    border-radius:13px;
     box-shadow:
-        0 0 25px rgba(0,168,255,.15),
-        inset 0 0 30px rgba(0,168,255,.035);
+        0 7px 22px rgba(0,0,0,.4),
+        inset 0 0 0 2px rgba(0,0,0,.08);
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    grid-template-rows:repeat(3,1fr);
+    padding:10px;
 }
 
-.player.stunned {
-    border-color: #ff9f1c;
+.dot{
+    width:12px;
+    height:12px;
+    background:#090b0f;
+    border-radius:50%;
+    align-self:center;
+    justify-self:center;
 }
 
-.player-name {
-    text-align: center;
-    font-size: clamp(18px, 2vw, 29px);
-    font-weight: 900;
-    letter-spacing: 1px;
+.pos1{grid-area:1/1}
+.pos2{grid-area:1/2}
+.pos3{grid-area:1/3}
+.pos4{grid-area:2/1}
+.pos5{grid-area:2/2}
+.pos6{grid-area:2/3}
+.pos7{grid-area:3/1}
+.pos8{grid-area:3/2}
+.pos9{grid-area:3/3}
+
+.result-number{
+    margin-top:8px;
+    height:42px;
+    font-size:38px;
+    line-height:42px;
+    font-weight:1000;
+    color:white;
+    text-shadow:0 0 20px rgba(0,168,255,.25);
 }
 
-.class-name {
-    margin-top: 3px;
-    text-align: center;
-    font-size: clamp(11px, 1vw, 15px);
-    color: #778da4;
-    font-weight: 800;
-    text-transform: uppercase;
+.damage-text{
+    height:25px;
+    color:var(--danger);
+    font-size:13px;
+    font-weight:900;
 }
 
-.hp-number {
-    margin-top: clamp(8px, 1vw, 15px);
-    text-align: center;
-    font-size: clamp(28px, 3.3vw, 52px);
-    font-weight: 900;
-    line-height: 1;
+.log{
+    width:100%;
+    flex:1;
+    min-height:80px;
+    margin-top:8px;
+    background:#060a10;
+    border:1px solid rgba(255,255,255,.06);
+    border-radius:9px;
+    padding:7px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    gap:5px;
 }
 
-.hp-label {
-    margin-top: 4px;
-    text-align: center;
-    font-size: 11px;
-    color: #667c92;
-    font-weight: 800;
-    letter-spacing: 1px;
+.log-entry{
+    font-size:10px;
+    line-height:13px;
+    color:#aeb8c5;
+    padding:4px 6px;
+    border-left:2px solid rgba(0,168,255,.45);
+    background:rgba(255,255,255,.015);
 }
 
-.hp-bar {
-    width: 100%;
-    height: clamp(10px, 1vw, 14px);
-    margin-top: 9px;
-    border-radius: 999px;
-    overflow: hidden;
-    background: #151e29;
-    border: 1px solid #1e2b3a;
+.controls{
+    position:absolute;
+    bottom:12px;
+    left:14px;
+    right:14px;
 }
 
-.hp-fill {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, #00a8ff, #24d8ff);
-    transition: width .25s ease;
+.kick-button{
+    width:100%;
+    padding:8px;
+    border-radius:7px;
+    border:1px solid rgba(255,61,88,.3);
+    background:rgba(255,61,88,.07);
+    color:#ff6b7d;
+    font-size:10px;
+    font-weight:900;
 }
 
-.player-right .hp-fill {
-    background: linear-gradient(90deg, #ff3d58, #ff7183);
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.72);
+    backdrop-filter:blur(8px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:100;
+    opacity:0;
+    pointer-events:none;
+    transition:.25s;
 }
 
-.turn {
-    min-height: 28px;
-    margin-top: 12px;
-    text-align: center;
-    font-size: clamp(11px, 1.1vw, 15px);
-    font-weight: 900;
-    color: #24d8ff;
+.overlay.visible{
+    opacity:1;
+    pointer-events:auto;
 }
 
-.player-right .turn {
-    color: #ff7183;
+.winner-box{
+    width:min(430px,90vw);
+    background:linear-gradient(145deg,#0b121d,#101a27);
+    border:1px solid rgba(0,168,255,.35);
+    border-radius:16px;
+    padding:25px;
+    text-align:center;
+    box-shadow:0 20px 70px rgba(0,0,0,.6);
 }
 
-.stun-text {
-    min-height: 20px;
-    margin-top: 3px;
-    text-align: center;
-    font-size: 12px;
-    font-weight: 900;
-    color: #ffb02e;
+.winner-title{
+    font-size:27px;
+    font-weight:1000;
+    margin-bottom:8px;
 }
 
-/* ================= CENTER ================= */
-
-.arena {
-    min-width: 0;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid #172231;
-    border-radius: 16px;
-    background:
-        radial-gradient(circle, rgba(0,168,255,.08), transparent 65%),
-        #080d14;
-    overflow: hidden;
+.winner-score{
+    color:var(--cyan);
+    font-size:20px;
+    font-weight:900;
+    margin-bottom:20px;
 }
 
-/* Информация о том, чей ход — НАД КУБИКАМИ */
-
-.arena-turn {
-    min-height: 32px;
-    margin-bottom: 12px;
-    text-align: center;
-    font-size: clamp(15px, 1.5vw, 22px);
-    font-weight: 900;
-    letter-spacing: .5px;
-    color: #24d8ff;
-    text-transform: uppercase;
+.restart{
+    border:0;
+    border-radius:9px;
+    padding:11px 25px;
+    background:linear-gradient(135deg,#087cb5,#00a8ff);
+    color:white;
+    font-weight:900;
+    cursor:pointer;
 }
 
-/* ================= CLASSIC DICE ================= */
-
-.dice-area {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: clamp(12px, 1.4vw, 22px);
-}
-
-.dice {
-    width: clamp(62px, 6.5vw, 94px);
-    height: clamp(62px, 6.5vw, 94px);
-
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-
-    padding: clamp(8px, .8vw, 12px);
-
-    border: 2px solid #cfd5dc;
-    border-radius: 13px;
-
-    background: linear-gradient(
-        145deg,
-        #ffffff,
-        #e9edf1
-    );
-
-    box-shadow:
-        0 8px 20px rgba(0,0,0,.35),
-        inset 0 1px 2px rgba(255,255,255,.9);
-
-    transition: transform .12s ease;
-}
-
-.dice.rolling {
-    animation: diceShake .16s linear infinite;
-}
-
-@keyframes diceShake {
-    0% {
-        transform: rotate(0deg) scale(1);
+@media (orientation:portrait){
+    html,body{
+        overflow:auto;
     }
 
-    25% {
-        transform: rotate(-5deg) scale(1.04);
+    .page{
+        height:auto;
+        min-height:100vh;
     }
 
-    50% {
-        transform: rotate(5deg) scale(1.07);
+    .battle{
+        grid-template-columns:1fr;
     }
 
-    75% {
-        transform: rotate(-4deg) scale(1.04);
-    }
-
-    100% {
-        transform: rotate(0deg) scale(1);
+    .arena{
+        min-height:400px;
     }
 }
 
-/* Точки кубика */
-
-.dot {
-    width: clamp(8px, 1vw, 13px);
-    height: clamp(8px, 1vw, 13px);
-
-    align-self: center;
-    justify-self: center;
-
-    border-radius: 50%;
-    background: #111820;
-
-    box-shadow:
-        inset 0 1px 1px rgba(255,255,255,.15);
-}
-
-/* Сетка позиций */
-
-.pos1 {
-    grid-column: 1;
-    grid-row: 1;
-}
-
-.pos2 {
-    grid-column: 2;
-    grid-row: 1;
-}
-
-.pos3 {
-    grid-column: 3;
-    grid-row: 1;
-}
-
-.pos4 {
-    grid-column: 1;
-    grid-row: 2;
-}
-
-.pos5 {
-    grid-column: 2;
-    grid-row: 2;
-}
-
-.pos6 {
-    grid-column: 3;
-    grid-row: 2;
-}
-
-.pos7 {
-    grid-column: 1;
-    grid-row: 3;
-}
-
-.pos8 {
-    grid-column: 2;
-    grid-row: 3;
-}
-
-.pos9 {
-    grid-column: 3;
-    grid-row: 3;
-}
-
-/* ================= RESULT ================= */
-
-.result-number {
-    min-height: 55px;
-    margin-top: 13px;
-    text-align: center;
-
-    font-size: clamp(34px, 4vw, 58px);
-    line-height: 1;
-    font-weight: 900;
-
-    color: #ffffff;
-
-    text-shadow:
-        0 0 18px rgba(36,216,255,.3);
-}
-
-.damage-text {
-    min-height: 23px;
-    margin-top: 5px;
-    text-align: center;
-    font-size: clamp(10px, 1vw, 14px);
-    color: #8298ad;
-    font-weight: 800;
-}
-
-/* ================= LOG ================= */
-
-.log {
-    width: 92%;
-    height: clamp(105px, 16vh, 180px);
-    margin-top: 12px;
-    padding: 8px;
-
-    border: 1px solid #182535;
-    border-radius: 10px;
-
-    background: rgba(4,7,11,.75);
-
-    overflow-y: auto;
-    scrollbar-width: thin;
-}
-
-.log-entry {
-    padding: 5px 6px;
-    border-bottom: 1px solid #111b26;
-
-    font-size: clamp(9px, .85vw, 12px);
-    line-height: 1.25;
-
-    color: #8da2b6;
-}
-
-.log-entry:first-child {
-    color: #d9e7f3;
-}
-
-/* ================= BOTTOM ================= */
-
-.bottom {
-    flex: 0 0 auto;
-    height: 38px;
-    margin-top: 8px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-.restart-button {
-    height: 34px;
-    padding: 0 18px;
-
-    border: 1px solid #26384c;
-    border-radius: 9px;
-
-    background: #0b121b;
-    color: #9bb0c4;
-
-    font-size: 11px;
-    font-weight: 900;
-
-    cursor: pointer;
-}
-
-.restart-button:hover {
-    color: white;
-    border-color: #00a8ff;
-}
-
-/* ================= WINNER ================= */
-
-.winner-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-
-    display: none;
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-
-    background: rgba(0,0,0,.72);
-    backdrop-filter: blur(8px);
-}
-
-.winner-overlay.show {
-    display: flex;
-}
-
-.winner-box {
-    width: min(500px, 90vw);
-    padding: 30px 25px;
-
-    text-align: center;
-
-    border: 1px solid #00a8ff;
-    border-radius: 18px;
-
-    background: #0b121b;
-
-    box-shadow:
-        0 0 50px rgba(0,168,255,.2);
-}
-
-.winner-small {
-    color: #728aa0;
-    font-size: 12px;
-    font-weight: 900;
-    letter-spacing: 2px;
-}
-
-.winner-title {
-    margin-top: 8px;
-
-    font-size: clamp(28px, 5vw, 50px);
-    font-weight: 900;
-
-    color: #24d8ff;
-}
-
-.winner-score {
-    margin-top: 8px;
-    font-size: 20px;
-    font-weight: 900;
-}
-
-.winner-close {
-    margin-top: 20px;
-
-    height: 42px;
-    padding: 0 25px;
-
-    border: 0;
-    border-radius: 9px;
-
-    background: #00a8ff;
-    color: white;
-
-    font-weight: 900;
-    cursor: pointer;
-}
-
-/* ================= TABLET LANDSCAPE ================= */
-
-@media (orientation: landscape) and (min-width: 700px) {
-
-    .game {
-        padding: 7px 10px;
+@media (max-height:650px) and (orientation:landscape){
+    .page{
+        padding:7px;
+        gap:6px;
     }
 
-    .header {
-        height: 46px;
-        border-radius: 11px;
+    .header{
+        min-height:48px;
+        padding:6px 12px;
     }
 
-    .coin-panel {
-        height: 62px;
-        margin: 6px 0;
-        border-radius: 11px;
+    .logo{
+        font-size:20px;
     }
 
-    .coin-button {
-        height: 42px;
-        min-width: 130px;
+    .coin-panel{
+        min-height:45px;
     }
 
-    .battle {
-        gap: 8px;
+    .coin-button{
+        padding:7px 16px;
     }
 
-    .player,
-    .arena {
-        border-radius: 12px;
+    .player-card{
+        padding:10px;
     }
 
-    .bottom {
-        height: 32px;
-        margin-top: 5px;
+    .player-name{
+        font-size:19px;
     }
 
-    .restart-button {
-        height: 29px;
-    }
-}
-
-/* ================= SHORT LANDSCAPE ================= */
-
-@media (orientation: landscape) and (max-height: 750px) {
-
-    .game {
-        padding: 5px 8px;
+    .class-name{
+        margin-bottom:10px;
     }
 
-    .header {
-        height: 40px;
+    .dice{
+        width:60px;
+        height:60px;
+        padding:8px;
     }
 
-    .coin-panel {
-        height: 52px;
-        margin: 4px 0;
+    .dot{
+        width:10px;
+        height:10px;
     }
 
-    .coin-button {
-        height: 36px;
-        min-width: 115px;
+    .result-number{
+        font-size:31px;
+        height:34px;
+        line-height:34px;
     }
 
-    .player {
-        padding: 7px;
-    }
-
-    .hp-number {
-        margin-top: 5px;
-    }
-
-    .hp-bar {
-        margin-top: 5px;
-    }
-
-    .turn {
-        margin-top: 5px;
-    }
-
-    .arena-turn {
-        margin-bottom: 7px;
-    }
-
-    .result-number {
-        margin-top: 8px;
-    }
-
-    .log {
-        height: 100px;
-        margin-top: 7px;
-    }
-
-    .bottom {
-        display: none;
-    }
-}
-
-/* ================= PORTRAIT ================= */
-
-@media (orientation: portrait) {
-
-    body {
-        overflow: auto;
-    }
-
-    .game {
-        height: auto;
-        min-height: 100vh;
-        overflow: visible;
-    }
-
-    .header {
-        height: 58px;
-    }
-
-    .coin-panel {
-        height: auto;
-        min-height: 100px;
-        flex-wrap: wrap;
-        padding: 12px;
-    }
-
-    .battle {
-        grid-template-columns: 1fr;
-        min-height: auto;
-    }
-
-    .player {
-        min-height: 170px;
-    }
-
-    .arena {
-        min-height: 380px;
-    }
-
-    .log {
-        height: 150px;
-    }
-
-    .bottom {
-        margin-bottom: 10px;
+    .log{
+        min-height:55px;
     }
 }
 </style>
@@ -736,291 +519,108 @@ button {
 
 <body>
 
-<div class="game">
-
-    <!-- HEADER -->
+<div class="page">
 
     <header class="header">
+        <div class="logo">SPN <span>BATTLE</span></div>
 
-        <div class="logo">
-            SPN BATTLE
+        <div class="header-center">
+            <div class="round-title" id="roundTitle">РАУНД 1 / 3</div>
+            <div class="score" id="score">0 : 0</div>
         </div>
 
-        <div class="round-info">
-
-            <div class="round-title" id="roundTitle">
-                РАУНД 1 / 3
-            </div>
-
-            <div class="score" id="score">
-                0 : 0
-            </div>
-
-        </div>
-
-        <div class="status" id="status">
-            ОЖИДАНИЕ
-        </div>
-
+        <div class="status" id="status">ОЖИДАНИЕ</div>
     </header>
 
-
-    <!-- COIN -->
-
     <section class="coin-panel">
-
-        <div class="coin-label">
-            Кто начинает?
-        </div>
-
-        <button
-            class="coin-button"
-            id="coinButton"
-        >
-            ОРЕЛ / РЕШКА
-        </button>
-
-        <div
-            class="coin-result"
-            id="coinResult"
-        >
-            —
-        </div>
-
+        <button class="coin-button" id="coinButton">ОРЕЛ / РЕШКА</button>
+        <div class="coin-result" id="coinResult">—</div>
     </section>
-
-
-    <!-- BATTLE -->
 
     <main class="battle">
 
-        <!-- PLAYER 1 -->
-
-        <section
-            class="player player-left"
-            id="player1"
-        >
-
-            <div class="player-name">
-                ИГРОК 1
+        <section class="player-card" id="player1">
+            <div class="player-top">
+                <div class="player-number">ИГРОК 1</div>
             </div>
 
-            <div class="class-name">
-                ВАРВАР
-            </div>
+            <div class="player-name">ИГРОК 1</div>
+            <div class="class-name">ВАРВАР</div>
 
-            <div
-                class="hp-number"
-                id="hp1Text"
-            >
-                1000
-            </div>
-
-            <div class="hp-label">
-                HP
+            <div class="hp-row">
+                <div class="hp-label">ЗДОРОВЬЕ</div>
+                <div class="hp-value" id="hp1Text">1000</div>
             </div>
 
             <div class="hp-bar">
-
-                <div
-                    class="hp-fill"
-                    id="hp1Bar"
-                ></div>
-
+                <div class="hp-fill" id="hp1Bar"></div>
             </div>
 
-            <div
-                class="turn"
-                id="turn1"
-            ></div>
+            <div class="turn-label" id="turn1">НЕ В ХОДУ</div>
+            <div class="stun-label" id="stun1">НЕ ОГЛУШЁН</div>
 
-            <div
-                class="stun-text"
-                id="stun1"
-            ></div>
-
+            <div class="controls">
+                <button class="kick-button" onclick="kickMessage()">КИК / ЗАНЯТЬ СЛОТ</button>
+            </div>
         </section>
-
-
-        <!-- CENTER ARENA -->
 
         <section class="arena">
 
-            <!-- ХОД НАД КУБИКАМИ -->
-
-            <div
-                class="arena-turn"
-                id="arenaTurn"
-            >
-                ОЖИДАНИЕ
-            </div>
-
-
-            <!-- КУБИКИ -->
+            <div class="arena-turn" id="arenaTurn">ОЖИДАНИЕ</div>
 
             <div class="dice-area">
-
-                <div
-                    class="dice"
-                    id="dice1"
-                ></div>
-
-                <div
-                    class="dice"
-                    id="dice2"
-                ></div>
-
+                <div class="dice" id="dice1"></div>
+                <div class="dice" id="dice2"></div>
             </div>
 
+            <div class="result-number" id="resultNumber">—</div>
+            <div class="damage-text" id="damageText">ОЖИДАНИЕ БРОСКА</div>
 
-            <!-- ЧИСЛО ПОД КУБИКАМИ -->
-
-            <div
-                class="result-number"
-                id="resultNumber"
-            >
-                —
-            </div>
-
-
-            <div
-                class="damage-text"
-                id="damageText"
-            >
-                Ожидание начала
-            </div>
-
-
-            <!-- LOG -->
-
-            <div
-                class="log"
-                id="log"
-            ></div>
+            <div class="log" id="log"></div>
 
         </section>
 
-
-        <!-- PLAYER 2 -->
-
-        <section
-            class="player player-right"
-            id="player2"
-        >
-
-            <div class="player-name">
-                ИГРОК 2
+        <section class="player-card" id="player2">
+            <div class="player-top">
+                <div class="player-number">ИГРОК 2</div>
             </div>
 
-            <div class="class-name">
-                ВАРВАР
-            </div>
+            <div class="player-name">ИГРОК 2</div>
+            <div class="class-name">ВАРВАР</div>
 
-            <div
-                class="hp-number"
-                id="hp2Text"
-            >
-                1000
-            </div>
-
-            <div class="hp-label">
-                HP
+            <div class="hp-row">
+                <div class="hp-label">ЗДОРОВЬЕ</div>
+                <div class="hp-value" id="hp2Text">1000</div>
             </div>
 
             <div class="hp-bar">
-
-                <div
-                    class="hp-fill"
-                    id="hp2Bar"
-                ></div>
-
+                <div class="hp-fill" id="hp2Bar"></div>
             </div>
 
-            <div
-                class="turn"
-                id="turn2"
-            ></div>
+            <div class="turn-label" id="turn2">НЕ В ХОДУ</div>
+            <div class="stun-label" id="stun2">НЕ ОГЛУШЁН</div>
 
-            <div
-                class="stun-text"
-                id="stun2"
-            ></div>
-
+            <div class="controls">
+                <button class="kick-button" onclick="kickMessage()">КИК / ЗАНЯТЬ СЛОТ</button>
+            </div>
         </section>
 
     </main>
-
-
-    <!-- BOTTOM -->
-
-    <div class="bottom">
-
-        <button
-            class="restart-button"
-            id="restartButton"
-        >
-            НАЧАТЬ ЗАНОВО
-        </button>
-
-    </div>
-
 </div>
 
-
-<!-- WINNER -->
-
-<div
-    class="winner-overlay"
-    id="winnerOverlay"
->
-
+<div class="overlay" id="winnerOverlay">
     <div class="winner-box">
-
-        <div class="winner-small">
-            SPN BATTLE • ПОБЕДИТЕЛЬ
-        </div>
-
-        <div
-            class="winner-title"
-            id="winnerTitle"
-        >
-            ИГРОК 1
-        </div>
-
-        <div
-            class="winner-score"
-            id="winnerScore"
-        >
-            Счёт серии: 2 : 0
-        </div>
-
-        <button
-            class="winner-close"
-            id="winnerClose"
-        >
-            НОВАЯ БИТВА
-        </button>
-
+        <div class="winner-title" id="winnerTitle">ПОБЕДА</div>
+        <div class="winner-score" id="winnerScore">2 : 0</div>
+        <button class="restart" id="winnerClose">НОВЫЙ БОЙ</button>
     </div>
-
 </div>
-
 
 <script>
-
-/* =========================================================
-   SPN BATTLE
-   BEST OF 3
-   ========================================================= */
-
 const MAX_HP = 1000;
-
 const TURN_DELAY = 900;
-
 const DICE_ANIMATION_TIME = 550;
-
 const NEXT_ROUND_DELAY = 1800;
-
 
 let hp1 = MAX_HP;
 let hp2 = MAX_HP;
@@ -1029,1293 +629,656 @@ let score1 = 0;
 let score2 = 0;
 
 let currentRound = 1;
-
 let currentPlayer = 1;
 
 let stunned1 = false;
 let stunned2 = false;
 
 let gameStarted = false;
-
 let battleFinished = false;
-
 let roundFinished = false;
 
+let previousRoundWinner = null;
+let previousRoundLoser = null;
+
 let battleTimer = null;
-
 let diceTimer = null;
-
 let nextRoundTimer = null;
+let coinTimer = null;
 
 let audioContext = null;
-
 let soundEnabled = true;
 
+const coinButton = document.getElementById("coinButton");
+const coinResult = document.getElementById("coinResult");
 
-/* =========================================================
-   ELEMENTS
-   ========================================================= */
+const roundTitle = document.getElementById("roundTitle");
+const score = document.getElementById("score");
+const status = document.getElementById("status");
 
-const coinButton =
-    document.getElementById("coinButton");
+const arenaTurn = document.getElementById("arenaTurn");
 
-const coinResult =
-    document.getElementById("coinResult");
+const hp1Text = document.getElementById("hp1Text");
+const hp2Text = document.getElementById("hp2Text");
 
-const roundTitle =
-    document.getElementById("roundTitle");
+const hp1Bar = document.getElementById("hp1Bar");
+const hp2Bar = document.getElementById("hp2Bar");
 
-const score =
-    document.getElementById("score");
+const player1 = document.getElementById("player1");
+const player2 = document.getElementById("player2");
 
-const status =
-    document.getElementById("status");
+const turn1 = document.getElementById("turn1");
+const turn2 = document.getElementById("turn2");
 
-const arenaTurn =
-    document.getElementById("arenaTurn");
+const stun1 = document.getElementById("stun1");
+const stun2 = document.getElementById("stun2");
 
-const hp1Text =
-    document.getElementById("hp1Text");
+const dice1 = document.getElementById("dice1");
+const dice2 = document.getElementById("dice2");
 
-const hp2Text =
-    document.getElementById("hp2Text");
+const resultNumber = document.getElementById("resultNumber");
+const damageText = document.getElementById("damageText");
 
-const hp1Bar =
-    document.getElementById("hp1Bar");
+const log = document.getElementById("log");
 
-const hp2Bar =
-    document.getElementById("hp2Bar");
-
-const player1 =
-    document.getElementById("player1");
-
-const player2 =
-    document.getElementById("player2");
-
-const turn1 =
-    document.getElementById("turn1");
-
-const turn2 =
-    document.getElementById("turn2");
-
-const stun1 =
-    document.getElementById("stun1");
-
-const stun2 =
-    document.getElementById("stun2");
-
-const dice1 =
-    document.getElementById("dice1");
-
-const dice2 =
-    document.getElementById("dice2");
-
-const resultNumber =
-    document.getElementById("resultNumber");
-
-const damageText =
-    document.getElementById("damageText");
-
-const log =
-    document.getElementById("log");
-
-const restartButton =
-    document.getElementById("restartButton");
-
-const winnerOverlay =
-    document.getElementById("winnerOverlay");
-
-const winnerTitle =
-    document.getElementById("winnerTitle");
-
-const winnerScore =
-    document.getElementById("winnerScore");
-
-const winnerClose =
-    document.getElementById("winnerClose");
-
-
-/* =========================================================
-   CLASSIC DICE
-   ========================================================= */
+const winnerOverlay = document.getElementById("winnerOverlay");
+const winnerTitle = document.getElementById("winnerTitle");
+const winnerScore = document.getElementById("winnerScore");
+const winnerClose = document.getElementById("winnerClose");
 
 const dicePatterns = {
-
-    1: [5],
-
-    2: [1, 9],
-
-    3: [1, 5, 9],
-
-    4: [1, 3, 7, 9],
-
-    5: [1, 3, 5, 7, 9],
-
-    6: [1, 3, 4, 6, 7, 9]
-
+    1:[5],
+    2:[1,9],
+    3:[1,5,9],
+    4:[1,3,7,9],
+    5:[1,3,5,7,9],
+    6:[1,3,4,6,7,9]
 };
 
-
-function drawDice(element, number) {
-
+function drawDice(element, number){
     element.innerHTML = "";
 
-    if (!number) {
-        return;
-    }
+    if(!number) return;
 
-    const positions =
-        dicePatterns[number];
-
-    positions.forEach(position => {
-
-        const dot =
-            document.createElement("span");
-
-        dot.className =
-            `dot pos${position}`;
-
+    dicePatterns[number].forEach(position=>{
+        const dot = document.createElement("span");
+        dot.className = `dot pos${position}`;
         element.appendChild(dot);
-
     });
 }
 
+function initAudio(){
+    if(!soundEnabled) return;
 
-/* =========================================================
-   SOUND
-   ========================================================= */
-
-function initAudio() {
-
-    if (!soundEnabled) {
-        return;
+    if(!audioContext){
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
     }
 
-    if (!audioContext) {
-
-        try {
-
-            audioContext =
-                new (
-                    window.AudioContext ||
-                    window.webkitAudioContext
-                )();
-
-        } catch (error) {
-
-            soundEnabled = false;
-
-        }
-
-    }
-
-    if (
-        audioContext &&
-        audioContext.state === "suspended"
-    ) {
-
+    if(audioContext.state === "suspended"){
         audioContext.resume();
-
     }
-
 }
 
+function playClick(frequency=520,duration=.045,volume=.035){
+    if(!soundEnabled) return;
 
-function playClick(
-    frequency = 520,
-    duration = 0.045,
-    volume = 0.035
-) {
+    initAudio();
 
-    if (
-        !soundEnabled ||
-        !audioContext
-    ) {
-        return;
-    }
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
 
-    const oscillator =
-        audioContext.createOscillator();
-
-    const gain =
-        audioContext.createGain();
-
+    oscillator.frequency.value = frequency;
     oscillator.type = "sine";
 
-    oscillator.frequency.setValueAtTime(
-        frequency,
-        audioContext.currentTime
-    );
-
-    gain.gain.setValueAtTime(
-        volume,
-        audioContext.currentTime
-    );
-
+    gain.gain.setValueAtTime(volume,audioContext.currentTime);
     gain.gain.exponentialRampToValueAtTime(
-        0.001,
+        .001,
         audioContext.currentTime + duration
     );
 
     oscillator.connect(gain);
-
-    gain.connect(
-        audioContext.destination
-    );
+    gain.connect(audioContext.destination);
 
     oscillator.start();
-
-    oscillator.stop(
-        audioContext.currentTime + duration
-    );
-
+    oscillator.stop(audioContext.currentTime + duration);
 }
 
-
-function playButtonSound() {
-
-    playClick(
-        520,
-        0.045,
-        0.035
-    );
-
+function playButtonSound(){
+    playClick(520,.045,.035);
 }
 
-
-function playDiceSound() {
-
-    playClick(
-        300,
-        0.035,
-        0.018
-    );
-
+function playHoverSound(){
+    playClick(720,.025,.012);
 }
 
+function playScreenshotSound(){
+    if(!soundEnabled) return;
 
-function playHitSound() {
+    initAudio();
 
-    playClick(
-        180,
-        0.08,
-        0.035
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(650,audioContext.currentTime);
+    oscillator.frequency.linearRampToValueAtTime(
+        950,
+        audioContext.currentTime + .12
     );
 
-}
-
-
-function playStunSound() {
-
-    playClick(
-        720,
-        0.08,
-        0.035
+    gain.gain.setValueAtTime(.025,audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(
+        .001,
+        audioContext.currentTime + .14
     );
 
-    setTimeout(() => {
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
 
-        playClick(
-            950,
-            0.1,
-            0.025
-        );
-
-    }, 70);
-
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + .14);
 }
 
+function playOpenSound(){
+    if(!soundEnabled) return;
 
-function playWinSound() {
+    initAudio();
 
-    playClick(
-        520,
-        0.08,
-        0.035
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(420,audioContext.currentTime);
+    oscillator.frequency.linearRampToValueAtTime(
+        760,
+        audioContext.currentTime + .15
     );
 
-    setTimeout(() => {
-
-        playClick(
-            720,
-            0.1,
-            0.035
-        );
-
-    }, 90);
-
-    setTimeout(() => {
-
-        playClick(
-            950,
-            0.15,
-            0.04
-        );
-
-    }, 190);
-
-}
-
-
-/* =========================================================
-   HELPERS
-   ========================================================= */
-
-function randomDice() {
-
-    return Math.floor(
-        Math.random() * 6
-    ) + 1;
-
-}
-
-
-function isDouble(
-    die1,
-    die2
-) {
-
-    return die1 === die2;
-
-}
-
-
-function clearTimers() {
-
-    clearTimeout(
-        battleTimer
+    gain.gain.setValueAtTime(.025,audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(
+        .001,
+        audioContext.currentTime + .18
     );
 
-    clearInterval(
-        diceTimer
-    );
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
 
-    clearTimeout(
-        nextRoundTimer
-    );
-
-    battleTimer = null;
-
-    diceTimer = null;
-
-    nextRoundTimer = null;
-
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + .18);
 }
 
+function playCloseSound(){
+    playClick(330,.06,.025);
+}
 
-function addLog(message) {
-
-    const entry =
-        document.createElement("div");
-
-    entry.className =
-        "log-entry";
-
-    entry.textContent =
-        message;
+function addLog(message){
+    const entry = document.createElement("div");
+    entry.className = "log-entry";
+    entry.textContent = message;
 
     log.prepend(entry);
 
+    while(log.children.length > 9){
+        log.removeChild(log.lastChild);
+    }
 }
 
+function clearTimers(){
+    clearTimeout(battleTimer);
+    clearTimeout(diceTimer);
+    clearTimeout(nextRoundTimer);
+    clearInterval(coinTimer);
 
-/* =========================================================
-   UI
-   ========================================================= */
+    battleTimer = null;
+    diceTimer = null;
+    nextRoundTimer = null;
+    coinTimer = null;
+}
 
-function updateUI() {
+function updateUI(){
+    hp1Text.textContent = Math.max(0,hp1);
+    hp2Text.textContent = Math.max(0,hp2);
 
-    hp1 =
-        Math.max(0, hp1);
+    hp1Bar.style.width = `${Math.max(0,hp1 / MAX_HP * 100)}%`;
+    hp2Bar.style.width = `${Math.max(0,hp2 / MAX_HP * 100)}%`;
 
-    hp2 =
-        Math.max(0, hp2);
-
-
-    hp1Text.textContent =
-        hp1;
-
-    hp2Text.textContent =
-        hp2;
-
-
-    hp1Bar.style.width =
-        `${(hp1 / MAX_HP) * 100}%`;
-
-    hp2Bar.style.width =
-        `${(hp2 / MAX_HP) * 100}%`;
-
-
-    roundTitle.textContent =
-        `РАУНД ${currentRound} / 3`;
-
-
-    score.textContent =
-        `${score1} : ${score2}`;
-
+    score.textContent = `${score1} : ${score2}`;
+    roundTitle.textContent = `РАУНД ${currentRound} / 3`;
 
     player1.classList.toggle(
         "active",
-        gameStarted &&
-        currentPlayer === 1 &&
-        !battleFinished &&
-        !roundFinished
+        gameStarted && currentPlayer === 1
     );
-
 
     player2.classList.toggle(
         "active",
-        gameStarted &&
-        currentPlayer === 2 &&
-        !battleFinished &&
-        !roundFinished
+        gameStarted && currentPlayer === 2
     );
 
+    turn1.textContent =
+        gameStarted && currentPlayer === 1
+        ? "ХОД ИГРОКА 1"
+        : "НЕ В ХОДУ";
 
-    player1.classList.toggle(
-        "stunned",
-        stunned1
-    );
+    turn2.textContent =
+        gameStarted && currentPlayer === 2
+        ? "ХОД ИГРОКА 2"
+        : "НЕ В ХОДУ";
 
+    stun1.textContent = stunned1 ? "ОГЛУШЁН • ХОД ПРОПУСКАЕТ" : "НЕ ОГЛУШЁН";
+    stun2.textContent = stunned2 ? "ОГЛУШЁН • ХОД ПРОПУСКАЕТ" : "НЕ ОГЛУШЁН";
 
-    player2.classList.toggle(
-        "stunned",
-        stunned2
-    );
+    stun1.classList.toggle("visible",stunned1);
+    stun2.classList.toggle("visible",stunned2);
 
-
-    if (
-        gameStarted &&
-        currentPlayer === 1 &&
-        !battleFinished &&
-        !roundFinished
-    ) {
-
-        turn1.textContent =
-            "▶ ХОД ИГРОКА 1";
-
-        turn2.textContent = "";
-
-        arenaTurn.textContent =
-            "ХОД ИГРОКА 1";
-
-        arenaTurn.style.color =
-            "#24d8ff";
-
+    if(gameStarted){
+        status.textContent = `ХОД ИГРОКА ${currentPlayer}`;
+        arenaTurn.textContent = `ХОД ИГРОКА ${currentPlayer}`;
     }
-
-    else if (
-        gameStarted &&
-        currentPlayer === 2 &&
-        !battleFinished &&
-        !roundFinished
-    ) {
-
-        turn1.textContent = "";
-
-        turn2.textContent =
-            "◀ ХОД ИГРОКА 2";
-
-        arenaTurn.textContent =
-            "ХОД ИГРОКА 2";
-
-        arenaTurn.style.color =
-            "#ff7183";
-
-    }
-
-    else {
-
-        turn1.textContent = "";
-
-        turn2.textContent = "";
-
-        if (!gameStarted) {
-
-            arenaTurn.textContent =
-                "ОЖИДАНИЕ";
-
-            arenaTurn.style.color =
-                "#647b91";
-
-        }
-
-    }
-
-
-    stun1.textContent =
-        stunned1
-            ? "🔥 ОГЛУШЁН"
-            : "";
-
-
-    stun2.textContent =
-        stunned2
-            ? "🔥 ОГЛУШЁН"
-            : "";
-
 }
 
-
-/* =========================================================
-   START ROUND
-   ========================================================= */
-
-function startRound() {
-
-    clearTimers();
-
-
+function resetRoundState(){
     hp1 = MAX_HP;
-
     hp2 = MAX_HP;
 
-
     stunned1 = false;
-
     stunned2 = false;
 
-
     gameStarted = false;
-
-    battleFinished = false;
-
     roundFinished = false;
-
 
     currentPlayer = 1;
 
+    drawDice(dice1,0);
+    drawDice(dice2,0);
 
-    drawDice(
-        dice1,
-        null
-    );
+    resultNumber.textContent = "—";
+    damageText.textContent = "ОЖИДАНИЕ БРОСКА";
+}
 
-    drawDice(
-        dice2,
-        null
-    );
+function startRound(mode="manual"){
+    clearTimers();
 
-
-    resultNumber.textContent =
-        "—";
-
-
-    damageText.textContent =
-        "Кто начнёт раунд?";
-
-
-    coinResult.textContent =
-        "—";
-
-
-    coinButton.disabled =
-        false;
-
-
-    status.textContent =
-        "ОЖИДАНИЕ";
-
-
-    arenaTurn.textContent =
-        "ОЖИДАНИЕ";
-
-
-    arenaTurn.style.color =
-        "#647b91";
-
+    resetRoundState();
 
     updateUI();
 
+    addLog(`⚔️ Начинается раунд ${currentRound}. HP восстановлены до 1000.`);
 
-    addLog(
-        `⚔️ Начинается раунд ${currentRound}. HP восстановлены до 1000.`
-    );
+    if(mode === "manual"){
+        coinButton.disabled = false;
+        coinResult.textContent = "—";
 
-}
+        status.textContent = "ОЖИДАНИЕ";
+        arenaTurn.textContent = "ОЖИДАНИЕ";
 
-
-/* =========================================================
-   COIN
-   ========================================================= */
-
-function determineFirstPlayer() {
-
-    if (
-        gameStarted ||
-        roundFinished ||
-        battleFinished
-    ) {
+        addLog("🪙 Выберите ОРЕЛ / РЕШКА, чтобы определить первого игрока.");
         return;
     }
 
+    if(mode === "loser"){
+        coinButton.disabled = true;
 
-    initAudio();
+        currentPlayer = previousRoundLoser;
 
-    playButtonSound();
+        coinResult.textContent = "ПРАВО НЕУДАЧНИКА";
 
+        gameStarted = true;
 
-    const result =
-        Math.random() < 0.5
-            ? "ОРЕЛ"
-            : "РЕШКА";
+        status.textContent = `ХОД ИГРОКА ${currentPlayer}`;
+        arenaTurn.textContent = `ХОД ИГРОКА ${currentPlayer}`;
 
+        addLog(
+            `⚔️ Право неудачника: игрок ${currentPlayer} проиграл прошлый раунд и начинает этот раунд.`
+        );
 
-    if (result === "ОРЕЛ") {
+        updateUI();
 
-        currentPlayer = 1;
+        battleTimer = setTimeout(()=>{
+            automaticTurn();
+        },TURN_DELAY);
 
-    } else {
-
-        currentPlayer = 2;
-
+        return;
     }
 
+    if(mode === "autoCoin"){
+        coinButton.disabled = true;
 
-    coinResult.textContent =
-        result;
+        coinResult.textContent = "КРУТИМ...";
+        status.textContent = "ЖЕРЕБЬЁВКА";
+        arenaTurn.textContent = "ЖЕРЕБЬЁВКА";
 
+        addLog("🎲 Решающий раунд: автоматическая жеребьёвка определяет первого игрока.");
+
+        runAutomaticCoinToss();
+
+        return;
+    }
+}
+
+function determineFirstPlayer(){
+    if(gameStarted || battleFinished || roundFinished) return;
+    if(currentRound !== 1) return;
+
+    initAudio();
+    playButtonSound();
+
+    const result = Math.random() < .5 ? "ОРЕЛ" : "РЕШКА";
+
+    currentPlayer = result === "ОРЕЛ" ? 1 : 2;
+
+    coinResult.textContent = result;
 
     gameStarted = true;
 
+    coinButton.disabled = true;
 
-    coinButton.disabled =
-        true;
-
-
-    status.textContent =
-        `ХОД ИГРОКА ${currentPlayer}`;
-
+    status.textContent = `ХОД ИГРОКА ${currentPlayer}`;
+    arenaTurn.textContent = `ХОД ИГРОКА ${currentPlayer}`;
 
     addLog(
-        `Выпало ${result}. Игрок ${currentPlayer} получает право первого броска.`
+        `🪙 Выпало ${result}. Игрок ${currentPlayer} получает право первого броска.`
     );
-
-
-    damageText.textContent =
-        `Первым бросает игрок ${currentPlayer}`;
-
 
     updateUI();
 
-
-    battleTimer =
-        setTimeout(() => {
-
-            automaticTurn();
-
-        }, 800);
-
+    battleTimer = setTimeout(()=>{
+        automaticTurn();
+    },TURN_DELAY);
 }
 
+function runAutomaticCoinToss(){
+    let flips = 0;
+    const totalFlips = 12;
 
-/* =========================================================
-   AUTOMATIC TURN
-   ========================================================= */
+    coinTimer = setInterval(()=>{
+        const visualResult = flips % 2 === 0 ? "ОРЕЛ" : "РЕШКА";
 
-function automaticTurn() {
+        coinResult.textContent = visualResult;
 
-    if (
-        !gameStarted ||
-        battleFinished ||
-        roundFinished
-    ) {
-        return;
-    }
-
-
-    /* Игрок 1 оглушён */
-
-    if (
-        currentPlayer === 1 &&
-        stunned1
-    ) {
-
-        stunned1 = false;
-
-
-        addLog(
-            "Игрок 1 оглушён и пропускает этот ход."
+        playClick(
+            visualResult === "ОРЕЛ" ? 620 : 470,
+            .035,
+            .018
         );
 
+        flips++;
 
-        damageText.textContent =
-            "Игрок 1 пропускает ход";
+        if(flips >= totalFlips){
+            clearInterval(coinTimer);
+            coinTimer = null;
 
+            const result = Math.random() < .5 ? "ОРЕЛ" : "РЕШКА";
 
-        playStunSound();
+            currentPlayer = result === "ОРЕЛ" ? 1 : 2;
 
+            coinResult.textContent = result;
 
-        updateUI();
+            gameStarted = true;
 
+            status.textContent = `ХОД ИГРОКА ${currentPlayer}`;
+            arenaTurn.textContent = `ХОД ИГРОКА ${currentPlayer}`;
 
-        currentPlayer = 2;
+            playOpenSound();
 
-
-        battleTimer =
-            setTimeout(() => {
-
-                automaticTurn();
-
-            }, TURN_DELAY);
-
-
-        return;
-    }
-
-
-    /* Игрок 2 оглушён */
-
-    if (
-        currentPlayer === 2 &&
-        stunned2
-    ) {
-
-        stunned2 = false;
-
-
-        addLog(
-            "Игрок 2 оглушён и пропускает этот ход."
-        );
-
-
-        damageText.textContent =
-            "Игрок 2 пропускает ход";
-
-
-        playStunSound();
-
-
-        updateUI();
-
-
-        currentPlayer = 1;
-
-
-        battleTimer =
-            setTimeout(() => {
-
-                automaticTurn();
-
-            }, TURN_DELAY);
-
-
-        return;
-    }
-
-
-    rollDiceAutomatically();
-
-}
-
-
-/* =========================================================
-   AUTOMATIC DICE
-   ========================================================= */
-
-function rollDiceAutomatically() {
-
-    if (
-        !gameStarted ||
-        battleFinished ||
-        roundFinished
-    ) {
-        return;
-    }
-
-
-    dice1.classList.add(
-        "rolling"
-    );
-
-    dice2.classList.add(
-        "rolling"
-    );
-
-
-    resultNumber.textContent =
-        "••";
-
-
-    damageText.textContent =
-        "БРОСОК...";
-
-
-    playDiceSound();
-
-
-    const animationStart =
-        Date.now();
-
-
-    diceTimer =
-        setInterval(() => {
-
-            const temp1 =
-                randomDice();
-
-            const temp2 =
-                randomDice();
-
-
-            drawDice(
-                dice1,
-                temp1
+            addLog(
+                `🎲 Автоматическая жеребьёвка: выпало ${result}. Игрок ${currentPlayer} начинает решающий раунд.`
             );
 
-            drawDice(
-                dice2,
-                temp2
-            );
+            updateUI();
 
-
-            playDiceSound();
-
-
-            if (
-                Date.now() -
-                animationStart >=
-                DICE_ANIMATION_TIME
-            ) {
-
-                clearInterval(
-                    diceTimer
-                );
-
-                diceTimer = null;
-
-
-                finishDiceRoll();
-
-            }
-
-        }, 80);
-
+            battleTimer = setTimeout(()=>{
+                automaticTurn();
+            },TURN_DELAY);
+        }
+    },120);
 }
 
+function automaticTurn(){
+    if(!gameStarted || battleFinished || roundFinished) return;
 
-/* =========================================================
-   FINISH DICE
-   ========================================================= */
-
-function finishDiceRoll() {
-
-    dice1.classList.remove(
-        "rolling"
-    );
-
-    dice2.classList.remove(
-        "rolling"
-    );
-
-
-    const die1 =
-        randomDice();
-
-    const die2 =
-        randomDice();
-
-
-    const number =
-        die1 * 10 + die2;
-
-
-    drawDice(
-        dice1,
-        die1
-    );
-
-    drawDice(
-        dice2,
-        die2
-    );
-
-
-    resultNumber.textContent =
-        number;
-
-
-    const attacker =
-        currentPlayer;
-
-    const defender =
+    const stunned =
         currentPlayer === 1
-            ? 2
-            : 1;
+        ? stunned1
+        : stunned2;
 
-
-    if (attacker === 1) {
-
-        hp2 -= number;
-
-    } else {
-
-        hp1 -= number;
-
-    }
-
-
-    hp1 =
-        Math.max(
-            0,
-            hp1
+    if(stunned){
+        addLog(
+            `💫 Игрок ${currentPlayer} оглушён и пропускает ход.`
         );
 
-    hp2 =
-        Math.max(
-            0,
-            hp2
-        );
-
-
-    damageText.textContent =
-        `УРОН: ${number}`;
-
-
-    playHitSound();
-
-
-    addLog(
-        `Игрок ${attacker} выбросил ${number} и нанёс ${number} урона игроку ${defender}.`
-    );
-
-
-    /* Дубль */
-
-    if (
-        isDouble(
-            die1,
-            die2
-        )
-    ) {
-
-        if (defender === 1) {
-
-            stunned1 = true;
-
-        } else {
-
-            stunned2 = true;
-
+        if(currentPlayer === 1){
+            stunned1 = false;
+        }else{
+            stunned2 = false;
         }
 
+        updateUI();
 
-        addLog(
-            `🔥 ДУБЛЬ ${number}! Варвар оглушил игрока ${defender}. Следующий ход игрока ${defender} будет пропущен.`
-        );
+        battleTimer = setTimeout(()=>{
+            currentPlayer = currentPlayer === 1 ? 2 : 1;
 
+            updateUI();
 
-        playStunSound();
+            battleTimer = setTimeout(()=>{
+                automaticTurn();
+            },450);
 
-    }
-
-
-    updateUI();
-
-
-    /* Проверяем конец раунда */
-
-    if (
-        hp1 <= 0 ||
-        hp2 <= 0
-    ) {
-
-        const roundWinner =
-            hp1 <= 0
-                ? 2
-                : 1;
-
-
-        finishRound(
-            roundWinner
-        );
-
+        },650);
 
         return;
-
     }
 
-
-    /* Следующий игрок */
-
-    currentPlayer =
-        currentPlayer === 1
-            ? 2
-            : 1;
-
-
-    status.textContent =
-        `ХОД ИГРОКА ${currentPlayer}`;
-
-
-    updateUI();
-
-
-    battleTimer =
-        setTimeout(() => {
-
-            automaticTurn();
-
-        }, TURN_DELAY);
-
+    rollDiceAutomatically();
 }
 
+function rollDiceAutomatically(){
+    if(!gameStarted || battleFinished || roundFinished) return;
 
-/* =========================================================
-   FINISH ROUND
-   ========================================================= */
+    const rollingPlayer = currentPlayer;
 
-function finishRound(
-    roundWinner
-) {
+    let elapsed = 0;
 
-    roundFinished = true;
+    diceTimer = setInterval(()=>{
+        if(!gameStarted || battleFinished || roundFinished){
+            clearInterval(diceTimer);
+            diceTimer = null;
+            return;
+        }
 
-    gameStarted = false;
+        const temp1 = Math.floor(Math.random()*6)+1;
+        const temp2 = Math.floor(Math.random()*6)+1;
 
+        drawDice(dice1,temp1);
+        drawDice(dice2,temp2);
 
-    clearTimeout(
-        battleTimer
-    );
+        resultNumber.textContent = `${temp1}${temp2}`;
 
-    battleTimer = null;
+        elapsed += 90;
 
+        if(elapsed >= DICE_ANIMATION_TIME){
+            clearInterval(diceTimer);
+            diceTimer = null;
 
-    if (
-        roundWinner === 1
-    ) {
+            finishDiceRoll(rollingPlayer);
+        }
+    },90);
+}
 
-        score1++;
+function finishDiceRoll(rollingPlayer){
+    if(!gameStarted || battleFinished || roundFinished) return;
 
-    } else {
+    const die1 = Math.floor(Math.random()*6)+1;
+    const die2 = Math.floor(Math.random()*6)+1;
 
-        score2++;
+    drawDice(dice1,die1);
+    drawDice(dice2,die2);
 
+    const result = die1 * 10 + die2;
+
+    resultNumber.textContent = result;
+    damageText.textContent = `УРОН: ${result}`;
+
+    playClick(560,.06,.03);
+
+    const targetPlayer = rollingPlayer === 1 ? 2 : 1;
+
+    if(targetPlayer === 1){
+        hp1 = Math.max(0,hp1 - result);
+    }else{
+        hp2 = Math.max(0,hp2 - result);
     }
 
+    addLog(
+        `Игрок ${rollingPlayer} выбросил ${result} и нанёс ${result} урона игроку ${targetPlayer}.`
+    );
+
+    const isDouble = die1 === die2;
+
+    if(isDouble){
+        if(targetPlayer === 1){
+            stunned1 = true;
+        }else{
+            stunned2 = true;
+        }
+
+        addLog(
+            `🔥 ДУБЛЬ ${result}! Варвар оглушил игрока ${targetPlayer}. Следующий ход игрока ${targetPlayer} будет пропущен.`
+        );
+    }
 
     updateUI();
 
+    if(hp1 <= 0 || hp2 <= 0){
+        const winner = hp1 <= 0 ? 2 : 1;
 
-    addLog(
-        `🏆 Игрок ${roundWinner} победил в раунде ${currentRound}! Счёт серии: ${score1} : ${score2}.`
-    );
-
-
-    status.textContent =
-        `ПОБЕДА ИГРОКА ${roundWinner}`;
-
-
-    arenaTurn.textContent =
-        `РАУНД ${currentRound} ЗАВЕРШЁН`;
-
-
-    damageText.textContent =
-        `РАУНД ${currentRound} ЗАВЕРШЁН`;
-
-
-    /* Кто-то выиграл два раунда */
-
-    if (
-        score1 >= 2 ||
-        score2 >= 2
-    ) {
-
-        battleFinished = true;
-
-
-        const overallWinner =
-            score1 >= 2
-                ? 1
-                : 2;
-
-
-        addLog(
-            `👑 Игрок ${overallWinner} выиграл серию со счётом ${score1} : ${score2}!`
-        );
-
-
-        status.textContent =
-            "СЕРИЯ ЗАВЕРШЕНА";
-
-
-        playWinSound();
-
-
-        nextRoundTimer =
-            setTimeout(() => {
-
-                winnerTitle.textContent =
-                    `ИГРОК ${overallWinner}`;
-
-
-                winnerScore.textContent =
-                    `Счёт серии: ${score1} : ${score2}`;
-
-
-                winnerOverlay.classList.add(
-                    "show"
-                );
-
-
-            }, 1000);
-
+        battleTimer = setTimeout(()=>{
+            finishRound(winner);
+        },700);
 
         return;
-
     }
 
+    currentPlayer = currentPlayer === 1 ? 2 : 1;
 
-    /*
-       Если 1 : 1 —
-       автоматически начинается третий раунд.
-    */
+    updateUI();
+
+    battleTimer = setTimeout(()=>{
+        automaticTurn();
+    },TURN_DELAY);
+}
+
+function finishRound(roundWinner){
+    if(roundFinished || battleFinished) return;
+
+    roundFinished = true;
+    gameStarted = false;
+
+    previousRoundWinner = roundWinner;
+    previousRoundLoser = roundWinner === 1 ? 2 : 1;
+
+    if(roundWinner === 1){
+        score1++;
+    }else{
+        score2++;
+    }
+
+    addLog(
+        `🏆 Раунд ${currentRound} завершён. Победил игрок ${roundWinner}. Счёт серии: ${score1} : ${score2}.`
+    );
+
+    updateUI();
+
+    if(score1 >= 2 || score2 >= 2){
+        battleFinished = true;
+
+        winnerTitle.textContent = `ПОБЕДИТЕЛЬ: ИГРОК ${roundWinner}`;
+        winnerScore.textContent = `СЧЁТ СЕРИИ ${score1} : ${score2}`;
+
+        nextRoundTimer = setTimeout(()=>{
+            winnerOverlay.classList.add("visible");
+        },800);
+
+        return;
+    }
 
     currentRound++;
 
+    if(currentRound === 2){
+        addLog(
+            `⚔️ Следующий раунд начнётся с права неудачника — игрок ${previousRoundLoser} начинает первым.`
+        );
 
-    nextRoundTimer =
-        setTimeout(() => {
+        nextRoundTimer = setTimeout(()=>{
+            startRound("loser");
+        },NEXT_ROUND_DELAY);
 
-            startRound();
+        return;
+    }
 
+    if(currentRound === 3){
+        addLog(
+            "🎲 Счёт 1 : 1. Начинается решающий третий раунд с автоматической жеребьёвкой."
+        );
 
-            addLog(
-                `⚔️ Раунд ${currentRound}. Серия продолжается.`
-            );
-
-
-        }, NEXT_ROUND_DELAY);
-
+        nextRoundTimer = setTimeout(()=>{
+            startRound("autoCoin");
+        },NEXT_ROUND_DELAY);
+    }
 }
 
-
-/* =========================================================
-   RESTART
-   ========================================================= */
-
-function restartGame() {
-
-    initAudio();
-
-    playButtonSound();
-
-
+function restartGame(){
     clearTimers();
 
-
-    hp1 = MAX_HP;
-
-    hp2 = MAX_HP;
-
+    winnerOverlay.classList.remove("visible");
 
     score1 = 0;
-
     score2 = 0;
 
-
     currentRound = 1;
-
     currentPlayer = 1;
 
-
-    stunned1 = false;
-
-    stunned2 = false;
-
+    previousRoundWinner = null;
+    previousRoundLoser = null;
 
     gameStarted = false;
-
     battleFinished = false;
-
     roundFinished = false;
-
-
-    winnerOverlay.classList.remove(
-        "show"
-    );
-
 
     log.innerHTML = "";
 
+    coinButton.disabled = false;
+    coinResult.textContent = "—";
 
-    addLog(
-        "⚔️ Новая серия best-of-3 готова."
-    );
+    status.textContent = "ОЖИДАНИЕ";
+    arenaTurn.textContent = "ОЖИДАНИЕ";
 
-
-    drawDice(
-        dice1,
-        null
-    );
-
-    drawDice(
-        dice2,
-        null
-    );
-
-
-    resultNumber.textContent =
-        "—";
-
-
-    damageText.textContent =
-        "Ожидание начала";
-
-
-    coinResult.textContent =
-        "—";
-
-
-    coinButton.disabled =
-        false;
-
-
-    status.textContent =
-        "ОЖИДАНИЕ";
-
-
-    arenaTurn.textContent =
-        "ОЖИДАНИЕ";
-
-
-    arenaTurn.style.color =
-        "#647b91";
-
-
-    updateUI();
-
+    startRound("manual");
 }
 
+function kickMessage(){
+    initAudio();
+    playButtonSound();
 
-/* =========================================================
-   EVENTS
-   ========================================================= */
+    alert(
+        "Хотите кикнуть команду и занять этот слот?\n\nОбращайтесь в ТГ @VankKingX\nЦена слота: 100 рублей."
+    );
+}
 
-coinButton.addEventListener(
-    "click",
-    determineFirstPlayer
-);
+coinButton.addEventListener("click",determineFirstPlayer);
 
+winnerClose.addEventListener("click",()=>{
+    playCloseSound();
+    restartGame();
+});
 
-restartButton.addEventListener(
-    "click",
-    restartGame
-);
+coinButton.addEventListener("mouseenter",()=>{
+    if(!coinButton.disabled){
+        playHoverSound();
+    }
+});
 
-
-winnerClose.addEventListener(
-    "click",
-    restartGame
-);
-
-
-/* =========================================================
-   INITIAL
-   ========================================================= */
-
-startRound();
-
+startRound("manual");
 </script>
 
 </body>
