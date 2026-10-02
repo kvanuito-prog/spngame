@@ -57,6 +57,7 @@
   .pclass.assassin { color: #ef4444; }
   .pclass.barbarian { color: #f59e0b; }
   .pclass.vampire { color: #a855f7; }
+  .pclass.joker { color: #10b981; }
   .hp-bar { width: 100%; height: 7px; background: rgba(0,0,0,0.4); border-radius: 4px; overflow: hidden; margin-bottom: 2px; }
   .hp-fill {
     height: 100%; width: 100%;
@@ -73,6 +74,20 @@
     display: none;
   }
   .player.stunned .stun-badge { display: block; }
+
+  .buff-badge {
+    position: absolute; top: 4px; left: 4px;
+    background: #10b981; color: #0a0f1e;
+    font-size: 9px; font-weight: 800;
+    padding: 2px 5px; border-radius: 5px; letter-spacing: 1px;
+    display: none;
+    animation: buffPulse 0.8s infinite;
+  }
+  .player.has-buff .buff-badge { display: block; }
+  @keyframes buffPulse {
+    0%,100% { box-shadow: 0 0 6px rgba(16,185,129,0.6); }
+    50%     { box-shadow: 0 0 18px rgba(16,185,129,1); }
+  }
 
   .dice-row { display: flex; gap: 14px; justify-content: center; flex-shrink: 0; margin: 2px 0; }
   .die {
@@ -93,6 +108,10 @@
   .die.vampire-glow {
     box-shadow: 0 0 30px rgba(168,85,247,0.95), 0 0 60px rgba(239,68,68,0.5), inset 0 -3px 6px rgba(0,0,0,0.15);
     background: #f6eaff;
+  }
+  .die.joker-glow {
+    box-shadow: 0 0 30px rgba(16,185,129,0.95), 0 0 60px rgba(74,222,128,0.6), inset 0 -3px 6px rgba(0,0,0,0.15);
+    background: #e6fff5;
   }
   @keyframes shake {
     0%   { transform: rotate(-5deg) scale(1.03); }
@@ -122,6 +141,11 @@
   .result.vampire {
     color: #a855f7;
     text-shadow: 0 0 40px rgba(168,85,247,0.95), 0 0 20px rgba(239,68,68,0.5);
+    animation: critFlash 0.45s ease-out;
+  }
+  .result.joker {
+    color: #10b981;
+    text-shadow: 0 0 40px rgba(16,185,129,1), 0 0 20px rgba(74,222,128,0.6);
     animation: critFlash 0.45s ease-out;
   }
   @keyframes critFlash {
@@ -186,6 +210,21 @@
     text-shadow: 0 0 8px rgba(168,85,247,0.9);
     font-size: 13px;
   }
+  .log-entry.joker {
+    background: rgba(16,185,129,0.14);
+    border-left: 3px solid #10b981;
+  }
+  .log-entry.joker .dmg {
+    color: #10b981;
+    text-shadow: 0 0 8px rgba(16,185,129,0.9);
+    font-size: 13px;
+  }
+  .log-entry.buff {
+    background: rgba(16,185,129,0.10);
+    border-left: 3px solid #10b981;
+  }
+  .log-entry.buff .who { color: #10b981; }
+  .log-entry.buff .dmg { color: #10b981; letter-spacing: 1.5px; }
   .log-entry.stun { background: rgba(251,191,36,0.10); }
   .log-entry.stun .who { color: #fbbf24; }
   .log-entry.stun .dmg { color: #fbbf24; letter-spacing: 2px; }
@@ -259,8 +298,8 @@
   .overlay-card {
     background: linear-gradient(160deg, #1e2a4a, #0f1729);
     border: 2px solid rgba(74,222,128,0.4);
-    border-radius: 20px; padding: 22px 18px;
-    text-align: center; max-width: 440px; width: 100%;
+    border-radius: 20px; padding: 20px 16px;
+    text-align: center; max-width: 460px; width: 100%;
     box-shadow: 0 20px 60px rgba(0,0,0,0.6);
     margin: auto;
   }
@@ -283,14 +322,14 @@
   }
 
   .select-title { font-size: 20px; font-weight: 800; margin-bottom: 4px; color: #fff; }
-  .select-subtitle { font-size: 12px; color: #8892b0; margin-bottom: 16px; letter-spacing: 1px; }
+  .select-subtitle { font-size: 12px; color: #8892b0; margin-bottom: 14px; letter-spacing: 1px; }
   .select-row { margin-bottom: 12px; text-align: left; }
   .select-pname { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; font-weight: 700; }
   .select-pname.p1 { color: #4ade80; }
   .select-pname.p2 { color: #60a5fa; }
-  .select-list { display: flex; gap: 6px; }
+  .select-list { display: flex; gap: 5px; }
   .class-card {
-    flex: 1; padding: 9px 6px;
+    flex: 1; padding: 8px 4px;
     border: 2px solid rgba(255,255,255,0.1);
     border-radius: 10px; text-align: center;
     cursor: pointer; transition: all 0.2s ease;
@@ -302,10 +341,10 @@
     background: rgba(74,222,128,0.12);
     box-shadow: 0 0 16px rgba(74,222,128,0.35);
   }
-  .class-card .icon { font-size: 22px; line-height: 1; margin-bottom: 3px; }
-  .class-card .cname { font-size: 11px; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 3px; }
+  .class-card .icon { font-size: 20px; line-height: 1; margin-bottom: 3px; }
+  .class-card .cname { font-size: 10px; font-weight: 800; letter-spacing: 0.3px; margin-bottom: 3px; }
   .class-card.selected .cname { color: #4ade80; }
-  .class-card .cdesc { font-size: 9px; line-height: 1.25; color: #8892b0; }
+  .class-card .cdesc { font-size: 8.5px; line-height: 1.25; color: #8892b0; }
 
   @media (min-width: 700px) {
     #app { max-width: 720px; margin: 0 auto; padding: 12px; gap: 8px; }
@@ -316,15 +355,14 @@
     .pname { font-size: 12px; }
     .pclass { font-size: 11px; }
     .log-wrap { min-height: 170px; }
-    .class-card .icon { font-size: 28px; }
-    .class-card .cname { font-size: 13px; }
-    .class-card .cdesc { font-size: 10.5px; }
+    .class-card .icon { font-size: 24px; }
+    .class-card .cname { font-size: 12px; }
+    .class-card .cdesc { font-size: 10px; }
   }
 </style>
 </head>
 <body>
 
-<!-- ЭКРАН ВЫБОРА КЛАССОВ -->
 <div class="overlay show" id="selectOverlay">
   <div class="overlay-card">
     <div class="select-title">Выбор классов</div>
@@ -344,10 +382,10 @@
   </div>
 </div>
 
-<!-- ОСНОВНОЙ ЭКРАН -->
 <div id="app">
   <div class="players">
     <div class="player" id="p1">
+      <div class="buff-badge">🎲 x3</div>
       <div class="stun-badge">⚡ СТАН</div>
       <div class="pname">Игрок 1</div>
       <div class="pclass" id="pclass1">—</div>
@@ -355,6 +393,7 @@
       <div class="hp-val" id="hpVal1">1000</div>
     </div>
     <div class="player" id="p2">
+      <div class="buff-badge">🎲 x3</div>
       <div class="stun-badge">⚡ СТАН</div>
       <div class="pname">Игрок 2</div>
       <div class="pclass" id="pclass2">—</div>
@@ -390,7 +429,6 @@
   <div class="hint" id="hint">Выбери классы и начни бой</div>
 </div>
 
-<!-- ОКНО ПОБЕДЫ -->
 <div class="overlay" id="overlay">
   <div class="overlay-card">
     <div class="overlay-title" id="overlayTitle">Победа!</div>
@@ -404,25 +442,24 @@
   // ============ КЛАССЫ ============
   var CLASSES = {
     assassin: {
-      icon: '🗡',
-      short: 'Ассасин',
-      label: '🗡 Ассасин',
-      css: 'assassin',
+      icon: '🗡', short: 'Ассасин',
+      label: '🗡 Ассасин', css: 'assassin',
       desc: 'Дубль → реролл, урон ×2.'
     },
     barbarian: {
-      icon: '⚔',
-      short: 'Варвар',
-      label: '⚔ Варвар',
-      css: 'barbarian',
+      icon: '⚔', short: 'Варвар',
+      label: '⚔ Варвар', css: 'barbarian',
       desc: 'Дубль → стан + урон.'
     },
     vampire: {
-      icon: '🧛',
-      short: 'Вампир',
-      label: '🧛 Вампир',
-      css: 'vampire',
-      desc: 'Дубль → укус: урон и хил на столько же.'
+      icon: '🧛', short: 'Вампир',
+      label: '🧛 Вампир', css: 'vampire',
+      desc: 'Дубль → укус: урон + хил.'
+    },
+    joker: {
+      icon: '🎲', short: 'Джокер',
+      label: '🎲 Джокер', css: 'joker',
+      desc: 'HP из одинаковых цифр → урон ×3.'
     }
   };
 
@@ -459,6 +496,7 @@
   var hp2 = MAX_HP;
   var gameOver = false;
   var stunned = { 1: false, 2: false };
+  var jokerBuff = { 1: false, 2: false };
   var autoPlay = false;
   var autoTimer = null;
 
@@ -466,6 +504,19 @@
     1: [4], 2: [0, 8], 3: [0, 4, 8],
     4: [0, 2, 6, 8], 5: [0, 2, 4, 6, 8], 6: [0, 2, 3, 5, 6, 8]
   };
+
+  // ============ «КРАСИВОЕ» ЧИСЛО ============
+  // Только числа, у которых ВСЕ цифры одинаковые и длина >= 2:
+  // 11,22,...,99, 111,222,...,999
+  function isBeautiful(n) {
+    if (n <= 0) return false;
+    var s = String(n);
+    if (s.length < 2) return false;
+    for (var i = 1; i < s.length; i++) {
+      if (s[i] !== s[0]) return false;
+    }
+    return true;
+  }
 
   // ============ КУБИКИ ============
   function renderDie(el, value) {
@@ -484,9 +535,10 @@
 
   function setDieGlow(type) {
     dieEls.forEach(function(el) {
-      el.classList.remove('crit-glow', 'vampire-glow');
+      el.classList.remove('crit-glow', 'vampire-glow', 'joker-glow');
       if (type === 'crit') el.classList.add('crit-glow');
       else if (type === 'vampire') el.classList.add('vampire-glow');
+      else if (type === 'joker') el.classList.add('joker-glow');
     });
   }
 
@@ -561,6 +613,8 @@
     }
     if (stunned[1]) cls1 += ' stunned';
     if (stunned[2]) cls2 += ' stunned';
+    if (jokerBuff[1] && !gameOver) cls1 += ' has-buff';
+    if (jokerBuff[2] && !gameOver) cls2 += ' has-buff';
     if (hp1 <= 0) cls1 += ' dead';
     if (hp2 <= 0) cls2 += ' dead';
     p1.className = cls1;
@@ -570,11 +624,12 @@
   function setHint(text) { hintEl.textContent = text; }
 
   // ============ ЛОГ ============
-  function addLogEntry(number, attacker, dmg, isDouble, stunCaused, isCrit, heal) {
+  function addLogEntry(number, attacker, dmg, isDouble, stunCaused, isCrit, heal, isJokerHit) {
     var entry = document.createElement('div');
     var extraClass = '';
     if (isCrit) extraClass = ' crit';
     else if (heal) extraClass = ' vampire';
+    else if (isJokerHit) extraClass = ' joker';
     else if (isDouble) extraClass = ' double';
     entry.className = 'log-entry' + extraClass;
 
@@ -584,6 +639,7 @@
 
     var suffix = '';
     if (isCrit) suffix = ' 💥 КРИТ×2';
+    else if (isJokerHit) suffix = ' 🎲×3';
     else if (heal) suffix = ' 🧛 +' + heal;
     if (stunCaused) suffix += ' ⚡';
 
@@ -604,8 +660,31 @@
     trimLog();
   }
 
+  function addBuffLog(playerNum) {
+    var entry = document.createElement('div');
+    entry.className = 'log-entry buff';
+    var idx = document.createElement('span'); idx.className = 'idx'; idx.textContent = '🎲';
+    var who = document.createElement('span'); who.className = 'who'; who.textContent = 'Джокер Игрок ' + playerNum;
+    var dmgEl = document.createElement('span'); dmgEl.className = 'dmg'; dmgEl.textContent = '×3 ГОТОВ';
+    entry.appendChild(idx); entry.appendChild(who); entry.appendChild(dmgEl);
+    logList.insertBefore(entry, logList.firstChild);
+    trimLog();
+  }
+
   function trimLog() {
     while (logList.children.length > MAX_LOG) logList.removeChild(logList.lastChild);
+  }
+
+  // ============ ПРОВЕРКА БАФФА ДЖОКЕРА ============
+  function checkJokerBuffs() {
+    [1, 2].forEach(function(p) {
+      if (classes[p] === 'joker' && !jokerBuff[p]) {
+        if (isBeautiful(hp1) || isBeautiful(hp2)) {
+          jokerBuff[p] = true;
+          addBuffLog(p);
+        }
+      }
+    });
   }
 
   // ============ СПИН ============
@@ -643,9 +722,9 @@
       var defender = attacker === 1 ? 2 : 1;
       var cls = classes[attacker];
       var isDouble = v1 === v2;
-      var dmg = v1 * 10 + v2;
+      var baseDmg = v1 * 10 + v2;
 
-      resultEl.textContent = String(dmg);
+      resultEl.textContent = String(baseDmg);
       resultEl.className = 'result' + (isDouble ? ' double' : (attacker === 2 ? ' p2' : ''));
 
       // ===== Ассасин: дубль → реролл ×2 =====
@@ -658,13 +737,13 @@
             resultEl.className = 'result crit';
             setDieGlow('crit');
             setTimeout(function() { setDieGlow(null); }, 600);
-            applyHit(attacker, defender, critDmg, false, false, true, 0);
+            applyHit(attacker, defender, critDmg, false, false, true, 0, false);
           });
         }, getCritPause());
         return;
       }
 
-      // ===== Вампир: дубль → укус (урон + хил) =====
+      // ===== Вампир: дубль → укус =====
       if (cls === 'vampire' && isDouble) {
         setHint('🧛 Дубль! Укус...');
         setTimeout(function() {
@@ -674,10 +753,24 @@
             resultEl.className = 'result vampire';
             setDieGlow('vampire');
             setTimeout(function() { setDieGlow(null); }, 600);
-            applyHit(attacker, defender, biteDmg, false, false, false, biteDmg);
+            applyHit(attacker, defender, biteDmg, false, false, false, biteDmg, false);
           });
         }, getCritPause());
         return;
+      }
+
+      // ===== Джокер: если есть бафф — урон ×3 =====
+      var isJokerHit = false;
+      var dmg = baseDmg;
+      if (cls === 'joker' && jokerBuff[attacker]) {
+        dmg = baseDmg * 3;
+        isJokerHit = true;
+        jokerBuff[attacker] = false;
+        resultEl.textContent = dmg + '';
+        resultEl.className = 'result joker';
+        setDieGlow('joker');
+        setTimeout(function() { setDieGlow(null); }, 700);
+        setHint('🎲 Джокер активировал ×3!');
       }
 
       // ===== Варвар: дубль → стан =====
@@ -687,35 +780,38 @@
         stunCaused = true;
       }
 
-      applyHit(attacker, defender, dmg, isDouble, stunCaused, false, 0);
+      applyHit(attacker, defender, dmg, isDouble, stunCaused, false, 0, isJokerHit);
     });
   }
 
   // ============ УРОН, ХИЛ, ПЕРЕХОД ХОДА ============
-  function applyHit(attacker, defender, dmg, isDouble, stunCaused, isCrit, heal) {
+  function applyHit(attacker, defender, dmg, isDouble, stunCaused, isCrit, heal, isJokerHit) {
     rollNumber++;
 
-    // Урон
     if (attacker === 1) hp2 = Math.max(0, hp2 - dmg);
     else hp1 = Math.max(0, hp1 - dmg);
 
-    // Хил вампира
     if (heal > 0) {
       if (attacker === 1) hp1 = Math.min(MAX_HP, hp1 + heal);
       else hp2 = Math.min(MAX_HP, hp2 + heal);
     }
 
-    addLogEntry(rollNumber, attacker, dmg, isDouble, stunCaused, isCrit, heal);
+    addLogEntry(rollNumber, attacker, dmg, isDouble, stunCaused, isCrit, heal, isJokerHit);
 
     if (hp1 <= 0 || hp2 <= 0) {
       gameOver = true;
       stunned[1] = false;
       stunned[2] = false;
+      jokerBuff[1] = false;
+      jokerBuff[2] = false;
       updatePlayersUI();
       showGameOver();
       rolling = false;
       return;
     }
+
+    // Проверка баффа Джокера после изменения HP
+    checkJokerBuffs();
 
     turn = defender;
     updatePlayersUI();
@@ -786,6 +882,7 @@
     autoPlay = false;
     clearTimeout(autoTimer);
     stunned[1] = false; stunned[2] = false;
+    jokerBuff[1] = false; jokerBuff[2] = false;
     logList.innerHTML = '';
     resultEl.textContent = '— —';
     resultEl.className = 'result';
