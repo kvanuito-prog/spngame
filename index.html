@@ -3,32 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SPN BATTLE — TOURNAMENT</title>
+<title>SPN BATTLE</title>
 
 <style>
 :root{
   --bg:#05070b;
   --panel:#0b1018;
   --panel2:#0e141e;
-  --border:#1c2a3b;
+  --border:#1d2b3d;
   --blue:#00a8ff;
   --cyan:#24d8ff;
   --green:#27e38b;
   --red:#ff3d58;
   --yellow:#ffd447;
   --purple:#b86cff;
-  --blood:#d93652;
   --text:#f3f7fb;
   --muted:#718096;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 body{
   margin:0;
   min-height:100vh;
   background:
-    radial-gradient(circle at top,#101b2a 0,#05070b 45%,#030408 100%);
+    radial-gradient(circle at top,#111c2b 0,#05070b 45%,#030408 100%);
   color:var(--text);
   font-family:Arial,Helvetica,sans-serif;
 }
@@ -48,7 +49,7 @@ button{
 }
 
 .app{
-  width:min(1500px,100%);
+  width:min(1550px,100%);
   margin:auto;
   padding:18px;
 }
@@ -59,18 +60,16 @@ header{
 }
 
 .logo{
-  font-size:clamp(30px,6vw,64px);
+  font-size:clamp(32px,6vw,62px);
   font-weight:1000;
-  letter-spacing:4px;
-  color:#fff;
-  text-shadow:0 0 25px rgba(0,168,255,.3);
+  letter-spacing:5px;
 }
 
 .subtitle{
   color:var(--cyan);
-  font-weight:800;
+  font-size:11px;
+  font-weight:1000;
   letter-spacing:3px;
-  font-size:12px;
   margin-top:5px;
 }
 
@@ -88,9 +87,16 @@ header{
 }
 
 .setup-title{
-  font-size:20px;
+  font-size:21px;
   font-weight:1000;
-  margin-bottom:15px;
+  margin-bottom:16px;
+}
+
+.count-row{
+  display:grid;
+  grid-template-columns:220px 1fr;
+  gap:12px;
+  align-items:end;
 }
 
 .field{
@@ -100,9 +106,9 @@ header{
 }
 
 .field label{
-  font-size:11px;
   color:var(--muted);
-  font-weight:900;
+  font-size:10px;
+  font-weight:1000;
   text-transform:uppercase;
 }
 
@@ -121,47 +127,32 @@ select{
 input:focus,
 select:focus{
   border-color:var(--blue);
-  box-shadow:0 0 0 2px rgba(0,168,255,.12);
 }
 
-.count-row{
-  display:grid;
-  grid-template-columns:220px 1fr;
-  gap:12px;
-  align-items:end;
+.primary,
+.secondary{
+  min-height:46px;
+  border-radius:10px;
+  padding:10px 20px;
+  font-weight:1000;
 }
 
 .primary{
-  min-height:46px;
   border:0;
-  border-radius:10px;
-  padding:10px 20px;
   color:#001018;
-  font-weight:1000;
   background:linear-gradient(135deg,var(--cyan),var(--blue));
 }
 
 .secondary{
-  min-height:44px;
-  border:1px solid #284158;
-  border-radius:10px;
-  padding:9px 18px;
-  color:#fff;
+  border:1px solid #294056;
   background:#101923;
-  font-weight:900;
-}
-
-.danger{
-  border-color:#57202b;
-  background:#1c0d12;
-  color:#ff7184;
+  color:#fff;
 }
 
 .players-editor{
   margin-top:18px;
   max-height:500px;
   overflow:auto;
-  padding-right:4px;
 }
 
 .player-row{
@@ -169,7 +160,7 @@ select:focus{
   grid-template-columns:60px minmax(150px,1fr) 180px;
   gap:10px;
   align-items:center;
-  padding:9px;
+  padding:8px;
   margin-bottom:7px;
   background:#080d14;
   border:1px solid #162435;
@@ -177,76 +168,118 @@ select:focus{
 }
 
 .player-number{
-  font-weight:1000;
-  color:var(--cyan);
   text-align:center;
+  color:var(--cyan);
+  font-weight:1000;
 }
 
 .actions{
   display:flex;
+  flex-wrap:wrap;
   gap:10px;
   margin-top:15px;
-  flex-wrap:wrap;
 }
 
 .message{
+  min-height:20px;
   margin-top:12px;
-  color:#ffb9c2;
+  color:#ffb5c0;
   font-size:13px;
-  min-height:18px;
 }
+
+/* ==============================
+   TOURNAMENT HEADER
+============================== */
 
 .tournament{
   margin-top:18px;
 }
 
-.topbar{
+.tournament-top{
   display:grid;
   grid-template-columns:1fr auto 1fr;
   gap:12px;
   align-items:center;
-  margin-bottom:15px;
+  margin-bottom:14px;
 }
 
 .stat{
   background:#080d14;
   border:1px solid var(--border);
   border-radius:12px;
-  padding:11px 14px;
+  padding:10px 14px;
 }
 
 .stat-label{
-  font-size:10px;
   color:var(--muted);
-  font-weight:900;
+  font-size:9px;
+  font-weight:1000;
 }
 
 .stat-value{
-  font-size:20px;
-  font-weight:1000;
   margin-top:3px;
+  font-size:21px;
+  font-weight:1000;
 }
 
-.stage{
+.stage-title{
   text-align:center;
-  font-size:20px;
+  font-size:21px;
   font-weight:1000;
 }
+
+/* ==============================
+   SPEED
+============================== */
+
+.speed-panel{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
+
+.speed-label{
+  color:var(--muted);
+  font-size:10px;
+  font-weight:1000;
+}
+
+.speed-btn{
+  min-width:55px;
+  min-height:38px;
+  border-radius:8px;
+  border:1px solid #25384c;
+  background:#0a1119;
+  color:#8fa0b2;
+  font-size:12px;
+  font-weight:1000;
+}
+
+.speed-btn.active{
+  color:#001018;
+  background:var(--cyan);
+  border-color:var(--cyan);
+}
+
+/* ==============================
+   BATTLE
+============================== */
 
 .battle{
   display:grid;
-  grid-template-columns:1fr minmax(260px,380px) 1fr;
+  grid-template-columns:1fr minmax(280px,390px) 1fr;
   gap:14px;
-  align-items:stretch;
 }
 
 .fighter{
-  position:relative;
   border:1px solid var(--border);
   border-radius:16px;
   background:#080d14;
   padding:18px;
-  overflow:hidden;
+  transition:.2s;
 }
 
 .fighter.active{
@@ -255,7 +288,7 @@ select:focus{
 }
 
 .fighter.dead{
-  opacity:.55;
+  opacity:.5;
 }
 
 .fighter-name{
@@ -277,11 +310,11 @@ select:focus{
 
 .class-name.assassin{
   color:#d19aff;
-  background:#261538;
+  background:#28173a;
 }
 
 .class-name.vampire{
-  color:#ff7b91;
+  color:#ff7c91;
   background:#35121a;
 }
 
@@ -291,103 +324,103 @@ select:focus{
 }
 
 .hp-text{
-  margin-top:22px;
   display:flex;
-  justify-content:space-between;
   align-items:end;
+  justify-content:space-between;
+  margin-top:20px;
 }
 
 .hp{
-  font-size:34px;
+  font-size:35px;
   font-weight:1000;
 }
 
 .hp-label{
   color:var(--muted);
   font-size:10px;
-  font-weight:900;
+  font-weight:1000;
 }
 
 .hp-bar{
   height:12px;
+  margin-top:7px;
+  overflow:hidden;
   background:#171d25;
   border-radius:20px;
-  overflow:hidden;
-  margin-top:7px;
 }
 
 .hp-fill{
-  height:100%;
   width:100%;
+  height:100%;
   background:linear-gradient(90deg,var(--green),#a8ffca);
-  transition:width .25s ease;
+  transition:.25s;
 }
 
 .turn{
+  min-height:34px;
   margin-top:15px;
-  min-height:32px;
   display:flex;
   align-items:center;
   justify-content:center;
   border-radius:8px;
   background:#0d141e;
   color:var(--muted);
-  font-size:11px;
+  font-size:10px;
   font-weight:1000;
 }
 
 .fighter.active .turn{
-  background:rgba(0,168,255,.12);
   color:var(--cyan);
+  background:rgba(0,168,255,.12);
 }
 
 .special-status{
-  margin-top:8px;
-  min-height:24px;
+  min-height:26px;
+  margin-top:7px;
   text-align:center;
-  font-size:12px;
-  font-weight:1000;
   color:var(--yellow);
+  font-size:11px;
+  font-weight:1000;
 }
 
+/* ==============================
+   ARENA
+============================== */
+
 .arena{
+  background:#060a10;
   border:1px solid var(--border);
   border-radius:16px;
-  background:#060a10;
   padding:15px;
   text-align:center;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
 }
 
 .round{
-  font-size:11px;
   color:var(--muted);
+  font-size:10px;
   font-weight:1000;
   letter-spacing:2px;
 }
 
 .score{
-  font-size:26px;
-  font-weight:1000;
   margin:5px 0 12px;
+  font-size:27px;
+  font-weight:1000;
 }
 
 .dice{
   display:flex;
   justify-content:center;
   gap:10px;
-  margin:8px 0;
 }
 
 .die{
-  width:72px;
-  height:72px;
-  border-radius:13px;
+  width:70px;
+  height:70px;
   display:flex;
   align-items:center;
   justify-content:center;
+  border-radius:13px;
   background:#fff;
   color:#07101a;
   font-size:40px;
@@ -396,71 +429,69 @@ select:focus{
 }
 
 .die.rolling{
-  animation:diceShake .08s linear infinite alternate;
+  animation:diceShake .07s linear infinite alternate;
 }
 
 @keyframes diceShake{
-  from{transform:rotate(-5deg) translateY(-2px)}
-  to{transform:rotate(5deg) translateY(2px)}
+  from{
+    transform:rotate(-5deg) translateY(-2px);
+  }
+  to{
+    transform:rotate(5deg) translateY(2px);
+  }
 }
 
 .result{
+  margin:9px 0;
   font-size:52px;
   line-height:1;
   font-weight:1000;
   color:var(--cyan);
-  margin:8px 0;
 }
 
 .special{
-  min-height:40px;
-  font-size:17px;
-  font-weight:1000;
+  min-height:38px;
   color:var(--yellow);
+  font-size:16px;
+  font-weight:1000;
 }
 
 .damage{
-  min-height:28px;
+  min-height:25px;
   font-size:15px;
   font-weight:1000;
 }
 
 .log{
-  margin-top:12px;
-  height:150px;
+  height:190px;
   overflow:auto;
-  text-align:left;
-  padding:10px;
+  margin-top:10px;
+  padding:8px;
   background:#03060a;
-  border:1px solid #131f2d;
+  border:1px solid #13202e;
   border-radius:9px;
+  text-align:left;
+  display:flex;
+  flex-direction:column;
   font-size:11px;
-  line-height:1.55;
+  line-height:1.45;
 }
 
 .log-line{
-  padding:3px 0;
-  border-bottom:1px solid rgba(255,255,255,.035);
+  padding:4px 3px;
+  border-bottom:1px solid rgba(255,255,255,.04);
 }
 
-.joker-charge{
-  color:#ffe26a;
-  font-weight:1000;
-}
+/* ==============================
+   BRACKET
+============================== */
 
 .bracket{
-  margin-top:18px;
-}
-
-.bracket-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  margin-bottom:10px;
+  margin-top:16px;
 }
 
 .bracket-title{
+  margin-bottom:12px;
   font-size:20px;
   font-weight:1000;
 }
@@ -472,99 +503,179 @@ select:focus{
 
 .bracket-grid{
   display:flex;
-  gap:12px;
+  gap:14px;
   min-width:max-content;
 }
 
 .bracket-column{
-  width:220px;
+  width:245px;
 }
 
 .column-title{
+  margin-bottom:8px;
+  padding:8px;
+  border-radius:8px;
+  background:#0a111a;
+  border:1px solid #18283a;
   text-align:center;
-  font-size:11px;
-  color:var(--muted);
+  color:var(--cyan);
+  font-size:10px;
   font-weight:1000;
-  margin-bottom:7px;
 }
 
 .match{
+  margin-bottom:9px;
+  padding:8px;
   border:1px solid #1a2939;
   border-radius:10px;
   background:#080d14;
-  padding:8px;
-  margin-bottom:8px;
-  font-size:11px;
 }
 
 .match.current{
   border-color:var(--cyan);
 }
 
-.match.finished{
-  opacity:.7;
+.match.done{
+  opacity:.8;
 }
 
 .match-player{
   display:flex;
+  align-items:center;
   justify-content:space-between;
-  gap:6px;
+  gap:5px;
+  min-height:25px;
   padding:4px 5px;
   border-radius:5px;
+  font-size:10px;
+  font-weight:900;
 }
 
-.match-player.winner{
-  background:rgba(39,227,139,.09);
+.match-player.win{
   color:var(--green);
+  background:rgba(39,227,139,.08);
 }
 
-.match-player.loser{
-  color:#687789;
+.match-player.loss{
+  color:#667587;
 }
 
-.match-player.empty{
-  color:#3e4c5d;
+.match-player.pending{
+  color:#526174;
+}
+
+.match-vs{
+  text-align:center;
+  padding:3px;
+  color:#4d6073;
+  font-size:9px;
+  font-weight:1000;
 }
 
 .match-status{
   margin-top:5px;
-  color:#536477;
-  font-size:9px;
   text-align:center;
+  color:#607286;
+  font-size:8px;
+  font-weight:900;
 }
+
+/* ==============================
+   DRAW
+============================== */
+
+.draw-panel{
+  margin-top:16px;
+}
+
+.draw-title{
+  text-align:center;
+  font-size:22px;
+  font-weight:1000;
+  margin-bottom:10px;
+}
+
+.draw-subtitle{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:14px;
+}
+
+.draw-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:9px;
+  max-height:600px;
+  overflow:auto;
+}
+
+.draw-match{
+  padding:10px;
+  background:#080d14;
+  border:1px solid #1a2939;
+  border-radius:10px;
+}
+
+.draw-match-number{
+  color:var(--cyan);
+  font-size:9px;
+  font-weight:1000;
+  margin-bottom:6px;
+}
+
+.draw-player{
+  padding:7px;
+  border-radius:6px;
+  background:#0d141e;
+  margin-top:4px;
+  font-size:11px;
+  font-weight:900;
+}
+
+.draw-player span{
+  color:var(--muted);
+  margin-left:5px;
+}
+
+/* ==============================
+   WINNER
+============================== */
 
 .winner-overlay{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.82);
-  backdrop-filter:blur(7px);
+  z-index:100;
   display:flex;
   align-items:center;
   justify-content:center;
-  z-index:100;
   padding:20px;
+  background:rgba(0,0,0,.83);
+  backdrop-filter:blur(7px);
 }
 
 .winner-box{
   width:min(600px,100%);
-  background:#0a1018;
+  padding:35px;
   border:1px solid var(--cyan);
   border-radius:20px;
-  padding:35px;
+  background:#0a1018;
   text-align:center;
   box-shadow:0 0 80px rgba(0,168,255,.2);
 }
 
 .winner-small{
   color:var(--cyan);
+  font-size:12px;
   font-weight:1000;
   letter-spacing:3px;
 }
 
 .winner-name{
-  font-size:clamp(32px,8vw,64px);
-  font-weight:1000;
   margin:12px 0;
+  font-size:clamp(34px,8vw,65px);
+  font-weight:1000;
+  word-break:break-word;
 }
 
 .winner-class{
@@ -573,6 +684,7 @@ select:focus{
 }
 
 @media(max-width:850px){
+
   .battle{
     grid-template-columns:1fr;
   }
@@ -581,29 +693,32 @@ select:focus{
     order:-1;
   }
 
-  .topbar{
+  .tournament-top{
     grid-template-columns:1fr 1fr;
   }
 
-  .stage{
+  .stage-title{
     grid-column:1/-1;
     grid-row:1;
   }
 
-  .count-row{
-    grid-template-columns:1fr;
-  }
-}
-
-@media(max-width:600px){
-  .app{padding:10px}
-
   .player-row{
-    grid-template-columns:40px 1fr;
+    grid-template-columns:45px 1fr;
   }
 
   .player-row select{
     grid-column:2;
+  }
+}
+
+@media(max-width:600px){
+
+  .app{
+    padding:10px;
+  }
+
+  .count-row{
+    grid-template-columns:1fr;
   }
 
   .die{
@@ -616,161 +731,524 @@ select:focus{
 </head>
 
 <body>
+
 <div class="app">
 
 <header>
   <div class="logo">SPN BATTLE</div>
-  <div class="subtitle">AUTOMATIC DOUBLE ELIMINATION</div>
+  <div class="subtitle">DOUBLE ELIMINATION TOURNAMENT</div>
 </header>
 
+<!-- =========================
+     SETUP
+========================= -->
+
 <section id="setupPanel" class="panel setup">
-  <div class="setup-title">НАСТРОЙКА ТУРНИРА</div>
+
+  <div class="setup-title">
+    НАСТРОЙКА ТУРНИРА
+  </div>
 
   <div class="count-row">
+
     <div class="field">
       <label>Количество игроков</label>
-      <input id="playerCount" type="number" min="2" max="100" value="8">
+
+      <input
+        id="playerCount"
+        type="number"
+        min="2"
+        max="100"
+        value="8"
+      >
     </div>
 
-    <button id="createPlayersButton" class="primary">
+    <button
+      id="createPlayersButton"
+      class="primary"
+      type="button"
+    >
       СОЗДАТЬ ИГРОКОВ
     </button>
+
   </div>
 
-  <div id="playersEditor" class="players-editor hidden"></div>
+  <div
+    id="playersEditor"
+    class="players-editor hidden"
+  ></div>
 
-  <div id="setupActions" class="actions hidden">
-    <button id="startTournamentButton" class="primary">
-      НАЧАТЬ ТУРНИР
+  <div
+    id="setupActions"
+    class="actions hidden"
+  >
+
+    <button
+      id="drawButton"
+      class="primary"
+      type="button"
+    >
+      ПРИСТУПИТЬ К ЖЕРЕБЬЁВКЕ
     </button>
 
-    <button id="clearPlayersButton" class="secondary">
+    <button
+      id="clearPlayersButton"
+      class="secondary"
+      type="button"
+    >
       ОЧИСТИТЬ
     </button>
+
   </div>
 
-  <div id="setupMessage" class="message"></div>
+  <div
+    id="setupMessage"
+    class="message"
+  ></div>
+
 </section>
 
-<section id="tournamentPanel" class="tournament hidden">
+<!-- =========================
+     TOURNAMENT
+========================= -->
 
-  <div class="topbar">
+<section
+  id="tournamentPanel"
+  class="tournament hidden"
+>
+
+  <div class="tournament-top">
+
     <div class="stat">
-      <div class="stat-label">МАТЧЕЙ ЗАВЕРШЕНО</div>
-      <div id="completedMatches" class="stat-value">0</div>
+      <div class="stat-label">
+        ЗАВЕРШЕНО БОЁВ
+      </div>
+
+      <div
+        id="completedMatches"
+        class="stat-value"
+      >
+        0
+      </div>
     </div>
 
-    <div id="stageTitle" class="stage">ЖЕРЕБЬЁВКА</div>
+    <div
+      id="stageTitle"
+      class="stage-title"
+    >
+      ЖЕРЕБЬЁВКА
+    </div>
 
     <div class="stat">
-      <div class="stat-label">ОСТАЛОСЬ ИГРОКОВ</div>
-      <div id="alivePlayers" class="stat-value">0</div>
-    </div>
-  </div>
-
-  <div class="panel battle">
-
-    <div id="fighter1" class="fighter">
-      <div id="fighter1Name" class="fighter-name">—</div>
-      <div id="fighter1Class" class="class-name">—</div>
-
-      <div class="hp-text">
-        <div id="hp1" class="hp">1000</div>
-        <div class="hp-label">HP</div>
+      <div class="stat-label">
+        ОСТАЛОСЬ
       </div>
 
-      <div class="hp-bar">
-        <div id="hp1Bar" class="hp-fill"></div>
+      <div
+        id="alivePlayers"
+        class="stat-value"
+      >
+        0
       </div>
-
-      <div id="turn1" class="turn">ОЖИДАНИЕ</div>
-      <div id="status1" class="special-status"></div>
-    </div>
-
-    <div class="arena">
-
-      <div id="roundText" class="round">РАУНД 1 / 3</div>
-      <div id="scoreText" class="score">0 : 0</div>
-
-      <div class="dice">
-        <div id="die1" class="die">?</div>
-        <div id="die2" class="die">?</div>
-      </div>
-
-      <div id="resultText" class="result">—</div>
-      <div id="specialText" class="special"></div>
-      <div id="damageText" class="damage"></div>
-
-      <div id="battleLog" class="log"></div>
-    </div>
-
-    <div id="fighter2" class="fighter">
-      <div id="fighter2Name" class="fighter-name">—</div>
-      <div id="fighter2Class" class="class-name">—</div>
-
-      <div class="hp-text">
-        <div id="hp2" class="hp">1000</div>
-        <div class="hp-label">HP</div>
-      </div>
-
-      <div class="hp-bar">
-        <div id="hp2Bar" class="hp-fill"></div>
-      </div>
-
-      <div id="turn2" class="turn">ОЖИДАНИЕ</div>
-      <div id="status2" class="special-status"></div>
     </div>
 
   </div>
 
-  <section class="panel bracket">
-    <div class="bracket-head">
-      <div class="bracket-title">СЕТКА DOUBLE ELIMINATION</div>
-      <button id="newTournamentButton" class="secondary">
-        НОВЫЙ ТУРНИР
+  <!-- =========================
+       SPEED
+  ========================= -->
+
+  <div
+    id="speedPanel"
+    class="panel speed-panel hidden"
+  >
+
+    <span class="speed-label">
+      СКОРОСТЬ ИГРЫ:
+    </span>
+
+    <button
+      class="speed-btn"
+      data-speed="0.25"
+      type="button"
+    >
+      0.25×
+    </button>
+
+    <button
+      class="speed-btn"
+      data-speed="0.5"
+      type="button"
+    >
+      0.5×
+    </button>
+
+    <button
+      class="speed-btn active"
+      data-speed="1"
+      type="button"
+    >
+      1×
+    </button>
+
+    <button
+      class="speed-btn"
+      data-speed="2"
+      type="button"
+    >
+      2×
+    </button>
+
+    <button
+      class="speed-btn"
+      data-speed="4"
+      type="button"
+    >
+      4×
+    </button>
+
+  </div>
+
+  <!-- =========================
+       DRAW
+  ========================= -->
+
+  <section
+    id="drawPanel"
+    class="panel draw-panel hidden"
+  >
+
+    <div class="draw-title">
+      🎲 ЖЕРЕБЬЁВКА ЗАВЕРШЕНА
+    </div>
+
+    <div class="draw-subtitle">
+      Вот пары первого этапа. После просмотра нажмите
+      «НАЧАТЬ ТУРНИР».
+    </div>
+
+    <div
+      id="drawGrid"
+      class="draw-grid"
+    ></div>
+
+    <div
+      class="actions"
+      style="justify-content:center"
+    >
+
+      <button
+        id="startTournamentButton"
+        class="primary"
+        type="button"
+      >
+        НАЧАТЬ ТУРНИР
       </button>
+
+      <button
+        id="newSetupButton"
+        class="secondary"
+        type="button"
+      >
+        ИЗМЕНИТЬ ИГРОКОВ
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- =========================
+       BATTLE
+  ========================= -->
+
+  <div
+    id="battleArea"
+    class="hidden"
+  >
+
+    <div class="battle">
+
+      <div
+        id="fighter1"
+        class="fighter"
+      >
+
+        <div
+          id="fighter1Name"
+          class="fighter-name"
+        >
+          —
+        </div>
+
+        <div
+          id="fighter1Class"
+          class="class-name"
+        >
+          —
+        </div>
+
+        <div class="hp-text">
+          <div
+            id="hp1"
+            class="hp"
+          >
+            1000
+          </div>
+
+          <div class="hp-label">
+            HP
+          </div>
+        </div>
+
+        <div class="hp-bar">
+          <div
+            id="hp1Bar"
+            class="hp-fill"
+          ></div>
+        </div>
+
+        <div
+          id="turn1"
+          class="turn"
+        >
+          ОЖИДАНИЕ
+        </div>
+
+        <div
+          id="status1"
+          class="special-status"
+        ></div>
+
+      </div>
+
+      <!-- ARENA -->
+
+      <div class="arena">
+
+        <div
+          id="roundText"
+          class="round"
+        >
+          РАУНД 1 / 3
+        </div>
+
+        <div
+          id="scoreText"
+          class="score"
+        >
+          0 : 0
+        </div>
+
+        <div class="dice">
+
+          <div
+            id="die1"
+            class="die"
+          >
+            ?
+          </div>
+
+          <div
+            id="die2"
+            class="die"
+          >
+            ?
+          </div>
+
+        </div>
+
+        <div
+          id="resultText"
+          class="result"
+        >
+          —
+        </div>
+
+        <div
+          id="specialText"
+          class="special"
+        ></div>
+
+        <div
+          id="damageText"
+          class="damage"
+        ></div>
+
+        <div
+          id="battleLog"
+          class="log"
+        ></div>
+
+      </div>
+
+      <!-- PLAYER 2 -->
+
+      <div
+        id="fighter2"
+        class="fighter"
+      >
+
+        <div
+          id="fighter2Name"
+          class="fighter-name"
+        >
+          —
+        </div>
+
+        <div
+          id="fighter2Class"
+          class="class-name"
+        >
+          —
+        </div>
+
+        <div class="hp-text">
+
+          <div
+            id="hp2"
+            class="hp"
+          >
+            1000
+          </div>
+
+          <div class="hp-label">
+            HP
+          </div>
+
+        </div>
+
+        <div class="hp-bar">
+
+          <div
+            id="hp2Bar"
+            class="hp-fill"
+          ></div>
+
+        </div>
+
+        <div
+          id="turn2"
+          class="turn"
+        >
+          ОЖИДАНИЕ
+        </div>
+
+        <div
+          id="status2"
+          class="special-status"
+        ></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- =========================
+       BRACKET
+  ========================= -->
+
+  <section
+    id="bracketPanel"
+    class="panel bracket"
+  >
+
+    <div class="bracket-title">
+      СЕТКА ТУРНИРА
     </div>
 
     <div class="bracket-scroll">
-      <div id="bracketGrid" class="bracket-grid"></div>
+
+      <div
+        id="bracketGrid"
+        class="bracket-grid"
+      ></div>
+
     </div>
+
   </section>
+
+  <div
+    class="actions"
+    style="justify-content:center"
+  >
+
+    <button
+      id="newTournamentButton"
+      class="secondary"
+      type="button"
+    >
+      НОВЫЙ ТУРНИР
+    </button>
+
+  </div>
 
 </section>
 
 </div>
 
-<div id="winnerOverlay" class="winner-overlay hidden">
-  <div class="winner-box">
-    <div class="winner-small">ПОБЕДИТЕЛЬ ТУРНИРА</div>
-    <div id="winnerName" class="winner-name">—</div>
-    <div id="winnerClass" class="winner-class">—</div>
+<!-- =========================
+     WINNER
+========================= -->
 
-    <div class="actions" style="justify-content:center">
-      <button id="winnerRestartButton" class="primary">
+<div
+  id="winnerOverlay"
+  class="winner-overlay hidden"
+>
+
+  <div class="winner-box">
+
+    <div class="winner-small">
+      🏆 ПОБЕДИТЕЛЬ ТУРНИРА
+    </div>
+
+    <div
+      id="winnerName"
+      class="winner-name"
+    >
+      —
+    </div>
+
+    <div
+      id="winnerClass"
+      class="winner-class"
+    >
+      —
+    </div>
+
+    <div
+      class="actions"
+      style="justify-content:center"
+    >
+
+      <button
+        id="winnerRestartButton"
+        class="primary"
+        type="button"
+      >
         НОВЫЙ ТУРНИР
       </button>
+
     </div>
+
   </div>
+
 </div>
 
 <script>
 "use strict";
 
-/* =========================
-   НАСТРОЙКИ
-========================= */
+/* =========================================
+   CONSTANTS
+========================================= */
 
 const MAX_HP = 1000;
-const TURN_DELAY = 700;
-const DICE_ANIMATION_TIME = 480;
-const NEXT_ROUND_DELAY = 1100;
 
 const CLASS_NAMES = {
-  barbar: "ВАРВАР",
-  assassin: "АССАСИН",
-  vampire: "ВАМПИР",
-  joker: "ДЖОКЕР"
+  barbar:"ВАРВАР",
+  assassin:"АССАСИН",
+  vampire:"ВАМПИР",
+  joker:"ДЖОКЕР"
 };
 
 const BEAUTIFUL_HP = new Set([
@@ -778,150 +1256,285 @@ const BEAUTIFUL_HP = new Set([
   111,222,333,444,555,666,777,888,999
 ]);
 
-/* =========================
+/*
+  Чем больше число — тем быстрее игра.
+*/
+let gameSpeed = 1;
+
+/* =========================================
    DOM
-========================= */
+========================================= */
 
-const setupPanel = document.getElementById("setupPanel");
-const tournamentPanel = document.getElementById("tournamentPanel");
+const setupPanel =
+  document.getElementById("setupPanel");
 
-const playerCountInput = document.getElementById("playerCount");
-const createPlayersButton = document.getElementById("createPlayersButton");
-const playersEditor = document.getElementById("playersEditor");
-const setupActions = document.getElementById("setupActions");
-const startTournamentButton = document.getElementById("startTournamentButton");
-const clearPlayersButton = document.getElementById("clearPlayersButton");
-const setupMessage = document.getElementById("setupMessage");
+const tournamentPanel =
+  document.getElementById("tournamentPanel");
 
-const completedMatchesEl = document.getElementById("completedMatches");
-const alivePlayersEl = document.getElementById("alivePlayers");
-const stageTitle = document.getElementById("stageTitle");
+const playerCountInput =
+  document.getElementById("playerCount");
 
-const fighter1 = document.getElementById("fighter1");
-const fighter2 = document.getElementById("fighter2");
+const createPlayersButton =
+  document.getElementById("createPlayersButton");
 
-const fighter1Name = document.getElementById("fighter1Name");
-const fighter2Name = document.getElementById("fighter2Name");
+const playersEditor =
+  document.getElementById("playersEditor");
 
-const fighter1Class = document.getElementById("fighter1Class");
-const fighter2Class = document.getElementById("fighter2Class");
+const setupActions =
+  document.getElementById("setupActions");
 
-const hp1El = document.getElementById("hp1");
-const hp2El = document.getElementById("hp2");
+const drawButton =
+  document.getElementById("drawButton");
 
-const hp1Bar = document.getElementById("hp1Bar");
-const hp2Bar = document.getElementById("hp2Bar");
+const clearPlayersButton =
+  document.getElementById("clearPlayersButton");
 
-const turn1 = document.getElementById("turn1");
-const turn2 = document.getElementById("turn2");
+const setupMessage =
+  document.getElementById("setupMessage");
 
-const status1 = document.getElementById("status1");
-const status2 = document.getElementById("status2");
+const drawPanel =
+  document.getElementById("drawPanel");
 
-const roundText = document.getElementById("roundText");
-const scoreText = document.getElementById("scoreText");
+const drawGrid =
+  document.getElementById("drawGrid");
 
-const die1El = document.getElementById("die1");
-const die2El = document.getElementById("die2");
+const startTournamentButton =
+  document.getElementById("startTournamentButton");
 
-const resultText = document.getElementById("resultText");
-const specialText = document.getElementById("specialText");
-const damageText = document.getElementById("damageText");
+const newSetupButton =
+  document.getElementById("newSetupButton");
 
-const battleLog = document.getElementById("battleLog");
-const bracketGrid = document.getElementById("bracketGrid");
+const speedPanel =
+  document.getElementById("speedPanel");
 
-const winnerOverlay = document.getElementById("winnerOverlay");
-const winnerName = document.getElementById("winnerName");
-const winnerClass = document.getElementById("winnerClass");
+const speedButtons =
+  [...document.querySelectorAll(".speed-btn")];
 
-const newTournamentButton = document.getElementById("newTournamentButton");
-const winnerRestartButton = document.getElementById("winnerRestartButton");
+const battleArea =
+  document.getElementById("battleArea");
 
-/* =========================
+const bracketGrid =
+  document.getElementById("bracketGrid");
+
+const bracketPanel =
+  document.getElementById("bracketPanel");
+
+const completedMatches =
+  document.getElementById("completedMatches");
+
+const alivePlayers =
+  document.getElementById("alivePlayers");
+
+const stageTitle =
+  document.getElementById("stageTitle");
+
+const fighter1 =
+  document.getElementById("fighter1");
+
+const fighter2 =
+  document.getElementById("fighter2");
+
+const fighter1Name =
+  document.getElementById("fighter1Name");
+
+const fighter2Name =
+  document.getElementById("fighter2Name");
+
+const fighter1Class =
+  document.getElementById("fighter1Class");
+
+const fighter2Class =
+  document.getElementById("fighter2Class");
+
+const hp1 =
+  document.getElementById("hp1");
+
+const hp2 =
+  document.getElementById("hp2");
+
+const hp1Bar =
+  document.getElementById("hp1Bar");
+
+const hp2Bar =
+  document.getElementById("hp2Bar");
+
+const turn1 =
+  document.getElementById("turn1");
+
+const turn2 =
+  document.getElementById("turn2");
+
+const status1 =
+  document.getElementById("status1");
+
+const status2 =
+  document.getElementById("status2");
+
+const roundText =
+  document.getElementById("roundText");
+
+const scoreText =
+  document.getElementById("scoreText");
+
+const die1 =
+  document.getElementById("die1");
+
+const die2 =
+  document.getElementById("die2");
+
+const resultText =
+  document.getElementById("resultText");
+
+const specialText =
+  document.getElementById("specialText");
+
+const damageText =
+  document.getElementById("damageText");
+
+const battleLog =
+  document.getElementById("battleLog");
+
+const newTournamentButton =
+  document.getElementById("newTournamentButton");
+
+const winnerOverlay =
+  document.getElementById("winnerOverlay");
+
+const winnerName =
+  document.getElementById("winnerName");
+
+const winnerClass =
+  document.getElementById("winnerClass");
+
+const winnerRestartButton =
+  document.getElementById("winnerRestartButton");
+
+/* =========================================
    STATE
-========================= */
+========================================= */
 
 let players = [];
 
+let drawMatches = [];
+
 let tournament = {
-  active: false,
-  finished: false,
+  configured:false,
+  running:false,
+  finished:false,
 
-  completedMatches: 0,
+  winnersRounds:[],
+  losersRounds:[],
 
-  winnersQueue: [],
-  losersQueue: [],
+  currentMatch:null,
 
-  currentStage: "",
-  currentMatch: null,
+  completedMatches:0,
 
-  winner: null,
+  history:[],
 
-  history: []
+  winner:null
 };
 
 let battle = {
-  p1: null,
-  p2: null,
+  p1:null,
+  p2:null,
 
-  hp1: MAX_HP,
-  hp2: MAX_HP,
+  hp1:MAX_HP,
+  hp2:MAX_HP,
 
-  score1: 0,
-  score2: 0,
+  score1:0,
+  score2:0,
 
-  round: 1,
+  round:1,
 
-  currentPlayer: 1,
+  currentPlayer:1,
 
-  stunned1: false,
-  stunned2: false,
+  stunned1:false,
+  stunned2:false,
 
-  jokerCharge1: 0,
-  jokerCharge2: 0,
+  jokerCharge1:0,
+  jokerCharge2:0,
 
-  finished: false
+  finished:false
 };
 
 let timers = [];
 
-/* =========================
-   HELPERS
-========================= */
+/* =========================================
+   SPEED
+========================================= */
 
-function schedule(fn, delay){
+function speedDelay(ms){
+  return Math.max(
+    30,
+    Math.round(ms / gameSpeed)
+  );
+}
+
+function schedule(fn,ms){
   const timer = setTimeout(() => {
     timers = timers.filter(t => t !== timer);
     fn();
-  }, delay);
+  },speedDelay(ms));
 
   timers.push(timer);
-  return timer;
 }
 
-function clearAllTimers(){
+function clearTimers(){
   timers.forEach(clearTimeout);
   timers = [];
 }
 
-function clamp(value,min,max){
-  return Math.max(min,Math.min(max,value));
-}
+speedButtons.forEach(button => {
+
+  button.addEventListener("click",() => {
+
+    gameSpeed =
+      Number(button.dataset.speed);
+
+    speedButtons.forEach(b =>
+      b.classList.remove("active")
+    );
+
+    button.classList.add("active");
+  });
+
+});
+
+/* =========================================
+   GENERAL
+========================================= */
 
 function randomInt(min,max){
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  return Math.floor(
+    Math.random() * (max-min+1)
+  ) + min;
 }
 
 function shuffle(array){
-  const copy = [...array];
 
-  for(let i = copy.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i],copy[j]] = [copy[j],copy[i]];
+  const result = [...array];
+
+  for(
+    let i=result.length-1;
+    i>0;
+    i--
+  ){
+
+    const j =
+      Math.floor(Math.random()*(i+1));
+
+    [result[i],result[j]] =
+      [result[j],result[i]];
   }
 
-  return copy;
+  return result;
+}
+
+function clamp(value,min,max){
+  return Math.max(
+    min,
+    Math.min(max,value)
+  );
 }
 
 function getClassName(player){
@@ -932,1238 +1545,18 @@ function beautifulHp(value){
   return BEAUTIFUL_HP.has(value);
 }
 
-function getClassCss(playerClass){
-  if(playerClass === "assassin") return "assassin";
-  if(playerClass === "vampire") return "vampire";
-  if(playerClass === "joker") return "joker";
+function classCss(className){
+
+  if(className==="assassin")
+    return "assassin";
+
+  if(className==="vampire")
+    return "vampire";
+
+  if(className==="joker")
+    return "joker";
+
   return "";
-}
-
-function addLog(text){
-  const line = document.createElement("div");
-  line.className = "log-line";
-  line.textContent = text;
-
-  battleLog.appendChild(line);
-  battleLog.scrollTop = battleLog.scrollHeight;
-}
-
-/* =========================
-   PLAYER CREATION
-========================= */
-
-function createPlayerEditor(){
-  let count = Number(playerCountInput.value);
-
-  if(!Number.isFinite(count)){
-    count = 8;
-  }
-
-  count = clamp(Math.floor(count),2,100);
-  playerCountInput.value = count;
-
-  playersEditor.innerHTML = "";
-
-  for(let i = 1; i <= count; i++){
-    const row = document.createElement("div");
-    row.className = "player-row";
-
-    row.innerHTML = `
-      <div class="player-number">#${i}</div>
-
-      <input
-        class="player-name-input"
-        maxlength="24"
-        placeholder="Ник игрока ${i}"
-        value="ИГРОК ${i}"
-      >
-
-      <select class="player-class-input">
-        <option value="barbar">ВАРВАР</option>
-        <option value="assassin">АССАСИН</option>
-        <option value="vampire">ВАМПИР</option>
-        <option value="joker">ДЖОКЕР</option>
-      </select>
-    `;
-
-    playersEditor.appendChild(row);
-  }
-
-  playersEditor.classList.remove("hidden");
-  setupActions.classList.remove("hidden");
-  setupMessage.textContent = "";
-}
-
-function collectPlayers(){
-  const names = [...document.querySelectorAll(".player-name-input")];
-  const classes = [...document.querySelectorAll(".player-class-input")];
-
-  if(names.length < 2){
-    setupMessage.textContent = "Нужно минимум 2 игрока.";
-    return false;
-  }
-
-  const result = [];
-
-  for(let i = 0; i < names.length; i++){
-    const name = names[i].value.trim() || `ИГРОК ${i + 1}`;
-
-    result.push({
-      id: i + 1,
-      name,
-      class: classes[i].value,
-      losses: 0,
-      eliminated: false,
-      wins: 0
-    });
-  }
-
-  players = result;
-
-  return true;
-}
-
-/* =========================
-   TOURNAMENT
-========================= */
-
-/*
-  Турнир работает как double elimination:
-  - игрок начинает в Winners;
-  - первое поражение отправляет его в Losers;
-  - второе поражение = вылет;
-  - победитель Winners встречается с победителем Losers;
-  - если победитель Losers выигрывает финал,
-    проводится reset-финал.
-*/
-
-function startTournament(){
-
-  if(!collectPlayers()){
-    return;
-  }
-
-  clearAllTimers();
-
-  tournament = {
-    active:true,
-    finished:false,
-    completedMatches:0,
-
-    winnersQueue:shuffle(players),
-    losersQueue:[],
-
-    currentStage:"ЖЕРЕБЬЁВКА",
-    currentMatch:null,
-
-    winner:null,
-
-    history:[]
-  };
-
-  players.forEach(player => {
-    player.losses = 0;
-    player.eliminated = false;
-    player.wins = 0;
-  });
-
-  setupPanel.classList.add("hidden");
-  tournamentPanel.classList.remove("hidden");
-
-  alivePlayersEl.textContent = players.length;
-  completedMatchesEl.textContent = "0";
-
-  renderBracket();
-
-  stageTitle.textContent = "ЖЕРЕБЬЁВКА";
-
-  battleLog.innerHTML = "";
-  addLog(`🎲 Участников: ${players.length}`);
-  addLog("🎲 Игроки перемешиваются...");
-  
-  schedule(() => {
-    addLog("🎯 Жеребьёвка завершена.");
-    startNextTournamentMatch();
-  },1200);
-}
-
-function getAlivePlayers(){
-  return players.filter(player => !player.eliminated);
-}
-
-function prepareNextMatch(){
-
-  /*
-    Сначала Winners.
-    В Winners могут быть игроки, которые ещё не проигрывали.
-  */
-
-  if(tournament.winnersQueue.length >= 2){
-
-    const p1 = tournament.winnersQueue.shift();
-    const p2 = tournament.winnersQueue.shift();
-
-    return {
-      type:"winners",
-      p1,
-      p2
-    };
-  }
-
-  /*
-    Один игрок в Winners ждёт.
-  */
-
-  if(tournament.winnersQueue.length === 1){
-
-    /*
-      Если есть Losers, проводим бой там,
-      чтобы не оставлять турнир без движения.
-    */
-    if(tournament.losersQueue.length >= 2){
-
-      const p1 = tournament.losersQueue.shift();
-      const p2 = tournament.losersQueue.shift();
-
-      return {
-        type:"losers",
-        p1,
-        p2
-      };
-    }
-
-    /*
-      Один Winners остаётся до следующего раунда.
-    */
-  }
-
-  /*
-    Losers.
-    Здесь любое поражение = вылет.
-  */
-
-  if(tournament.losersQueue.length >= 2){
-
-    const p1 = tournament.losersQueue.shift();
-    const p2 = tournament.losersQueue.shift();
-
-    return {
-      type:"losers",
-      p1,
-      p2
-    };
-  }
-
-  /*
-    Если остался один Winners и один Losers,
-    можно провести матч между ними как
-    переходный бой.
-  */
-
-  if(
-    tournament.winnersQueue.length === 1 &&
-    tournament.losersQueue.length === 1
-  ){
-
-    const p1 = tournament.winnersQueue.shift();
-    const p2 = tournament.losersQueue.shift();
-
-    return {
-      type:"winners",
-      p1,
-      p2
-    };
-  }
-
-  return null;
-}
-
-function startNextTournamentMatch(){
-
-  if(tournament.finished){
-    return;
-  }
-
-  const alive = getAlivePlayers();
-
-  if(alive.length <= 1){
-    finishTournament(alive[0]);
-    return;
-  }
-
-  const match = prepareNextMatch();
-
-  if(!match){
-
-    /*
-      Если стандартные очереди временно пусты,
-      берём двух ещё не выбывших участников,
-      сохраняя их количество поражений.
-    */
-
-    const available = alive.filter(player =>
-      tournament.winnersQueue.includes(player) ||
-      tournament.losersQueue.includes(player)
-    );
-
-    if(available.length >= 2){
-
-      const p1 = available[0];
-      const p2 = available[1];
-
-      tournament.winnersQueue =
-        tournament.winnersQueue.filter(p => p !== p1 && p !== p2);
-
-      tournament.losersQueue =
-        tournament.losersQueue.filter(p => p !== p1 && p !== p2);
-
-      startTournamentMatch({
-        type: p1.losses === 0 && p2.losses === 0 ? "winners" : "losers",
-        p1,
-        p2
-      });
-
-      return;
-    }
-
-    /*
-      Теоретически сюда можно попасть только при
-      нечётном количестве участников.
-      Переносим игрока дальше без поражения.
-    */
-
-    if(tournament.winnersQueue.length === 1){
-
-      const waiting = tournament.winnersQueue.shift();
-
-      addLog(`⏭ ${waiting.name} получает BYE.`);
-
-      schedule(startNextTournamentMatch,500);
-      return;
-    }
-
-    finishTournament(alive[0]);
-    return;
-  }
-
-  startTournamentMatch(match);
-}
-
-function startTournamentMatch(match){
-
-  tournament.currentMatch = match;
-  tournament.currentStage =
-    match.type === "winners"
-      ? "WINNERS BRACKET"
-      : "LOSERS BRACKET";
-
-  stageTitle.textContent = tournament.currentStage;
-
-  battleLog.innerHTML = "";
-
-  addLog(`⚔️ НОВЫЙ БОЙ: ${match.p1.name} VS ${match.p2.name}`);
-  addLog(`🏆 ${tournament.currentStage}`);
-
-  renderBracket();
-
-  schedule(() => {
-    startBattle(match.p1,match.p2);
-  },700);
-}
-
-/* =========================
-   BATTLE
-========================= */
-
-function startBattle(p1,p2){
-
-  battle = {
-    p1,
-    p2,
-
-    hp1:MAX_HP,
-    hp2:MAX_HP,
-
-    score1:0,
-    score2:0,
-
-    round:1,
-
-    currentPlayer:Math.random() < .5 ? 1 : 2,
-
-    stunned1:false,
-    stunned2:false,
-
-    jokerCharge1:0,
-    jokerCharge2:0,
-
-    finished:false
-  };
-
-  clearBattleVisuals();
-
-  addLog(`🥊 ${p1.name} (${getClassName(p1)}) VS ${p2.name} (${getClassName(p2)})`);
-  addLog(`🎲 Первый ход: ${getBattlePlayer(battle.currentPlayer).name}`);
-
-  updateBattleUI();
-
-  schedule(startBattleTurn,900);
-}
-
-function clearBattleVisuals(){
-
-  die1El.textContent = "?";
-  die2El.textContent = "?";
-
-  resultText.textContent = "—";
-  specialText.textContent = "";
-  damageText.textContent = "";
-
-  battleLog.innerHTML = "";
-
-  status1.textContent = "";
-  status2.textContent = "";
-
-  fighter1.classList.remove("active","dead");
-  fighter2.classList.remove("active","dead");
-}
-
-function getBattlePlayer(side){
-  return side === 1 ? battle.p1 : battle.p2;
-}
-
-function getBattleHp(side){
-  return side === 1 ? battle.hp1 : battle.hp2;
-}
-
-function setBattleHp(side,value){
-  if(side === 1){
-    battle.hp1 = value;
-  }else{
-    battle.hp2 = value;
-  }
-}
-
-function getOpponentSide(side){
-  return side === 1 ? 2 : 1;
-}
-
-function startBattleTurn(){
-
-  if(battle.finished){
-    return;
-  }
-
-  const side = battle.currentPlayer;
-  const player = getBattlePlayer(side);
-
-  /*
-    Оглушение Варвара.
-  */
-
-  if(side === 1 && battle.stunned1){
-    battle.stunned1 = false;
-
-    addLog(`💫 ${player.name} оглушён и пропускает ход.`);
-
-    updateBattleUI();
-
-    battle.currentPlayer = 2;
-
-    schedule(startBattleTurn,TURN_DELAY);
-    return;
-  }
-
-  if(side === 2 && battle.stunned2){
-    battle.stunned2 = false;
-
-    addLog(`💫 ${player.name} оглушён и пропускает ход.`);
-
-    updateBattleUI();
-
-    battle.currentPlayer = 1;
-
-    schedule(startBattleTurn,TURN_DELAY);
-    return;
-  }
-
-  updateBattleUI();
-
-  rollDice(side,"normal");
-}
-
-function drawDiceAnimated(){
-
-  die1El.classList.add("rolling");
-  die2El.classList.add("rolling");
-
-  const frames = 7;
-
-  for(let i = 0; i < frames; i++){
-
-    schedule(() => {
-
-      die1El.textContent = randomInt(1,6);
-      die2El.textContent = randomInt(1,6);
-
-    },i * (DICE_ANIMATION_TIME / frames));
-  }
-
-  schedule(() => {
-
-    die1El.classList.remove("rolling");
-    die2El.classList.remove("rolling");
-
-  },DICE_ANIMATION_TIME);
-}
-
-function rollDice(side,rollType){
-
-  drawDiceAnimated();
-
-  schedule(() => {
-
-    finishDiceRoll(side,rollType);
-
-  },DICE_ANIMATION_TIME + 80);
-}
-
-function finishDiceRoll(side,rollType){
-
-  if(battle.finished){
-    return;
-  }
-
-  const player = getBattlePlayer(side);
-  const opponentSide = getOpponentSide(side);
-
-  const dieA = randomInt(1,6);
-  const dieB = randomInt(1,6);
-
-  const result = dieA * 10 + dieB;
-
-  die1El.textContent = dieA;
-  die2El.textContent = dieB;
-
-  resultText.textContent = result;
-
-  const isDouble = dieA === dieB;
-
-  specialText.textContent = "";
-  damageText.textContent = "";
-
-  /*
-    ASSASSIN
-    Дубль превращается в критический новый бросок.
-  */
-
-  if(
-    rollType === "normal" &&
-    isDouble &&
-    player.class === "assassin"
-  ){
-
-    specialText.textContent = "⚡ КРИТИЧЕСКИЙ УРОН!";
-
-    addLog(
-      `⚡ ${player.name} выбросил дубль ${result}. ` +
-      `Обычный урон отменён. Следующий бросок будет ×2.`
-    );
-
-    schedule(() => {
-      rollDice(side,"critical");
-    },650);
-
-    return;
-  }
-
-  /*
-    VAMPIRE
-    Дубль превращается в укус.
-  */
-
-  if(
-    rollType === "normal" &&
-    isDouble &&
-    player.class === "vampire"
-  ){
-
-    specialText.textContent = "🩸 УКУС!";
-
-    addLog(
-      `🩸 ${player.name} выбросил дубль ${result}. ` +
-      `Дубль не наносит урон. Следующий бросок станет укусом.`
-    );
-
-    schedule(() => {
-      rollDice(side,"vampire");
-    },650);
-
-    return;
-  }
-
-  /*
-    JOKER
-    Если заряд есть — следующий удар ×3.
-  */
-
-  let damage = result;
-
-  if(
-    player.class === "joker" &&
-    (
-      side === 1
-        ? battle.jokerCharge1 > 0
-        : battle.jokerCharge2 > 0
-    )
-  ){
-
-    damage = result * 3;
-
-    specialText.textContent = "🃏 ТРОЙНОЙ УДАР ×3!";
-
-    if(side === 1){
-      battle.jokerCharge1--;
-    }else{
-      battle.jokerCharge2--;
-    }
-
-    addLog(
-      `🃏 ${player.name} использует усиление: ` +
-      `${result} × 3 = ${damage} урона!`
-    );
-  }
-
-  /*
-    ASSASSIN critical.
-  */
-
-  if(rollType === "critical"){
-
-    damage = result * 2;
-
-    specialText.textContent = "⚡ КРИТИЧЕСКИЙ УДАР ×2!";
-
-    addLog(
-      `💥 ${player.name}: ${result} × 2 = ${damage} урона!`
-    );
-  }
-
-  /*
-    VAMPIRE bite.
-  */
-
-  if(rollType === "vampire"){
-
-    damage = result;
-
-    specialText.textContent = "🩸 УКУС!";
-
-    addLog(
-      `🩸 ${player.name} наносит ${damage} урона и восстанавливает столько же HP.`
-    );
-  }
-
-  /*
-    Нанесение урона.
-  */
-
-  const oldOpponentHp = getBattleHp(opponentSide);
-
-  const newOpponentHp = Math.max(
-    0,
-    oldOpponentHp - damage
-  );
-
-  setBattleHp(opponentSide,newOpponentHp);
-
-  damageText.textContent = `-${damage} HP`;
-
-  addLog(
-    `🎲 ${player.name} выбросил ${result}. ` +
-    `Урон: ${damage}.`
-  );
-
-  /*
-    VAMPIRE HEAL.
-  */
-
-  if(rollType === "vampire"){
-
-    const oldHp = getBattleHp(side);
-
-    const newHp = Math.min(
-      MAX_HP,
-      oldHp + damage
-    );
-
-    const healed = newHp - oldHp;
-
-    setBattleHp(side,newHp);
-
-    if(healed > 0){
-      addLog(`❤️‍🩹 ${player.name} восстановил ${healed} HP.`);
-    }
-  }
-
-  /*
-    BARBARIAN STUN.
-  */
-
-  if(
-    rollType === "normal" &&
-    isDouble &&
-    player.class === "barbar"
-  ){
-
-    if(opponentSide === 1){
-      battle.stunned1 = true;
-    }else{
-      battle.stunned2 = true;
-    }
-
-    addLog(
-      `💫 ${player.name} выбросил дубль ${result}. ` +
-      `${getBattlePlayer(opponentSide).name} пропустит следующий ход.`
-    );
-  }
-
-  /*
-    JOKER PASSIVE.
-    ВАЖНО: проверяем HP обоих игроков ПОСЛЕ урона.
-  */
-
-  checkJokerTrigger(1);
-  checkJokerTrigger(2);
-
-  updateBattleUI();
-
-  /*
-    Победа в раунде.
-  */
-
-  if(newOpponentHp <= 0){
-
-    finishRound(side);
-    return;
-  }
-
-  /*
-    Следующий ход.
-  */
-
-  battle.currentPlayer = opponentSide;
-
-  schedule(startBattleTurn,TURN_DELAY);
-}
-
-function checkJokerTrigger(side){
-
-  const player = getBattlePlayer(side);
-
-  if(player.class !== "joker"){
-    return;
-  }
-
-  const hpSelf = getBattleHp(side);
-  const hpOpponent = getBattleHp(getOpponentSide(side));
-
-  let triggered = false;
-
-  if(beautifulHp(hpSelf)){
-    triggered = true;
-
-    addLog(
-      `🃏 ${player.name}: его HP стало ${hpSelf}. ` +
-      `Получено усиление ×3!`
-    );
-  }
-
-  if(beautifulHp(hpOpponent)){
-    triggered = true;
-
-    addLog(
-      `🃏 ${player.name}: HP противника стало ${hpOpponent}. ` +
-      `Получено усиление ×3!`
-    );
-  }
-
-  if(triggered){
-
-    if(side === 1){
-      battle.jokerCharge1++;
-    }else{
-      battle.jokerCharge2++;
-    }
-  }
-}
-
-/* =========================
-   ROUND SYSTEM
-========================= */
-
-function finishRound(winnerSide){
-
-  if(battle.finished){
-    return;
-  }
-
-  battle.finished = true;
-
-  const winner = getBattlePlayer(winnerSide);
-  const loser = getBattlePlayer(getOpponentSide(winnerSide));
-
-  if(winnerSide === 1){
-    battle.score1++;
-  }else{
-    battle.score2++;
-  }
-
-  addLog(
-    `🏆 РАУНД ${battle.round}: ${winner.name} победил!`
-  );
-
-  updateBattleUI();
-
-  if(battle.score1 >= 2 || battle.score2 >= 2){
-
-    schedule(() => {
-      finishBattle(winner,loser);
-    },NEXT_ROUND_DELAY);
-
-    return;
-  }
-
-  battle.round++;
-
-  /*
-    Round 2:
-    проигравший прошлого раунда получает первый ход.
-  */
-
-  if(battle.round === 2){
-
-    schedule(() => {
-
-      resetRound(loserSide(winnerSide));
-
-      addLog(
-        `⚖️ ПРАВО НЕУДАЧНИКА: ${loser.name} начинает следующий раунд.`
-      );
-
-      schedule(startBattleTurn,850);
-
-    },NEXT_ROUND_DELAY);
-
-    return;
-  }
-
-  /*
-    Round 3:
-    автоматическая жеребьёвка первого хода.
-  */
-
-  schedule(() => {
-
-    const first = Math.random() < .5 ? 1 : 2;
-
-    resetRound(first);
-
-    addLog(
-      `🎲 РЕШАЮЩИЙ РАУНД: первый ход получает ` +
-      `${getBattlePlayer(first).name}.`
-    );
-
-    schedule(startBattleTurn,850);
-
-  },NEXT_ROUND_DELAY);
-}
-
-function loserSide(winnerSide){
-  return winnerSide === 1 ? 2 : 1;
-}
-
-function resetRound(firstPlayer){
-
-  battle.hp1 = MAX_HP;
-  battle.hp2 = MAX_HP;
-
-  battle.currentPlayer = firstPlayer;
-
-  battle.stunned1 = false;
-  battle.stunned2 = false;
-
-  battle.jokerCharge1 = 0;
-  battle.jokerCharge2 = 0;
-
-  battle.finished = false;
-
-  die1El.textContent = "?";
-  die2El.textContent = "?";
-
-  resultText.textContent = "—";
-  specialText.textContent = "";
-  damageText.textContent = "";
-
-  addLog(
-    `🔄 НАЧАЛО РАУНДА ${battle.round}: ` +
-    `${getBattlePlayer(firstPlayer).name} ходит первым.`
-  );
-
-  updateBattleUI();
-}
-
-function finishBattle(winner,loser){
-
-  winner.wins++;
-
-  loser.losses++;
-
-  tournament.completedMatches++;
-
-  tournament.history.push({
-    stage:tournament.currentStage,
-    winner:winner.id,
-    loser:loser.id
-  });
-
-  /*
-    Первое поражение -> Losers.
-    Второе -> вылет.
-  */
-
-  if(loser.losses >= 2){
-
-    loser.eliminated = true;
-
-    addLog(
-      `❌ ${loser.name} получает второе поражение и выбывает.`
-    );
-
-  }else{
-
-    /*
-      Если проиграл в Winners — отправляем в Losers.
-      Если проиграл в Losers — остаётся выбывшим.
-    */
-
-    if(tournament.currentStage === "WINNERS BRACKET"){
-
-      tournament.losersQueue.push(loser);
-
-      addLog(
-        `⬇️ ${loser.name} переходит в LOSERS BRACKET.`
-      );
-
-    }else{
-
-      loser.eliminated = true;
-
-      addLog(
-        `❌ ${loser.name} выбывает из турнира.`
-      );
-    }
-  }
-
-  /*
-    Победитель Winners остаётся в Winners.
-    Победитель Losers остаётся в Losers.
-  */
-
-  if(tournament.currentStage === "WINNERS BRACKET"){
-
-    tournament.winnersQueue.push(winner);
-
-  }else{
-
-    tournament.losersQueue.push(winner);
-  }
-
-  tournament.currentMatch = null;
-
-  updateTournamentCounters();
-  renderBracket();
-
-  const alive = getAlivePlayers();
-
-  if(alive.length <= 1){
-
-    finishTournament(alive[0]);
-    return;
-  }
-
-  /*
-    Специально оставляем небольшую паузу,
-    чтобы зритель видел результат боя.
-  */
-
-  schedule(startNextTournamentMatch,1500);
-}
-
-/* =========================
-   UI
-========================= */
-
-function updateBattleUI(){
-
-  if(!battle.p1 || !battle.p2){
-    return;
-  }
-
-  fighter1Name.textContent = battle.p1.name;
-  fighter2Name.textContent = battle.p2.name;
-
-  fighter1Class.textContent = getClassName(battle.p1);
-  fighter2Class.textContent = getClassName(battle.p2);
-
-  fighter1Class.className =
-    `class-name ${getClassCss(battle.p1.class)}`;
-
-  fighter2Class.className =
-    `class-name ${getClassCss(battle.p2.class)}`;
-
-  hp1El.textContent = battle.hp1;
-  hp2El.textContent = battle.hp2;
-
-  hp1Bar.style.width = `${battle.hp1 / MAX_HP * 100}%`;
-  hp2Bar.style.width = `${battle.hp2 / MAX_HP * 100}%`;
-
-  scoreText.textContent =
-    `${battle.score1} : ${battle.score2}`;
-
-  roundText.textContent =
-    `РАУНД ${battle.round} / 3`;
-
-  fighter1.classList.toggle(
-    "active",
-    !battle.finished && battle.currentPlayer === 1
-  );
-
-  fighter2.classList.toggle(
-    "active",
-    !battle.finished && battle.currentPlayer === 2
-  );
-
-  fighter1.classList.toggle("dead",battle.hp1 <= 0);
-  fighter2.classList.toggle("dead",battle.hp2 <= 0);
-
-  turn1.textContent =
-    battle.currentPlayer === 1 && !battle.finished
-      ? `ХОД: ${battle.p1.name}`
-      : "ОЖИДАНИЕ";
-
-  turn2.textContent =
-    battle.currentPlayer === 2 && !battle.finished
-      ? `ХОД: ${battle.p2.name}`
-      : "ОЖИДАНИЕ";
-
-  status1.textContent = getStatusText(1);
-  status2.textContent = getStatusText(2);
-}
-
-function getStatusText(side){
-
-  const player = getBattlePlayer(side);
-
-  const result = [];
-
-  if(side === 1 && battle.stunned1){
-    result.push("💫 ОГЛУШЁН");
-  }
-
-  if(side === 2 && battle.stunned2){
-    result.push("💫 ОГЛУШЁН");
-  }
-
-  if(player.class === "joker"){
-
-    const charges =
-      side === 1
-        ? battle.jokerCharge1
-        : battle.jokerCharge2;
-
-    if(charges > 0){
-      result.push(`🃏 ×3 ЗАРЯДОВ: ${charges}`);
-    }
-  }
-
-  return result.join(" • ");
-}
-
-function updateTournamentCounters(){
-
-  completedMatchesEl.textContent =
-    tournament.completedMatches;
-
-  alivePlayersEl.textContent =
-    getAlivePlayers().length;
-}
-
-/* =========================
-   BRACKET
-========================= */
-
-function renderBracket(){
-
-  bracketGrid.innerHTML = "";
-
-  const winners = tournament.winnersQueue;
-  const losers = tournament.losersQueue;
-
-  /*
-    Winners column.
-  */
-
-  const winnersColumn = document.createElement("div");
-  winnersColumn.className = "bracket-column";
-
-  winnersColumn.innerHTML =
-    `<div class="column-title">WINNERS BRACKET</div>`;
-
-  if(winners.length === 0){
-
-    const empty = document.createElement("div");
-    empty.className = "match";
-    empty.innerHTML = `
-      <div class="match-player empty">ПУСТО</div>
-    `;
-
-    winnersColumn.appendChild(empty);
-
-  }else{
-
-    winners.forEach(player => {
-
-      const match = document.createElement("div");
-      match.className = "match";
-
-      match.innerHTML = `
-        <div class="match-player winner">
-          <span>${escapeHtml(player.name)}</span>
-          <span>0L</span>
-        </div>
-        <div class="match-status">ОЖИДАЕТ</div>
-      `;
-
-      winnersColumn.appendChild(match);
-    });
-  }
-
-  bracketGrid.appendChild(winnersColumn);
-
-  /*
-    Losers column.
-  */
-
-  const losersColumn = document.createElement("div");
-  losersColumn.className = "bracket-column";
-
-  losersColumn.innerHTML =
-    `<div class="column-title">LOSERS BRACKET</div>`;
-
-  if(losers.length === 0){
-
-    const empty = document.createElement("div");
-    empty.className = "match";
-    empty.innerHTML = `
-      <div class="match-player empty">ПОКА НЕТ</div>
-    `;
-
-    losersColumn.appendChild(empty);
-
-  }else{
-
-    losers.forEach(player => {
-
-      const match = document.createElement("div");
-      match.className = "match";
-
-      match.innerHTML = `
-        <div class="match-player">
-          <span>${escapeHtml(player.name)}</span>
-          <span>${player.losses}L</span>
-        </div>
-        <div class="match-status">ВТОРОЙ ШАНС</div>
-      `;
-
-      losersColumn.appendChild(match);
-    });
-  }
-
-  bracketGrid.appendChild(losersColumn);
-
-  /*
-    Current match.
-  */
-
-  if(tournament.currentMatch){
-
-    const currentColumn = document.createElement("div");
-    currentColumn.className = "bracket-column";
-
-    currentColumn.innerHTML =
-      `<div class="column-title">ТЕКУЩИЙ БОЙ</div>`;
-
-    const match = document.createElement("div");
-    match.className = "match current";
-
-    match.innerHTML = `
-      <div class="match-player">
-        <span>${escapeHtml(tournament.currentMatch.p1.name)}</span>
-      </div>
-
-      <div style="text-align:center;color:#24d8ff;font-weight:1000;padding:3px">
-        VS
-      </div>
-
-      <div class="match-player">
-        <span>${escapeHtml(tournament.currentMatch.p2.name)}</span>
-      </div>
-
-      <div class="match-status">
-        ${escapeHtml(tournament.currentStage)}
-      </div>
-    `;
-
-    currentColumn.appendChild(match);
-    bracketGrid.appendChild(currentColumn);
-  }
-}
-
-/* =========================
-   FINISH TOURNAMENT
-========================= */
-
-function finishTournament(winner){
-
-  if(tournament.finished){
-    return;
-  }
-
-  tournament.finished = true;
-  tournament.active = false;
-  tournament.winner = winner;
-
-  clearAllTimers();
-
-  if(!winner){
-    return;
-  }
-
-  stageTitle.textContent = "ТУРНИР ЗАВЕРШЁН";
-
-  winnerName.textContent = winner.name;
-  winnerClass.textContent =
-    `${getClassName(winner)} • ПОБЕДИТЕЛЬ`;
-
-  winnerOverlay.classList.remove("hidden");
-
-  addLog(
-    `🏆🏆🏆 ${winner.name} ПОБЕДИЛ ВО ВСЁМ ТУРНИРЕ!`
-  );
-
-  updateTournamentCounters();
-  renderBracket();
 }
 
 function escapeHtml(value){
@@ -2176,64 +1569,2231 @@ function escapeHtml(value){
     .replaceAll("'","&#039;");
 }
 
-/* =========================
+/* =========================================
+   BATTLE LOG
+   НОВОЕ СОБЫТИЕ ВСЕГДА СВЕРХУ
+========================================= */
+
+function addLog(text){
+
+  const line =
+    document.createElement("div");
+
+  line.className = "log-line";
+
+  line.textContent = text;
+
+  battleLog.prepend(line);
+}
+
+/* =========================================
+   PLAYER SETUP
+========================================= */
+
+function createPlayers(){
+
+  let count =
+    Number(playerCountInput.value);
+
+  if(!Number.isFinite(count))
+    count=8;
+
+  count =
+    clamp(
+      Math.floor(count),
+      2,
+      100
+    );
+
+  playerCountInput.value=count;
+
+  playersEditor.innerHTML="";
+
+  for(let i=1;i<=count;i++){
+
+    const row =
+      document.createElement("div");
+
+    row.className="player-row";
+
+    row.innerHTML=`
+
+      <div class="player-number">
+        #${i}
+      </div>
+
+      <input
+        class="player-name-input"
+        maxlength="24"
+        value="ИГРОК ${i}"
+        placeholder="Ник игрока ${i}"
+      >
+
+      <select class="player-class-input">
+
+        <option value="barbar">
+          ВАРВАР
+        </option>
+
+        <option value="assassin">
+          АССАСИН
+        </option>
+
+        <option value="vampire">
+          ВАМПИР
+        </option>
+
+        <option value="joker">
+          ДЖОКЕР
+        </option>
+
+      </select>
+    `;
+
+    playersEditor.appendChild(row);
+  }
+
+  playersEditor.classList.remove("hidden");
+  setupActions.classList.remove("hidden");
+
+  setupMessage.textContent="";
+}
+
+function collectPlayers(){
+
+  const nameInputs =
+    [...document.querySelectorAll(
+      ".player-name-input"
+    )];
+
+  const classInputs =
+    [...document.querySelectorAll(
+      ".player-class-input"
+    )];
+
+  if(nameInputs.length<2){
+
+    setupMessage.textContent=
+      "Нужно минимум 2 игрока.";
+
+    return false;
+  }
+
+  players=[];
+
+  nameInputs.forEach((input,index)=>{
+
+    const name =
+      input.value.trim() ||
+      `ИГРОК ${index+1}`;
+
+    players.push({
+
+      id:index+1,
+
+      name,
+
+      class:classInputs[index].value,
+
+      losses:0,
+
+      wins:0,
+
+      eliminated:false
+
+    });
+
+  });
+
+  return true;
+}
+
+/* =========================================
+   DRAW
+========================================= */
+
+function startDraw(){
+
+  if(!collectPlayers())
+    return;
+
+  clearTimers();
+
+  drawMatches=[];
+
+  const shuffled =
+    shuffle(players);
+
+  /*
+    При нечётном количестве игроков
+    один игрок получает BYE.
+  */
+
+  let index=0;
+  let matchNumber=1;
+
+  while(index < shuffled.length){
+
+    const p1 =
+      shuffled[index++];
+
+    const p2 =
+      index < shuffled.length
+        ? shuffled[index++]
+        : null;
+
+    drawMatches.push({
+
+      number:matchNumber++,
+
+      p1,
+
+      p2,
+
+      winner:null,
+
+      loser:null,
+
+      status:"ОЖИДАЕТ"
+
+    });
+
+  }
+
+  tournament = {
+
+    configured:true,
+
+    running:false,
+
+    finished:false,
+
+    winnersRounds:[],
+
+    losersRounds:[],
+
+    currentMatch:null,
+
+    completedMatches:0,
+
+    history:[],
+
+    winner:null
+
+  };
+
+  setupPanel.classList.add("hidden");
+
+  tournamentPanel.classList.remove("hidden");
+
+  drawPanel.classList.remove("hidden");
+
+  bracketPanel.classList.add("hidden");
+
+  battleArea.classList.add("hidden");
+
+  speedPanel.classList.add("hidden");
+
+  stageTitle.textContent =
+    "ЖЕРЕБЬЁВКА";
+
+  completedMatches.textContent="0";
+
+  alivePlayers.textContent=
+    players.length;
+
+  renderDraw();
+
+  renderBracket();
+
+}
+
+function renderDraw(){
+
+  drawGrid.innerHTML="";
+
+  drawMatches.forEach(match=>{
+
+    const card =
+      document.createElement("div");
+
+    card.className="draw-match";
+
+    card.innerHTML=`
+
+      <div class="draw-match-number">
+        БОЙ ${match.number}
+      </div>
+
+      <div class="draw-player">
+        ${escapeHtml(match.p1.name)}
+        <span>
+          ${escapeHtml(
+            getClassName(match.p1)
+          )}
+        </span>
+      </div>
+
+      <div style="
+        text-align:center;
+        color:#526579;
+        font-size:9px;
+        font-weight:1000;
+        padding:3px;
+      ">
+        VS
+      </div>
+
+      ${
+        match.p2
+
+        ? `
+
+        <div class="draw-player">
+          ${escapeHtml(match.p2.name)}
+          <span>
+            ${escapeHtml(
+              getClassName(match.p2)
+            )}
+          </span>
+        </div>
+
+        `
+
+        :
+
+        `
+
+        <div
+          class="draw-player"
+          style="color:#27e38b"
+        >
+          BYE — проходит дальше
+        </div>
+
+        `
+      }
+
+    `;
+
+    drawGrid.appendChild(card);
+
+  });
+}
+
+/* =========================================
+   START TOURNAMENT
+========================================= */
+
+function startTournament(){
+
+  tournament.running=true;
+
+  drawPanel.classList.add("hidden");
+
+  bracketPanel.classList.remove("hidden");
+
+  battleArea.classList.remove("hidden");
+
+  speedPanel.classList.remove("hidden");
+
+  stageTitle.textContent =
+    "WINNERS BRACKET";
+
+  /*
+    Первый раунд строится прямо из жеребьёвки.
+  */
+
+  const firstRound=[];
+
+  drawMatches.forEach(match=>{
+
+    if(match.p2){
+
+      firstRound.push({
+
+        id:
+          `W1-${match.number}`,
+
+        type:"winners",
+
+        round:1,
+
+        p1:match.p1,
+
+        p2:match.p2,
+
+        winner:null,
+
+        loser:null,
+
+        played:false
+
+      });
+
+    }else{
+
+      /*
+        BYE автоматически пропускает игрока.
+      */
+
+      firstRound.push({
+
+        id:
+          `W1-${match.number}`,
+
+        type:"winners",
+
+        round:1,
+
+        p1:match.p1,
+
+        p2:null,
+
+        winner:match.p1,
+
+        loser:null,
+
+        played:true,
+
+        bye:true
+
+      });
+
+    }
+
+  });
+
+  tournament.winnersRounds=[
+    firstRound
+  ];
+
+  /*
+    Первый раунд Losers пока пуст.
+  */
+
+  tournament.losersRounds=[];
+
+  renderBracket();
+
+  schedule(
+    processNextTournamentStep,
+    900
+  );
+}
+
+/* =========================================
+   TOURNAMENT ENGINE
+========================================= */
+
+function getAlivePlayers(){
+
+  return players.filter(
+    p => !p.eliminated
+  );
+}
+
+function processNextTournamentStep(){
+
+  if(tournament.finished)
+    return;
+
+  /*
+    Сначала ищем непроведённые Winners.
+  */
+
+  const winnersMatch =
+    findPendingMatch(
+      tournament.winnersRounds
+    );
+
+  if(winnersMatch){
+
+    startTournamentMatch(
+      winnersMatch
+    );
+
+    return;
+  }
+
+  /*
+    Затем Losers.
+  */
+
+  const losersMatch =
+    findPendingMatch(
+      tournament.losersRounds
+    );
+
+  if(losersMatch){
+
+    startTournamentMatch(
+      losersMatch
+    );
+
+    return;
+  }
+
+  /*
+    Создаём следующий Winners round.
+  */
+
+  if(createNextWinnersRound()){
+
+    schedule(
+      processNextTournamentStep,
+      500
+    );
+
+    return;
+  }
+
+  /*
+    Создаём Losers round.
+  */
+
+  if(createNextLosersRound()){
+
+    schedule(
+      processNextTournamentStep,
+      500
+    );
+
+    return;
+  }
+
+  /*
+    Если сетки закончились —
+    определяем финалистов.
+  */
+
+  checkFinal();
+
+}
+
+function findPendingMatch(rounds){
+
+  for(const round of rounds){
+
+    for(const match of round){
+
+      if(
+        !match.played &&
+        match.p1 &&
+        match.p2
+      ){
+
+        return match;
+      }
+    }
+  }
+
+  return null;
+}
+
+/* =========================================
+   NEXT WINNERS ROUND
+========================================= */
+
+function createNextWinnersRound(){
+
+  const lastRound =
+    tournament.winnersRounds[
+      tournament.winnersRounds.length-1
+    ];
+
+  if(!lastRound)
+    return false;
+
+  const winners =
+    lastRound
+      .filter(match => match.played)
+      .map(match => match.winner)
+      .filter(Boolean);
+
+  /*
+    Если осталось больше одного —
+    формируем следующий раунд.
+  */
+
+  if(winners.length<=1)
+    return false;
+
+  /*
+    Если этот набор уже был сформирован,
+    не создаём повторно.
+  */
+
+  if(
+    tournament.winnersRounds.length>1 &&
+    tournament.winnersRounds[
+      tournament.winnersRounds.length-1
+    ].every(m=>m.played)
+  ){
+
+    const nextRound =
+      [];
+
+    for(
+      let i=0;
+      i<winners.length;
+      i+=2
+    ){
+
+      const p1=winners[i];
+      const p2=winners[i+1]||null;
+
+      nextRound.push({
+
+        id:
+          `W${tournament.winnersRounds.length+1}-${i}`,
+
+        type:"winners",
+
+        round:
+          tournament.winnersRounds.length+1,
+
+        p1,
+
+        p2,
+
+        winner:p2?null:p1,
+
+        loser:null,
+
+        played:!p2,
+
+        bye:!p2
+
+      });
+
+    }
+
+    tournament.winnersRounds.push(
+      nextRound
+    );
+
+    return true;
+  }
+
+  /*
+    Для первого раунда всегда можно
+    создать второй.
+  */
+
+  if(tournament.winnersRounds.length===1){
+
+    const nextRound=[];
+
+    for(
+      let i=0;
+      i<winners.length;
+      i+=2
+    ){
+
+      const p1=winners[i];
+      const p2=winners[i+1]||null;
+
+      nextRound.push({
+
+        id:
+          `W2-${i}`,
+
+        type:"winners",
+
+        round:2,
+
+        p1,
+
+        p2,
+
+        winner:p2?null:p1,
+
+        loser:null,
+
+        played:!p2,
+
+        bye:!p2
+
+      });
+
+    }
+
+    tournament.winnersRounds.push(
+      nextRound
+    );
+
+    return true;
+  }
+
+  return false;
+}
+
+/* =========================================
+   LOSERS
+========================================= */
+
+function collectLosersForBracket(){
+
+  const result=[];
+
+  tournament.history.forEach(
+    historyItem=>{
+
+      if(
+        historyItem.loser &&
+        historyItem.loser.losses===1
+      ){
+
+        if(
+          !result.includes(
+            historyItem.loser
+          )
+        ){
+
+          result.push(
+            historyItem.loser
+          );
+
+        }
+      }
+
+    }
+  );
+
+  return result.filter(
+    p => !p.eliminated
+  );
+}
+
+function createNextLosersRound(){
+
+  const candidates =
+    collectLosersForBracket();
+
+  /*
+    Убираем игроков,
+    которые уже находятся в текущей
+    Losers-сетке.
+  */
+
+  const alreadyInLosers =
+    new Set();
+
+  tournament.losersRounds.forEach(
+    round=>{
+
+      round.forEach(match=>{
+
+        if(match.p1)
+          alreadyInLosers.add(match.p1);
+
+        if(match.p2)
+          alreadyInLosers.add(match.p2);
+
+        if(match.winner)
+          alreadyInLosers.add(match.winner);
+
+      });
+
+    }
+  );
+
+  const available =
+    candidates.filter(
+      p => !alreadyInLosers.has(p)
+    );
+
+  if(available.length<2)
+    return false;
+
+  const round=[];
+
+  for(
+    let i=0;
+    i<available.length;
+    i+=2
+  ){
+
+    const p1=available[i];
+    const p2=available[i+1]||null;
+
+    round.push({
+
+      id:
+        `L${tournament.losersRounds.length+1}-${i}`,
+
+      type:"losers",
+
+      round:
+        tournament.losersRounds.length+1,
+
+      p1,
+
+      p2,
+
+      winner:p2?null:p1,
+
+      loser:null,
+
+      played:!p2,
+
+      bye:!p2
+
+    });
+
+  }
+
+  tournament.losersRounds.push(
+    round
+  );
+
+  return true;
+}
+
+/* =========================================
+   START MATCH
+========================================= */
+
+function startTournamentMatch(match){
+
+  tournament.currentMatch=match;
+
+  stageTitle.textContent =
+    match.type==="winners"
+      ? "WINNERS BRACKET"
+      : "LOSERS BRACKET";
+
+  renderBracket();
+
+  if(match.bye){
+
+    match.played=true;
+    match.winner=match.p1;
+
+    schedule(
+      processNextTournamentStep,
+      400
+    );
+
+    return;
+  }
+
+  battleLog.innerHTML="";
+
+  addLog(
+    `⚔️ БОЙ: ${match.p1.name} VS ${match.p2.name}`
+  );
+
+  addLog(
+    `🏆 ${
+      match.type==="winners"
+        ? "WINNERS BRACKET"
+        : "LOSERS BRACKET"
+    }`
+  );
+
+  schedule(
+    () => {
+
+      startBattle(
+        match.p1,
+        match.p2
+      );
+
+    },
+    700
+  );
+}
+
+/* =========================================
+   BATTLE START
+========================================= */
+
+function startBattle(p1,p2){
+
+  battle={
+
+    p1,
+
+    p2,
+
+    hp1:MAX_HP,
+
+    hp2:MAX_HP,
+
+    score1:0,
+
+    score2:0,
+
+    round:1,
+
+    currentPlayer:
+      Math.random()<.5
+        ? 1
+        : 2,
+
+    stunned1:false,
+
+    stunned2:false,
+
+    jokerCharge1:0,
+
+    jokerCharge2:0,
+
+    finished:false
+
+  };
+
+  die1.textContent="?";
+  die2.textContent="?";
+
+  resultText.textContent="—";
+  specialText.textContent="";
+  damageText.textContent="";
+
+  addLog(
+    `🥊 ${p1.name} — ${getClassName(p1)}`
+  );
+
+  addLog(
+    `🥊 ${p2.name} — ${getClassName(p2)}`
+  );
+
+  addLog(
+    `🎲 Первый ход: ${
+      getBattlePlayer(
+        battle.currentPlayer
+      ).name
+    }`
+  );
+
+  updateBattleUI();
+
+  schedule(
+    startBattleTurn,
+    800
+  );
+}
+
+function getBattlePlayer(side){
+
+  return side===1
+    ? battle.p1
+    : battle.p2;
+}
+
+function getBattleHp(side){
+
+  return side===1
+    ? battle.hp1
+    : battle.hp2;
+}
+
+function setBattleHp(side,value){
+
+  if(side===1)
+    battle.hp1=value;
+  else
+    battle.hp2=value;
+}
+
+function opponentSide(side){
+
+  return side===1?2:1;
+}
+
+/* =========================================
+   BATTLE TURN
+========================================= */
+
+function startBattleTurn(){
+
+  if(battle.finished)
+    return;
+
+  const side=
+    battle.currentPlayer;
+
+  const player=
+    getBattlePlayer(side);
+
+  /*
+    Оглушение
+  */
+
+  if(
+    side===1 &&
+    battle.stunned1
+  ){
+
+    battle.stunned1=false;
+
+    addLog(
+      `💫 ${player.name} пропускает ход.`
+    );
+
+    battle.currentPlayer=2;
+
+    updateBattleUI();
+
+    schedule(
+      startBattleTurn,
+      500
+    );
+
+    return;
+  }
+
+  if(
+    side===2 &&
+    battle.stunned2
+  ){
+
+    battle.stunned2=false;
+
+    addLog(
+      `💫 ${player.name} пропускает ход.`
+    );
+
+    battle.currentPlayer=1;
+
+    updateBattleUI();
+
+    schedule(
+      startBattleTurn,
+      500
+    );
+
+    return;
+  }
+
+  updateBattleUI();
+
+  rollDice(
+    side,
+    "normal"
+  );
+}
+
+/* =========================================
+   DICE
+========================================= */
+
+function animateDice(){
+
+  die1.classList.add("rolling");
+  die2.classList.add("rolling");
+
+  const frames=7;
+
+  for(
+    let i=0;
+    i<frames;
+    i++
+  ){
+
+    schedule(
+      ()=>{
+
+        die1.textContent=
+          randomInt(1,6);
+
+        die2.textContent=
+          randomInt(1,6);
+
+      },
+      i*65
+    );
+
+  }
+
+  schedule(
+    ()=>{
+      die1.classList.remove("rolling");
+      die2.classList.remove("rolling");
+    },
+    480
+  );
+}
+
+function rollDice(side,type){
+
+  animateDice();
+
+  schedule(
+    ()=>{
+      finishDiceRoll(
+        side,
+        type
+      );
+    },
+    560
+  );
+}
+
+/* =========================================
+   DICE RESULT
+========================================= */
+
+function finishDiceRoll(side,type){
+
+  if(battle.finished)
+    return;
+
+  const player=
+    getBattlePlayer(side);
+
+  const enemySide=
+    opponentSide(side);
+
+  const d1=
+    randomInt(1,6);
+
+  const d2=
+    randomInt(1,6);
+
+  const result=
+    d1*10+d2;
+
+  const isDouble=
+    d1===d2;
+
+  die1.textContent=d1;
+  die2.textContent=d2;
+
+  resultText.textContent=result;
+
+  specialText.textContent="";
+  damageText.textContent="";
+
+  /*
+    ASSASSIN
+  */
+
+  if(
+    type==="normal" &&
+    isDouble &&
+    player.class==="assassin"
+  ){
+
+    specialText.textContent=
+      "⚡ КРИТИЧЕСКИЙ УРОН!";
+
+    addLog(
+      `⚡ ${player.name}: дубль ${result}. `+
+      `Следующий бросок ×2.`
+    );
+
+    schedule(
+      ()=>{
+        rollDice(
+          side,
+          "critical"
+        );
+      },
+      600
+    );
+
+    return;
+  }
+
+  /*
+    VAMPIRE
+  */
+
+  if(
+    type==="normal" &&
+    isDouble &&
+    player.class==="vampire"
+  ){
+
+    specialText.textContent=
+      "🩸 УКУС!";
+
+    addLog(
+      `🩸 ${player.name}: дубль ${result}. `+
+      `Следующий бросок станет укусом.`
+    );
+
+    schedule(
+      ()=>{
+        rollDice(
+          side,
+          "vampire"
+        );
+      },
+      600
+    );
+
+    return;
+  }
+
+  let damage=result;
+
+  /*
+    JOKER
+  */
+
+  const jokerCharges=
+    side===1
+      ? battle.jokerCharge1
+      : battle.jokerCharge2;
+
+  if(
+    player.class==="joker" &&
+    jokerCharges>0
+  ){
+
+    damage=result*3;
+
+    specialText.textContent=
+      "🃏 ТРОЙНОЙ УДАР ×3!";
+
+    if(side===1)
+      battle.jokerCharge1--;
+    else
+      battle.jokerCharge2--;
+
+    addLog(
+      `🃏 ${player.name}: `+
+      `${result} × 3 = ${damage}`
+    );
+  }
+
+  /*
+    ASSASSIN CRITICAL
+  */
+
+  if(type==="critical"){
+
+    damage=result*2;
+
+    specialText.textContent=
+      "⚡ КРИТИЧЕСКИЙ УДАР ×2!";
+
+    addLog(
+      `💥 ${player.name}: `+
+      `${result} × 2 = ${damage}`
+    );
+  }
+
+  /*
+    VAMPIRE BITE
+  */
+
+  if(type==="vampire"){
+
+    damage=result;
+
+    specialText.textContent=
+      "🩸 УКУС!";
+
+    addLog(
+      `🩸 ${player.name}: `+
+      `${damage} урона + лечение`
+    );
+  }
+
+  /*
+    DAMAGE
+  */
+
+  const oldEnemyHp=
+    getBattleHp(enemySide);
+
+  const newEnemyHp=
+    Math.max(
+      0,
+      oldEnemyHp-damage
+    );
+
+  setBattleHp(
+    enemySide,
+    newEnemyHp
+  );
+
+  damageText.textContent=
+    `-${damage} HP`;
+
+  addLog(
+    `🎲 ${player.name} выбросил ${result}. `+
+    `Урон: ${damage}.`
+  );
+
+  /*
+    VAMPIRE HEAL
+  */
+
+  if(type==="vampire"){
+
+    const oldHp=
+      getBattleHp(side);
+
+    const newHp=
+      Math.min(
+        MAX_HP,
+        oldHp+damage
+      );
+
+    const healed=
+      newHp-oldHp;
+
+    setBattleHp(
+      side,
+      newHp
+    );
+
+    if(healed>0){
+
+      addLog(
+        `❤️‍🩹 ${player.name} `+
+        `восстановил ${healed} HP.`
+      );
+
+    }
+
+  }
+
+  /*
+    BARBARIAN STUN
+  */
+
+  if(
+    type==="normal" &&
+    isDouble &&
+    player.class==="barbar"
+  ){
+
+    if(enemySide===1)
+      battle.stunned1=true;
+    else
+      battle.stunned2=true;
+
+    addLog(
+      `💫 ${getBattlePlayer(enemySide).name} `+
+      `оглушён.`
+    );
+  }
+
+  /*
+    JOKER PASSIVE
+  */
+
+  checkJoker(1);
+  checkJoker(2);
+
+  updateBattleUI();
+
+  /*
+    ROUND END
+  */
+
+  if(newEnemyHp<=0){
+
+    finishRound(side);
+
+    return;
+  }
+
+  /*
+    NEXT TURN
+  */
+
+  battle.currentPlayer=
+    enemySide;
+
+  schedule(
+    startBattleTurn,
+    650
+  );
+}
+
+/* =========================================
+   JOKER
+========================================= */
+
+function checkJoker(side){
+
+  const player=
+    getBattlePlayer(side);
+
+  if(player.class!=="joker")
+    return;
+
+  const ownHp=
+    getBattleHp(side);
+
+  const enemyHp=
+    getBattleHp(
+      opponentSide(side)
+    );
+
+  let triggered=false;
+
+  if(beautifulHp(ownHp)){
+
+    triggered=true;
+
+    addLog(
+      `🃏 ${player.name}: `+
+      `его HP стало ${ownHp}. `+
+      `ЗАРЯД ×3!`
+    );
+  }
+
+  if(beautifulHp(enemyHp)){
+
+    triggered=true;
+
+    addLog(
+      `🃏 ${player.name}: `+
+      `HP противника стало ${enemyHp}. `+
+      `ЗАРЯД ×3!`
+    );
+  }
+
+  if(triggered){
+
+    if(side===1)
+      battle.jokerCharge1++;
+    else
+      battle.jokerCharge2++;
+  }
+}
+
+/* =========================================
+   ROUND
+========================================= */
+
+function finishRound(winnerSide){
+
+  if(battle.finished)
+    return;
+
+  battle.finished=true;
+
+  const winner=
+    getBattlePlayer(winnerSide);
+
+  const loser=
+    getBattlePlayer(
+      opponentSide(winnerSide)
+    );
+
+  if(winnerSide===1)
+    battle.score1++;
+  else
+    battle.score2++;
+
+  addLog(
+    `🏆 РАУНД ${battle.round}: `+
+    `${winner.name} победил.`
+  );
+
+  updateBattleUI();
+
+  /*
+    BEST OF 3
+  */
+
+  if(
+    battle.score1>=2 ||
+    battle.score2>=2
+  ){
+
+    schedule(
+      ()=>{
+        finishBattle(
+          winner,
+          loser
+        );
+      },
+      1100
+    );
+
+    return;
+  }
+
+  battle.round++;
+
+  /*
+    Раунд 2:
+    проигравший начинает.
+  */
+
+  if(battle.round===2){
+
+    schedule(
+      ()=>{
+
+        resetRound(
+          opponentSide(winnerSide)
+        );
+
+        addLog(
+          `⚖️ ПРАВО НЕУДАЧНИКА: `+
+          `${loser.name}`
+        );
+
+        schedule(
+          startBattleTurn,
+          600
+        );
+
+      },
+      1000
+    );
+
+    return;
+  }
+
+  /*
+    Раунд 3:
+    случайный первый игрок.
+  */
+
+  schedule(
+    ()=>{
+
+      const first=
+        Math.random()<.5
+          ? 1
+          : 2;
+
+      resetRound(first);
+
+      addLog(
+        `🎲 РЕШАЮЩИЙ РАУНД: `+
+        `${getBattlePlayer(first).name} ходит первым.`
+      );
+
+      schedule(
+        startBattleTurn,
+        600
+      );
+
+    },
+    1000
+  );
+}
+
+function resetRound(first){
+
+  battle.hp1=MAX_HP;
+  battle.hp2=MAX_HP;
+
+  battle.currentPlayer=first;
+
+  battle.stunned1=false;
+  battle.stunned2=false;
+
+  battle.jokerCharge1=0;
+  battle.jokerCharge2=0;
+
+  battle.finished=false;
+
+  die1.textContent="?";
+  die2.textContent="?";
+
+  resultText.textContent="—";
+  specialText.textContent="";
+  damageText.textContent="";
+
+  updateBattleUI();
+}
+
+/* =========================================
+   FINISH MATCH
+========================================= */
+
+function finishBattle(winner,loser){
+
+  const match=
+    tournament.currentMatch;
+
+  if(!match)
+    return;
+
+  match.played=true;
+
+  match.winner=winner;
+
+  match.loser=loser;
+
+  winner.wins++;
+
+  loser.losses++;
+
+  tournament.completedMatches++;
+
+  tournament.history.push({
+    match,
+    winner,
+    loser
+  });
+
+  /*
+    Первое поражение:
+    игрок уходит в Losers.
+
+    Второе:
+    игрок выбывает.
+  */
+
+  if(
+    loser.losses>=2
+  ){
+
+    loser.eliminated=true;
+
+    addLog(
+      `❌ ${loser.name} ВЫБЫВАЕТ.`
+    );
+
+  }else{
+
+    addLog(
+      `⬇️ ${loser.name} переходит в LOSERS BRACKET.`
+    );
+
+  }
+
+  /*
+    Победитель остаётся в своей ветке.
+    Для Winners следующий раунд будет
+    сформирован автоматически.
+  */
+
+  addLog(
+    `🏆 ${winner.name} проходит дальше.`
+  );
+
+  tournament.currentMatch=null;
+
+  updateTournamentCounters();
+
+  renderBracket();
+
+  /*
+    Проверяем финальное состояние.
+  */
+
+  schedule(
+    processNextTournamentStep,
+    1300
+  );
+}
+
+/* =========================================
+   FINAL
+========================================= */
+
+function checkFinal(){
+
+  const alive=
+    getAlivePlayers();
+
+  if(alive.length===1){
+
+    finishTournament(
+      alive[0]
+    );
+
+    return;
+  }
+
+  /*
+    Если осталось два игрока,
+    обязательно проводим финальный бой.
+  */
+
+  if(alive.length===2){
+
+    /*
+      Если уже есть текущий матч —
+      ничего не делаем.
+    */
+
+    if(tournament.currentMatch)
+      return;
+
+    const finalMatch={
+
+      id:"GRAND-FINAL",
+
+      type:"grand-final",
+
+      round:1,
+
+      p1:alive[0],
+
+      p2:alive[1],
+
+      winner:null,
+
+      loser:null,
+
+      played:false
+
+    };
+
+    /*
+      Создаём финальную колонку.
+    */
+
+    tournament.winnersRounds.push([
+      finalMatch
+    ]);
+
+    startTournamentMatch(
+      finalMatch
+    );
+
+    return;
+  }
+
+  /*
+    На случай нестандартного состояния
+    запускаем следующий доступный бой.
+  */
+
+  const available=
+    alive.filter(
+      p => !p.eliminated
+    );
+
+  if(available.length>=2){
+
+    const match={
+
+      id:"FINAL-CONTROL",
+
+      type:"grand-final",
+
+      round:1,
+
+      p1:available[0],
+
+      p2:available[1],
+
+      winner:null,
+
+      loser:null,
+
+      played:false
+
+    };
+
+    tournament.winnersRounds.push([
+      match
+    ]);
+
+    startTournamentMatch(match);
+  }
+}
+
+function finishTournament(winner){
+
+  if(tournament.finished)
+    return;
+
+  tournament.finished=true;
+  tournament.running=false;
+  tournament.winner=winner;
+
+  clearTimers();
+
+  if(!winner)
+    return;
+
+  stageTitle.textContent=
+    "ТУРНИР ЗАВЕРШЁН";
+
+  winnerName.textContent=
+    winner.name;
+
+  winnerClass.textContent=
+    `${getClassName(winner)} • ПОБЕДИТЕЛЬ`;
+
+  winnerOverlay.classList.remove(
+    "hidden"
+  );
+
+  renderBracket();
+}
+
+/* =========================================
+   BATTLE UI
+========================================= */
+
+function updateBattleUI(){
+
+  if(!battle.p1 || !battle.p2)
+    return;
+
+  fighter1Name.textContent=
+    battle.p1.name;
+
+  fighter2Name.textContent=
+    battle.p2.name;
+
+  fighter1Class.textContent=
+    getClassName(battle.p1);
+
+  fighter2Class.textContent=
+    getClassName(battle.p2);
+
+  fighter1Class.className=
+    `class-name ${classCss(
+      battle.p1.class
+    )}`;
+
+  fighter2Class.className=
+    `class-name ${classCss(
+      battle.p2.class
+    )}`;
+
+  hp1.textContent=
+    battle.hp1;
+
+  hp2.textContent=
+    battle.hp2;
+
+  hp1Bar.style.width=
+    `${battle.hp1/MAX_HP*100}%`;
+
+  hp2Bar.style.width=
+    `${battle.hp2/MAX_HP*100}%`;
+
+  roundText.textContent=
+    `РАУНД ${battle.round} / 3`;
+
+  scoreText.textContent=
+    `${battle.score1} : ${battle.score2}`;
+
+  fighter1.classList.toggle(
+    "active",
+    !battle.finished &&
+    battle.currentPlayer===1
+  );
+
+  fighter2.classList.toggle(
+    "active",
+    !battle.finished &&
+    battle.currentPlayer===2
+  );
+
+  fighter1.classList.toggle(
+    "dead",
+    battle.hp1<=0
+  );
+
+  fighter2.classList.toggle(
+    "dead",
+    battle.hp2<=0
+  );
+
+  turn1.textContent=
+    battle.currentPlayer===1 &&
+    !battle.finished
+      ? `ХОД: ${battle.p1.name}`
+      : "ОЖИДАНИЕ";
+
+  turn2.textContent=
+    battle.currentPlayer===2 &&
+    !battle.finished
+      ? `ХОД: ${battle.p2.name}`
+      : "ОЖИДАНИЕ";
+
+  status1.textContent=
+    getStatus(1);
+
+  status2.textContent=
+    getStatus(2);
+}
+
+function getStatus(side){
+
+  const player=
+    getBattlePlayer(side);
+
+  const result=[];
+
+  if(
+    side===1 &&
+    battle.stunned1
+  ){
+
+    result.push(
+      "💫 ОГЛУШЁН"
+    );
+
+  }
+
+  if(
+    side===2 &&
+    battle.stunned2
+  ){
+
+    result.push(
+      "💫 ОГЛУШЁН"
+    );
+
+  }
+
+  if(player.class==="joker"){
+
+    const charges=
+      side===1
+        ? battle.jokerCharge1
+        : battle.jokerCharge2;
+
+    if(charges>0){
+
+      result.push(
+        `🃏 ×3: ${charges}`
+      );
+
+    }
+  }
+
+  return result.join(" • ");
+}
+
+function updateTournamentCounters(){
+
+  completedMatches.textContent=
+    tournament.completedMatches;
+
+  alivePlayers.textContent=
+    getAlivePlayers().length;
+}
+
+/* =========================================
+   BRACKET RENDER
+========================================= */
+
+function renderBracket(){
+
+  bracketGrid.innerHTML="";
+
+  /*
+    WINNERS
+  */
+
+  tournament.winnersRounds
+    .forEach((round,index)=>{
+
+      const column=
+        document.createElement("div");
+
+      column.className=
+        "bracket-column";
+
+      column.innerHTML=`
+        <div class="column-title">
+          WINNERS — РАУНД ${index+1}
+        </div>
+      `;
+
+      round.forEach(match=>{
+
+        column.appendChild(
+          renderMatchCard(match)
+        );
+
+      });
+
+      bracketGrid.appendChild(column);
+
+    });
+
+  /*
+    LOSERS
+  */
+
+  tournament.losersRounds
+    .forEach((round,index)=>{
+
+      const column=
+        document.createElement("div");
+
+      column.className=
+        "bracket-column";
+
+      column.innerHTML=`
+        <div class="column-title">
+          LOSERS — РАУНД ${index+1}
+        </div>
+      `;
+
+      round.forEach(match=>{
+
+        column.appendChild(
+          renderMatchCard(match)
+        );
+
+      });
+
+      bracketGrid.appendChild(column);
+
+    });
+
+  /*
+    Текущий бой
+  */
+
+  if(tournament.currentMatch){
+
+    const column=
+      document.createElement("div");
+
+    column.className=
+      "bracket-column";
+
+    column.innerHTML=`
+      <div class="column-title">
+        🔴 СЕЙЧАС
+      </div>
+    `;
+
+    column.appendChild(
+      renderMatchCard(
+        tournament.currentMatch,
+        true
+      )
+    );
+
+    bracketGrid.appendChild(column);
+  }
+}
+
+function renderMatchCard(match,current=false){
+
+  const card=
+    document.createElement("div");
+
+  card.className=
+    `match ${current?"current":""} ${
+      match.played?"done":""
+    }`;
+
+  const p1=match.p1;
+  const p2=match.p2;
+
+  const p1State=
+    match.winner===p1
+      ? "win"
+      : match.loser===p1
+        ? "loss"
+        : p1
+          ? "pending"
+          : "pending";
+
+  const p2State=
+    match.winner===p2
+      ? "win"
+      : match.loser===p2
+        ? "loss"
+        : p2
+          ? "pending"
+          : "pending";
+
+  card.innerHTML=`
+
+    <div class="match-player ${p1State}">
+      <span>
+        ${
+          p1
+            ? escapeHtml(p1.name)
+            : "ОЖИДАНИЕ"
+        }
+      </span>
+
+      <span>
+        ${
+          p1
+            ? p1.losses+"L"
+            : ""
+        }
+      </span>
+    </div>
+
+    <div class="match-vs">
+      ${
+        match.bye
+          ? "BYE"
+          : "VS"
+      }
+    </div>
+
+    <div class="match-player ${p2State}">
+      <span>
+        ${
+          p2
+            ? escapeHtml(p2.name)
+            : match.bye
+              ? "ПРОХОД"
+              : "ОЖИДАНИЕ"
+        }
+      </span>
+
+      <span>
+        ${
+          p2
+            ? p2.losses+"L"
+            : ""
+        }
+      </span>
+    </div>
+
+    <div class="match-status">
+
+      ${
+        match.played
+
+          ? match.bye
+
+            ? "BYE — ПРОШЁЛ"
+
+            : match.winner
+              ? `ПОБЕДИЛ: ${
+                  escapeHtml(
+                    match.winner.name
+                  )
+                }`
+              : "ЗАВЕРШЁН"
+
+          : current
+
+            ? "БОЙ ИДЁТ"
+
+            : "ОЖИДАЕТ"
+
+      }
+
+    </div>
+  `;
+
+  return card;
+}
+
+/* =========================================
    RESET
-========================= */
+========================================= */
 
 function resetApplication(){
 
-  clearAllTimers();
+  clearTimers();
 
-  players = [];
+  players=[];
 
-  tournament = {
-    active:false,
+  drawMatches=[];
+
+  tournament={
+    configured:false,
+    running:false,
     finished:false,
-    completedMatches:0,
-    winnersQueue:[],
-    losersQueue:[],
-    currentStage:"",
+    winnersRounds:[],
+    losersRounds:[],
     currentMatch:null,
-    winner:null,
-    history:[]
+    completedMatches:0,
+    history:[],
+    winner:null
   };
 
-  winnerOverlay.classList.add("hidden");
-  tournamentPanel.classList.add("hidden");
-  setupPanel.classList.remove("hidden");
+  battle={
+    p1:null,
+    p2:null,
+    hp1:MAX_HP,
+    hp2:MAX_HP,
+    score1:0,
+    score2:0,
+    round:1,
+    currentPlayer:1,
+    stunned1:false,
+    stunned2:false,
+    jokerCharge1:0,
+    jokerCharge2:0,
+    finished:false
+  };
 
-  playersEditor.innerHTML = "";
-  playersEditor.classList.add("hidden");
+  winnerOverlay.classList.add(
+    "hidden"
+  );
 
-  setupActions.classList.add("hidden");
+  tournamentPanel.classList.add(
+    "hidden"
+  );
 
-  setupMessage.textContent = "";
+  setupPanel.classList.remove(
+    "hidden"
+  );
 
-  playerCountInput.value = 8;
+  drawPanel.classList.add(
+    "hidden"
+  );
+
+  battleArea.classList.add(
+    "hidden"
+  );
+
+  speedPanel.classList.add(
+    "hidden"
+  );
+
+  bracketPanel.classList.remove(
+    "hidden"
+  );
+
+  playersEditor.innerHTML="";
+
+  playersEditor.classList.add(
+    "hidden"
+  );
+
+  setupActions.classList.add(
+    "hidden"
+  );
+
+  setupMessage.textContent="";
+
+  playerCountInput.value=8;
 }
 
-/* =========================
+/* =========================================
    EVENTS
-========================= */
+========================================= */
 
 createPlayersButton.addEventListener(
   "click",
-  createPlayerEditor
+  createPlayers
 );
 
 playerCountInput.addEventListener(
   "change",
-  () => {
+  ()=>{
+    let value=
+      Number(playerCountInput.value);
 
-    let value = Number(playerCountInput.value);
+    if(!Number.isFinite(value))
+      value=8;
 
-    if(!Number.isFinite(value)){
-      value = 8;
-    }
+    value=
+      clamp(
+        Math.floor(value),
+        2,
+        100
+      );
 
-    playerCountInput.value =
-      clamp(Math.floor(value),2,100);
+    playerCountInput.value=value;
   }
+);
+
+drawButton.addEventListener(
+  "click",
+  startDraw
 );
 
 startTournamentButton.addEventListener(
@@ -2243,15 +3803,17 @@ startTournamentButton.addEventListener(
 
 clearPlayersButton.addEventListener(
   "click",
-  () => {
-
-    playersEditor.innerHTML = "";
+  ()=>{
+    playersEditor.innerHTML="";
     playersEditor.classList.add("hidden");
-
     setupActions.classList.add("hidden");
-
-    setupMessage.textContent = "";
+    setupMessage.textContent="";
   }
+);
+
+newSetupButton.addEventListener(
+  "click",
+  resetApplication
 );
 
 newTournamentButton.addEventListener(
@@ -2264,11 +3826,11 @@ winnerRestartButton.addEventListener(
   resetApplication
 );
 
-/* =========================
+/* =========================================
    INITIAL
-========================= */
+========================================= */
 
-createPlayerEditor();
+createPlayers();
 </script>
 
 </body>
