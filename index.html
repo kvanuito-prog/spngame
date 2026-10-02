@@ -342,7 +342,7 @@
 <script>
   var CLASSES = {
     assassin:  { icon: '🗡', short: 'Ассасин',  label: '🗡 Ассасин',  css: 'assassin',  desc: 'Дубль → реролл ×2.' },
-    barbarian: { icon: '⚔', short: 'Варвар',   label: '⚔ Варвар',   css: 'barbarian', desc: 'Дубль → стан.' },
+    barbarian: { icon: '⚔', short: 'Варвар',   label: '⚔ Варвар',   css: 'barbarian', desc: 'Дубль → стан + слаб. урон.' },
     vampire:   { icon: '🧛', short: 'Вампир',   label: '🧛 Вампир',   css: 'vampire',   desc: 'Дубль → укус: урон + хил.' },
     joker:     { icon: '🎲', short: 'Джокер',   label: '🎲 Джокер',   css: 'joker',     desc: 'HP-триггер → ×2 или ×3.' },
     druid:     { icon: '🐉', short: 'Друид',    label: '🐉 Друид',    css: 'druid',     desc: 'Дубль → суммон.' },
@@ -356,6 +356,16 @@
     44: { type: 'wolf', name: 'Волк',    icon: '🐺', hp: 82,  mult: 1.0, canStun: false },
     55: { type: 'bear', name: 'Медведь', icon: '🐻', hp: 115, mult: 1.0, canStun: true  },
     66: { type: 'bear', name: 'Медведь', icon: '🐻', hp: 132, mult: 1.0, canStun: true  }
+  };
+
+  // ============ НОВОЕ: урон Варвара на дубль ============
+  var BARB_DOUBLE_DMG = {
+    11: 6,
+    22: 11,
+    33: 16,
+    44: 22,
+    55: 23,
+    66: 33
   };
 
   var classes = { 1: 'assassin', 2: 'barbarian' };
@@ -399,12 +409,8 @@
     4: [0, 2, 6, 8], 5: [0, 2, 4, 6, 8], 6: [0, 2, 3, 5, 6, 8]
   };
 
-  // ============ МОНЕТКА ============
-  function coinFlip() {
-    return Math.random() < 0.5 ? 1 : 2;
-  }
+  function coinFlip() { return Math.random() < 0.5 ? 1 : 2; }
 
-  // ============ ТРИГГЕРЫ ДЖОКЕРА ============
   function isBeautiful(n) {
     if (n <= 0) return false;
     var s = String(n);
@@ -418,8 +424,6 @@
     if (n >= 100 && n <= 900 && n % 100 === 0) return true;
     return false;
   }
-
-  // ============ БЕРСЕРК ============
   function getBerserkerBonus(hp) {
     if (hp <= 0) return 0;
     if (hp === 1) return 100;
@@ -495,6 +499,7 @@
         var r1 = r6(), r2 = r6();
         dmg = (r1 * 10 + r2) * 2;
       } else if (cls === 'barbarian' && db) {
+        dmg = BARB_DOUBLE_DMG[base] || base;
         stunCause = true;
       } else if (cls === 'vampire' && db) {
         var b1 = r6(), b2 = r6();
@@ -550,7 +555,6 @@
     return 0;
   }
 
-  // ============ ТЕСТ БАЛАНСА ============
   function runBalanceTest() {
     var N = 100000;
     testSub.textContent = '100 000 боёв на пару · 1 500 000 боёв всего';
@@ -638,7 +642,6 @@
     }, 100);
   }
 
-  // ============ КУБИКИ ============
   function renderDie(el, value) {
     el.innerHTML = '';
     var pips = pipPositions[value] || [];
@@ -1024,9 +1027,13 @@
         }
       }
 
+      // ===== Варвар: дубль → слабый урон + стан =====
       var stunCaused = false;
       if (cls === 'barbarian' && isDouble && hp1 > 0 && hp2 > 0) {
-        stunned[defender] = true; stunCaused = true;
+        dmg = BARB_DOUBLE_DMG[baseDmg] || baseDmg;
+        stunned[defender] = true;
+        stunCaused = true;
+        resultEl.textContent = String(dmg);
       }
 
       applyHit(attacker, defender, dmg, isDouble, stunCaused, false, 0, jokerMult, null, rageBonus);
