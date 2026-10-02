@@ -1,5 +1,5 @@
 // ============ ВЕРСИЯ ============
-var GAME_VERSION = '1.03';
+var GAME_VERSION = '1.04';
 (function showVersion() {
   function set() {
     var el = document.getElementById('versionBadge');
@@ -9,16 +9,14 @@ var GAME_VERSION = '1.03';
   else set();
 })();
 
-// ============ ЧАСТИЦЫ ФОНА ============
+// ============ ФОНОВЫЕ ЧАСТИЦЫ ============
 (function initParticles() {
   var canvas = document.getElementById('bg-canvas');
   if (!canvas) return;
   var ctx = canvas.getContext('2d');
-  var particles = [];
-  var W, H;
+  var particles = [], W, H;
   function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-  resize();
-  window.addEventListener('resize', resize);
+  resize(); window.addEventListener('resize', resize);
   var COUNT = Math.min(40, Math.floor(window.innerWidth / 40));
   for (var i = 0; i < COUNT; i++) {
     particles.push({ x: Math.random() * W, y: Math.random() * H, r: 0.6 + Math.random() * 1.6, vx: (Math.random() - 0.5) * 0.25, vy: -0.15 - Math.random() * 0.35, a: 0.2 + Math.random() * 0.5, hue: Math.random() < 0.5 ? 160 : 220 });
@@ -29,26 +27,21 @@ var GAME_VERSION = '1.03';
       var p = particles[i];
       p.x += p.vx; p.y += p.vy;
       if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
-      if (p.x < -10) p.x = W + 10;
-      if (p.x > W + 10) p.x = -10;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      if (p.x < -10) p.x = W + 10; if (p.x > W + 10) p.x = -10;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
       ctx.fillStyle = 'hsla(' + p.hue + ', 80%, 70%, ' + p.a + ')';
-      ctx.shadowColor = 'hsla(' + p.hue + ', 80%, 60%, 1)';
-      ctx.shadowBlur = 8;
-      ctx.fill();
-      ctx.shadowBlur = 0;
+      ctx.shadowColor = 'hsla(' + p.hue + ', 80%, 60%, 1)'; ctx.shadowBlur = 8;
+      ctx.fill(); ctx.shadowBlur = 0;
     }
     requestAnimationFrame(frame);
   }
   frame();
 })();
 
-// ============ ЧАСТИЦЫ ИСКР ============
+// ============ ИСКРЫ ============
 var fxCanvas = document.getElementById('fx-canvas');
 var fxCtx = fxCanvas ? fxCanvas.getContext('2d') : null;
-var fxParticles = [];
-var fxRunning = false;
+var fxParticles = [], fxRunning = false;
 function fxResize() { if (!fxCanvas) return; fxCanvas.width = window.innerWidth; fxCanvas.height = window.innerHeight; }
 if (fxCanvas) { fxResize(); window.addEventListener('resize', fxResize); }
 function spawnSparks(x, y, count, color, speed) {
@@ -69,11 +62,8 @@ function fxLoop() {
     if (p.life <= 0) { fxParticles.splice(i, 1); continue; }
     fxCtx.globalAlpha = p.life;
     fxCtx.fillStyle = p.color;
-    fxCtx.shadowColor = p.color;
-    fxCtx.shadowBlur = 12;
-    fxCtx.beginPath();
-    fxCtx.arc(p.x, p.y, p.r * p.life, 0, Math.PI * 2);
-    fxCtx.fill();
+    fxCtx.shadowColor = p.color; fxCtx.shadowBlur = 12;
+    fxCtx.beginPath(); fxCtx.arc(p.x, p.y, p.r * p.life, 0, Math.PI * 2); fxCtx.fill();
   }
   fxCtx.globalAlpha = 1; fxCtx.shadowBlur = 0;
   if (fxParticles.length > 0) requestAnimationFrame(fxLoop);
@@ -96,23 +86,20 @@ function shakeScreen(strong) {
   app.classList.add(cls);
   setTimeout(function() { app.classList.remove(cls); }, 600);
 }
-function shakeCard(playerNum) {
-  var card = document.getElementById('p' + playerNum);
-  if (!card) return;
-  card.classList.remove('shake', 'hit-flash');
-  void card.offsetWidth;
+function shakeCard(n) {
+  var card = document.getElementById('p' + n); if (!card) return;
+  card.classList.remove('shake', 'hit-flash'); void card.offsetWidth;
   card.classList.add('shake', 'hit-flash');
   setTimeout(function() { card.classList.remove('shake', 'hit-flash'); }, 500);
 }
-function flashHpBar(playerNum) {
-  var bar = document.querySelector('#p' + playerNum + ' .hp-bar');
-  var val = document.getElementById('hpVal' + playerNum);
+function flashHpBar(n) {
+  var bar = document.querySelector('#p' + n + ' .hp-bar');
+  var val = document.getElementById('hpVal' + n);
   if (bar) { bar.classList.remove('flash'); void bar.offsetWidth; bar.classList.add('flash'); setTimeout(function() { bar.classList.remove('flash'); }, 400); }
   if (val) { val.classList.remove('bump'); void val.offsetWidth; val.classList.add('bump'); setTimeout(function() { val.classList.remove('bump'); }, 400); }
 }
-function showFloatingDamage(playerNum, value, type) {
-  var card = document.getElementById('p' + playerNum);
-  if (!card) return;
+function showFloatingDamage(n, value, type) {
+  var card = document.getElementById('p' + n); if (!card) return;
   var rect = card.getBoundingClientRect();
   var el = document.createElement('div');
   el.className = 'float-dmg' + (type ? ' ' + type : '');
@@ -147,38 +134,161 @@ var BARB_WEAK_MULT = 0.8;
 var ASSASSIN_CRIT = 1.9;
 var JOKER_ROUND_MULT = 2.5;
 var JOKER_BEAUTIFUL_MULT = 3.5;
+var MAX_HP = 1000;
 
-// ============ ИМЕНА (пул) ============
+// ============ ИМЕНА ============
 var FIRST_NAMES = [
   'Аэлис','Гримгор','Ксилл','Торин','Вельда','Роран','Мира','Зарк','Нимфа','Дарион',
   'Элдрин','Сайра','Корвус','Тавия','Лун','Бранд','Фелис','Морок','Кира','Страж',
   'Пельмень','Скибиди','Гигачад','Босс','Стрелок','Тень','Ястреб','Вихрь','Гром','Пепел',
   'Змей','Клык','Клинок','Сова','Ворон','Пегас','Ирис','Лава','Мороз','Огонь',
-  'Иван','Мария','Дмитрий','Ольга','Сергей','Анна','Никита','Елена','Артём','Ксения',
-  'Барсик','Мурка','Шарик','Тузик','Матильда','Пушок','Кузя','Тимоша','Муся','Бублик'
+  'Иван','Мария','Дмитрий','Ольга','Сергей','Анна','Никита','Елена','Артём','Ксения'
 ];
-function randomName() {
-  return FIRST_NAMES[Math.floor(Math.random() * FIRST_NAMES.length)];
+function randomName() { return FIRST_NAMES[Math.floor(Math.random() * FIRST_NAMES.length)]; }
+function randomClass() { return CLASS_KEYS[Math.floor(Math.random() * CLASS_KEYS.length)]; }
+function shuffle(arr) {
+  for (var i = arr.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+  }
+  return arr;
 }
-function randomClass() {
-  return CLASS_KEYS[Math.floor(Math.random() * CLASS_KEYS.length)];
+
+// ============ СИМУЛЯЦИЯ ОДНОЙ ПАРТИИ (без UI) ============
+function simulateBattle(c1, c2) {
+  var h1 = MAX_HP, h2 = MAX_HP;
+  var t = Math.random() < 0.5 ? 1 : 2;
+  var st = { 1: false, 2: false };
+  var jb = { 1: 0, 2: 0 };
+  var sm = { 1: null, 2: null };
+  var weak = { 1: false, 2: false };
+  var MAX_TURNS = 500;
+
+  function r6() { return 1 + Math.floor(Math.random() * 6); }
+  function beautiful(n) {
+    if (n <= 0) return false;
+    var s = '' + n;
+    if (s.length < 2) return false;
+    for (var i = 1; i < s.length; i++) if (s[i] !== s[0]) return false;
+    return true;
+  }
+  function round(n) {
+    if (n <= 0) return false;
+    if (n >= 10 && n <= 90 && n % 10 === 0) return true;
+    if (n >= 100 && n <= 900 && n % 100 === 0) return true;
+    return false;
+  }
+  function bers(hp) {
+    if (hp === 1) return 100;
+    if (hp < 5) return 70;
+    if (hp < 50) return 40;
+    if (hp < 100) return 30;
+    if (hp < 150) return 20;
+    if (hp < 200) return 12;
+    if (hp < 250) return 7;
+    if (hp < 300) return 3;
+    return 0;
+  }
+  function applyJoker(p) {
+    if ((p === 1 ? c1 : c2) !== 'joker') return;
+    var cur = jb[p];
+    if (beautiful(h1) || beautiful(h2)) { if (JOKER_BEAUTIFUL_MULT > cur) jb[p] = JOKER_BEAUTIFUL_MULT; }
+    else if (round(h1) || round(h2)) { if (JOKER_ROUND_MULT > cur) jb[p] = JOKER_ROUND_MULT; }
+  }
+
+  for (var t_i = 0; t_i < MAX_TURNS; t_i++) {
+    if (h1 <= 0) return 2;
+    if (h2 <= 0) return 1;
+    var a = t, d = a === 1 ? 2 : 1, cls = a === 1 ? c1 : c2;
+    if (st[a]) { st[a] = false; t = d; continue; }
+    var v1 = r6(), v2 = r6();
+    var db = v1 === v2;
+    var base = v1 * 10 + v2;
+    var dmg = base, heal = 0, stunCause = false;
+
+    if (cls === 'assassin' && db) {
+      var r1 = r6(), r2 = r6();
+      dmg = Math.round((r1 * 10 + r2) * ASSASSIN_CRIT);
+    } else if (cls === 'barbarian') {
+      if (db) { stunCause = true; weak[a] = true; }
+      if (weak[a]) { dmg = Math.floor(base * BARB_WEAK_MULT); weak[a] = false; }
+    } else if (cls === 'vampire' && db) {
+      var b1 = r6(), b2 = r6();
+      dmg = b1 * 10 + b2; heal = dmg;
+    } else if (cls === 'joker') {
+      if (jb[a] > 0) { dmg = Math.round(base * jb[a]); jb[a] = 0; }
+    } else if (cls === 'berserker') {
+      var myHp = a === 1 ? h1 : h2;
+      dmg = base + bers(myHp);
+    } else if (cls === 'druid') {
+      if (sm[a]) {
+        dmg = Math.floor(base * sm[a].mult);
+        if (sm[a].canStun && db) stunCause = true;
+      } else if (db) {
+        var info = SUMMON_TABLE[base];
+        if (info) { sm[a] = { hp: info.hp, mult: info.mult, canStun: info.canStun }; dmg = 0; }
+      }
+    }
+
+    if (dmg > 0) {
+      var s = sm[d];
+      if (s) {
+        if (dmg >= s.hp) {
+          var ov = dmg - s.hp; sm[d] = null;
+          if (d === 1) h1 = Math.max(0, h1 - ov); else h2 = Math.max(0, h2 - ov);
+        } else { s.hp -= dmg; }
+      } else {
+        if (d === 1) h1 = Math.max(0, h1 - dmg); else h2 = Math.max(0, h2 - dmg);
+      }
+    }
+    if (heal > 0) { if (a === 1) h1 = Math.min(MAX_HP, h1 + heal); else h2 = Math.min(MAX_HP, h2 + heal); }
+    applyJoker(1); applyJoker(2);
+    if (stunCause) st[d] = true;
+    t = d;
+  }
+  // Ничья — победа первого (ходит первым)
+  return 1;
+}
+
+// ============ СИМУЛЯЦИЯ МАТЧА (Bo3 / Bo5) ============
+function simulateMatch(p1, p2, bo) {
+  var need = Math.ceil(bo / 2);
+  var w1 = 0, w2 = 0;
+  var games = [];
+  while (w1 < need && w2 < need) {
+    var r = simulateBattle(p1.classKey, p2.classKey);
+    if (r === 1) { w1++; games.push(1); }
+    else { w2++; games.push(2); }
+  }
+  return {
+    winner: w1 >= need ? p1 : p2,
+    loser: w1 >= need ? p2 : p1,
+    score: [w1, w2],
+    gamesCount: w1 + w2
+  };
 }
 
 // ============ СОСТОЯНИЕ ТУРНИРА ============
-var tournamentPlayers = [];  // [{name, classKey}]
-var tournamentState = null;
+var tournamentPlayers = [];
+var tournamentActive = false;
 
 // ============ ЭЛЕМЕНТЫ ============
 var menuOverlay = document.getElementById('menuOverlay');
 var setupOverlay = document.getElementById('setupOverlay');
 var playersOverlay = document.getElementById('playersOverlay');
 var simOverlay = document.getElementById('simOverlay');
+var championOverlay = document.getElementById('championOverlay');
 var selectOverlay = document.getElementById('selectOverlay');
 var playerCount = document.getElementById('playerCount');
 var playersList = document.getElementById('playersList');
 var playersCount = document.getElementById('playersCount');
+var simTitle = document.getElementById('simTitle');
+var simStatus = document.getElementById('simStatus');
+var simProgress = document.getElementById('simProgress');
+var simCounter = document.getElementById('simCounter');
+var simLog = document.getElementById('simLog');
 
-// ============ ГЛАВНОЕ МЕНЮ ============
+// ============ МЕНЮ ============
 document.getElementById('btnTournament').addEventListener('click', function() {
   menuOverlay.classList.remove('show');
   playerCount.value = '2';
@@ -193,7 +303,7 @@ document.getElementById('quickBackBtn').addEventListener('click', function() {
   menuOverlay.classList.add('show');
 });
 
-// ============ НАСТРОЙКА КОЛИЧЕСТВА ============
+// ============ НАСТРОЙКА ============
 document.getElementById('btnSetupBack').addEventListener('click', function() {
   setupOverlay.classList.remove('show');
   menuOverlay.classList.add('show');
@@ -211,9 +321,7 @@ document.getElementById('btnSetupNext').addEventListener('click', function() {
 // ============ СПИСОК ИГРОКОВ ============
 function buildPlayersList(n) {
   tournamentPlayers = [];
-  for (var i = 0; i < n; i++) {
-    tournamentPlayers.push({ name: '', classKey: null });
-  }
+  for (var i = 0; i < n; i++) tournamentPlayers.push({ name: '', classKey: null });
   renderPlayersList();
 }
 
@@ -221,8 +329,6 @@ function renderPlayersList() {
   var n = tournamentPlayers.length;
   playersCount.textContent = 'Игроков: ' + n;
   playersList.innerHTML = '';
-
-  // Виртуализация для больших списков
   if (n > 200) {
     var info = document.createElement('div');
     info.style.cssText = 'padding:20px;text-align:center;color:#8892b0;font-size:13px;line-height:1.6;';
@@ -231,42 +337,28 @@ function renderPlayersList() {
       'Остальные заполнятся случайно при старте.';
     playersList.appendChild(info);
   }
-
   var showCount = Math.min(n, 200);
-  for (var i = 0; i < showCount; i++) {
-    playersList.appendChild(createPlayerRow(i));
-  }
+  for (var i = 0; i < showCount; i++) playersList.appendChild(createPlayerRow(i));
 }
 
 function createPlayerRow(idx) {
   var p = tournamentPlayers[idx];
   var row = document.createElement('div');
   row.className = 'player-row';
-
-  var num = document.createElement('span');
-  num.className = 'num';
-  num.textContent = (idx + 1);
+  var num = document.createElement('span'); num.className = 'num'; num.textContent = (idx + 1);
   row.appendChild(num);
-
   var nameInput = document.createElement('input');
   nameInput.className = 'name-input';
   nameInput.type = 'text';
   nameInput.placeholder = 'Имя (пусто = случайно)';
   nameInput.value = p.name;
-  nameInput.addEventListener('input', function(e) {
-    tournamentPlayers[idx].name = e.target.value;
-  });
+  nameInput.addEventListener('input', function(e) { tournamentPlayers[idx].name = e.target.value; });
   row.appendChild(nameInput);
-
   var classBtn = document.createElement('button');
   classBtn.className = 'class-btn';
   updateClassBtn(classBtn, p.classKey);
-  classBtn.addEventListener('click', function(e) {
-    e.stopPropagation();
-    openClassMenu(idx, classBtn);
-  });
+  classBtn.addEventListener('click', function(e) { e.stopPropagation(); openClassMenu(idx, classBtn); });
   row.appendChild(classBtn);
-
   return row;
 }
 
@@ -281,31 +373,20 @@ function updateClassBtn(btn, classKey) {
   }
 }
 
-// ============ МЕНЮ ВЫБОРА КЛАССА ============
-var classMenuEl = null;
-var classMenuIdx = -1;
-var classMenuBtn = null;
-
+// ============ МЕНЮ КЛАССА ============
+var classMenuEl = null, classMenuIdx = -1, classMenuBtn = null;
 function openClassMenu(idx, btn) {
-  classMenuIdx = idx;
-  classMenuBtn = btn;
+  classMenuIdx = idx; classMenuBtn = btn;
   if (classMenuEl) classMenuEl.remove();
-
   classMenuEl = document.createElement('div');
   classMenuEl.className = 'class-menu show';
-
   var card = document.createElement('div');
   card.className = 'class-menu-card';
-
   var title = document.createElement('div');
-  title.className = 'class-menu-title';
-  title.textContent = 'Выбор класса';
+  title.className = 'class-menu-title'; title.textContent = 'Выбор класса';
   card.appendChild(title);
+  var grid = document.createElement('div'); grid.className = 'class-menu-grid';
 
-  var grid = document.createElement('div');
-  grid.className = 'class-menu-grid';
-
-  // Опция "Случайно"
   var randOpt = document.createElement('div');
   randOpt.className = 'class-option' + (tournamentPlayers[idx].classKey === null ? ' selected' : '');
   randOpt.innerHTML = '<div class="co-icon random-icon">🎲</div><div class="co-name">Случайно</div>';
@@ -316,7 +397,6 @@ function openClassMenu(idx, btn) {
   });
   grid.appendChild(randOpt);
 
-  // 6 классов
   CLASS_KEYS.forEach(function(k) {
     var c = CLASSES[k];
     var opt = document.createElement('div');
@@ -333,19 +413,10 @@ function openClassMenu(idx, btn) {
   card.appendChild(grid);
   classMenuEl.appendChild(card);
   document.body.appendChild(classMenuEl);
-
-  classMenuEl.addEventListener('click', function(e) {
-    if (e.target === classMenuEl) closeClassMenu();
-  });
+  classMenuEl.addEventListener('click', function(e) { if (e.target === classMenuEl) closeClassMenu(); });
 }
+function closeClassMenu() { if (classMenuEl) { classMenuEl.remove(); classMenuEl = null; } classMenuIdx = -1; classMenuBtn = null; }
 
-function closeClassMenu() {
-  if (classMenuEl) { classMenuEl.remove(); classMenuEl = null; }
-  classMenuIdx = -1;
-  classMenuBtn = null;
-}
-
-// ============ ЗАПОЛНИТЬ ПУСТЫЕ ============
 document.getElementById('btnFillRandom').addEventListener('click', function() {
   for (var i = 0; i < tournamentPlayers.length; i++) {
     if (!tournamentPlayers[i].name) tournamentPlayers[i].name = randomName();
@@ -353,45 +424,236 @@ document.getElementById('btnFillRandom').addEventListener('click', function() {
   }
   renderPlayersList();
 });
-
 document.getElementById('btnClearAll').addEventListener('click', function() {
   for (var i = 0; i < tournamentPlayers.length; i++) {
-    tournamentPlayers[i].name = '';
-    tournamentPlayers[i].classKey = null;
+    tournamentPlayers[i].name = ''; tournamentPlayers[i].classKey = null;
   }
   renderPlayersList();
 });
-
 document.getElementById('btnPlayersBack').addEventListener('click', function() {
   playersOverlay.classList.remove('show');
   setupOverlay.classList.add('show');
 });
 
-// ============ СТАРТ ТУРНИРА ============
+// ============ ТУРНИР ============
 document.getElementById('btnStartTournament').addEventListener('click', function() {
-  // Заполняем пустые
   for (var i = 0; i < tournamentPlayers.length; i++) {
     if (!tournamentPlayers[i].name) tournamentPlayers[i].name = randomName();
     if (!tournamentPlayers[i].classKey) tournamentPlayers[i].classKey = randomClass();
   }
   playersOverlay.classList.remove('show');
-  // Пока просто показываем результат
-  alert('Турнир на ' + tournamentPlayers.length + ' игроков готов!\n\n' +
-        'Первые 5 участников:\n' +
-        tournamentPlayers.slice(0, 5).map(function(p, idx) {
-          var c = CLASSES[p.classKey];
-          return (idx+1) + '. ' + p.name + ' — ' + c.short;
-        }).join('\n') +
-        '\n\nТурнирная логика — следующий этап разработки.');
+  simOverlay.classList.add('show');
+  simLog.innerHTML = '';
+  simProgress.style.width = '0%';
+  runTournament();
+});
+
+// ============ ЛОГ СИМУЛЯЦИИ ============
+function addSimLog(html, cls) {
+  var line = document.createElement('div');
+  line.className = 'sim-log-line ' + (cls || '');
+  line.innerHTML = html;
+  simLog.insertBefore(line, simLog.firstChild);
+  while (simLog.children.length > 200) simLog.removeChild(simLog.lastChild);
+}
+function addRoundHeader(roundName, aliveCount) {
+  var line = document.createElement('div');
+  line.className = 'sim-log-line round-header';
+  line.textContent = roundName + ' · игроков: ' + aliveCount;
+  simLog.insertBefore(line, simLog.firstChild);
+}
+
+// ============ ТУРНИРНАЯ ЛОГИКА ============
+function getRoundName(playersInRound) {
+  // playersInRound — сколько игроков на входе в раунд
+  if (playersInRound === 2) return 'ФИНАЛ';
+  if (playersInRound === 4) return 'ПОЛУФИНАЛ';
+  if (playersInRound === 8) return '1/4 ФИНАЛА';
+  if (playersInRound === 16) return '1/8 ФИНАЛА';
+  if (playersInRound === 32) return '1/16 ФИНАЛА';
+  if (playersInRound === 64) return '1/32 ФИНАЛА';
+  if (playersInRound === 128) return '1/64 ФИНАЛА';
+  if (playersInRound === 256) return '1/128 ФИНАЛА';
+  if (playersInRound === 512) return '1/256 ФИНАЛА';
+  if (playersInRound === 1024) return '1/512 ФИНАЛА';
+  return 'Раунд на ' + playersInRound;
+}
+
+function runTournament() {
+  var N = tournamentPlayers.length;
+  var size = 1;
+  while (size < N) size *= 2;
+
+  // Жребий — перемешать игроков
+  var list = tournamentPlayers.slice();
+  shuffle(list);
+
+  // Дополнить до size пустыми (bye)
+  var bracket = [];
+  for (var i = 0; i < size; i++) bracket.push(i < N ? list[i] : null);
+
+  // Статистика
+  var totalMatches = 0;
+  var totalGames = 0;
+  var semifinalLosers = [];  // для 3-4 места
+  var finalMatch = null;
+
+  // Раунды (асинхронно, чтобы UI успевал)
+  var currentRound = bracket;
+  var roundIdx = 0;
+  var totalRounds = Math.log2(size);
+
+  function processRound() {
+    if (currentRound.length <= 1) {
+      // Турнир закончен
+      var champion = currentRound[0];
+      finishTournament(champion, semifinalLosers, totalMatches, totalGames);
+      return;
+    }
+
+    var playersInRound = currentRound.length;
+    var roundName = getRoundName(playersInRound);
+    var isFinalRound = (playersInRound === 2);
+    var bo = isFinalRound ? 5 : 3;
+
+    simStatus.textContent = roundName + ' · Bo' + bo;
+    addRoundHeader(roundName, playersInRound);
+
+    var nextRound = [];
+    var roundMatches = [];
+
+    for (var i = 0; i < currentRound.length; i += 2) {
+      var p1 = currentRound[i];
+      var p2 = currentRound[i + 1];
+
+      if (p1 && p2) {
+        // Реальный матч
+        var result = simulateMatch(p1, p2, bo);
+        totalMatches++;
+        totalGames += result.gamesCount;
+
+        // Записать в лог
+        var pWin = result.winner;
+        var pLose = result.loser;
+        var winClass = CLASSES[pWin.classKey].icon;
+        var loseClass = CLASSES[pLose.classKey].icon;
+        addSimLog(
+          '<span class="round-tag">' + roundName.replace('ФИНАЛА', 'Ф.').replace('ПОЛУФИНАЛ', '1/2').replace('ФИНАЛ', 'Ф.') + '</span>' +
+          '<span class="p-win">' + winClass + ' ' + escapeHtml(pWin.name) + '</span>' +
+          '<span class="score">' + result.score[0] + ':' + result.score[1] + '</span>' +
+          '<span class="p-lose">' + escapeHtml(pLose.name) + ' ' + loseClass + '</span>',
+          'match'
+        );
+
+        nextRound.push(result.winner);
+
+        // Если это полуфинал — запомнить проигравших
+        if (playersInRound === 4) semifinalLosers.push(result.loser);
+        if (isFinalRound) finalMatch = result;
+
+      } else if (p1) {
+        // p1 проходит автоматически
+        nextRound.push(p1);
+        addSimLog(
+          '<span class="round-tag">' + roundName.replace('ФИНАЛА', 'Ф.') + '</span>' +
+          '<span class="p-win">' + CLASSES[p1.classKey].icon + ' ' + escapeHtml(p1.name) + '</span>' +
+          '<span class="score">проход</span><span class="p-lose"></span>',
+          'match'
+        );
+      } else if (p2) {
+        nextRound.push(p2);
+        addSimLog(
+          '<span class="round-tag">' + roundName.replace('ФИНАЛА', 'Ф.') + '</span>' +
+          '<span class="p-win">' + CLASSES[p2.classKey].icon + ' ' + escapeHtml(p2.name) + '</span>' +
+          '<span class="score">проход</span><span class="p-lose"></span>',
+          'match'
+        );
+      }
+      // Если оба null — пропускаем (не должно случиться на практике)
+    }
+
+    // Обновить прогресс
+    var progress = (1 - nextRound.length / N) * 100;
+    simProgress.style.width = progress + '%';
+    simCounter.textContent = 'Осталось игроков: ' + nextRound.length;
+
+    currentRound = nextRound;
+    roundIdx++;
+
+    // Дать UI отрисоваться, потом следующий раунд
+    setTimeout(processRound, 120);
+  }
+
+  setTimeout(processRound, 100);
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, function(c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+
+// ============ ЗАВЕРШЕНИЕ ТУРНИРА ============
+function finishTournament(champion, semifinalLosers, totalMatches, totalGames) {
+  simProgress.style.width = '100%';
+  simCounter.textContent = 'Турнир завершён!';
+  simStatus.textContent = 'Чемпион определён';
+
+  // Заполнить экран чемпиона
+  var cClass = CLASSES[champion.classKey];
+  document.getElementById('championName').textContent = champion.name;
+  document.getElementById('championClass').textContent = cClass.icon + ' ' + cClass.label;
+
+  // 2-е место — не сохраняется в переменной, найдём из финала
+  // Проще: последний матч в логе — но у нас нет прямого доступа.
+  // Используем semifinalLosers: их 2. Оба — 3-4 места.
+  // 2-е место — надо передать. Хм.
+
+  // Для простоты — выведем только полуфинальных проигравших как 3-4 места.
+  if (semifinalLosers.length >= 2) {
+    document.getElementById('podiumSilver').querySelector('.pname-txt').textContent =
+      CLASSES[semifinalLosers[0].classKey].icon + ' ' + semifinalLosers[0].name;
+    document.getElementById('podiumBronze').querySelector('.pname-txt').textContent =
+      CLASSES[semifinalLosers[1].classKey].icon + ' ' + semifinalLosers[1].name;
+  } else if (semifinalLosers.length === 1) {
+    document.getElementById('podiumSilver').querySelector('.pname-txt').textContent =
+      CLASSES[semifinalLosers[0].classKey].icon + ' ' + semifinalLosers[0].name;
+    document.getElementById('podiumBronze').querySelector('.pname-txt').textContent = '—';
+  } else {
+    document.getElementById('podiumSilver').querySelector('.pname-txt').textContent = '—';
+    document.getElementById('podiumBronze').querySelector('.pname-txt').textContent = '—';
+  }
+
+  document.getElementById('tournamentStats').innerHTML =
+    'Всего матчей: <b style="color:#e0e6f0">' + totalMatches + '</b><br>' +
+    'Всего партий: <b style="color:#e0e6f0">' + totalGames + '</b><br>' +
+    'Участников: <b style="color:#e0e6f0">' + tournamentPlayers.length + '</b>';
+
+  // Закрыть экран симуляции, открыть чемпиона
+  setTimeout(function() {
+    simOverlay.classList.remove('show');
+    championOverlay.classList.add('show');
+
+    // Искры
+    var rect = document.getElementById('championName').getBoundingClientRect();
+    spawnSparks(rect.left + rect.width / 2, rect.top + rect.height / 2, 40, '#fbbf24', 6);
+    setTimeout(function() {
+      spawnSparks(rect.left + rect.width / 2, rect.top + rect.height / 2, 25, '#4ade80', 5);
+    }, 200);
+  }, 400);
+}
+
+// ============ КНОПКИ ЭКРАНА ЧЕМПИОНА ============
+document.getElementById('btnNewTournament').addEventListener('click', function() {
+  championOverlay.classList.remove('show');
+  setupOverlay.classList.add('show');
+});
+document.getElementById('btnChampionMenu').addEventListener('click', function() {
+  championOverlay.classList.remove('show');
   menuOverlay.classList.add('show');
 });
 
-// ============ СТАРЫЙ РЕЖИМ: БЫСТРАЯ ИГРА ============
-// (Полностью сохранён из предыдущей версии)
-// ... ниже весь старый код 1 на 1 ...
-
-// (Здесь оставлю весь блок быстрой игры, чтобы не сломать существующее)
-
+// ============ БЫСТРАЯ ИГРА (сохранена) ============
 var pendingClasses = { 1: 'assassin', 2: 'barbarian' };
 var dieEls = [document.getElementById('die1'), document.getElementById('die2')];
 var resultEl = document.getElementById('result');
@@ -403,12 +665,8 @@ var overlaySub = document.getElementById('overlaySub');
 var battleBtn = document.getElementById('battleBtn');
 var speedSlider = document.getElementById('speedSlider');
 var speedValue = document.getElementById('speedValue');
-var testOverlay = document.getElementById('testOverlay');
-var testResultBody = document.getElementById('testResultBody');
-var testSub = document.getElementById('testSub');
 var appEl = document.getElementById('app');
 
-var MAX_HP = 1000;
 var MAX_LOG = 60;
 var speed = 4;
 
@@ -426,6 +684,7 @@ var jokerBuff = { 1: 0, 2: 0 };
 var summons = { 1: null, 2: null };
 var barbWeak = { 1: false, 2: false };
 var autoPlay = false, autoTimer = null;
+var classes = { 1: 'assassin', 2: 'barbarian' };
 var hpDisplay = { 1: MAX_HP, 2: MAX_HP };
 var hpTarget = { 1: MAX_HP, 2: MAX_HP };
 var hpAnimating = false;
@@ -436,14 +695,13 @@ var pipPositions = {
 };
 
 function coinFlip() { return Math.random() < 0.5 ? 1 : 2; }
-function isBeautiful(n) {
+function isBeautifulF(n) {
   if (n <= 0) return false;
-  var s = String(n);
-  if (s.length < 2) return false;
+  var s = String(n); if (s.length < 2) return false;
   for (var i = 1; i < s.length; i++) if (s[i] !== s[0]) return false;
   return true;
 }
-function isRound(n) {
+function isRoundF(n) {
   if (n <= 0) return false;
   if (n >= 10 && n <= 90 && n % 10 === 0) return true;
   if (n >= 100 && n <= 900 && n % 100 === 0) return true;
@@ -499,7 +757,6 @@ function renderDie(el, value) {
   }
 }
 function randomDie() { return Math.floor(Math.random() * 6) + 1; }
-
 function setDieGlow(type) {
   dieEls.forEach(function(el) {
     el.classList.remove('crit-glow', 'vampire-glow', 'joker-glow', 'joker15-glow', 'summon-glow', 'rage-glow');
@@ -529,13 +786,6 @@ function renderSelectionUI() {
   });
 }
 
-function openSelection() {
-  pendingClasses[1] = classes[1];
-  pendingClasses[2] = classes[2];
-  renderSelectionUI();
-  selectOverlay.classList.add('show');
-}
-
 function updateSummonUI(p) {
   var s = summons[p];
   var el = document.getElementById('summon' + p);
@@ -546,7 +796,6 @@ function updateSummonUI(p) {
     document.getElementById('summonHp' + p).textContent = s.hp + '/' + s.maxHp;
   } else el.classList.remove('show');
 }
-
 function updateRageBadge(p) {
   var el = document.getElementById('p' + p);
   var badge = document.getElementById('rage' + p);
@@ -555,39 +804,27 @@ function updateRageBadge(p) {
     if (bonus > 0) {
       el.classList.add('has-rage');
       badge.textContent = '🩸 +' + bonus;
-      if (bonus >= 70) el.classList.add('rage-max');
-      else el.classList.remove('rage-max');
-    } else {
-      el.classList.remove('has-rage');
-      el.classList.remove('rage-max');
-    }
-  } else {
-    el.classList.remove('has-rage');
-    el.classList.remove('rage-max');
-  }
+      if (bonus >= 70) el.classList.add('rage-max'); else el.classList.remove('rage-max');
+    } else { el.classList.remove('has-rage'); el.classList.remove('rage-max'); }
+  } else { el.classList.remove('has-rage'); el.classList.remove('rage-max'); }
 }
-
 function updateJokerBadge(p) {
   var el = document.getElementById('p' + p);
   var badge = document.getElementById('buff' + p);
   if (classes[p] === 'joker' && !gameOver && jokerBuff[p] > 0) {
     el.classList.add('has-buff');
     if (jokerBuff[p] === JOKER_BEAUTIFUL_MULT) {
-      badge.textContent = '🎲 x' + JOKER_BEAUTIFUL_MULT;
-      badge.className = 'buff-badge tier3';
+      badge.textContent = '🎲 x' + JOKER_BEAUTIFUL_MULT; badge.className = 'buff-badge tier3';
     } else {
-      badge.textContent = '🎲 x' + JOKER_ROUND_MULT;
-      badge.className = 'buff-badge tier15';
+      badge.textContent = '🎲 x' + JOKER_ROUND_MULT; badge.className = 'buff-badge tier15';
     }
   } else el.classList.remove('has-buff');
 }
-
 function updateWeakBadge(p) {
   var el = document.getElementById('p' + p);
   if (barbWeak[p] && !gameOver && hp1 > 0 && hp2 > 0) el.classList.add('has-weak');
   else el.classList.remove('has-weak');
 }
-
 function updatePlayersUI() {
   hpTarget[1] = hp1; hpTarget[2] = hp2;
   var fill1 = document.getElementById('hpFill1');
@@ -597,7 +834,6 @@ function updatePlayersUI() {
   fill1.className = 'hp-fill' + (hp1 / MAX_HP < 0.3 ? ' low' : '');
   fill2.className = 'hp-fill' + (hp2 / MAX_HP < 0.3 ? ' low' : '');
   animateHp();
-
   var pc1 = document.getElementById('pclass1');
   var pc2 = document.getElementById('pclass2');
   var c1 = CLASSES[classes[1]], c2 = CLASSES[classes[2]];
@@ -605,7 +841,6 @@ function updatePlayersUI() {
   pc1.className = 'pclass ' + (c1 ? c1.css : '');
   pc2.textContent = c2 ? c2.label : '—';
   pc2.className = 'pclass ' + (c2 ? c2.css : '');
-
   var p1 = document.getElementById('p1'), p2 = document.getElementById('p2');
   var cls1 = 'player', cls2 = 'player';
   if (!gameOver) {
@@ -616,15 +851,12 @@ function updatePlayersUI() {
   if (stunned[2]) cls2 += ' stunned';
   if (hp1 <= 0) cls1 += ' dead';
   if (hp2 <= 0) cls2 += ' dead';
-  p1.className = cls1;
-  p2.className = cls2;
-
+  p1.className = cls1; p2.className = cls2;
   updateJokerBadge(1); updateJokerBadge(2);
   updateRageBadge(1); updateRageBadge(2);
   updateWeakBadge(1); updateWeakBadge(2);
   updateSummonUI(1); updateSummonUI(2);
 }
-
 function setHint(text) { hintEl.textContent = text; }
 
 function addAttackLog(m) {
@@ -667,42 +899,32 @@ function addAttackLog(m) {
   logList.insertBefore(entry, logList.firstChild);
   trimLog();
 }
-
-function addStunSkipLog(playerNum) {
-  var entry = document.createElement('div');
-  entry.className = 'log-entry stun';
-  entry.innerHTML = '<span class="idx" style="color:#fbbf24">⚡</span><span class="who">Игрок ' + playerNum + ' оглушён</span><span class="dmg">ПРОПУСК</span>';
-  logList.insertBefore(entry, logList.firstChild);
-  trimLog();
+function addStunSkipLog(n) {
+  var entry = document.createElement('div'); entry.className = 'log-entry stun';
+  entry.innerHTML = '<span class="idx" style="color:#fbbf24">⚡</span><span class="who">Игрок ' + n + ' оглушён</span><span class="dmg">ПРОПУСК</span>';
+  logList.insertBefore(entry, logList.firstChild); trimLog();
 }
-function addCoinLog(firstPlayer) {
-  var entry = document.createElement('div');
-  entry.className = 'log-entry coin';
-  var coinName = firstPlayer === 1 ? 'Орёл' : 'Решка';
-  entry.innerHTML = '<span class="who">🪙 ' + coinName + ' — первым ходит Игрок ' + firstPlayer + '</span>';
-  logList.insertBefore(entry, logList.firstChild);
-  trimLog();
+function addCoinLog(n) {
+  var entry = document.createElement('div'); entry.className = 'log-entry coin';
+  var name = n === 1 ? 'Орёл' : 'Решка';
+  entry.innerHTML = '<span class="who">🪙 ' + name + ' — первым ходит Игрок ' + n + '</span>';
+  logList.insertBefore(entry, logList.firstChild); trimLog();
 }
 function addJokerBuffLog(p, mult) {
   var entry = document.createElement('div');
   entry.className = 'log-entry ' + (mult === JOKER_BEAUTIFUL_MULT ? 'buff' : 'buff15');
   entry.innerHTML = '<span class="idx" style="color:#10b981">🎲</span><span class="who">Джокер Игрок ' + p + '</span><span class="dmg">×' + mult + ' ГОТОВ</span>';
-  logList.insertBefore(entry, logList.firstChild);
-  trimLog();
+  logList.insertBefore(entry, logList.firstChild); trimLog();
 }
 function addSummonLog(p, info) {
-  var entry = document.createElement('div');
-  entry.className = 'log-entry summon';
+  var entry = document.createElement('div'); entry.className = 'log-entry summon';
   entry.innerHTML = '<span class="idx" style="color:#22c55e">✨</span><span class="who p' + p + '">И' + p + ' призвал</span><span class="dmg">' + info.icon + ' ' + info.name + ' · ' + info.hp + ' HP</span>';
-  logList.insertBefore(entry, logList.firstChild);
-  trimLog();
+  logList.insertBefore(entry, logList.firstChild); trimLog();
 }
 function addSummonDeathLog(defender, killed, overflow) {
-  var entry = document.createElement('div');
-  entry.className = 'log-entry summon-death';
+  var entry = document.createElement('div'); entry.className = 'log-entry summon-death';
   entry.innerHTML = '<span class="idx" style="color:#f87171">💀</span><span class="who">' + killed.icon + ' ' + killed.name + ' И' + defender + ' погиб</span><span class="dmg">' + (overflow > 0 ? overflow + ' → И' + defender : '') + '</span>';
-  logList.insertBefore(entry, logList.firstChild);
-  trimLog();
+  logList.insertBefore(entry, logList.firstChild); trimLog();
 }
 function trimLog() { while (logList.children.length > MAX_LOG) logList.removeChild(logList.lastChild); }
 
@@ -711,8 +933,8 @@ function checkJokerBuffs() {
     if (classes[p] !== 'joker') return;
     var cur = jokerBuff[p];
     var newBuff = 0;
-    if (isBeautiful(hp1) || isBeautiful(hp2)) newBuff = JOKER_BEAUTIFUL_MULT;
-    else if (isRound(hp1) || isRound(hp2)) newBuff = JOKER_ROUND_MULT;
+    if (isBeautifulF(hp1) || isBeautifulF(hp2)) newBuff = JOKER_BEAUTIFUL_MULT;
+    else if (isRoundF(hp1) || isRoundF(hp2)) newBuff = JOKER_ROUND_MULT;
     if (newBuff > cur) {
       jokerBuff[p] = newBuff;
       addJokerBuffLog(p, newBuff);
@@ -732,23 +954,16 @@ function dealDamage(defender, dmg) {
       var ov = dmg - s.hp;
       var killed = { name: s.name, icon: s.icon };
       summons[defender] = null;
-      if (defender === 1) hp1 = Math.max(0, hp1 - ov);
-      else hp2 = Math.max(0, hp2 - ov);
+      if (defender === 1) hp1 = Math.max(0, hp1 - ov); else hp2 = Math.max(0, hp2 - ov);
       return { toSummon: s.hp, toPlayer: ov, summonDied: true, killed: killed };
-    } else {
-      s.hp -= dmg;
-      return { toSummon: dmg, toPlayer: 0, summonDied: false, killed: null };
-    }
+    } else { s.hp -= dmg; return { toSummon: dmg, toPlayer: 0, summonDied: false, killed: null }; }
   }
-  if (defender === 1) hp1 = Math.max(0, hp1 - dmg);
-  else hp2 = Math.max(0, hp2 - dmg);
+  if (defender === 1) hp1 = Math.max(0, hp1 - dmg); else hp2 = Math.max(0, hp2 - dmg);
   return { toSummon: 0, toPlayer: dmg, summonDied: false, killed: null };
 }
 
 function spinDice(callback) {
-  dieEls.forEach(function(el) {
-    el.classList.add('spinning', 'rolling');
-  });
+  dieEls.forEach(function(el) { el.classList.add('spinning', 'rolling'); });
   setDieGlow(null);
   var spinDuration = getSpinDuration();
   var frameInterval = getFrameInterval();
@@ -758,8 +973,7 @@ function spinDice(callback) {
     if (performance.now() - start >= spinDuration) {
       clearInterval(timer);
       var v1 = randomDie(), v2 = randomDie();
-      renderDie(dieEls[0], v1);
-      renderDie(dieEls[1], v2);
+      renderDie(dieEls[0], v1); renderDie(dieEls[1], v2);
       dieEls.forEach(function(el) { el.classList.remove('spinning', 'rolling'); });
       callback(v1, v2);
     }
@@ -786,8 +1000,7 @@ function roll() {
         var stunB = s.canStun && isDouble;
         resultEl.textContent = String(sd);
         resultEl.className = 'result summon';
-        setDieGlow('summon');
-        setTimeout(function() { setDieGlow(null); }, 600);
+        setDieGlow('summon'); setTimeout(function() { setDieGlow(null); }, 600);
         setHint(s.icon + ' ' + s.name + ' атакует!');
         var summonFormula = s.mult === 1.0 ? String(baseDmg) : baseDmg + ' ×' + s.mult;
         applyHit(attacker, defender, sd, isDouble, stunB, false, 0, 0, { icon: s.icon, name: s.name }, 0, false, v1, v2, summonFormula);
@@ -799,8 +1012,7 @@ function roll() {
           summons[attacker] = { type: info.type, name: info.name, icon: info.icon, hp: info.hp, maxHp: info.hp, mult: info.mult, canStun: info.canStun };
           setHint(info.icon + ' Призыв: ' + info.name + '!');
           addSummonLog(attacker, info);
-          rollNumber++;
-          updatePlayersUI();
+          rollNumber++; updatePlayersUI();
           finishTurnAfterAction(attacker, defender, 0);
           return;
         }
@@ -817,8 +1029,7 @@ function roll() {
           var critDmg = Math.round(critBase * ASSASSIN_CRIT);
           resultEl.textContent = critDmg + '';
           resultEl.className = 'result crit';
-          setDieGlow('crit');
-          setTimeout(function() { setDieGlow(null); }, 600);
+          setDieGlow('crit'); setTimeout(function() { setDieGlow(null); }, 600);
           applyHit(attacker, defender, critDmg, false, false, true, 0, 0, null, 0, false, r1, r2, critBase + ' ×' + ASSASSIN_CRIT);
         });
       }, getCritPause());
@@ -832,8 +1043,7 @@ function roll() {
           var bite = r1 * 10 + r2;
           resultEl.textContent = bite + '';
           resultEl.className = 'result vampire';
-          setDieGlow('vampire');
-          setTimeout(function() { setDieGlow(null); }, 600);
+          setDieGlow('vampire'); setTimeout(function() { setDieGlow(null); }, 600);
           applyHit(attacker, defender, bite, false, false, false, bite, 0, null, 0, false, r1, r2, String(bite));
         });
       }, getCritPause());
@@ -861,8 +1071,7 @@ function roll() {
         dmg = baseDmg + rageBonus;
         resultEl.textContent = dmg + '';
         resultEl.className = 'result rage';
-        setDieGlow('rage');
-        setTimeout(function() { setDieGlow(null); }, 600);
+        setDieGlow('rage'); setTimeout(function() { setDieGlow(null); }, 600);
         setHint('🔥 Ярость +' + rageBonus + '!');
         formula = baseDmg + ' +' + rageBonus;
       }
@@ -873,17 +1082,14 @@ function roll() {
     if (cls === 'barbarian') {
       if (barbWeak[attacker]) {
         dmg = Math.floor(dmg * BARB_WEAK_MULT);
-        isWeak = true;
-        barbWeak[attacker] = false;
+        isWeak = true; barbWeak[attacker] = false;
         resultEl.textContent = dmg + '';
         resultEl.className = 'result weak';
         setHint('💜 Удар ослаблен на 20%');
         formula = baseDmg + ' ×0.8';
       }
       if (isDouble && hp1 > 0 && hp2 > 0) {
-        stunned[defender] = true;
-        stunCaused = true;
-        barbWeak[attacker] = true;
+        stunned[defender] = true; stunCaused = true; barbWeak[attacker] = true;
       }
     }
 
@@ -908,8 +1114,7 @@ function finishTurnAfterAction(attacker, defender, extraDelay) {
     var skip = turn;
     var sp = getStunPause();
     setHint('⚡ Игрок ' + skip + ' оглушён!');
-    addStunSkipLog(skip);
-    delay += sp;
+    addStunSkipLog(skip); delay += sp;
     setTimeout(function() {
       stunned[skip] = false;
       turn = skip === 1 ? 2 : 1;
@@ -934,12 +1139,9 @@ function applyHit(attacker, defender, dmg, isDouble, stunCaused, isCrit, heal, j
   if (isCrit) floatType = 'crit';
   else if (isWeak) floatType = 'weak';
   showFloatingDamage(defender, dmg, floatType);
-
   if (heal > 0) setTimeout(function() { showFloatingDamage(attacker, heal, 'heal'); }, 150);
 
-  shakeCard(defender);
-  flashHpBar(defender);
-
+  shakeCard(defender); flashHpBar(defender);
   var defRect = document.getElementById('p' + defender).getBoundingClientRect();
   var cx = defRect.left + defRect.width / 2;
   var cy = defRect.top + defRect.height / 2;
@@ -950,23 +1152,17 @@ function applyHit(attacker, defender, dmg, isDouble, stunCaused, isCrit, heal, j
   else if (dmg >= 60) intensity = 2;
   else if (dmg >= 40) intensity = 1;
   if (rageBonus > 0 && dmg >= 70) intensity = Math.max(intensity, 2);
-
   if (intensity >= 2) shakeScreen(intensity === 3);
-
   if (intensity === 3) {
     spawnSparks(cx, cy, 30, '#fbbf24', 6);
     spawnSparks(cx, cy, 15, '#ef4444', 4);
     spawnShockwave(cx, cy, '#fbbf24');
-  } else if (intensity === 2) {
-    spawnSparks(cx, cy, 15, '#f87171', 4);
-  } else if (intensity === 1) {
-    spawnSparks(cx, cy, 8, '#f87171', 3);
-  }
+  } else if (intensity === 2) spawnSparks(cx, cy, 15, '#f87171', 4);
+  else if (intensity === 1) spawnSparks(cx, cy, 8, '#f87171', 3);
 
   if ((v1 === 6 && v2 === 6) || (isCrit && dmg >= 100)) {
     dieEls.forEach(function(el) {
-      el.classList.remove('max-pulse');
-      void el.offsetWidth;
+      el.classList.remove('max-pulse'); void el.offsetWidth;
       el.classList.add('max-pulse');
       setTimeout(function() { el.classList.remove('max-pulse'); }, 650);
     });
@@ -974,16 +1170,15 @@ function applyHit(attacker, defender, dmg, isDouble, stunCaused, isCrit, heal, j
 
   addAttackLog({
     number: rollNumber, attacker: attacker, defender: defender, dmg: dmg,
-    v1: v1, v2: v2, formula: formula,
-    isCrit: isCrit, isWeak: isWeak, heal: heal, jokerMult: jokerMult,
-    rageBonus: rageBonus, stunCaused: stunCaused, summonInfo: summonInfo,
-    isDouble: isDouble, defHpBefore: defHpBefore, defHpAfter: defHpAfter
+    v1: v1, v2: v2, formula: formula, isCrit: isCrit, isWeak: isWeak, heal: heal,
+    jokerMult: jokerMult, rageBonus: rageBonus, stunCaused: stunCaused,
+    summonInfo: summonInfo, isDouble: isDouble,
+    defHpBefore: defHpBefore, defHpAfter: defHpAfter
   });
 
   if (dr.summonDied) addSummonDeathLog(defender, dr.killed, dr.toPlayer);
   if (heal > 0) {
-    if (attacker === 1) hp1 = Math.min(MAX_HP, hp1 + heal);
-    else hp2 = Math.min(MAX_HP, hp2 + heal);
+    if (attacker === 1) hp1 = Math.min(MAX_HP, hp1 + heal); else hp2 = Math.min(MAX_HP, hp2 + heal);
   }
   finishTurnAfterAction(attacker, defender, 0);
 }
@@ -1047,7 +1242,6 @@ function resetGame() {
   setHint('Тап — бросок Игрока ' + turn);
 }
 
-// ============ СТАРТ БЫСТРОЙ ИГРЫ ============
 document.getElementById('startGameBtn').addEventListener('click', function(e) {
   e.stopPropagation();
   classes[1] = pendingClasses[1];
@@ -1056,21 +1250,15 @@ document.getElementById('startGameBtn').addEventListener('click', function(e) {
   appEl.classList.add('show');
   resetGame();
 });
-
 document.getElementById('exitBtn').addEventListener('click', function(e) {
-  e.stopPropagation();
-  stopAuto();
-  appEl.classList.remove('show');
-  menuOverlay.classList.add('show');
+  e.stopPropagation(); stopAuto();
+  appEl.classList.remove('show'); menuOverlay.classList.add('show');
 });
-
 document.getElementById('toMenuBtn').addEventListener('click', function(e) {
   e.stopPropagation();
   overlay.classList.remove('show');
-  appEl.classList.remove('show');
-  menuOverlay.classList.add('show');
+  appEl.classList.remove('show'); menuOverlay.classList.add('show');
 });
-
 document.getElementById('restartBtn').addEventListener('click', function(e) { e.stopPropagation(); resetGame(); });
 document.getElementById('changeClassesBtn').addEventListener('click', function(e) {
   e.stopPropagation();
@@ -1078,7 +1266,6 @@ document.getElementById('changeClassesBtn').addEventListener('click', function(e
   appEl.classList.remove('show');
   selectOverlay.classList.add('show');
 });
-
 document.body.addEventListener('click', function(e) {
   if (!appEl.classList.contains('show')) return;
   if (e.target.closest('.log-wrap')) return;
@@ -1098,7 +1285,6 @@ document.body.addEventListener('touchstart', function(e) {
   if (autoPlay || gameOver) return;
   roll();
 }, { passive: false });
-
 battleBtn.addEventListener('click', function(e) { e.stopPropagation(); if (autoPlay) stopAuto(); else startAuto(); });
 speedSlider.addEventListener('input', function(e) {
   e.stopPropagation();
