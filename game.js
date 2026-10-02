@@ -1,5 +1,5 @@
 // ============ ВЕРСИЯ ============
-var GAME_VERSION = '1.06';
+var GAME_VERSION = '1.07';
 (function showVersion() {
   function set() {
     var el = document.getElementById('versionBadge');
@@ -834,7 +834,6 @@ function renderBracket() {
   bracketZoomLevel = 1.0;
   applyBracketZoom();
 
-  // Метки раундов сверху
   for (var r = 0; r < numRounds; r++) {
     var playersIn = size / Math.pow(2, r);
     var label = document.createElement('div');
@@ -850,46 +849,8 @@ function renderBracket() {
     grid.appendChild(label);
   }
 
-  // Начальная сетка: список всех пар первого раунда
-  // Соберём список победителей/проигравших для каждой стадии
-  // Для каждой стадии r найдём данные о матче m
-
-  // Для каждого раунда r и каждого матча m:
-  // - если r === 0: участники — из начальной сетки
-  // - если r > 0: участники — победители матчей (2m, 2m+1) раунда r-1
-
-  function getMatchData(r, m) {
-    var roundData = tournamentRun.rounds[r];
-    if (roundData && roundData.matches && roundData.matches[m]) {
-      return roundData.matches[m];
-    }
-    // Если данных ещё нет — вычислим предполагаемых игроков
-    if (r === 0) {
-      // Первый раунд: игроки из начального bracket
-      // Но у нас нет bracket в tournamentRun, только currentRound и финальные данные
-      return null;
-    }
-    // Для r>0 — рекурсивно
-    var prev1 = getMatchData(r - 1, m * 2);
-    var prev2 = getMatchData(r - 1, m * 2 + 1);
-    var p1 = prev1 ? prev1.winner : null;
-    var p2 = prev2 ? prev2.winner : null;
-    return { p1: p1, p2: p2, winner: null, loser: null, score: [0, 0] };
-  }
-
-  // Проще: сначала построить полную структуру данных рекурсивно
-  // Соберём winner всех матчей из rounds
-  // Но rounds не содержит будущих матчей
-
-  // Другой подход: у нас есть только пройденные матчи. Восстановим структуру:
-  // - Найдём самую раннюю стадию, где у нас есть данные
-  // - Изначальный массив игроков = tournamentPlayers (перемешанные при старте)
-  // - Восстановим сетку по логу
-
-  // Получим изначальный порядок из первой стадии rounds
   var allRounds = tournamentRun.rounds;
 
-  // Определим стартовый порядок игроков
   var initialOrder = null;
   if (allRounds.length > 0 && allRounds[0].matches.length > 0) {
     initialOrder = [];
@@ -897,19 +858,16 @@ function renderBracket() {
       initialOrder.push(m.p1);
       initialOrder.push(m.p2);
     });
-    // дополним null'ами до size
     while (initialOrder.length < size) initialOrder.push(null);
   } else {
     initialOrder = [];
     for (var i = 0; i < size; i++) initialOrder.push(null);
   }
 
-  // Функция: вернуть матч (r, m)
   function getMatch(r, m) {
     if (r < allRounds.length && allRounds[r].matches[m]) {
       return allRounds[r].matches[m];
     }
-    // Предполагаемый матч
     if (r === 0) {
       var p1 = initialOrder[m * 2];
       var p2 = initialOrder[m * 2 + 1];
@@ -924,20 +882,16 @@ function renderBracket() {
     };
   }
 
-  // Размер ячейки по вертикали для первого раунда
   var firstRoundMatches = size / 2;
   var stepFirst = (totalMatchH + MATCH_GAP) / firstRoundMatches;
 
-  // Сохраним центр каждого матча, чтобы рисовать связи
-  var matchCenters = []; // matchCenters[r][m] = {top, bottom, centerY}
+  var matchCenters = [];
 
-  // Отрисуем все матчи
   for (var r = 0; r < numRounds; r++) {
     var matchesInRound = size / Math.pow(2, r + 1);
     matchCenters[r] = [];
 
     for (var m = 0; m < matchesInRound; m++) {
-      // Y-координата верхнего края матча
       var centerY;
       if (r === 0) {
         centerY = LABEL_H + m * stepFirst + stepFirst / 2;
@@ -993,19 +947,17 @@ function renderBracket() {
     }
   }
 
-  // Связи между раундами
-  for (var r = 1; r < numRounds; r++) {
-    var matchesInRound = size / Math.pow(2, r + 1);
-    var prevColRight = (r - 1) * (COL_W + COL_GAP) + COL_W;
-    var curColLeft = r * (COL_W + COL_GAP);
+  for (var r2 = 1; r2 < numRounds; r2++) {
+    var matchesInRound2 = size / Math.pow(2, r2 + 1);
+    var prevColRight = (r2 - 1) * (COL_W + COL_GAP) + COL_W;
+    var curColLeft = r2 * (COL_W + COL_GAP);
     var midX = prevColRight + COL_GAP / 2;
 
-    for (var m = 0; m < matchesInRound; m++) {
-      var topCenter = matchCenters[r - 1][m * 2].centerY;
-      var botCenter = matchCenters[r - 1][m * 2 + 1].centerY;
-      var midY = matchCenters[r][m].centerY;
+    for (var m2 = 0; m2 < matchesInRound2; m2++) {
+      var topCenter = matchCenters[r2 - 1][m2 * 2].centerY;
+      var botCenter = matchCenters[r2 - 1][m2 * 2 + 1].centerY;
+      var midY = matchCenters[r2][m2].centerY;
 
-      // Верхний горизонтальный отрезок
       var hTop = document.createElement('div');
       hTop.className = 'bracket-connector h-top';
       hTop.style.left = prevColRight + 'px';
@@ -1014,7 +966,6 @@ function renderBracket() {
       hTop.style.height = (midY - topCenter) + 'px';
       grid.appendChild(hTop);
 
-      // Нижний горизонтальный отрезок
       var hBot = document.createElement('div');
       hBot.className = 'bracket-connector h-bot';
       hBot.style.left = prevColRight + 'px';
@@ -1023,7 +974,6 @@ function renderBracket() {
       hBot.style.height = (botCenter - midY) + 'px';
       grid.appendChild(hBot);
 
-      // Средний горизонтальный
       var hMid = document.createElement('div');
       hMid.className = 'bracket-connector h-mid';
       hMid.style.left = midX + 'px';
@@ -1061,11 +1011,12 @@ var exitBtn = document.getElementById('exitBtn');
 var speedSlider = document.getElementById('speedSlider');
 var speedValue = document.getElementById('speedValue');
 
-function getSpinDuration()  { return Math.max(70, 900 / speed); }
-function getPauseBetween()  { return Math.max(8,  120 / speed); }
-function getStunPause()     { return Math.max(150, 1200 / speed); }
-function getCritPause()     { return Math.max(80, 500 / speed); }
-function getFrameInterval() { return Math.max(16, getSpinDuration() / 5); }
+// ============ ТАЙМЕРЫ (ОБНОВЛЕНЫ ПОД 30×) ============
+function getSpinDuration()  { return Math.max(30, 900 / speed); }
+function getPauseBetween()  { return Math.max(3,  120 / speed); }
+function getStunPause()     { return Math.max(100, 1200 / speed); }
+function getCritPause()     { return Math.max(30, 500 / speed); }
+function getFrameInterval() { return Math.max(8, getSpinDuration() / 5); }
 
 var rolling = false, rollNumber = 0, turn = 1;
 var hp1 = MAX_HP, hp2 = MAX_HP;
