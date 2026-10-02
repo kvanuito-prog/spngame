@@ -18,235 +18,81 @@
     touch-action: manipulation;
     user-select: none; -webkit-user-select: none;
   }
-  #app {
-    display: flex; flex-direction: column;
-    height: 100vh; height: 100dvh;
-    padding: 8px; gap: 6px;
-    overflow: hidden;
-  }
+  #app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; padding: 8px; gap: 6px; overflow: hidden; }
 
   .players { display: flex; gap: 8px; flex-shrink: 0; }
   .player {
-    flex: 1;
-    background: rgba(255,255,255,0.05);
+    flex: 1; background: rgba(255,255,255,0.05);
     border: 2px solid rgba(255,255,255,0.08);
     border-radius: 10px; padding: 6px 10px;
-    transition: all 0.25s ease;
-    min-width: 0; position: relative; overflow: hidden;
+    transition: all 0.25s ease; min-width: 0;
+    position: relative; overflow: hidden;
   }
   .player.active { border-color: #4ade80; box-shadow: 0 0 16px rgba(74,222,128,0.35); background: rgba(74,222,128,0.08); }
   .player.active.p2-active { border-color: #60a5fa; box-shadow: 0 0 16px rgba(96,165,250,0.35); background: rgba(96,165,250,0.08); }
-  .player.stunned {
-    border-color: #fbbf24 !important;
-    background: rgba(251,191,36,0.12) !important;
-    animation: stunPulse 0.7s infinite;
-  }
-  @keyframes stunPulse {
-    0%,100% { box-shadow: 0 0 10px rgba(251,191,36,0.4); }
-    50%     { box-shadow: 0 0 26px rgba(251,191,36,0.95); }
-  }
+  .player.stunned { border-color: #fbbf24 !important; background: rgba(251,191,36,0.12) !important; animation: stunPulse 0.7s infinite; }
+  @keyframes stunPulse { 0%,100% { box-shadow: 0 0 10px rgba(251,191,36,0.4); } 50% { box-shadow: 0 0 26px rgba(251,191,36,0.95); } }
   .player.dead { border-color: #ef4444; opacity: 0.5; filter: grayscale(0.7); }
-  .pname {
-    font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
-    color: #8892b0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
+  .pname { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: #8892b0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .player.active .pname { color: #4ade80; }
   .player.active.p2-active .pname { color: #60a5fa; }
   .player.stunned .pname { color: #fbbf24 !important; }
   .pclass { font-size: 10px; letter-spacing: 1px; margin: 1px 0 4px; font-weight: 700; opacity: 0.9; }
-  .pclass.assassin { color: #ef4444; }
-  .pclass.barbarian { color: #f59e0b; }
-  .pclass.vampire { color: #a855f7; }
-  .pclass.joker { color: #10b981; }
-  .pclass.druid { color: #22c55e; }
-  .pclass.berserker { color: #dc2626; }
+  .pclass.assassin { color: #ef4444; } .pclass.barbarian { color: #f59e0b; }
+  .pclass.vampire { color: #a855f7; } .pclass.joker { color: #10b981; }
+  .pclass.druid { color: #22c55e; } .pclass.berserker { color: #dc2626; }
   .hp-bar { width: 100%; height: 7px; background: rgba(0,0,0,0.4); border-radius: 4px; overflow: hidden; margin-bottom: 2px; }
-  .hp-fill {
-    height: 100%; width: 100%;
-    background: linear-gradient(90deg, #22c55e, #4ade80);
-    border-radius: 4px; transition: width 0.4s ease, background 0.4s ease;
-  }
+  .hp-fill { height: 100%; width: 100%; background: linear-gradient(90deg, #22c55e, #4ade80); border-radius: 4px; transition: width 0.4s ease, background 0.4s ease; }
   .hp-fill.low { background: linear-gradient(90deg, #ef4444, #f87171); }
   .hp-val { font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; color: #e0e6f0; }
-  .stun-badge {
-    position: absolute; top: 4px; right: 4px;
-    background: #fbbf24; color: #1a1a1a;
-    font-size: 9px; font-weight: 800;
-    padding: 2px 5px; border-radius: 5px; letter-spacing: 1px;
-    display: none;
-  }
+  .stun-badge { position: absolute; top: 4px; right: 4px; background: #fbbf24; color: #1a1a1a; font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 5px; letter-spacing: 1px; display: none; }
   .player.stunned .stun-badge { display: block; }
-
-  .buff-badge {
-    position: absolute; top: 4px; left: 4px;
-    background: #10b981; color: #0a0f1e;
-    font-size: 9px; font-weight: 800;
-    padding: 2px 5px; border-radius: 5px; letter-spacing: 1px;
-    display: none;
-    animation: buffPulse 0.8s infinite;
-  }
+  .buff-badge { position: absolute; top: 4px; left: 4px; background: #10b981; color: #0a0f1e; font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 5px; letter-spacing: 1px; display: none; animation: buffPulse 0.8s infinite; }
   .player.has-buff .buff-badge { display: block; }
-  @keyframes buffPulse {
-    0%,100% { box-shadow: 0 0 6px rgba(16,185,129,0.6); }
-    50%     { box-shadow: 0 0 18px rgba(16,185,129,1); }
-  }
-
-  /* Значок ярости (капелька крови) */
-  .rage-badge {
-    position: absolute; top: 4px; left: 4px;
-    background: linear-gradient(145deg, #dc2626, #991b1b);
-    color: #fff;
-    font-size: 9px; font-weight: 800;
-    padding: 2px 6px; border-radius: 5px; letter-spacing: 0.5px;
-    display: none;
-    border: 1px solid #fca5a5;
-  }
+  @keyframes buffPulse { 0%,100% { box-shadow: 0 0 6px rgba(16,185,129,0.6); } 50% { box-shadow: 0 0 18px rgba(16,185,129,1); } }
+  .rage-badge { position: absolute; top: 4px; left: 4px; background: linear-gradient(145deg, #dc2626, #991b1b); color: #fff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 5px; letter-spacing: 0.5px; display: none; border: 1px solid #fca5a5; }
   .player.has-rage .rage-badge { display: block; }
-  .player.has-rage.rage-max {
-    border-color: #dc2626 !important;
-    background: rgba(220,38,38,0.15) !important;
-    animation: rageMaxPulse 0.9s infinite;
-  }
-  @keyframes rageMaxPulse {
-    0%,100% { box-shadow: 0 0 10px rgba(220,38,38,0.5); }
-    50%     { box-shadow: 0 0 28px rgba(220,38,38,1); }
-  }
-
-  /* Суммон */
-  .summon-line {
-    display: none;
-    align-items: center;
-    gap: 5px;
-    margin-top: 4px;
-    padding: 3px 6px;
-    background: rgba(217, 119, 6, 0.15);
-    border-left: 2px solid #d97706;
-    border-radius: 4px;
-    font-size: 11px;
-  }
+  .player.has-rage.rage-max { border-color: #dc2626 !important; background: rgba(220,38,38,0.15) !important; animation: rageMaxPulse 0.9s infinite; }
+  @keyframes rageMaxPulse { 0%,100% { box-shadow: 0 0 10px rgba(220,38,38,0.5); } 50% { box-shadow: 0 0 28px rgba(220,38,38,1); } }
+  .summon-line { display: none; align-items: center; gap: 5px; margin-top: 4px; padding: 3px 6px; background: rgba(217, 119, 6, 0.15); border-left: 2px solid #d97706; border-radius: 4px; font-size: 11px; }
   .summon-line.show { display: flex; }
   .summon-line .summon-icon { font-size: 13px; line-height: 1; }
   .summon-line .summon-name { color: #fbbf24; font-weight: 700; }
   .summon-line .summon-hp { margin-left: auto; color: #e0e6f0; font-weight: 700; font-variant-numeric: tabular-nums; font-size: 11px; }
 
   .dice-row { display: flex; gap: 14px; justify-content: center; flex-shrink: 0; margin: 2px 0; }
-  .die {
-    width: 64px; height: 64px;
-    background: #ffffff; border-radius: 10px;
-    box-shadow: 0 5px 16px rgba(0,0,0,0.5), inset 0 -3px 6px rgba(0,0,0,0.15);
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    padding: 8px;
-    transition: box-shadow 0.2s ease;
-  }
+  .die { width: 64px; height: 64px; background: #ffffff; border-radius: 10px; box-shadow: 0 5px 16px rgba(0,0,0,0.5), inset 0 -3px 6px rgba(0,0,0,0.15); display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); padding: 8px; transition: box-shadow 0.2s ease; }
   .die.spinning { animation: shake 0.12s infinite; }
-  .die.crit-glow {
-    box-shadow: 0 0 30px rgba(239,68,68,0.9), 0 0 60px rgba(251,191,36,0.5), inset 0 -3px 6px rgba(0,0,0,0.15);
-    background: #fff2e6;
-  }
-  .die.vampire-glow {
-    box-shadow: 0 0 30px rgba(168,85,247,0.95), 0 0 60px rgba(239,68,68,0.5), inset 0 -3px 6px rgba(0,0,0,0.15);
-    background: #f6eaff;
-  }
-  .die.joker-glow {
-    box-shadow: 0 0 30px rgba(16,185,129,0.95), 0 0 60px rgba(74,222,128,0.6), inset 0 -3px 6px rgba(0,0,0,0.15);
-    background: #e6fff5;
-  }
-  .die.summon-glow {
-    box-shadow: 0 0 30px rgba(217,119,6,0.95), 0 0 60px rgba(251,191,36,0.6), inset 0 -3px 6px rgba(0,0,0,0.15);
-    background: #fff7ed;
-  }
-  .die.rage-glow {
-    box-shadow: 0 0 30px rgba(220,38,38,0.95), 0 0 60px rgba(239,68,68,0.6), inset 0 -3px 6px rgba(0,0,0,0.15);
-    background: #ffe6e6;
-  }
-  @keyframes shake {
-    0%   { transform: rotate(-5deg) scale(1.03); }
-    50%  { transform: rotate(5deg) scale(0.97); }
-    100% { transform: rotate(-5deg) scale(1.03); }
-  }
+  .die.crit-glow { box-shadow: 0 0 30px rgba(239,68,68,0.9), 0 0 60px rgba(251,191,36,0.5), inset 0 -3px 6px rgba(0,0,0,0.15); background: #fff2e6; }
+  .die.vampire-glow { box-shadow: 0 0 30px rgba(168,85,247,0.95), 0 0 60px rgba(239,68,68,0.5), inset 0 -3px 6px rgba(0,0,0,0.15); background: #f6eaff; }
+  .die.joker-glow { box-shadow: 0 0 30px rgba(16,185,129,0.95), 0 0 60px rgba(74,222,128,0.6), inset 0 -3px 6px rgba(0,0,0,0.15); background: #e6fff5; }
+  .die.summon-glow { box-shadow: 0 0 30px rgba(217,119,6,0.95), 0 0 60px rgba(251,191,36,0.6), inset 0 -3px 6px rgba(0,0,0,0.15); background: #fff7ed; }
+  .die.rage-glow { box-shadow: 0 0 30px rgba(220,38,38,0.95), 0 0 60px rgba(239,68,68,0.6), inset 0 -3px 6px rgba(0,0,0,0.15); background: #ffe6e6; }
+  @keyframes shake { 0% { transform: rotate(-5deg) scale(1.03); } 50% { transform: rotate(5deg) scale(0.97); } 100% { transform: rotate(-5deg) scale(1.03); } }
   .pip { display: flex; align-items: center; justify-content: center; }
   .pip::after { content: ""; display: block; width: 11px; height: 11px; background: #1a1a1a; border-radius: 50%; }
   .pip.hidden-pip::after { display: none; }
 
-  .result {
-    text-align: center; font-size: 34px; font-weight: 800;
-    letter-spacing: 5px; color: #4ade80;
-    text-shadow: 0 0 25px rgba(74,222,128,0.5);
-    font-variant-numeric: tabular-nums;
-    min-height: 40px; line-height: 40px;
-    transition: color 0.3s ease;
-    flex-shrink: 0;
-  }
+  .result { text-align: center; font-size: 34px; font-weight: 800; letter-spacing: 5px; color: #4ade80; text-shadow: 0 0 25px rgba(74,222,128,0.5); font-variant-numeric: tabular-nums; min-height: 40px; line-height: 40px; transition: color 0.3s ease; flex-shrink: 0; }
   .result.p2 { color: #60a5fa; text-shadow: 0 0 25px rgba(96,165,250,0.5); }
   .result.double { color: #fbbf24; text-shadow: 0 0 25px rgba(251,191,36,0.7); }
-  .result.crit {
-    color: #ef4444;
-    text-shadow: 0 0 40px rgba(239,68,68,0.95), 0 0 20px rgba(251,191,36,0.7);
-    animation: critFlash 0.45s ease-out;
-  }
-  .result.vampire {
-    color: #a855f7;
-    text-shadow: 0 0 40px rgba(168,85,247,0.95), 0 0 20px rgba(239,68,68,0.5);
-    animation: critFlash 0.45s ease-out;
-  }
-  .result.joker {
-    color: #10b981;
-    text-shadow: 0 0 40px rgba(16,185,129,1), 0 0 20px rgba(74,222,128,0.6);
-    animation: critFlash 0.45s ease-out;
-  }
-  .result.summon {
-    color: #f59e0b;
-    text-shadow: 0 0 40px rgba(217,119,6,1), 0 0 20px rgba(251,191,36,0.6);
-    animation: critFlash 0.45s ease-out;
-  }
-  .result.rage {
-    color: #dc2626;
-    text-shadow: 0 0 40px rgba(220,38,38,1), 0 0 20px rgba(239,68,68,0.6);
-    animation: critFlash 0.45s ease-out;
-  }
-  @keyframes critFlash {
-    0%   { transform: scale(1.7); }
-    50%  { transform: scale(1.15); }
-    100% { transform: scale(1); }
-  }
+  .result.crit { color: #ef4444; text-shadow: 0 0 40px rgba(239,68,68,0.95), 0 0 20px rgba(251,191,36,0.7); animation: critFlash 0.45s ease-out; }
+  .result.vampire { color: #a855f7; text-shadow: 0 0 40px rgba(168,85,247,0.95), 0 0 20px rgba(239,68,68,0.5); animation: critFlash 0.45s ease-out; }
+  .result.joker { color: #10b981; text-shadow: 0 0 40px rgba(16,185,129,1), 0 0 20px rgba(74,222,128,0.6); animation: critFlash 0.45s ease-out; }
+  .result.summon { color: #f59e0b; text-shadow: 0 0 40px rgba(217,119,6,1), 0 0 20px rgba(251,191,36,0.6); animation: critFlash 0.45s ease-out; }
+  .result.rage { color: #dc2626; text-shadow: 0 0 40px rgba(220,38,38,1), 0 0 20px rgba(239,68,68,0.6); animation: critFlash 0.45s ease-out; }
+  @keyframes critFlash { 0% { transform: scale(1.7); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
 
-  .log-wrap {
-    flex: 1 1 auto;
-    min-height: 140px;
-    display: flex; flex-direction: column;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 10px; overflow: hidden;
-  }
-  .log-title {
-    padding: 5px 10px; font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
-    color: #8892b0; border-bottom: 1px solid rgba(255,255,255,0.06);
-    background: rgba(0,0,0,0.15); flex-shrink: 0;
-  }
-  .log-list {
-    flex: 1 1 auto;
-    overflow-y: auto; overflow-x: hidden;
-    padding: 2px 0;
-    min-height: 0;
-    scrollbar-width: thin;
-  }
+  .log-wrap { flex: 1 1 auto; min-height: 140px; display: flex; flex-direction: column; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden; }
+  .log-title { padding: 5px 10px; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #8892b0; border-bottom: 1px solid rgba(255,255,255,0.06); background: rgba(0,0,0,0.15); flex-shrink: 0; }
+  .log-list { flex: 1 1 auto; overflow-y: auto; overflow-x: hidden; padding: 2px 0; min-height: 0; scrollbar-width: thin; }
   .log-list::-webkit-scrollbar { width: 6px; }
   .log-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
   .log-list::-webkit-scrollbar-thumb { background: rgba(74,222,128,0.3); border-radius: 3px; }
-
-  .log-entry {
-    display: flex; align-items: center; gap: 8px;
-    padding: 5px 10px; font-size: 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    font-variant-numeric: tabular-nums;
-    flex-shrink: 0;
-  }
+  .log-entry { display: flex; align-items: center; gap: 8px; padding: 5px 10px; font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.04); font-variant-numeric: tabular-nums; flex-shrink: 0; }
   .log-entry .idx { color: #6b7a99; font-size: 11px; min-width: 28px; }
   .log-entry .who { font-size: 12px; font-weight: 700; }
-  .log-entry .who.p1 { color: #4ade80; }
-  .log-entry .who.p2 { color: #60a5fa; }
+  .log-entry .who.p1 { color: #4ade80; } .log-entry .who.p2 { color: #60a5fa; }
   .log-entry .dmg { margin-left: auto; font-weight: 700; color: #f87171; }
   .log-entry.double .dmg { color: #fbbf24; }
   .log-entry.crit { background: rgba(239,68,68,0.14); border-left: 3px solid #ef4444; }
@@ -258,146 +104,83 @@
   .log-entry.rage { background: rgba(220,38,38,0.14); border-left: 3px solid #dc2626; }
   .log-entry.rage .dmg { color: #dc2626; text-shadow: 0 0 8px rgba(220,38,38,0.9); font-size: 13px; }
   .log-entry.summon-attack { background: rgba(217,119,6,0.10); border-left: 3px solid #d97706; }
-  .log-entry.summon-attack .who { color: #fbbf24; }
-  .log-entry.summon-attack .dmg { color: #fbbf24; }
+  .log-entry.summon-attack .who { color: #fbbf24; } .log-entry.summon-attack .dmg { color: #fbbf24; }
   .log-entry.buff { background: rgba(16,185,129,0.10); border-left: 3px solid #10b981; }
-  .log-entry.buff .who { color: #10b981; }
-  .log-entry.buff .dmg { color: #10b981; letter-spacing: 1.5px; }
+  .log-entry.buff .who { color: #10b981; } .log-entry.buff .dmg { color: #10b981; letter-spacing: 1.5px; }
   .log-entry.summon { background: rgba(34,197,94,0.12); border-left: 3px solid #22c55e; }
-  .log-entry.summon .who { color: #22c55e; }
-  .log-entry.summon .dmg { color: #fbbf24; }
+  .log-entry.summon .who { color: #22c55e; } .log-entry.summon .dmg { color: #fbbf24; }
   .log-entry.summon-death { background: rgba(239,68,68,0.10); border-left: 3px solid #ef4444; }
-  .log-entry.summon-death .who { color: #f87171; }
-  .log-entry.summon-death .dmg { color: #fbbf24; font-size: 12px; }
+  .log-entry.summon-death .who { color: #f87171; } .log-entry.summon-death .dmg { color: #fbbf24; font-size: 12px; }
   .log-entry.stun { background: rgba(251,191,36,0.10); }
-  .log-entry.stun .who { color: #fbbf24; }
-  .log-entry.stun .dmg { color: #fbbf24; letter-spacing: 2px; }
+  .log-entry.stun .who { color: #fbbf24; } .log-entry.stun .dmg { color: #fbbf24; letter-spacing: 2px; }
 
-  .speed-box {
-    flex-shrink: 0;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 10px;
-    padding: 6px 12px 8px;
-  }
+  .speed-box { flex-shrink: 0; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 6px 12px 8px; }
   .speed-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px; }
   .speed-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #8892b0; }
-  .speed-value {
-    font-size: 16px; font-weight: 800; color: #4ade80;
-    letter-spacing: 1px; font-variant-numeric: tabular-nums;
-  }
+  .speed-value { font-size: 16px; font-weight: 800; color: #4ade80; letter-spacing: 1px; font-variant-numeric: tabular-nums; }
   .speed-value::after { content: "×"; font-size: 12px; margin-left: 1px; opacity: 0.7; }
-
-  input[type="range"].speed-slider {
-    -webkit-appearance: none; appearance: none;
-    width: 100%; height: 6px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 3px; outline: none;
-    margin: 4px 0 0;
-    touch-action: manipulation;
-  }
-  input[type="range"].speed-slider::-webkit-slider-thumb {
-    -webkit-appearance: none; appearance: none;
-    width: 24px; height: 24px; border-radius: 50%;
-    background: radial-gradient(circle at 35% 30%, #6ee7a3, #4ade80);
-    cursor: pointer;
-    box-shadow: 0 0 12px rgba(74,222,128,0.6), 0 2px 6px rgba(0,0,0,0.5);
-    border: 2px solid #0a0f1e;
-  }
-  input[type="range"].speed-slider::-moz-range-thumb {
-    width: 24px; height: 24px; border-radius: 50%;
-    background: #4ade80; cursor: pointer;
-    border: 2px solid #0a0f1e;
-    box-shadow: 0 0 12px rgba(74,222,128,0.6);
-  }
+  input[type="range"].speed-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; outline: none; margin: 4px 0 0; touch-action: manipulation; }
+  input[type="range"].speed-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #6ee7a3, #4ade80); cursor: pointer; box-shadow: 0 0 12px rgba(74,222,128,0.6), 0 2px 6px rgba(0,0,0,0.5); border: 2px solid #0a0f1e; }
+  input[type="range"].speed-slider::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: #4ade80; cursor: pointer; border: 2px solid #0a0f1e; box-shadow: 0 0 12px rgba(74,222,128,0.6); }
 
   .controls { display: flex; gap: 8px; flex-shrink: 0; }
-  .control-btn {
-    flex: 1; padding: 12px;
-    font-size: 14px; font-weight: 800;
-    border: none; border-radius: 10px;
-    cursor: pointer; letter-spacing: 1.5px;
-    font-family: inherit;
-    color: #0a0f1e;
-    transition: transform 0.1s ease;
-  }
+  .control-btn { flex: 1; padding: 12px; font-size: 14px; font-weight: 800; border: none; border-radius: 10px; cursor: pointer; letter-spacing: 1.5px; font-family: inherit; color: #0a0f1e; transition: transform 0.1s ease; }
   .control-btn:active { transform: scale(0.97); }
   .control-btn.start { background: linear-gradient(145deg, #4ade80, #22c55e); }
-  .control-btn.stop  { background: linear-gradient(145deg, #f87171, #ef4444); color: #fff; }
+  .control-btn.stop { background: linear-gradient(145deg, #f87171, #ef4444); color: #fff; }
   .control-btn.hidden { display: none; }
 
-  .hint {
-    text-align: center; color: #8892b0; font-size: 10px;
-    letter-spacing: 1px; flex-shrink: 0; min-height: 12px;
-  }
+  .hint { text-align: center; color: #8892b0; font-size: 10px; letter-spacing: 1px; flex-shrink: 0; min-height: 12px; }
 
-  .overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.9);
-    display: none; align-items: center; justify-content: center;
-    z-index: 100; padding: 16px;
-    overflow-y: auto;
-  }
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 100; padding: 16px; overflow-y: auto; }
   .overlay.show { display: flex; }
-  .overlay-card {
-    background: linear-gradient(160deg, #1e2a4a, #0f1729);
-    border: 2px solid rgba(74,222,128,0.4);
-    border-radius: 20px; padding: 20px 16px;
-    text-align: center; max-width: 480px; width: 100%;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-    margin: auto;
-  }
+  .overlay-card { background: linear-gradient(160deg, #1e2a4a, #0f1729); border: 2px solid rgba(74,222,128,0.4); border-radius: 20px; padding: 20px 16px; text-align: center; max-width: 480px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.6); margin: auto; }
   .overlay-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; color: #4ade80; }
   .overlay-sub { font-size: 12px; color: #8892b0; margin-bottom: 16px; }
-  .btn {
-    background: linear-gradient(145deg, #4ade80, #22c55e);
-    color: #0a0f1e; border: none;
-    padding: 12px 24px; font-size: 14px; font-weight: 800;
-    border-radius: 10px; cursor: pointer; letter-spacing: 1px;
-    width: 100%; font-family: inherit;
-    transition: transform 0.1s ease;
-  }
+  .btn { background: linear-gradient(145deg, #4ade80, #22c55e); color: #0a0f1e; border: none; padding: 12px 24px; font-size: 14px; font-weight: 800; border-radius: 10px; cursor: pointer; letter-spacing: 1px; width: 100%; font-family: inherit; transition: transform 0.1s ease; }
   .btn:active { transform: scale(0.97); }
-  .btn-secondary {
-    background: transparent;
-    border: 2px solid rgba(74,222,128,0.45);
-    color: #4ade80;
-    margin-top: 8px;
-  }
+  .btn-secondary { background: transparent; border: 2px solid rgba(74,222,128,0.45); color: #4ade80; margin-top: 8px; }
+  .btn-test { background: transparent; border: 2px solid rgba(96,165,250,0.5); color: #60a5fa; padding: 10px; font-size: 13px; font-weight: 700; border-radius: 10px; cursor: pointer; letter-spacing: 0.5px; width: 100%; font-family: inherit; margin-top: 10px; transition: transform 0.1s ease; }
+  .btn-test:active { transform: scale(0.97); }
 
   .select-title { font-size: 20px; font-weight: 800; margin-bottom: 4px; color: #fff; }
   .select-subtitle { font-size: 12px; color: #8892b0; margin-bottom: 14px; letter-spacing: 1px; }
   .select-row { margin-bottom: 12px; text-align: left; }
   .select-pname { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; font-weight: 700; }
-  .select-pname.p1 { color: #4ade80; }
-  .select-pname.p2 { color: #60a5fa; }
+  .select-pname.p1 { color: #4ade80; } .select-pname.p2 { color: #60a5fa; }
   .select-list { display: flex; gap: 4px; flex-wrap: wrap; }
-  .class-card {
-    flex: 1 1 calc(33.33% - 4px); min-width: 0;
-    padding: 7px 3px;
-    border: 2px solid rgba(255,255,255,0.1);
-    border-radius: 10px; text-align: center;
-    cursor: pointer; transition: all 0.2s ease;
-    background: rgba(255,255,255,0.03);
-  }
-  .class-card.selected {
-    border-color: #4ade80;
-    background: rgba(74,222,128,0.12);
-    box-shadow: 0 0 16px rgba(74,222,128,0.35);
-  }
+  .class-card { flex: 1 1 calc(33.33% - 4px); min-width: 0; padding: 7px 3px; border: 2px solid rgba(255,255,255,0.1); border-radius: 10px; text-align: center; cursor: pointer; transition: all 0.2s ease; background: rgba(255,255,255,0.03); }
+  .class-card.selected { border-color: #4ade80; background: rgba(74,222,128,0.12); box-shadow: 0 0 16px rgba(74,222,128,0.35); }
   .class-card .icon { font-size: 18px; line-height: 1; margin-bottom: 2px; }
   .class-card .cname { font-size: 9.5px; font-weight: 800; letter-spacing: 0.2px; margin-bottom: 2px; }
   .class-card.selected .cname { color: #4ade80; }
   .class-card .cdesc { font-size: 8px; line-height: 1.2; color: #8892b0; }
+
+  /* Тест баланса */
+  .test-result-card { background: linear-gradient(160deg, #1e2a4a, #0f1729); border: 2px solid rgba(96,165,250,0.4); border-radius: 20px; padding: 20px 16px; text-align: center; max-width: 520px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.6); margin: auto; }
+  .test-title { font-size: 18px; font-weight: 800; margin-bottom: 4px; color: #60a5fa; }
+  .test-sub { font-size: 11px; color: #8892b0; margin-bottom: 14px; }
+  .test-loading { padding: 50px 0; color: #8892b0; font-size: 13px; }
+  .test-table { width: 100%; border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; }
+  .test-table th { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: #8892b0; padding: 6px 4px; border-bottom: 1px solid rgba(255,255,255,0.08); text-align: left; }
+  .test-table th:last-child { text-align: right; }
+  .test-table td { padding: 7px 4px; border-bottom: 1px solid rgba(255,255,255,0.04); text-align: left; }
+  .test-table td:last-child { text-align: right; }
+  .test-table .rank-1 td { background: rgba(251,191,36,0.10); }
+  .test-table .rank-2 td { background: rgba(203,213,225,0.05); }
+  .test-table .rank-3 td { background: rgba(180,83,9,0.08); }
+  .test-table .cls-cell { font-weight: 700; }
+  .test-table .wr-cell { font-weight: 800; }
+  .test-table .wr-good { color: #4ade80; }
+  .test-table .wr-mid { color: #fbbf24; }
+  .test-table .wr-bad { color: #f87171; }
 
   @media (min-width: 700px) {
     #app { max-width: 720px; margin: 0 auto; padding: 12px; gap: 8px; }
     .die { width: 78px; height: 78px; padding: 10px; }
     .pip::after { width: 13px; height: 13px; }
     .result { font-size: 44px; min-height: 52px; line-height: 52px; }
-    .hp-val { font-size: 18px; }
-    .pname { font-size: 12px; }
-    .pclass { font-size: 11px; }
+    .hp-val { font-size: 18px; } .pname { font-size: 12px; } .pclass { font-size: 11px; }
     .log-wrap { min-height: 170px; }
     .class-card .icon { font-size: 22px; }
     .class-card .cname { font-size: 11px; }
@@ -423,6 +206,7 @@
     </div>
 
     <button class="btn" id="startGameBtn">НАЧАТЬ БОЙ</button>
+    <button class="btn-test" id="testBtn">📊 Тест баланса · 150 000 боёв</button>
   </div>
 </div>
 
@@ -494,55 +278,38 @@
   </div>
 </div>
 
+<div class="overlay" id="testOverlay">
+  <div class="test-result-card">
+    <div class="test-title">📊 Результаты баланса</div>
+    <div class="test-sub" id="testSub">10 000 боёв на каждую пару</div>
+    <div id="testResultBody"></div>
+    <button class="btn btn-secondary" id="testCloseBtn" style="margin-top:14px;">Закрыть</button>
+  </div>
+</div>
+
 <script>
   // ============ КЛАССЫ ============
   var CLASSES = {
-    assassin: {
-      icon: '🗡', short: 'Ассасин',
-      label: '🗡 Ассасин', css: 'assassin',
-      desc: 'Дубль → реролл ×2.'
-    },
-    barbarian: {
-      icon: '⚔', short: 'Варвар',
-      label: '⚔ Варвар', css: 'barbarian',
-      desc: 'Дубль → стан.'
-    },
-    vampire: {
-      icon: '🧛', short: 'Вампир',
-      label: '🧛 Вампир', css: 'vampire',
-      desc: 'Дубль → укус: урон + хил.'
-    },
-    joker: {
-      icon: '🎲', short: 'Джокер',
-      label: '🎲 Джокер', css: 'joker',
-      desc: 'Красивое HP → ×3.'
-    },
-    druid: {
-      icon: '🐉', short: 'Друид',
-      label: '🐉 Друид', css: 'druid',
-      desc: 'Дубль → суммон. Он бьёт.'
-    },
-    berserker: {
-      icon: '🔥', short: 'Берсерк',
-      label: '🔥 Берсерк', css: 'berserker',
-      desc: 'Мало HP → бонус к урону.'
-    }
+    assassin:  { icon: '🗡', short: 'Ассасин',  label: '🗡 Ассасин',  css: 'assassin',  desc: 'Дубль → реролл ×2.' },
+    barbarian: { icon: '⚔', short: 'Варвар',   label: '⚔ Варвар',   css: 'barbarian', desc: 'Дубль → стан.' },
+    vampire:   { icon: '🧛', short: 'Вампир',   label: '🧛 Вампир',   css: 'vampire',   desc: 'Дубль → укус: урон + хил.' },
+    joker:     { icon: '🎲', short: 'Джокер',   label: '🎲 Джокер',   css: 'joker',     desc: 'Красивое HP → ×3.' },
+    druid:     { icon: '🐉', short: 'Друид',    label: '🐉 Друид',    css: 'druid',     desc: 'Дубль → суммон.' },
+    berserker: { icon: '🔥', short: 'Берсерк',  label: '🔥 Берсерк',  css: 'berserker', desc: 'Мало HP → бонус.' }
   };
 
-  // Таблица суммонов друида (ключ — выпавший дубль)
   var SUMMON_TABLE = {
-    11: { type: 'boar', name: 'Кабан',    icon: '🐗', hp: 22, mult: 0.5, canStun: false },
-    22: { type: 'boar', name: 'Кабан',    icon: '🐗', hp: 33, mult: 0.5, canStun: false },
-    33: { type: 'wolf', name: 'Волк',     icon: '🐺', hp: 44, mult: 1.0, canStun: false },
-    44: { type: 'wolf', name: 'Волк',     icon: '🐺', hp: 55, mult: 1.0, canStun: false },
-    55: { type: 'bear', name: 'Медведь',  icon: '🐻', hp: 77, mult: 1.0, canStun: true  },
-    66: { type: 'bear', name: 'Медведь',  icon: '🐻', hp: 88, mult: 1.0, canStun: true  }
+    11: { type: 'boar', name: 'Кабан',   icon: '🐗', hp: 22, mult: 0.5, canStun: false },
+    22: { type: 'boar', name: 'Кабан',   icon: '🐗', hp: 33, mult: 0.5, canStun: false },
+    33: { type: 'wolf', name: 'Волк',    icon: '🐺', hp: 44, mult: 1.0, canStun: false },
+    44: { type: 'wolf', name: 'Волк',    icon: '🐺', hp: 55, mult: 1.0, canStun: false },
+    55: { type: 'bear', name: 'Медведь', icon: '🐻', hp: 77, mult: 1.0, canStun: true  },
+    66: { type: 'bear', name: 'Медведь', icon: '🐻', hp: 88, mult: 1.0, canStun: true  }
   };
 
   var classes = { 1: 'assassin', 2: 'barbarian' };
   var pendingClasses = { 1: 'assassin', 2: 'barbarian' };
 
-  // ============ ЭЛЕМЕНТЫ ============
   var dieEls = [document.getElementById('die1'), document.getElementById('die2')];
   var resultEl = document.getElementById('result');
   var logList = document.getElementById('logList');
@@ -554,6 +321,9 @@
   var speedSlider = document.getElementById('speedSlider');
   var speedValue = document.getElementById('speedValue');
   var selectOverlay = document.getElementById('selectOverlay');
+  var testOverlay = document.getElementById('testOverlay');
+  var testResultBody = document.getElementById('testResultBody');
+  var testSub = document.getElementById('testSub');
 
   var MAX_HP = 1000;
   var MAX_LOG = 80;
@@ -565,35 +335,26 @@
   function getCritPause()     { return Math.max(80, 500 / speed); }
   function getFrameInterval() { return Math.max(16, getSpinDuration() / 5); }
 
-  var rolling = false;
-  var rollNumber = 0;
-  var turn = 1;
-  var hp1 = MAX_HP;
-  var hp2 = MAX_HP;
+  var rolling = false, rollNumber = 0, turn = 1;
+  var hp1 = MAX_HP, hp2 = MAX_HP;
   var gameOver = false;
   var stunned = { 1: false, 2: false };
   var jokerBuff = { 1: false, 2: false };
   var summons = { 1: null, 2: null };
-  var autoPlay = false;
-  var autoTimer = null;
+  var autoPlay = false, autoTimer = null;
 
   var pipPositions = {
     1: [4], 2: [0, 8], 3: [0, 4, 8],
     4: [0, 2, 6, 8], 5: [0, 2, 4, 6, 8], 6: [0, 2, 3, 5, 6, 8]
   };
 
-  // ============ «КРАСИВОЕ» ЧИСЛО ============
   function isBeautiful(n) {
     if (n <= 0) return false;
     var s = String(n);
     if (s.length < 2) return false;
-    for (var i = 1; i < s.length; i++) {
-      if (s[i] !== s[0]) return false;
-    }
+    for (var i = 1; i < s.length; i++) if (s[i] !== s[0]) return false;
     return true;
   }
-
-  // ============ БЕРСЕРК ============
   function getBerserkerBonus(hp) {
     if (hp <= 0) return 0;
     if (hp === 1) return 100;
@@ -604,9 +365,165 @@
     if (hp < 150) return 10;
     return 0;
   }
+  function getPlayerHp(p) { return p === 1 ? hp1 : hp2; }
 
-  function getPlayerHp(p) {
-    return p === 1 ? hp1 : hp2;
+  // ============ СИМУЛЯЦИЯ (без UI) ============
+  function simulateBattle(c1, c2) {
+    var h1 = MAX_HP, h2 = MAX_HP;
+    var t = 1;
+    var st = { 1: false, 2: false };
+    var jb = { 1: false, 2: false };
+    var sm = { 1: null, 2: null };
+    var MAX_TURNS = 500;
+
+    function r6() { return 1 + Math.floor(Math.random() * 6); }
+    function beautiful(n) {
+      if (n <= 0) return false;
+      var s = '' + n;
+      if (s.length < 2) return false;
+      for (var i = 1; i < s.length; i++) if (s[i] !== s[0]) return false;
+      return true;
+    }
+    function bers(hp) {
+      if (hp === 1) return 100;
+      if (hp < 5) return 50;
+      if (hp < 10) return 45;
+      if (hp < 50) return 40;
+      if (hp < 100) return 30;
+      if (hp < 150) return 10;
+      return 0;
+    }
+
+    for (var t_i = 0; t_i < MAX_TURNS; t_i++) {
+      if (h1 <= 0) return 2;
+      if (h2 <= 0) return 1;
+
+      var a = t, d = a === 1 ? 2 : 1, cls = a === 1 ? c1 : c2;
+
+      if (st[a]) { st[a] = false; t = d; continue; }
+
+      var v1 = r6(), v2 = r6();
+      var db = v1 === v2;
+      var base = v1 * 10 + v2;
+      var dmg = base, heal = 0, stunCause = false;
+
+      if (cls === 'assassin' && db) {
+        var r1 = r6(), r2 = r6();
+        dmg = (r1 * 10 + r2) * 2;
+      } else if (cls === 'barbarian' && db) {
+        stunCause = true;
+      } else if (cls === 'vampire' && db) {
+        var b1 = r6(), b2 = r6();
+        dmg = b1 * 10 + b2;
+        heal = dmg;
+      } else if (cls === 'joker' && jb[a]) {
+        dmg = base * 3;
+        jb[a] = false;
+      } else if (cls === 'berserker') {
+        var myHp = a === 1 ? h1 : h2;
+        dmg = base + bers(myHp);
+      } else if (cls === 'druid') {
+        if (sm[a]) {
+          dmg = Math.floor(base * sm[a].mult);
+          if (sm[a].canStun && db) stunCause = true;
+        } else if (db) {
+          var info = SUMMON_TABLE[base];
+          if (info) {
+            sm[a] = { hp: info.hp, mult: info.mult, canStun: info.canStun };
+            dmg = 0;
+          }
+        }
+      }
+
+      if (dmg > 0) {
+        var s = sm[d];
+        if (s) {
+          if (dmg >= s.hp) {
+            var ov = dmg - s.hp;
+            sm[d] = null;
+            if (d === 1) h1 = Math.max(0, h1 - ov);
+            else h2 = Math.max(0, h2 - ov);
+          } else {
+            s.hp -= dmg;
+          }
+        } else {
+          if (d === 1) h1 = Math.max(0, h1 - dmg);
+          else h2 = Math.max(0, h2 - dmg);
+        }
+      }
+      if (heal > 0) {
+        if (a === 1) h1 = Math.min(MAX_HP, h1 + heal);
+        else h2 = Math.min(MAX_HP, h2 + heal);
+      }
+      if (c1 === 'joker' && !jb[1] && (beautiful(h1) || beautiful(h2))) jb[1] = true;
+      if (c2 === 'joker' && !jb[2] && (beautiful(h1) || beautiful(h2))) jb[2] = true;
+      if (stunCause) st[d] = true;
+
+      t = d;
+    }
+    return 0;
+  }
+
+  // ============ ЗАПУСК ТЕСТА ============
+  function runBalanceTest() {
+    testSub.textContent = '10 000 боёв на каждую пару · 150 000 боёв всего';
+    testResultBody.innerHTML = '<div class="test-loading">⏳ Выполняется 150 000 боёв...</div>';
+    testOverlay.classList.add('show');
+
+    // Даём браузеру отрисовать "loading" до блокирующего цикла
+    setTimeout(function() {
+      var C = Object.keys(CLASSES);
+      var N = 10000;
+      var R = {};
+      C.forEach(function(c) { R[c] = { w: 0, l: 0, d: 0 }; });
+
+      var matrix = {};
+      C.forEach(function(a) { matrix[a] = {}; });
+
+      for (var i = 0; i < C.length; i++) {
+        for (var j = i + 1; j < C.length; j++) {
+          var a = C[i], b = C[j];
+          var w1 = 0, w2 = 0, dr = 0;
+          for (var n = 0; n < N; n++) {
+            var r = simulateBattle(a, b);
+            if (r === 1) { w1++; R[a].w++; R[b].l++; }
+            else if (r === 2) { w2++; R[b].w++; R[a].l++; }
+            else { dr++; R[a].d++; R[b].d++; }
+          }
+          matrix[a][b] = { w: w1, l: w2, d: dr };
+          matrix[b][a] = { w: w2, l: w1, d: dr };
+        }
+      }
+
+      // Сортировка по винрейту
+      var sorted = C.map(function(c) {
+        var r = R[c];
+        var total = r.w + r.l + r.d;
+        return { cls: c, w: r.w, l: r.l, d: r.d, wr: r.w / total * 100, total: total };
+      }).sort(function(a, b) { return b.wr - a.wr; });
+
+      // Сборка таблицы
+      var html = '<table class="test-table"><thead><tr>' +
+        '<th>#</th><th>Класс</th><th>W</th><th>L</th><th>D</th><th>WR</th>' +
+        '</tr></thead><tbody>';
+
+      sorted.forEach(function(row, idx) {
+        var c = CLASSES[row.cls];
+        var wrClass = row.wr >= 52 ? 'wr-good' : (row.wr >= 49 ? 'wr-mid' : 'wr-bad');
+        var rankClass = idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : idx === 2 ? 'rank-3' : '';
+        html += '<tr class="' + rankClass + '">' +
+          '<td>' + (idx + 1) + '</td>' +
+          '<td class="cls-cell">' + c.icon + ' ' + c.short + '</td>' +
+          '<td>' + row.w + '</td>' +
+          '<td>' + row.l + '</td>' +
+          '<td>' + row.d + '</td>' +
+          '<td class="wr-cell ' + wrClass + '">' + row.wr.toFixed(1) + '%</td>' +
+          '</tr>';
+      });
+
+      html += '</tbody></table>';
+      testResultBody.innerHTML = html;
+    }, 50);
   }
 
   // ============ КУБИКИ ============
@@ -617,7 +534,7 @@
       var cell = document.createElement('div');
       cell.className = 'pip';
       var show = false;
-      for (var j = 0; j < pips.length; j++) { if (pips[j] === i) { show = true; break; } }
+      for (var j = 0; j < pips.length; j++) if (pips[j] === i) { show = true; break; }
       if (!show) cell.className += ' hidden-pip';
       el.appendChild(cell);
     }
@@ -627,11 +544,7 @@
   function setDieGlow(type) {
     dieEls.forEach(function(el) {
       el.classList.remove('crit-glow', 'vampire-glow', 'joker-glow', 'summon-glow', 'rage-glow');
-      if (type === 'crit') el.classList.add('crit-glow');
-      else if (type === 'vampire') el.classList.add('vampire-glow');
-      else if (type === 'joker') el.classList.add('joker-glow');
-      else if (type === 'summon') el.classList.add('summon-glow');
-      else if (type === 'rage') el.classList.add('rage-glow');
+      if (type) el.classList.add(type + '-glow');
     });
   }
 
@@ -644,8 +557,7 @@
         var c = CLASSES[key];
         var card = document.createElement('div');
         card.className = 'class-card' + (pendingClasses[p] === key ? ' selected' : '');
-        card.innerHTML =
-          '<div class="icon">' + c.icon + '</div>' +
+        card.innerHTML = '<div class="icon">' + c.icon + '</div>' +
           '<div class="cname">' + c.short + '</div>' +
           '<div class="cdesc">' + c.desc + '</div>';
         card.addEventListener('click', function(e) {
@@ -673,7 +585,7 @@
     resetGame();
   }
 
-  // ============ UI ИГРОКОВ ============
+  // ============ UI ============
   function updateSummonUI(p) {
     var s = summons[p];
     var el = document.getElementById('summon' + p);
@@ -687,57 +599,11 @@
     }
   }
 
-  function updatePlayersUI() {
-    document.getElementById('hpVal1').textContent = hp1;
-    document.getElementById('hpVal2').textContent = hp2;
-
-    var fill1 = document.getElementById('hpFill1');
-    var fill2 = document.getElementById('hpFill2');
-    fill1.style.width = (hp1 / MAX_HP * 100) + '%';
-    fill2.style.width = (hp2 / MAX_HP * 100) + '%';
-    fill1.className = 'hp-fill' + (hp1 / MAX_HP < 0.3 ? ' low' : '');
-    fill2.className = 'hp-fill' + (hp2 / MAX_HP < 0.3 ? ' low' : '');
-
-    var pc1 = document.getElementById('pclass1');
-    var pc2 = document.getElementById('pclass2');
-    var c1 = CLASSES[classes[1]];
-    var c2 = CLASSES[classes[2]];
-    pc1.textContent = c1 ? c1.label : '—';
-    pc1.className = 'pclass ' + (c1 ? c1.css : '');
-    pc2.textContent = c2 ? c2.label : '—';
-    pc2.className = 'pclass ' + (c2 ? c2.css : '');
-
-    var p1 = document.getElementById('p1');
-    var p2 = document.getElementById('p2');
-    var cls1 = 'player';
-    var cls2 = 'player';
-    if (!gameOver) {
-      if (turn === 1) cls1 += ' active';
-      if (turn === 2) cls2 += ' active p2-active';
-    }
-    if (stunned[1]) cls1 += ' stunned';
-    if (stunned[2]) cls2 += ' stunned';
-    if (jokerBuff[1] && !gameOver) cls1 += ' has-buff';
-    if (jokerBuff[2] && !gameOver) cls2 += ' has-buff';
-    if (hp1 <= 0) cls1 += ' dead';
-    if (hp2 <= 0) cls2 += ' dead';
-    p1.className = cls1;
-    p2.className = cls2;
-
-    // Берсерк: значок ярости
-    updateRageBadge(1);
-    updateRageBadge(2);
-
-    updateSummonUI(1);
-    updateSummonUI(2);
-  }
-
   function updateRageBadge(p) {
     var el = document.getElementById('p' + p);
     var badge = document.getElementById('rage' + p);
     if (classes[p] === 'berserker' && !gameOver && hp1 > 0 && hp2 > 0) {
-      var hp = getPlayerHp(p);
-      var bonus = getBerserkerBonus(hp);
+      var bonus = getBerserkerBonus(getPlayerHp(p));
       if (bonus > 0) {
         el.classList.add('has-rage');
         badge.textContent = '🩸 +' + bonus;
@@ -753,9 +619,47 @@
     }
   }
 
+  function updatePlayersUI() {
+    document.getElementById('hpVal1').textContent = hp1;
+    document.getElementById('hpVal2').textContent = hp2;
+    var fill1 = document.getElementById('hpFill1');
+    var fill2 = document.getElementById('hpFill2');
+    fill1.style.width = (hp1 / MAX_HP * 100) + '%';
+    fill2.style.width = (hp2 / MAX_HP * 100) + '%';
+    fill1.className = 'hp-fill' + (hp1 / MAX_HP < 0.3 ? ' low' : '');
+    fill2.className = 'hp-fill' + (hp2 / MAX_HP < 0.3 ? ' low' : '');
+
+    var pc1 = document.getElementById('pclass1');
+    var pc2 = document.getElementById('pclass2');
+    var c1 = CLASSES[classes[1]], c2 = CLASSES[classes[2]];
+    pc1.textContent = c1 ? c1.label : '—';
+    pc1.className = 'pclass ' + (c1 ? c1.css : '');
+    pc2.textContent = c2 ? c2.label : '—';
+    pc2.className = 'pclass ' + (c2 ? c2.css : '');
+
+    var p1 = document.getElementById('p1'), p2 = document.getElementById('p2');
+    var cls1 = 'player', cls2 = 'player';
+    if (!gameOver) {
+      if (turn === 1) cls1 += ' active';
+      if (turn === 2) cls2 += ' active p2-active';
+    }
+    if (stunned[1]) cls1 += ' stunned';
+    if (stunned[2]) cls2 += ' stunned';
+    if (jokerBuff[1] && !gameOver) cls1 += ' has-buff';
+    if (jokerBuff[2] && !gameOver) cls2 += ' has-buff';
+    if (hp1 <= 0) cls1 += ' dead';
+    if (hp2 <= 0) cls2 += ' dead';
+    p1.className = cls1;
+    p2.className = cls2;
+
+    updateRageBadge(1);
+    updateRageBadge(2);
+    updateSummonUI(1);
+    updateSummonUI(2);
+  }
+
   function setHint(text) { hintEl.textContent = text; }
 
-  // ============ ЛОГ ============
   function addLogEntry(number, attacker, dmg, isDouble, stunCaused, isCrit, heal, isJokerHit, summonInfo, rageBonus) {
     var entry = document.createElement('div');
     var extraClass = '';
@@ -769,8 +673,7 @@
 
     var idx = document.createElement('span'); idx.className = 'idx'; idx.textContent = '#' + number;
     var who = document.createElement('span'); who.className = 'who p' + attacker;
-    if (summonInfo) who.textContent = summonInfo.icon + ' И' + attacker;
-    else who.textContent = 'Игрок ' + attacker;
+    who.textContent = summonInfo ? summonInfo.icon + ' И' + attacker : 'Игрок ' + attacker;
     var dmgEl = document.createElement('span'); dmgEl.className = 'dmg';
 
     var suffix = '';
@@ -779,8 +682,8 @@
     else if (heal) suffix = ' 🧛 +' + heal;
     if (rageBonus > 0) suffix += ' 🩸+' + rageBonus;
     if (stunCaused) suffix += ' ⚡';
-
     dmgEl.textContent = '−' + dmg + suffix;
+
     entry.appendChild(idx); entry.appendChild(who); entry.appendChild(dmgEl);
     logList.insertBefore(entry, logList.firstChild);
     trimLog();
@@ -793,75 +696,55 @@
     var who = document.createElement('span'); who.className = 'who'; who.textContent = 'Игрок ' + playerNum + ' оглушён';
     var dmgEl = document.createElement('span'); dmgEl.className = 'dmg'; dmgEl.textContent = 'ПРОПУСК';
     entry.appendChild(idx); entry.appendChild(who); entry.appendChild(dmgEl);
-    logList.insertBefore(entry, logList.firstChild);
-    trimLog();
+    logList.insertBefore(entry, logList.firstChild); trimLog();
   }
-
-  function addBuffLog(playerNum) {
-    var entry = document.createElement('div');
-    entry.className = 'log-entry buff';
+  function addBuffLog(p) {
+    var entry = document.createElement('div'); entry.className = 'log-entry buff';
     var idx = document.createElement('span'); idx.className = 'idx'; idx.textContent = '🎲';
-    var who = document.createElement('span'); who.className = 'who'; who.textContent = 'Джокер Игрок ' + playerNum;
+    var who = document.createElement('span'); who.className = 'who'; who.textContent = 'Джокер Игрок ' + p;
     var dmgEl = document.createElement('span'); dmgEl.className = 'dmg'; dmgEl.textContent = '×3 ГОТОВ';
     entry.appendChild(idx); entry.appendChild(who); entry.appendChild(dmgEl);
-    logList.insertBefore(entry, logList.firstChild);
-    trimLog();
+    logList.insertBefore(entry, logList.firstChild); trimLog();
   }
-
-  function addSummonLog(playerNum, info) {
-    var entry = document.createElement('div');
-    entry.className = 'log-entry summon';
+  function addSummonLog(p, info) {
+    var entry = document.createElement('div'); entry.className = 'log-entry summon';
     var idx = document.createElement('span'); idx.className = 'idx'; idx.textContent = '✨';
-    var who = document.createElement('span'); who.className = 'who p' + playerNum;
-    who.textContent = 'И' + playerNum + ' призвал';
+    var who = document.createElement('span'); who.className = 'who p' + p; who.textContent = 'И' + p + ' призвал';
     var dmgEl = document.createElement('span'); dmgEl.className = 'dmg';
     dmgEl.textContent = info.icon + ' ' + info.name + ' · ' + info.hp + ' HP';
     entry.appendChild(idx); entry.appendChild(who); entry.appendChild(dmgEl);
-    logList.insertBefore(entry, logList.firstChild);
-    trimLog();
+    logList.insertBefore(entry, logList.firstChild); trimLog();
   }
-
   function addSummonDeathLog(defender, killed, overflow) {
-    var entry = document.createElement('div');
-    entry.className = 'log-entry summon-death';
+    var entry = document.createElement('div'); entry.className = 'log-entry summon-death';
     var idx = document.createElement('span'); idx.className = 'idx'; idx.textContent = '💀';
     var who = document.createElement('span'); who.className = 'who';
     who.textContent = killed.icon + ' ' + killed.name + ' И' + defender + ' погиб';
     var dmgEl = document.createElement('span'); dmgEl.className = 'dmg';
-    if (overflow > 0) dmgEl.textContent = overflow + ' → И' + defender;
-    else dmgEl.textContent = '';
+    dmgEl.textContent = overflow > 0 ? overflow + ' → И' + defender : '';
     entry.appendChild(idx); entry.appendChild(who); entry.appendChild(dmgEl);
-    logList.insertBefore(entry, logList.firstChild);
-    trimLog();
+    logList.insertBefore(entry, logList.firstChild); trimLog();
   }
+  function trimLog() { while (logList.children.length > MAX_LOG) logList.removeChild(logList.lastChild); }
 
-  function trimLog() {
-    while (logList.children.length > MAX_LOG) logList.removeChild(logList.lastChild);
-  }
-
-  // ============ ПРОВЕРКА БАФФА ДЖОКЕРА ============
   function checkJokerBuffs() {
     [1, 2].forEach(function(p) {
       if (classes[p] === 'joker' && !jokerBuff[p]) {
-        if (isBeautiful(hp1) || isBeautiful(hp2)) {
-          jokerBuff[p] = true;
-          addBuffLog(p);
-        }
+        if (isBeautiful(hp1) || isBeautiful(hp2)) { jokerBuff[p] = true; addBuffLog(p); }
       }
     });
   }
 
-  // ============ РАСПРЕДЕЛЕНИЕ УРОНА ============
   function dealDamage(defender, dmg) {
     var s = summons[defender];
     if (s) {
       if (dmg >= s.hp) {
-        var overflow = dmg - s.hp;
+        var ov = dmg - s.hp;
         var killed = { name: s.name, icon: s.icon };
         summons[defender] = null;
-        if (defender === 1) hp1 = Math.max(0, hp1 - overflow);
-        else hp2 = Math.max(0, hp2 - overflow);
-        return { toSummon: s.hp, toPlayer: overflow, summonDied: true, killed: killed };
+        if (defender === 1) hp1 = Math.max(0, hp1 - ov);
+        else hp2 = Math.max(0, hp2 - ov);
+        return { toSummon: s.hp, toPlayer: ov, summonDied: true, killed: killed };
       } else {
         s.hp -= dmg;
         return { toSummon: dmg, toPlayer: 0, summonDied: false, killed: null };
@@ -872,7 +755,6 @@
     return { toSummon: 0, toPlayer: dmg, summonDied: false, killed: null };
   }
 
-  // ============ СПИН ============
   function spinDice(callback) {
     dieEls.forEach(function(el) { el.classList.add('spinning'); });
     resultEl.textContent = '— —';
@@ -887,8 +769,7 @@
       dieEls.forEach(function(el) { renderDie(el, randomDie()); });
       if (performance.now() - start >= spinDuration) {
         clearInterval(timer);
-        var v1 = randomDie();
-        var v2 = randomDie();
+        var v1 = randomDie(), v2 = randomDie();
         renderDie(dieEls[0], v1);
         renderDie(dieEls[1], v2);
         dieEls.forEach(function(el) { el.classList.remove('spinning'); });
@@ -897,14 +778,12 @@
     }, frameInterval);
   }
 
-  // ============ БРОСОК ============
   function roll() {
     if (rolling || gameOver) return;
     rolling = true;
 
     spinDice(function(v1, v2) {
-      var attacker = turn;
-      var defender = attacker === 1 ? 2 : 1;
+      var attacker = turn, defender = attacker === 1 ? 2 : 1;
       var cls = classes[attacker];
       var isDouble = v1 === v2;
       var baseDmg = v1 * 10 + v2;
@@ -912,27 +791,23 @@
       resultEl.textContent = String(baseDmg);
       resultEl.className = 'result' + (isDouble ? ' double' : (attacker === 2 ? ' p2' : ''));
 
-      // ===== ДРУИД =====
       if (cls === 'druid') {
         if (summons[attacker]) {
           var s = summons[attacker];
-          var summonDmg = Math.floor(baseDmg * s.mult);
-          var stunFromBear = s.canStun && isDouble;
-          resultEl.textContent = String(summonDmg);
+          var sd = Math.floor(baseDmg * s.mult);
+          var stunB = s.canStun && isDouble;
+          resultEl.textContent = String(sd);
           resultEl.className = 'result summon';
           setDieGlow('summon');
           setTimeout(function() { setDieGlow(null); }, 600);
           setHint(s.icon + ' ' + s.name + ' атакует!');
-          applyHit(attacker, defender, summonDmg, isDouble, stunFromBear, false, 0, false, { icon: s.icon, name: s.name }, 0);
+          applyHit(attacker, defender, sd, isDouble, stunB, false, 0, false, { icon: s.icon, name: s.name }, 0);
           return;
         }
         if (isDouble) {
           var info = SUMMON_TABLE[baseDmg];
           if (info) {
-            summons[attacker] = {
-              type: info.type, name: info.name, icon: info.icon,
-              hp: info.hp, maxHp: info.hp, mult: info.mult, canStun: info.canStun
-            };
+            summons[attacker] = { type: info.type, name: info.name, icon: info.icon, hp: info.hp, maxHp: info.hp, mult: info.mult, canStun: info.canStun };
             setHint(info.icon + ' Призыв: ' + info.name + '!');
             addSummonLog(attacker, info);
             rollNumber++;
@@ -945,7 +820,6 @@
         return;
       }
 
-      // ===== Ассасин =====
       if (cls === 'assassin' && isDouble) {
         setHint('🗡 Дубль! Переброс на крит...');
         setTimeout(function() {
@@ -961,29 +835,25 @@
         return;
       }
 
-      // ===== Вампир =====
       if (cls === 'vampire' && isDouble) {
         setHint('🧛 Дубль! Укус...');
         setTimeout(function() {
           spinDice(function(r1, r2) {
-            var biteDmg = r1 * 10 + r2;
-            resultEl.textContent = biteDmg + '';
+            var bite = r1 * 10 + r2;
+            resultEl.textContent = bite + '';
             resultEl.className = 'result vampire';
             setDieGlow('vampire');
             setTimeout(function() { setDieGlow(null); }, 600);
-            applyHit(attacker, defender, biteDmg, false, false, false, biteDmg, false, null, 0);
+            applyHit(attacker, defender, bite, false, false, false, bite, false, null, 0);
           });
         }, getCritPause());
         return;
       }
 
-      // ===== Джокер =====
       var isJokerHit = false;
       var dmg = baseDmg;
       if (cls === 'joker' && jokerBuff[attacker]) {
-        dmg = baseDmg * 3;
-        isJokerHit = true;
-        jokerBuff[attacker] = false;
+        dmg = baseDmg * 3; isJokerHit = true; jokerBuff[attacker] = false;
         resultEl.textContent = dmg + '';
         resultEl.className = 'result joker';
         setDieGlow('joker');
@@ -991,7 +861,6 @@
         setHint('🎲 Джокер активировал ×3!');
       }
 
-      // ===== Берсерк: бонус ярости =====
       var rageBonus = 0;
       if (cls === 'berserker') {
         rageBonus = getBerserkerBonus(getPlayerHp(attacker));
@@ -1005,93 +874,68 @@
         }
       }
 
-      // ===== Варвар =====
       var stunCaused = false;
       if (cls === 'barbarian' && isDouble && hp1 > 0 && hp2 > 0) {
-        stunned[defender] = true;
-        stunCaused = true;
+        stunned[defender] = true; stunCaused = true;
       }
 
       applyHit(attacker, defender, dmg, isDouble, stunCaused, false, 0, isJokerHit, null, rageBonus);
     });
   }
 
-  // ============ ЗАВЕРШЕНИЕ ХОДА ============
   function finishTurnAfterAction(attacker, defender, extraDelay) {
     if (hp1 <= 0 || hp2 <= 0) {
       gameOver = true;
-      stunned[1] = false;
-      stunned[2] = false;
-      jokerBuff[1] = false;
-      jokerBuff[2] = false;
-      summons[1] = null;
-      summons[2] = null;
-      updatePlayersUI();
-      showGameOver();
-      rolling = false;
-      return;
+      stunned[1] = false; stunned[2] = false;
+      jokerBuff[1] = false; jokerBuff[2] = false;
+      summons[1] = null; summons[2] = null;
+      updatePlayersUI(); showGameOver(); rolling = false; return;
     }
-
     checkJokerBuffs();
     turn = defender;
     updatePlayersUI();
 
     var delay = extraDelay || 0;
-
     if (stunned[turn]) {
-      var skipPlayer = turn;
-      var stunPause = getStunPause();
-      setHint('⚡ Игрок ' + skipPlayer + ' оглушён!');
-      addStunSkipLog(skipPlayer);
-      delay += stunPause;
-
+      var skip = turn;
+      var sp = getStunPause();
+      setHint('⚡ Игрок ' + skip + ' оглушён!');
+      addStunSkipLog(skip);
+      delay += sp;
       setTimeout(function() {
-        stunned[skipPlayer] = false;
-        turn = skipPlayer === 1 ? 2 : 1;
+        stunned[skip] = false;
+        turn = skip === 1 ? 2 : 1;
         updatePlayersUI();
         if (!autoPlay) setHint('Тап — бросок Игрока ' + turn);
-      }, stunPause);
+      }, sp);
     } else if (!autoPlay) {
       setHint('Тап — бросок Игрока ' + turn);
     }
 
     rolling = false;
-
     if (autoPlay) {
       clearTimeout(autoTimer);
-      autoTimer = setTimeout(function() {
-        if (autoPlay && !gameOver) roll();
-      }, getPauseBetween() + delay);
+      autoTimer = setTimeout(function() { if (autoPlay && !gameOver) roll(); }, getPauseBetween() + delay);
     }
   }
 
-  // ============ УРОН ============
   function applyHit(attacker, defender, dmg, isDouble, stunCaused, isCrit, heal, isJokerHit, summonInfo, rageBonus) {
     rollNumber++;
     var dr = dealDamage(defender, dmg);
-
     addLogEntry(rollNumber, attacker, dmg, isDouble, stunCaused, isCrit, heal, isJokerHit, summonInfo, rageBonus);
-
-    if (dr.summonDied) {
-      addSummonDeathLog(defender, dr.killed, dr.toPlayer);
-    }
-
+    if (dr.summonDied) addSummonDeathLog(defender, dr.killed, dr.toPlayer);
     if (heal > 0) {
       if (attacker === 1) hp1 = Math.min(MAX_HP, hp1 + heal);
       else hp2 = Math.min(MAX_HP, hp2 + heal);
     }
-
     finishTurnAfterAction(attacker, defender, 0);
   }
 
-  // ============ КОНЕЦ ИГРЫ ============
   function showGameOver() {
     var winner = hp1 <= 0 ? 2 : 1;
     overlayTitle.textContent = 'Игрок ' + winner + ' победил!';
     overlayTitle.style.color = winner === 1 ? '#4ade80' : '#60a5fa';
-    var c1 = CLASSES[classes[1]].label;
-    var c2 = CLASSES[classes[2]].label;
-    overlaySub.textContent = c1 + ': ' + hp1 + ' HP  ·  ' + c2 + ': ' + hp2 + ' HP  ·  ' + speed + '×';
+    overlaySub.textContent = CLASSES[classes[1]].label + ': ' + hp1 + ' HP  ·  ' + CLASSES[classes[2]].label + ': ' + hp2 + ' HP  ·  ' + speed + '×';
     overlay.classList.add('show');
     setHint('Игра окончена');
     battleBtn.classList.add('hidden');
@@ -1105,7 +949,6 @@
     setHint('⚔ Бой идёт... (' + speed + '×)');
     roll();
   }
-
   function stopAuto() {
     autoPlay = false;
     clearTimeout(autoTimer);
@@ -1118,8 +961,7 @@
     hp1 = MAX_HP; hp2 = MAX_HP;
     turn = 1; rollNumber = 0;
     gameOver = false; rolling = false;
-    autoPlay = false;
-    clearTimeout(autoTimer);
+    autoPlay = false; clearTimeout(autoTimer);
     stunned[1] = false; stunned[2] = false;
     jokerBuff[1] = false; jokerBuff[2] = false;
     summons[1] = null; summons[2] = null;
@@ -1136,7 +978,7 @@
     setHint('Нажми «Начать бой»');
   }
 
-  // ============ ОБРАБОТЧИКИ ============
+  // Обработчики
   document.body.addEventListener('click', function(e) {
     if (e.target.closest('.log-wrap')) return;
     if (e.target.closest('.controls')) return;
@@ -1155,12 +997,7 @@
     roll();
   }, { passive: false });
 
-  battleBtn.addEventListener('click', function(e) {
-    e.stopPropagation();
-    if (autoPlay) stopAuto();
-    else startAuto();
-  });
-
+  battleBtn.addEventListener('click', function(e) { e.stopPropagation(); if (autoPlay) stopAuto(); else startAuto(); });
   speedSlider.addEventListener('input', function(e) {
     e.stopPropagation();
     speed = parseInt(speedSlider.value, 10);
@@ -1171,23 +1008,26 @@
   speedSlider.addEventListener('touchstart', function(e) { e.stopPropagation(); }, { passive: true });
   speedSlider.addEventListener('touchend', function(e) { e.stopPropagation(); });
 
-  document.getElementById('restartBtn').addEventListener('click', function(e) {
-    e.stopPropagation();
-    resetGame();
-  });
-
+  document.getElementById('restartBtn').addEventListener('click', function(e) { e.stopPropagation(); resetGame(); });
   document.getElementById('changeClassesBtn').addEventListener('click', function(e) {
     e.stopPropagation();
     overlay.classList.remove('show');
     openSelection();
   });
-
   document.getElementById('startGameBtn').addEventListener('click', function(e) {
     e.stopPropagation();
     startGameFromSelection();
   });
+  document.getElementById('testBtn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    runBalanceTest();
+  });
+  document.getElementById('testCloseBtn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    testOverlay.classList.remove('show');
+  });
 
-  // ============ СТАРТ ============
+  // СТАРТ
   renderSelectionUI();
   dieEls.forEach(function(el) { renderDie(el, randomDie()); });
   updatePlayersUI();
