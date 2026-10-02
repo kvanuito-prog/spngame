@@ -58,6 +58,7 @@
   .pclass.barbarian { color: #f59e0b; }
   .pclass.vampire { color: #a855f7; }
   .pclass.joker { color: #10b981; }
+  .pclass.druid { color: #22c55e; }
   .hp-bar { width: 100%; height: 7px; background: rgba(0,0,0,0.4); border-radius: 4px; overflow: hidden; margin-bottom: 2px; }
   .hp-fill {
     height: 100%; width: 100%;
@@ -89,6 +90,23 @@
     50%     { box-shadow: 0 0 18px rgba(16,185,129,1); }
   }
 
+  /* Суммон */
+  .summon-line {
+    display: none;
+    align-items: center;
+    gap: 5px;
+    margin-top: 4px;
+    padding: 3px 6px;
+    background: rgba(217, 119, 6, 0.15);
+    border-left: 2px solid #d97706;
+    border-radius: 4px;
+    font-size: 11px;
+  }
+  .summon-line.show { display: flex; }
+  .summon-line .summon-icon { font-size: 13px; line-height: 1; }
+  .summon-line .summon-name { color: #fbbf24; font-weight: 700; }
+  .summon-line .summon-hp { margin-left: auto; color: #e0e6f0; font-weight: 700; font-variant-numeric: tabular-nums; font-size: 11px; }
+
   .dice-row { display: flex; gap: 14px; justify-content: center; flex-shrink: 0; margin: 2px 0; }
   .die {
     width: 64px; height: 64px;
@@ -112,6 +130,10 @@
   .die.joker-glow {
     box-shadow: 0 0 30px rgba(16,185,129,0.95), 0 0 60px rgba(74,222,128,0.6), inset 0 -3px 6px rgba(0,0,0,0.15);
     background: #e6fff5;
+  }
+  .die.summon-glow {
+    box-shadow: 0 0 30px rgba(217,119,6,0.95), 0 0 60px rgba(251,191,36,0.6), inset 0 -3px 6px rgba(0,0,0,0.15);
+    background: #fff7ed;
   }
   @keyframes shake {
     0%   { transform: rotate(-5deg) scale(1.03); }
@@ -148,6 +170,11 @@
     text-shadow: 0 0 40px rgba(16,185,129,1), 0 0 20px rgba(74,222,128,0.6);
     animation: critFlash 0.45s ease-out;
   }
+  .result.summon {
+    color: #f59e0b;
+    text-shadow: 0 0 40px rgba(217,119,6,1), 0 0 20px rgba(251,191,36,0.6);
+    animation: critFlash 0.45s ease-out;
+  }
   @keyframes critFlash {
     0%   { transform: scale(1.7); }
     50%  { transform: scale(1.15); }
@@ -169,8 +196,7 @@
   }
   .log-list {
     flex: 1 1 auto;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow-y: auto; overflow-x: hidden;
     padding: 2px 0;
     min-height: 0;
     scrollbar-width: thin;
@@ -192,39 +218,24 @@
   .log-entry .who.p2 { color: #60a5fa; }
   .log-entry .dmg { margin-left: auto; font-weight: 700; color: #f87171; }
   .log-entry.double .dmg { color: #fbbf24; }
-  .log-entry.crit {
-    background: rgba(239,68,68,0.14);
-    border-left: 3px solid #ef4444;
-  }
-  .log-entry.crit .dmg {
-    color: #ef4444;
-    text-shadow: 0 0 8px rgba(239,68,68,0.9);
-    font-size: 13px;
-  }
-  .log-entry.vampire {
-    background: rgba(168,85,247,0.14);
-    border-left: 3px solid #a855f7;
-  }
-  .log-entry.vampire .dmg {
-    color: #a855f7;
-    text-shadow: 0 0 8px rgba(168,85,247,0.9);
-    font-size: 13px;
-  }
-  .log-entry.joker {
-    background: rgba(16,185,129,0.14);
-    border-left: 3px solid #10b981;
-  }
-  .log-entry.joker .dmg {
-    color: #10b981;
-    text-shadow: 0 0 8px rgba(16,185,129,0.9);
-    font-size: 13px;
-  }
-  .log-entry.buff {
-    background: rgba(16,185,129,0.10);
-    border-left: 3px solid #10b981;
-  }
+  .log-entry.crit { background: rgba(239,68,68,0.14); border-left: 3px solid #ef4444; }
+  .log-entry.crit .dmg { color: #ef4444; text-shadow: 0 0 8px rgba(239,68,68,0.9); font-size: 13px; }
+  .log-entry.vampire { background: rgba(168,85,247,0.14); border-left: 3px solid #a855f7; }
+  .log-entry.vampire .dmg { color: #a855f7; text-shadow: 0 0 8px rgba(168,85,247,0.9); font-size: 13px; }
+  .log-entry.joker { background: rgba(16,185,129,0.14); border-left: 3px solid #10b981; }
+  .log-entry.joker .dmg { color: #10b981; text-shadow: 0 0 8px rgba(16,185,129,0.9); font-size: 13px; }
+  .log-entry.summon-attack { background: rgba(217,119,6,0.10); border-left: 3px solid #d97706; }
+  .log-entry.summon-attack .who { color: #fbbf24; }
+  .log-entry.summon-attack .dmg { color: #fbbf24; }
+  .log-entry.buff { background: rgba(16,185,129,0.10); border-left: 3px solid #10b981; }
   .log-entry.buff .who { color: #10b981; }
   .log-entry.buff .dmg { color: #10b981; letter-spacing: 1.5px; }
+  .log-entry.summon { background: rgba(34,197,94,0.12); border-left: 3px solid #22c55e; }
+  .log-entry.summon .who { color: #22c55e; }
+  .log-entry.summon .dmg { color: #fbbf24; }
+  .log-entry.summon-death { background: rgba(239,68,68,0.10); border-left: 3px solid #ef4444; }
+  .log-entry.summon-death .who { color: #f87171; }
+  .log-entry.summon-death .dmg { color: #fbbf24; font-size: 12px; }
   .log-entry.stun { background: rgba(251,191,36,0.10); }
   .log-entry.stun .who { color: #fbbf24; }
   .log-entry.stun .dmg { color: #fbbf24; letter-spacing: 2px; }
@@ -299,7 +310,7 @@
     background: linear-gradient(160deg, #1e2a4a, #0f1729);
     border: 2px solid rgba(74,222,128,0.4);
     border-radius: 20px; padding: 20px 16px;
-    text-align: center; max-width: 460px; width: 100%;
+    text-align: center; max-width: 480px; width: 100%;
     box-shadow: 0 20px 60px rgba(0,0,0,0.6);
     margin: auto;
   }
@@ -327,24 +338,24 @@
   .select-pname { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; font-weight: 700; }
   .select-pname.p1 { color: #4ade80; }
   .select-pname.p2 { color: #60a5fa; }
-  .select-list { display: flex; gap: 5px; }
+  .select-list { display: flex; gap: 4px; flex-wrap: wrap; }
   .class-card {
-    flex: 1; padding: 8px 4px;
+    flex: 1 1 calc(20% - 4px); min-width: 0;
+    padding: 7px 3px;
     border: 2px solid rgba(255,255,255,0.1);
     border-radius: 10px; text-align: center;
     cursor: pointer; transition: all 0.2s ease;
     background: rgba(255,255,255,0.03);
-    min-width: 0;
   }
   .class-card.selected {
     border-color: #4ade80;
     background: rgba(74,222,128,0.12);
     box-shadow: 0 0 16px rgba(74,222,128,0.35);
   }
-  .class-card .icon { font-size: 20px; line-height: 1; margin-bottom: 3px; }
-  .class-card .cname { font-size: 10px; font-weight: 800; letter-spacing: 0.3px; margin-bottom: 3px; }
+  .class-card .icon { font-size: 18px; line-height: 1; margin-bottom: 2px; }
+  .class-card .cname { font-size: 9.5px; font-weight: 800; letter-spacing: 0.2px; margin-bottom: 2px; }
   .class-card.selected .cname { color: #4ade80; }
-  .class-card .cdesc { font-size: 8.5px; line-height: 1.25; color: #8892b0; }
+  .class-card .cdesc { font-size: 8px; line-height: 1.2; color: #8892b0; }
 
   @media (min-width: 700px) {
     #app { max-width: 720px; margin: 0 auto; padding: 12px; gap: 8px; }
@@ -355,9 +366,9 @@
     .pname { font-size: 12px; }
     .pclass { font-size: 11px; }
     .log-wrap { min-height: 170px; }
-    .class-card .icon { font-size: 24px; }
-    .class-card .cname { font-size: 12px; }
-    .class-card .cdesc { font-size: 10px; }
+    .class-card .icon { font-size: 22px; }
+    .class-card .cname { font-size: 11px; }
+    .class-card .cdesc { font-size: 9px; }
   }
 </style>
 </head>
@@ -391,6 +402,11 @@
       <div class="pclass" id="pclass1">—</div>
       <div class="hp-bar"><div class="hp-fill" id="hpFill1"></div></div>
       <div class="hp-val" id="hpVal1">1000</div>
+      <div class="summon-line" id="summon1">
+        <span class="summon-icon" id="summonIcon1">🐗</span>
+        <span class="summon-name" id="summonName1">Кабан</span>
+        <span class="summon-hp" id="summonHp1">22/22</span>
+      </div>
     </div>
     <div class="player" id="p2">
       <div class="buff-badge">🎲 x3</div>
@@ -399,6 +415,11 @@
       <div class="pclass" id="pclass2">—</div>
       <div class="hp-bar"><div class="hp-fill" id="hpFill2"></div></div>
       <div class="hp-val" id="hpVal2">1000</div>
+      <div class="summon-line" id="summon2">
+        <span class="summon-icon" id="summonIcon2">🐗</span>
+        <span class="summon-name" id="summonName2">Кабан</span>
+        <span class="summon-hp" id="summonHp2">22/22</span>
+      </div>
     </div>
   </div>
 
@@ -444,12 +465,12 @@
     assassin: {
       icon: '🗡', short: 'Ассасин',
       label: '🗡 Ассасин', css: 'assassin',
-      desc: 'Дубль → реролл, урон ×2.'
+      desc: 'Дубль → реролл ×2.'
     },
     barbarian: {
       icon: '⚔', short: 'Варвар',
       label: '⚔ Варвар', css: 'barbarian',
-      desc: 'Дубль → стан + урон.'
+      desc: 'Дубль → стан.'
     },
     vampire: {
       icon: '🧛', short: 'Вампир',
@@ -459,8 +480,23 @@
     joker: {
       icon: '🎲', short: 'Джокер',
       label: '🎲 Джокер', css: 'joker',
-      desc: 'HP из одинаковых цифр → урон ×3.'
+      desc: 'Красивое HP → ×3.'
+    },
+    druid: {
+      icon: '🐉', short: 'Друид',
+      label: '🐉 Друид', css: 'druid',
+      desc: 'Дубль → суммон. Он бьёт.'
     }
+  };
+
+  // Таблица суммонов друида (ключ — выпавший дубль)
+  var SUMMON_TABLE = {
+    11: { type: 'boar', name: 'Кабан',    icon: '🐗', hp: 22, mult: 0.5, canStun: false },
+    22: { type: 'boar', name: 'Кабан',    icon: '🐗', hp: 33, mult: 0.5, canStun: false },
+    33: { type: 'wolf', name: 'Волк',     icon: '🐺', hp: 44, mult: 1.0, canStun: false },
+    44: { type: 'wolf', name: 'Волк',     icon: '🐺', hp: 55, mult: 1.0, canStun: false },
+    55: { type: 'bear', name: 'Медведь',  icon: '🐻', hp: 77, mult: 1.0, canStun: true  },
+    66: { type: 'bear', name: 'Медведь',  icon: '🐻', hp: 88, mult: 1.0, canStun: true  }
   };
 
   var classes = { 1: 'assassin', 2: 'barbarian' };
@@ -480,7 +516,7 @@
   var selectOverlay = document.getElementById('selectOverlay');
 
   var MAX_HP = 1000;
-  var MAX_LOG = 60;
+  var MAX_LOG = 80;
   var speed = 4;
 
   function getSpinDuration()  { return Math.max(70, 900 / speed); }
@@ -497,6 +533,7 @@
   var gameOver = false;
   var stunned = { 1: false, 2: false };
   var jokerBuff = { 1: false, 2: false };
+  var summons = { 1: null, 2: null };
   var autoPlay = false;
   var autoTimer = null;
 
@@ -506,8 +543,6 @@
   };
 
   // ============ «КРАСИВОЕ» ЧИСЛО ============
-  // Только числа, у которых ВСЕ цифры одинаковые и длина >= 2:
-  // 11,22,...,99, 111,222,...,999
   function isBeautiful(n) {
     if (n <= 0) return false;
     var s = String(n);
@@ -535,10 +570,11 @@
 
   function setDieGlow(type) {
     dieEls.forEach(function(el) {
-      el.classList.remove('crit-glow', 'vampire-glow', 'joker-glow');
+      el.classList.remove('crit-glow', 'vampire-glow', 'joker-glow', 'summon-glow');
       if (type === 'crit') el.classList.add('crit-glow');
       else if (type === 'vampire') el.classList.add('vampire-glow');
       else if (type === 'joker') el.classList.add('joker-glow');
+      else if (type === 'summon') el.classList.add('summon-glow');
     });
   }
 
@@ -560,9 +596,7 @@
           pendingClasses[p] = key;
           renderSelectionUI();
         });
-        card.addEventListener('touchstart', function(e) {
-          e.stopPropagation();
-        }, { passive: true });
+        card.addEventListener('touchstart', function(e) { e.stopPropagation(); }, { passive: true });
         container.appendChild(card);
       });
     });
@@ -583,6 +617,19 @@
   }
 
   // ============ UI ИГРОКОВ ============
+  function updateSummonUI(p) {
+    var s = summons[p];
+    var el = document.getElementById('summon' + p);
+    if (s) {
+      el.classList.add('show');
+      document.getElementById('summonIcon' + p).textContent = s.icon;
+      document.getElementById('summonName' + p).textContent = s.name;
+      document.getElementById('summonHp' + p).textContent = s.hp + '/' + s.maxHp;
+    } else {
+      el.classList.remove('show');
+    }
+  }
+
   function updatePlayersUI() {
     document.getElementById('hpVal1').textContent = hp1;
     document.getElementById('hpVal2').textContent = hp2;
@@ -619,22 +666,31 @@
     if (hp2 <= 0) cls2 += ' dead';
     p1.className = cls1;
     p2.className = cls2;
+
+    updateSummonUI(1);
+    updateSummonUI(2);
   }
 
   function setHint(text) { hintEl.textContent = text; }
 
   // ============ ЛОГ ============
-  function addLogEntry(number, attacker, dmg, isDouble, stunCaused, isCrit, heal, isJokerHit) {
+  function addLogEntry(number, attacker, dmg, isDouble, stunCaused, isCrit, heal, isJokerHit, summonInfo) {
     var entry = document.createElement('div');
     var extraClass = '';
     if (isCrit) extraClass = ' crit';
     else if (heal) extraClass = ' vampire';
     else if (isJokerHit) extraClass = ' joker';
+    else if (summonInfo) extraClass = ' summon-attack';
     else if (isDouble) extraClass = ' double';
     entry.className = 'log-entry' + extraClass;
 
     var idx = document.createElement('span'); idx.className = 'idx'; idx.textContent = '#' + number;
-    var who = document.createElement('span'); who.className = 'who p' + attacker; who.textContent = 'Игрок ' + attacker;
+    var who = document.createElement('span'); who.className = 'who p' + attacker;
+    if (summonInfo) {
+      who.textContent = summonInfo.icon + ' И' + attacker;
+    } else {
+      who.textContent = 'Игрок ' + attacker;
+    }
     var dmgEl = document.createElement('span'); dmgEl.className = 'dmg';
 
     var suffix = '';
@@ -671,6 +727,33 @@
     trimLog();
   }
 
+  function addSummonLog(playerNum, info) {
+    var entry = document.createElement('div');
+    entry.className = 'log-entry summon';
+    var idx = document.createElement('span'); idx.className = 'idx'; idx.textContent = '✨';
+    var who = document.createElement('span'); who.className = 'who p' + playerNum;
+    who.textContent = 'И' + playerNum + ' призвал';
+    var dmgEl = document.createElement('span'); dmgEl.className = 'dmg';
+    dmgEl.textContent = info.icon + ' ' + info.name + ' · ' + info.hp + ' HP';
+    entry.appendChild(idx); entry.appendChild(who); entry.appendChild(dmgEl);
+    logList.insertBefore(entry, logList.firstChild);
+    trimLog();
+  }
+
+  function addSummonDeathLog(defender, killed, overflow) {
+    var entry = document.createElement('div');
+    entry.className = 'log-entry summon-death';
+    var idx = document.createElement('span'); idx.className = 'idx'; idx.textContent = '💀';
+    var who = document.createElement('span'); who.className = 'who';
+    who.textContent = killed.icon + ' ' + killed.name + ' И' + defender + ' погиб';
+    var dmgEl = document.createElement('span'); dmgEl.className = 'dmg';
+    if (overflow > 0) dmgEl.textContent = overflow + ' → И' + defender;
+    else dmgEl.textContent = '';
+    entry.appendChild(idx); entry.appendChild(who); entry.appendChild(dmgEl);
+    logList.insertBefore(entry, logList.firstChild);
+    trimLog();
+  }
+
   function trimLog() {
     while (logList.children.length > MAX_LOG) logList.removeChild(logList.lastChild);
   }
@@ -685,6 +768,29 @@
         }
       }
     });
+  }
+
+  // ============ РАСПРЕДЕЛЕНИЕ УРОНА ============
+  // Если у защитника есть суммон — сначала бьём суммона.
+  // Переполнение идёт в игрока.
+  function dealDamage(defender, dmg) {
+    var s = summons[defender];
+    if (s) {
+      if (dmg >= s.hp) {
+        var overflow = dmg - s.hp;
+        var killed = { name: s.name, icon: s.icon };
+        summons[defender] = null;
+        if (defender === 1) hp1 = Math.max(0, hp1 - overflow);
+        else hp2 = Math.max(0, hp2 - overflow);
+        return { toSummon: s.hp, toPlayer: overflow, summonDied: true, killed: killed };
+      } else {
+        s.hp -= dmg;
+        return { toSummon: dmg, toPlayer: 0, summonDied: false, killed: null };
+      }
+    }
+    if (defender === 1) hp1 = Math.max(0, hp1 - dmg);
+    else hp2 = Math.max(0, hp2 - dmg);
+    return { toSummon: 0, toPlayer: dmg, summonDied: false, killed: null };
   }
 
   // ============ СПИН ============
@@ -727,7 +833,43 @@
       resultEl.textContent = String(baseDmg);
       resultEl.className = 'result' + (isDouble ? ' double' : (attacker === 2 ? ' p2' : ''));
 
-      // ===== Ассасин: дубль → реролл ×2 =====
+      // ===== ДРУИД =====
+      if (cls === 'druid') {
+        // Если есть суммон — бьёт суммон
+        if (summons[attacker]) {
+          var s = summons[attacker];
+          var summonDmg = Math.floor(baseDmg * s.mult);
+          var stunFromBear = s.canStun && isDouble;
+          resultEl.textContent = String(summonDmg);
+          resultEl.className = 'result summon';
+          setDieGlow('summon');
+          setTimeout(function() { setDieGlow(null); }, 600);
+          setHint(s.icon + ' ' + s.name + ' атакует!');
+          applyHit(attacker, defender, summonDmg, isDouble, stunFromBear, false, 0, false, { icon: s.icon, name: s.name });
+          return;
+        }
+        // Суммона нет, дубль — призыв
+        if (isDouble) {
+          var info = SUMMON_TABLE[baseDmg];
+          if (info) {
+            summons[attacker] = {
+              type: info.type, name: info.name, icon: info.icon,
+              hp: info.hp, maxHp: info.hp, mult: info.mult, canStun: info.canStun
+            };
+            setHint(info.icon + ' Призыв: ' + info.name + '!');
+            addSummonLog(attacker, info);
+            rollNumber++;
+            updatePlayersUI();
+            finishTurnAfterAction(attacker, defender, 0);
+            return;
+          }
+        }
+        // Обычный удар без суммона
+        applyHit(attacker, defender, baseDmg, isDouble, false, false, 0, false, null);
+        return;
+      }
+
+      // ===== Ассасин =====
       if (cls === 'assassin' && isDouble) {
         setHint('🗡 Дубль! Переброс на крит...');
         setTimeout(function() {
@@ -737,13 +879,13 @@
             resultEl.className = 'result crit';
             setDieGlow('crit');
             setTimeout(function() { setDieGlow(null); }, 600);
-            applyHit(attacker, defender, critDmg, false, false, true, 0, false);
+            applyHit(attacker, defender, critDmg, false, false, true, 0, false, null);
           });
         }, getCritPause());
         return;
       }
 
-      // ===== Вампир: дубль → укус =====
+      // ===== Вампир =====
       if (cls === 'vampire' && isDouble) {
         setHint('🧛 Дубль! Укус...');
         setTimeout(function() {
@@ -753,13 +895,13 @@
             resultEl.className = 'result vampire';
             setDieGlow('vampire');
             setTimeout(function() { setDieGlow(null); }, 600);
-            applyHit(attacker, defender, biteDmg, false, false, false, biteDmg, false);
+            applyHit(attacker, defender, biteDmg, false, false, false, biteDmg, false, null);
           });
         }, getCritPause());
         return;
       }
 
-      // ===== Джокер: если есть бафф — урон ×3 =====
+      // ===== Джокер =====
       var isJokerHit = false;
       var dmg = baseDmg;
       if (cls === 'joker' && jokerBuff[attacker]) {
@@ -773,57 +915,45 @@
         setHint('🎲 Джокер активировал ×3!');
       }
 
-      // ===== Варвар: дубль → стан =====
+      // ===== Варвар =====
       var stunCaused = false;
       if (cls === 'barbarian' && isDouble && hp1 > 0 && hp2 > 0) {
         stunned[defender] = true;
         stunCaused = true;
       }
 
-      applyHit(attacker, defender, dmg, isDouble, stunCaused, false, 0, isJokerHit);
+      applyHit(attacker, defender, dmg, isDouble, stunCaused, false, 0, isJokerHit, null);
     });
   }
 
-  // ============ УРОН, ХИЛ, ПЕРЕХОД ХОДА ============
-  function applyHit(attacker, defender, dmg, isDouble, stunCaused, isCrit, heal, isJokerHit) {
-    rollNumber++;
-
-    if (attacker === 1) hp2 = Math.max(0, hp2 - dmg);
-    else hp1 = Math.max(0, hp1 - dmg);
-
-    if (heal > 0) {
-      if (attacker === 1) hp1 = Math.min(MAX_HP, hp1 + heal);
-      else hp2 = Math.min(MAX_HP, hp2 + heal);
-    }
-
-    addLogEntry(rollNumber, attacker, dmg, isDouble, stunCaused, isCrit, heal, isJokerHit);
-
+  // ============ ЗАВЕРШЕНИЕ ХОДА ============
+  function finishTurnAfterAction(attacker, defender, extraDelay) {
     if (hp1 <= 0 || hp2 <= 0) {
       gameOver = true;
       stunned[1] = false;
       stunned[2] = false;
       jokerBuff[1] = false;
       jokerBuff[2] = false;
+      summons[1] = null;
+      summons[2] = null;
       updatePlayersUI();
       showGameOver();
       rolling = false;
       return;
     }
 
-    // Проверка баффа Джокера после изменения HP
     checkJokerBuffs();
-
     turn = defender;
     updatePlayersUI();
 
-    var extraDelay = 0;
+    var delay = extraDelay || 0;
 
     if (stunned[turn]) {
       var skipPlayer = turn;
       var stunPause = getStunPause();
       setHint('⚡ Игрок ' + skipPlayer + ' оглушён!');
       addStunSkipLog(skipPlayer);
-      extraDelay = stunPause;
+      delay += stunPause;
 
       setTimeout(function() {
         stunned[skipPlayer] = false;
@@ -841,8 +971,27 @@
       clearTimeout(autoTimer);
       autoTimer = setTimeout(function() {
         if (autoPlay && !gameOver) roll();
-      }, getPauseBetween() + extraDelay);
+      }, getPauseBetween() + delay);
     }
+  }
+
+  // ============ УРОН ============
+  function applyHit(attacker, defender, dmg, isDouble, stunCaused, isCrit, heal, isJokerHit, summonInfo) {
+    rollNumber++;
+    var dr = dealDamage(defender, dmg);
+
+    addLogEntry(rollNumber, attacker, dmg, isDouble, stunCaused, isCrit, heal, isJokerHit, summonInfo);
+
+    if (dr.summonDied) {
+      addSummonDeathLog(defender, dr.killed, dr.toPlayer);
+    }
+
+    if (heal > 0) {
+      if (attacker === 1) hp1 = Math.min(MAX_HP, hp1 + heal);
+      else hp2 = Math.min(MAX_HP, hp2 + heal);
+    }
+
+    finishTurnAfterAction(attacker, defender, 0);
   }
 
   // ============ КОНЕЦ ИГРЫ ============
@@ -883,6 +1032,7 @@
     clearTimeout(autoTimer);
     stunned[1] = false; stunned[2] = false;
     jokerBuff[1] = false; jokerBuff[2] = false;
+    summons[1] = null; summons[2] = null;
     logList.innerHTML = '';
     resultEl.textContent = '— —';
     resultEl.className = 'result';
