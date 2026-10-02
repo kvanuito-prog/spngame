@@ -117,6 +117,17 @@
   .log-entry.summon-death .who { color: #f87171; } .log-entry.summon-death .dmg { color: #fbbf24; font-size: 12px; }
   .log-entry.stun { background: rgba(251,191,36,0.10); }
   .log-entry.stun .who { color: #fbbf24; } .log-entry.stun .dmg { color: #fbbf24; letter-spacing: 2px; }
+  .log-entry.coin {
+    background: rgba(251,191,36,0.10);
+    border-left: 3px solid #fbbf24;
+    justify-content: center;
+  }
+  .log-entry.coin .who {
+    color: #fbbf24;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    margin: 0 auto;
+  }
   .speed-box { flex-shrink: 0; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 6px 12px 8px; }
   .speed-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px; }
   .speed-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #8892b0; }
@@ -154,7 +165,7 @@
   .class-card .cname { font-size: 9.5px; font-weight: 800; letter-spacing: 0.2px; margin-bottom: 2px; }
   .class-card.selected .cname { color: #4ade80; }
   .class-card .cdesc { font-size: 8px; line-height: 1.2; color: #8892b0; }
-  .test-result-card { background: linear-gradient(160deg, #1e2a4a, #0f1729); border: 2px solid rgba(96,165,250,0.4); border-radius: 20px; padding: 20px 16px; text-align: center; max-width: 520px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.6); margin: auto; }
+  .test-result-card { background: linear-gradient(160deg, #1e2a4a, #0f1729); border: 2px solid rgba(96,165,250,0.4); border-radius: 20px; padding: 20px 16px; text-align: center; max-width: 560px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.6); margin: auto; }
   .test-title { font-size: 18px; font-weight: 800; margin-bottom: 4px; color: #60a5fa; }
   .test-sub { font-size: 11px; color: #8892b0; margin-bottom: 14px; }
   .test-loading { padding: 50px 0; color: #8892b0; font-size: 13px; line-height: 1.5; }
@@ -171,6 +182,54 @@
   .test-table .wr-good { color: #4ade80; }
   .test-table .wr-mid { color: #fbbf24; }
   .test-table .wr-bad { color: #f87171; }
+  .matrix-title {
+    margin-top: 20px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #60a5fa;
+    font-weight: 800;
+    text-align: left;
+  }
+  .matrix-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 6px;
+  }
+  .matrix-table {
+    border-collapse: collapse;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    width: 100%;
+    min-width: 400px;
+  }
+  .matrix-table th {
+    padding: 5px 4px;
+    font-size: 11px;
+    color: #8892b0;
+    font-weight: 700;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .matrix-table th.row-label {
+    text-align: left;
+    padding-left: 2px;
+    white-space: nowrap;
+    color: #e0e6f0;
+    font-size: 10px;
+    min-width: 72px;
+  }
+  .matrix-table td {
+    padding: 5px 4px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-weight: 700;
+  }
+  .matrix-table td.m-high { color: #4ade80; }
+  .matrix-table td.m-mid { color: #fbbf24; }
+  .matrix-table td.m-low { color: #f87171; }
+  .matrix-table td.diag { color: #4b5563; }
   @media (min-width: 700px) {
     #app { max-width: 720px; margin: 0 auto; padding: 12px; gap: 8px; }
     .die { width: 78px; height: 78px; padding: 10px; }
@@ -340,6 +399,11 @@
     4: [0, 2, 6, 8], 5: [0, 2, 4, 6, 8], 6: [0, 2, 3, 5, 6, 8]
   };
 
+  // ============ МОНЕТКА ============
+  function coinFlip() {
+    return Math.random() < 0.5 ? 1 : 2;
+  }
+
   // ============ ТРИГГЕРЫ ДЖОКЕРА ============
   function isBeautiful(n) {
     if (n <= 0) return false;
@@ -355,7 +419,7 @@
     return false;
   }
 
-  // ============ БЕРСЕРК (новая сетка) ============
+  // ============ БЕРСЕРК ============
   function getBerserkerBonus(hp) {
     if (hp <= 0) return 0;
     if (hp === 1) return 100;
@@ -373,7 +437,7 @@
   // ============ СИМУЛЯЦИЯ ============
   function simulateBattle(c1, c2) {
     var h1 = MAX_HP, h2 = MAX_HP;
-    var t = 1;
+    var t = coinFlip();
     var st = { 1: false, 2: false };
     var jb = { 1: 0, 2: 0 };
     var sm = { 1: null, 2: null };
@@ -489,7 +553,7 @@
   // ============ ТЕСТ БАЛАНСА ============
   function runBalanceTest() {
     var N = 100000;
-    testSub.textContent = '100 000 боёв на каждую пару · 1 500 000 боёв всего';
+    testSub.textContent = '100 000 боёв на пару · 1 500 000 боёв всего';
     testResultBody.innerHTML = '<div class="test-loading">⏳ Выполняется 1 500 000 боёв...<br>Это займёт 20–60 секунд, подожди.</div>';
     testOverlay.classList.add('show');
 
@@ -498,16 +562,26 @@
       var R = {};
       C.forEach(function(c) { R[c] = { w: 0, l: 0, d: 0 }; });
 
+      var matrix = {};
+      C.forEach(function(a) { matrix[a] = {}; });
+
       for (var i = 0; i < C.length; i++) {
         for (var j = i + 1; j < C.length; j++) {
           var a = C[i], b = C[j];
-          var w1 = 0, w2 = 0, dr = 0;
+          var aWins = 0, bWins = 0, draws = 0;
+
           for (var n = 0; n < N; n++) {
             var r = simulateBattle(a, b);
-            if (r === 1) { w1++; R[a].w++; R[b].l++; }
-            else if (r === 2) { w2++; R[b].w++; R[a].l++; }
-            else { dr++; R[a].d++; R[b].d++; }
+            if (r === 1) { aWins++; R[a].w++; R[b].l++; }
+            else if (r === 2) { bWins++; R[b].w++; R[a].l++; }
+            else { draws++; R[a].d++; R[b].d++; }
           }
+
+          var total = aWins + bWins;
+          var aWR = total > 0 ? aWins / total * 100 : 50;
+          var bWR = total > 0 ? bWins / total * 100 : 50;
+          matrix[a][b] = aWR;
+          matrix[b][a] = bWR;
         }
       }
 
@@ -536,6 +610,30 @@
       });
 
       html += '</tbody></table>';
+
+      html += '<div class="matrix-title">Класс против класса</div>';
+      html += '<div class="matrix-scroll"><table class="matrix-table"><thead><tr><th></th>';
+      C.forEach(function(c) {
+        html += '<th>' + CLASSES[c].icon + '</th>';
+      });
+      html += '</tr></thead><tbody>';
+
+      C.forEach(function(row) {
+        html += '<tr><th class="row-label">' + CLASSES[row].icon + ' ' + CLASSES[row].short + '</th>';
+        C.forEach(function(col) {
+          if (row === col) {
+            html += '<td class="diag">—</td>';
+          } else {
+            var wr = matrix[row][col];
+            var cls = wr >= 55 ? 'm-high' : (wr >= 45 ? 'm-mid' : 'm-low');
+            html += '<td class="' + cls + '">' + wr.toFixed(1) + '</td>';
+          }
+        });
+        html += '</tr>';
+      });
+
+      html += '</tbody></table></div>';
+
       testResultBody.innerHTML = html;
     }, 100);
   }
@@ -729,6 +827,17 @@
     entry.appendChild(idx); entry.appendChild(who); entry.appendChild(dmgEl);
     logList.insertBefore(entry, logList.firstChild); trimLog();
   }
+
+  function addCoinLog(firstPlayer) {
+    var entry = document.createElement('div');
+    entry.className = 'log-entry coin';
+    var who = document.createElement('span'); who.className = 'who';
+    var coinName = firstPlayer === 1 ? 'Орёл' : 'Решка';
+    who.textContent = '🪙 ' + coinName + ' — первым ходит Игрок ' + firstPlayer;
+    entry.appendChild(who);
+    logList.insertBefore(entry, logList.firstChild); trimLog();
+  }
+
   function addJokerBuffLog(p, mult) {
     var entry = document.createElement('div');
     entry.className = 'log-entry ' + (mult === 3 ? 'buff' : 'buff15');
@@ -1014,9 +1123,13 @@
     battleBtn.className = 'control-btn start';
     battleBtn.classList.remove('hidden');
     setDieGlow(null);
+
+    turn = coinFlip();
+    addCoinLog(turn);
+
     dieEls.forEach(function(el) { renderDie(el, randomDie()); });
     updatePlayersUI();
-    setHint('Нажми «Начать бой»');
+    setHint('Тап — бросок Игрока ' + turn);
   }
 
   document.body.addEventListener('click', function(e) {
