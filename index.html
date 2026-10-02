@@ -4,9 +4,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>SPN BATTLE</title>
 
 <style>
+
 :root{
     --bg:#05070b;
     --panel:#0b1018;
@@ -18,6 +20,7 @@
     --green:#36e28c;
     --yellow:#ffd34d;
     --purple:#b66cff;
+    --blood:#e83b5b;
 }
 
 *{
@@ -26,7 +29,8 @@
     padding:0;
 }
 
-html,body{
+html,
+body{
     width:100%;
     height:100%;
     overflow:hidden;
@@ -34,13 +38,25 @@ html,body{
 
 body{
     background:
-        radial-gradient(circle at 50% 20%,rgba(0,168,255,.08),transparent 35%),
-        linear-gradient(135deg,#03050a,#07101a 50%,#03050a);
+        radial-gradient(
+            circle at 50% 20%,
+            rgba(0,168,255,.08),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #03050a,
+            #07101a 50%,
+            #03050a
+        );
+
     color:var(--text);
     font-family:Arial,Helvetica,sans-serif;
 }
 
-button,input,select{
+button,
+input,
+select{
     font-family:inherit;
 }
 
@@ -48,27 +64,48 @@ button{
     cursor:pointer;
 }
 
+
+/* =========================
+   PAGE
+========================= */
+
 .page{
     width:100%;
     height:100vh;
     padding:8px;
+
     display:flex;
     flex-direction:column;
     gap:6px;
 }
 
-/* HEADER */
+
+/* =========================
+   HEADER
+========================= */
 
 .header{
     min-height:52px;
-    background:linear-gradient(135deg,#0b111b,#101925);
+
+    background:
+        linear-gradient(
+            135deg,
+            #0b111b,
+            #101925
+        );
+
     border:1px solid rgba(0,168,255,.22);
+
     border-radius:12px;
+
     display:flex;
     align-items:center;
     justify-content:space-between;
+
     padding:7px 15px;
-    box-shadow:0 8px 30px rgba(0,0,0,.35);
+
+    box-shadow:
+        0 8px 30px rgba(0,0,0,.35);
 }
 
 .logo{
@@ -101,23 +138,36 @@ button{
 
 .status{
     min-width:190px;
+
     text-align:right;
+
     font-size:11px;
+
     color:var(--green);
+
     font-weight:900;
+
     letter-spacing:.7px;
 }
 
-/* SETUP */
+
+/* =========================
+   SETUP
+========================= */
 
 .names-panel{
     background:var(--panel);
+
     border:1px solid rgba(255,255,255,.07);
+
     border-radius:11px;
+
     padding:6px 10px;
+
     display:flex;
     align-items:center;
     justify-content:center;
+
     gap:7px;
 }
 
@@ -130,14 +180,22 @@ button{
 .name-input{
     width:175px;
     height:34px;
+
     background:#060a10;
+
     border:1px solid rgba(0,168,255,.25);
+
     border-radius:7px;
+
     outline:none;
+
     color:white;
+
     padding:0 10px;
+
     font-size:12px;
     font-weight:800;
+
     text-align:center;
 }
 
@@ -148,47 +206,87 @@ button{
 .class-select{
     width:125px;
     height:34px;
+
     background:#060a10;
+
     border:1px solid rgba(0,168,255,.25);
+
     border-radius:7px;
+
     color:white;
+
     padding:0 7px;
+
     font-size:11px;
     font-weight:800;
+
     outline:none;
 }
 
 .start-button{
     height:34px;
+
     padding:0 16px;
+
     border:0;
+
     border-radius:7px;
+
     color:white;
+
     font-size:11px;
+
     font-weight:900;
-    background:linear-gradient(135deg,#087cb5,#00a8ff);
+
+    background:
+        linear-gradient(
+            135deg,
+            #087cb5,
+            #00a8ff
+        );
 }
 
-/* COIN */
+
+/* =========================
+   COIN
+========================= */
 
 .coin-panel{
     min-height:43px;
+
     background:var(--panel);
+
     border:1px solid rgba(255,255,255,.07);
+
     border-radius:11px;
+
     display:flex;
+
     align-items:center;
+
     justify-content:center;
+
     gap:10px;
 }
 
 .coin-button{
     border:1px solid rgba(0,168,255,.45);
-    background:linear-gradient(135deg,#087cb5,#00a8ff);
+
+    background:
+        linear-gradient(
+            135deg,
+            #087cb5,
+            #00a8ff
+        );
+
     color:white;
+
     font-weight:900;
+
     font-size:11px;
+
     padding:7px 18px;
+
     border-radius:8px;
 }
 
@@ -199,71 +297,120 @@ button{
 
 .coin-result{
     min-width:220px;
+
     text-align:center;
+
     font-size:11px;
+
     font-weight:900;
+
     color:var(--yellow);
+
     letter-spacing:1px;
 }
 
-/* BATTLE */
+
+/* =========================
+   BATTLE
+========================= */
 
 .battle{
     flex:1;
+
     min-height:0;
+
     display:grid;
-    grid-template-columns:minmax(240px,1fr) minmax(310px,1.15fr) minmax(240px,1fr);
+
+    grid-template-columns:
+        minmax(240px,1fr)
+        minmax(310px,1.15fr)
+        minmax(240px,1fr);
+
     gap:8px;
 }
+
+
+/* =========================
+   PLAYER CARD
+========================= */
 
 .player-card,
 .arena{
     min-height:0;
-    background:linear-gradient(160deg,#0b1018,#080d14);
+
+    background:
+        linear-gradient(
+            160deg,
+            #0b1018,
+            #080d14
+        );
+
     border:1px solid rgba(255,255,255,.07);
+
     border-radius:13px;
+
     overflow:hidden;
 }
 
 .player-card{
     display:flex;
+
     flex-direction:column;
+
     padding:12px;
+
     position:relative;
 }
 
 .player-card.active{
-    border-color:rgba(0,168,255,.6);
-    box-shadow:0 0 28px rgba(0,168,255,.12);
+    border-color:
+        rgba(0,168,255,.6);
+
+    box-shadow:
+        0 0 28px rgba(0,168,255,.12);
 }
 
 .player-top{
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
+
     margin-bottom:5px;
 }
 
 .player-number{
     font-size:10px;
+
     color:var(--muted);
+
     font-weight:900;
+
     letter-spacing:1px;
 }
 
 .player-name{
     font-size:21px;
+
     font-weight:900;
+
     white-space:nowrap;
+
     overflow:hidden;
+
     text-overflow:ellipsis;
 }
 
 .class-name{
     font-size:11px;
+
     color:var(--cyan);
+
     font-weight:900;
+
     margin-top:3px;
+
     margin-bottom:13px;
 }
 
@@ -271,70 +418,108 @@ button{
     color:var(--purple);
 }
 
+.class-name.vampire{
+    color:var(--blood);
+}
+
 .hp-row{
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
+
     margin-bottom:6px;
 }
 
 .hp-label{
     font-size:10px;
+
     color:var(--muted);
+
     font-weight:800;
 }
 
 .hp-value{
     font-size:17px;
+
     font-weight:900;
 }
 
 .hp-bar{
     height:12px;
+
     background:#1b222c;
+
     border-radius:20px;
+
     overflow:hidden;
 }
 
 .hp-fill{
     height:100%;
+
     width:100%;
-    background:linear-gradient(90deg,#20d27b,#63f1ad);
+
+    background:
+        linear-gradient(
+            90deg,
+            #20d27b,
+            #63f1ad
+        );
+
     transition:width .35s ease;
 }
 
 .turn-label,
 .stun-label{
     min-height:28px;
+
     display:flex;
+
     align-items:center;
+
     justify-content:center;
+
     border-radius:7px;
+
     font-size:10px;
+
     font-weight:900;
+
     letter-spacing:.5px;
 }
 
 .turn-label{
     margin-top:auto;
-    background:rgba(0,168,255,.08);
+
+    background:
+        rgba(0,168,255,.08);
+
     color:#6b7a8b;
 }
 
 .player-card.active .turn-label{
-    background:rgba(0,168,255,.16);
+    background:
+        rgba(0,168,255,.16);
+
     color:var(--cyan);
 }
 
 .stun-label{
     margin-top:5px;
-    background:rgba(255,211,77,.08);
+
+    background:
+        rgba(255,211,77,.08);
+
     color:#69717d;
 }
 
 .stun-label.visible{
     color:var(--yellow);
-    background:rgba(255,211,77,.14);
+
+    background:
+        rgba(255,211,77,.14);
 }
 
 .controls{
@@ -343,64 +528,104 @@ button{
 
 .kick-button{
     width:100%;
+
     padding:6px;
+
     border-radius:7px;
-    border:1px solid rgba(255,61,88,.3);
-    background:rgba(255,61,88,.07);
+
+    border:
+        1px solid rgba(255,61,88,.3);
+
+    background:
+        rgba(255,61,88,.07);
+
     color:#ff6b7d;
+
     font-size:9px;
+
     font-weight:900;
 }
 
-/* ARENA */
+
+/* =========================
+   ARENA
+========================= */
 
 .arena{
     display:flex;
+
     flex-direction:column;
+
     align-items:center;
+
     padding:9px;
 }
 
 .arena-turn{
     height:29px;
+
     display:flex;
+
     align-items:center;
+
     justify-content:center;
+
     font-size:13px;
+
     font-weight:900;
+
     color:var(--cyan);
+
     letter-spacing:.8px;
+
     text-align:center;
 }
 
 .dice-area{
     display:flex;
+
     align-items:center;
+
     justify-content:center;
+
     gap:17px;
+
     margin-top:3px;
 }
 
 .dice{
     width:70px;
     height:70px;
+
     background:#fff;
+
     border-radius:12px;
+
     box-shadow:
         0 7px 22px rgba(0,0,0,.4),
         inset 0 0 0 2px rgba(0,0,0,.08);
+
     display:grid;
-    grid-template-columns:repeat(3,1fr);
-    grid-template-rows:repeat(3,1fr);
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    grid-template-rows:
+        repeat(3,1fr);
+
     padding:9px;
 }
 
 .dot{
     width:12px;
     height:12px;
+
     background:#090b0f;
+
     border-radius:50%;
+
     align-self:center;
+
     justify-self:center;
 }
 
@@ -416,113 +641,207 @@ button{
 
 .result-number{
     margin-top:6px;
+
     height:38px;
+
     font-size:35px;
+
     line-height:38px;
+
     font-weight:1000;
 }
 
 .damage-text{
     height:23px;
+
     color:var(--danger);
+
     font-size:12px;
+
     font-weight:900;
+
     text-align:center;
 }
 
-.critical-text{
+.special-text{
     height:22px;
-    color:var(--purple);
-    font-size:13px;
+
+    font-size:14px;
+
     font-weight:1000;
+
     letter-spacing:1px;
+
     opacity:0;
+
     transition:.2s;
+
+    text-align:center;
 }
 
-.critical-text.visible{
+.special-text.visible{
     opacity:1;
-    text-shadow:0 0 14px rgba(182,108,255,.7);
+}
+
+.special-text.critical{
+    color:var(--purple);
+
+    text-shadow:
+        0 0 14px rgba(182,108,255,.7);
+}
+
+.special-text.bite{
+    color:var(--blood);
+
+    text-shadow:
+        0 0 14px rgba(232,59,91,.7);
 }
 
 .log{
     width:100%;
+
     flex:1;
+
     min-height:65px;
+
     margin-top:5px;
+
     background:#060a10;
-    border:1px solid rgba(255,255,255,.06);
+
+    border:
+        1px solid rgba(255,255,255,.06);
+
     border-radius:8px;
+
     padding:6px;
+
     overflow:hidden;
+
     display:flex;
+
     flex-direction:column;
+
     gap:4px;
 }
 
 .log-entry{
     font-size:9px;
+
     line-height:12px;
+
     color:#aeb8c5;
+
     padding:3px 5px;
-    border-left:2px solid rgba(0,168,255,.45);
-    background:rgba(255,255,255,.015);
+
+    border-left:
+        2px solid rgba(0,168,255,.45);
+
+    background:
+        rgba(255,255,255,.015);
 }
 
-/* WINNER */
+
+/* =========================
+   WINNER
+========================= */
 
 .overlay{
     position:fixed;
+
     inset:0;
-    background:rgba(0,0,0,.72);
+
+    background:
+        rgba(0,0,0,.72);
+
     backdrop-filter:blur(8px);
+
     display:flex;
+
     align-items:center;
+
     justify-content:center;
+
     z-index:100;
+
     opacity:0;
+
     pointer-events:none;
+
     transition:.25s;
 }
 
 .overlay.visible{
     opacity:1;
+
     pointer-events:auto;
 }
 
 .winner-box{
     width:min(430px,90vw);
-    background:linear-gradient(145deg,#0b121d,#101a27);
-    border:1px solid rgba(0,168,255,.35);
+
+    background:
+        linear-gradient(
+            145deg,
+            #0b121d,
+            #101a27
+        );
+
+    border:
+        1px solid rgba(0,168,255,.35);
+
     border-radius:16px;
+
     padding:25px;
+
     text-align:center;
 }
 
 .winner-title{
     font-size:26px;
+
     font-weight:1000;
+
     margin-bottom:8px;
 }
 
 .winner-score{
     color:var(--cyan);
+
     font-size:20px;
+
     font-weight:900;
+
     margin-bottom:20px;
 }
 
 .restart{
     border:0;
+
     border-radius:9px;
+
     padding:11px 25px;
-    background:linear-gradient(135deg,#087cb5,#00a8ff);
+
+    background:
+        linear-gradient(
+            135deg,
+            #087cb5,
+            #00a8ff
+        );
+
     color:white;
+
     font-weight:900;
 }
 
+
+/* =========================
+   PORTRAIT
+========================= */
+
 @media (orientation:portrait){
-    html,body{
+
+    html,
+    body{
         overflow:auto;
     }
 
@@ -535,6 +854,11 @@ button{
         grid-template-columns:1fr;
     }
 }
+
+
+/* =========================
+   SMALL LANDSCAPE
+========================= */
 
 @media (max-height:650px) and (orientation:landscape){
 
@@ -611,12 +935,18 @@ button{
         min-height:50px;
     }
 }
+
 </style>
 </head>
 
+
 <body>
 
+
 <div class="page">
+
+
+<!-- HEADER -->
 
 <header class="header">
 
@@ -625,25 +955,40 @@ button{
     </div>
 
     <div class="header-center">
-        <div class="round-title" id="roundTitle">
+
+        <div
+            class="round-title"
+            id="roundTitle"
+        >
             РАУНД 1 / 3
         </div>
 
-        <div class="score" id="score">
+        <div
+            class="score"
+            id="score"
+        >
             0 : 0
         </div>
+
     </div>
 
-    <div class="status" id="status">
+    <div
+        class="status"
+        id="status"
+    >
         ВВЕДИТЕ НИКИ
     </div>
 
 </header>
 
 
-<!-- НАСТРОЙКА БОЯ -->
+<!-- SETUP -->
 
-<section class="names-panel" id="namesPanel">
+<section
+    class="names-panel"
+    id="namesPanel"
+>
+
 
     <div class="setup-box">
 
@@ -655,15 +1000,32 @@ button{
             autocomplete="off"
         >
 
-        <select class="class-select" id="class1Select">
-            <option value="barbar">ВАРВАР</option>
-            <option value="assassin">АССАСИН</option>
+        <select
+            class="class-select"
+            id="class1Select"
+        >
+
+            <option value="barbar">
+                ВАРВАР
+            </option>
+
+            <option value="assassin">
+                АССАСИН
+            </option>
+
+            <option value="vampire">
+                ВАМПИР
+            </option>
+
         </select>
 
     </div>
 
 
-    <button class="start-button" id="startGameButton">
+    <button
+        class="start-button"
+        id="startGameButton"
+    >
         НАЧАТЬ БОЙ
     </button>
 
@@ -678,17 +1040,32 @@ button{
             autocomplete="off"
         >
 
-        <select class="class-select" id="class2Select">
-            <option value="barbar">ВАРВАР</option>
-            <option value="assassin">АССАСИН</option>
+        <select
+            class="class-select"
+            id="class2Select"
+        >
+
+            <option value="barbar">
+                ВАРВАР
+            </option>
+
+            <option value="assassin">
+                АССАСИН
+            </option>
+
+            <option value="vampire">
+                ВАМПИР
+            </option>
+
         </select>
 
     </div>
 
+
 </section>
 
 
-<!-- ОРЕЛ / РЕШКА -->
+<!-- COIN -->
 
 <section class="coin-panel">
 
@@ -710,12 +1087,17 @@ button{
 </section>
 
 
+<!-- BATTLE -->
+
 <main class="battle">
 
 
 <!-- PLAYER 1 -->
 
-<section class="player-card" id="player1">
+<section
+    class="player-card"
+    id="player1"
+>
 
     <div class="player-top">
 
@@ -725,6 +1107,7 @@ button{
 
     </div>
 
+
     <div
         class="player-name"
         id="player1Name"
@@ -732,12 +1115,14 @@ button{
         ИГРОК 1
     </div>
 
+
     <div
         class="class-name"
         id="class1Name"
     >
         ВАРВАР
     </div>
+
 
     <div class="hp-row">
 
@@ -754,6 +1139,7 @@ button{
 
     </div>
 
+
     <div class="hp-bar">
 
         <div
@@ -763,6 +1149,7 @@ button{
 
     </div>
 
+
     <div
         class="turn-label"
         id="turn1"
@@ -770,12 +1157,14 @@ button{
         НЕ В ХОДУ
     </div>
 
+
     <div
         class="stun-label"
         id="stun1"
     >
         НЕ ОГЛУШЁН
     </div>
+
 
     <div class="controls">
 
@@ -794,6 +1183,7 @@ button{
 <!-- ARENA -->
 
 <section class="arena">
+
 
     <div
         class="arena-turn"
@@ -827,10 +1217,10 @@ button{
 
 
     <div
-        class="critical-text"
-        id="criticalText"
+        class="special-text"
+        id="specialText"
     >
-        ⚡ КРИТИЧЕСКИЙ УРОН!
+        КРИТИЧЕСКИЙ УРОН!
     </div>
 
 
@@ -847,12 +1237,16 @@ button{
         id="log"
     ></div>
 
+
 </section>
 
 
 <!-- PLAYER 2 -->
 
-<section class="player-card" id="player2">
+<section
+    class="player-card"
+    id="player2"
+>
 
     <div class="player-top">
 
@@ -862,6 +1256,7 @@ button{
 
     </div>
 
+
     <div
         class="player-name"
         id="player2Name"
@@ -869,12 +1264,14 @@ button{
         ИГРОК 2
     </div>
 
+
     <div
         class="class-name"
         id="class2Name"
     >
         ВАРВАР
     </div>
+
 
     <div class="hp-row">
 
@@ -891,6 +1288,7 @@ button{
 
     </div>
 
+
     <div class="hp-bar">
 
         <div
@@ -900,6 +1298,7 @@ button{
 
     </div>
 
+
     <div
         class="turn-label"
         id="turn2"
@@ -907,12 +1306,14 @@ button{
         НЕ В ХОДУ
     </div>
 
+
     <div
         class="stun-label"
         id="stun2"
     >
         НЕ ОГЛУШЁН
     </div>
+
 
     <div class="controls">
 
@@ -926,6 +1327,7 @@ button{
     </div>
 
 </section>
+
 
 </main>
 
@@ -969,6 +1371,7 @@ button{
 
 <script>
 
+
 /* =========================
    CONSTANTS
 ========================= */
@@ -987,9 +1390,11 @@ const NEXT_ROUND_DELAY = 1800;
 ========================= */
 
 let hp1 = MAX_HP;
+
 let hp2 = MAX_HP;
 
 let score1 = 0;
+
 let score2 = 0;
 
 let currentRound = 1;
@@ -997,24 +1402,33 @@ let currentRound = 1;
 let currentPlayer = 1;
 
 let stunned1 = false;
+
 let stunned2 = false;
 
 let gameStarted = false;
+
 let battleFinished = false;
+
 let roundFinished = false;
 
 let previousRoundWinner = null;
+
 let previousRoundLoser = null;
 
 let playerName1 = "ИГРОК 1";
+
 let playerName2 = "ИГРОК 2";
 
 let playerClass1 = "barbar";
+
 let playerClass2 = "barbar";
 
 let battleTimer = null;
+
 let diceTimer = null;
+
 let nextRoundTimer = null;
+
 let coinTimer = null;
 
 let audioContext = null;
@@ -1113,11 +1527,11 @@ const dice2 =
 const resultNumber =
     document.getElementById("resultNumber");
 
+const specialText =
+    document.getElementById("specialText");
+
 const damageText =
     document.getElementById("damageText");
-
-const criticalText =
-    document.getElementById("criticalText");
 
 const log =
     document.getElementById("log");
@@ -1198,9 +1612,22 @@ function getPlayerClass(player){
 
 function getClassName(player){
 
-    return getPlayerClass(player) === "assassin"
-        ? "АССАСИН"
-        : "ВАРВАР";
+    const playerClass =
+        getPlayerClass(player);
+
+    if(playerClass === "assassin"){
+
+        return "АССАСИН";
+
+    }
+
+    if(playerClass === "vampire"){
+
+        return "ВАМПИР";
+
+    }
+
+    return "ВАРВАР";
 }
 
 
@@ -1396,6 +1823,55 @@ function playCriticalSound(){
 }
 
 
+function playBiteSound(){
+
+    if(!soundEnabled) return;
+
+    initAudio();
+
+    const oscillator =
+        audioContext.createOscillator();
+
+    const gain =
+        audioContext.createGain();
+
+    oscillator.type =
+        "sawtooth";
+
+    oscillator.frequency.setValueAtTime(
+        260,
+        audioContext.currentTime
+    );
+
+    oscillator.frequency.linearRampToValueAtTime(
+        120,
+        audioContext.currentTime + .22
+    );
+
+    gain.gain.setValueAtTime(
+        .035,
+        audioContext.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        .001,
+        audioContext.currentTime + .28
+    );
+
+    oscillator.connect(gain);
+
+    gain.connect(
+        audioContext.destination
+    );
+
+    oscillator.start();
+
+    oscillator.stop(
+        audioContext.currentTime + .28
+    );
+}
+
+
 function playCloseSound(){
 
     playClick(
@@ -1449,8 +1925,11 @@ function clearTimers(){
     clearInterval(coinTimer);
 
     battleTimer = null;
+
     diceTimer = null;
+
     nextRoundTimer = null;
+
     coinTimer = null;
 }
 
@@ -1485,22 +1964,28 @@ function updateUI(){
 
     player1.classList.toggle(
         "active",
-        gameStarted && currentPlayer === 1
+        gameStarted &&
+        currentPlayer === 1
     );
+
 
     player2.classList.toggle(
         "active",
-        gameStarted && currentPlayer === 2
+        gameStarted &&
+        currentPlayer === 2
     );
 
 
     turn1.textContent =
-        gameStarted && currentPlayer === 1
+        gameStarted &&
+        currentPlayer === 1
             ? `ХОД: ${playerName1}`
             : "НЕ В ХОДУ";
 
+
     turn2.textContent =
-        gameStarted && currentPlayer === 2
+        gameStarted &&
+        currentPlayer === 2
             ? `ХОД: ${playerName2}`
             : "НЕ В ХОДУ";
 
@@ -1509,6 +1994,7 @@ function updateUI(){
         stunned1
             ? "ОГЛУШЁН • ХОД ПРОПУСКАЕТ"
             : "НЕ ОГЛУШЁН";
+
 
     stun2.textContent =
         stunned2
@@ -1520,6 +2006,7 @@ function updateUI(){
         "visible",
         stunned1
     );
+
 
     stun2.classList.toggle(
         "visible",
@@ -1536,6 +2023,7 @@ function updateUI(){
             `ХОД: ${getPlayerName(currentPlayer)}`;
 
     }
+
 }
 
 
@@ -1546,25 +2034,41 @@ function updateUI(){
 function resetRoundState(){
 
     hp1 = MAX_HP;
+
     hp2 = MAX_HP;
 
     stunned1 = false;
+
     stunned2 = false;
 
     gameStarted = false;
+
     roundFinished = false;
 
     currentPlayer = 1;
 
-    criticalText.classList.remove(
-        "visible"
+
+    specialText.classList.remove(
+        "visible",
+        "critical",
+        "bite"
     );
 
-    drawDice(dice1,0);
-    drawDice(dice2,0);
+
+    drawDice(
+        dice1,
+        0
+    );
+
+    drawDice(
+        dice2,
+        0
+    );
+
 
     resultNumber.textContent =
         "—";
+
 
     damageText.textContent =
         "ОЖИДАНИЕ БРОСКА";
@@ -1604,6 +2108,7 @@ function startRound(mode="manual"){
         arenaTurn.textContent =
             "ОЖИДАНИЕ";
 
+
         addLog(
             "🪙 Нажмите «ОРЕЛ / РЕШКА», чтобы определить первого игрока."
         );
@@ -1621,18 +2126,23 @@ function startRound(mode="manual"){
         currentPlayer =
             previousRoundLoser;
 
+
         coinResult.textContent =
             "ПРАВО НЕУДАЧНИКА";
+
 
         status.textContent =
             `ПЕРВЫМ ХОДИТ ${getPlayerName(currentPlayer)}`;
 
+
         arenaTurn.textContent =
             "ПРАВО НЕУДАЧНИКА";
+
 
         addLog(
             `⚔️ Право неудачника: ${getPlayerName(currentPlayer)} проиграл прошлый раунд и начинает этот раунд.`
         );
+
 
         gameStarted = true;
 
@@ -1644,8 +2154,10 @@ function startRound(mode="manual"){
             coinResult.textContent =
                 "БОЙ ПРОДОЛЖАЕТСЯ";
 
+
             damageText.textContent =
                 `Первым бросает ${getPlayerName(currentPlayer)}`;
+
 
             updateUI();
 
@@ -1657,6 +2169,7 @@ function startRound(mode="manual"){
             },450);
 
         },1100);
+
 
         return;
     }
@@ -1677,13 +2190,16 @@ function startRound(mode="manual"){
         arenaTurn.textContent =
             "АВТОМАТИЧЕСКАЯ ЖЕРЕБЬЁВКА";
 
+
         addLog(
             "🎲 Счёт 1 : 1. Автоматическая жеребьёвка решит, кто начнёт третий раунд."
         );
 
+
         runAutomaticCoinToss();
 
     }
+
 }
 
 
@@ -1693,11 +2209,15 @@ function startRound(mode="manual"){
 
 function determineFirstPlayer(){
 
-    if(gameStarted ||
-       battleFinished ||
-       roundFinished) return;
+    if(
+        gameStarted ||
+        battleFinished ||
+        roundFinished
+    ) return;
+
 
     if(currentRound !== 1) return;
+
 
     initAudio();
 
@@ -1718,6 +2238,7 @@ function determineFirstPlayer(){
 
     coinResult.textContent =
         result;
+
 
     gameStarted = true;
 
@@ -1741,7 +2262,7 @@ function determineFirstPlayer(){
 
 
 /* =========================
-   ROUND 3 AUTO COIN
+   ROUND 3 COIN
 ========================= */
 
 function runAutomaticCoinToss(){
@@ -1751,76 +2272,79 @@ function runAutomaticCoinToss(){
     const totalFlips = 12;
 
 
-    coinTimer = setInterval(() => {
+    coinTimer =
+        setInterval(() => {
 
-        const visualResult =
-            flips % 2 === 0
-                ? "ОРЕЛ"
-                : "РЕШКА";
-
-
-        coinResult.textContent =
-            visualResult;
-
-
-        playClick(
-            visualResult === "ОРЕЛ"
-                ? 620
-                : 470,
-            .035,
-            .018
-        );
-
-
-        flips++;
-
-
-        if(flips >= totalFlips){
-
-            clearInterval(
-                coinTimer
-            );
-
-            coinTimer = null;
-
-
-            const result =
-                Math.random() < .5
+            const visualResult =
+                flips % 2 === 0
                     ? "ОРЕЛ"
                     : "РЕШКА";
 
 
-            currentPlayer =
-                result === "ОРЕЛ"
-                    ? 1
-                    : 2;
-
-
             coinResult.textContent =
-                result;
-
-            gameStarted = true;
-
-            playOpenSound();
+                visualResult;
 
 
-            addLog(
-                `🎲 Автоматическая жеребьёвка: выпало ${result}. ${getPlayerName(currentPlayer)} начинает решающий раунд.`
+            playClick(
+                visualResult === "ОРЕЛ"
+                    ? 620
+                    : 470,
+                .035,
+                .018
             );
 
 
-            updateUI();
+            flips++;
 
 
-            battleTimer = setTimeout(() => {
+            if(flips >= totalFlips){
 
-                automaticTurn();
+                clearInterval(
+                    coinTimer
+                );
 
-            },TURN_DELAY);
+                coinTimer = null;
 
-        }
 
-    },120);
+                const result =
+                    Math.random() < .5
+                        ? "ОРЕЛ"
+                        : "РЕШКА";
+
+
+                currentPlayer =
+                    result === "ОРЕЛ"
+                        ? 1
+                        : 2;
+
+
+                coinResult.textContent =
+                    result;
+
+
+                gameStarted = true;
+
+
+                playOpenSound();
+
+
+                addLog(
+                    `🎲 Автоматическая жеребьёвка: выпало ${result}. ${getPlayerName(currentPlayer)} начинает решающий раунд.`
+                );
+
+
+                updateUI();
+
+
+                battleTimer = setTimeout(() => {
+
+                    automaticTurn();
+
+                },TURN_DELAY);
+
+            }
+
+        },120);
 }
 
 
@@ -1830,9 +2354,11 @@ function runAutomaticCoinToss(){
 
 function automaticTurn(){
 
-    if(!gameStarted ||
-       battleFinished ||
-       roundFinished) return;
+    if(
+        !gameStarted ||
+        battleFinished ||
+        roundFinished
+    ) return;
 
 
     const stunned =
@@ -1891,14 +2417,16 @@ function automaticTurn(){
 
 
 /* =========================
-   DICE ROLL
+   NORMAL DICE ANIMATION
 ========================= */
 
 function rollDiceAutomatically(){
 
-    if(!gameStarted ||
-       battleFinished ||
-       roundFinished) return;
+    if(
+        !gameStarted ||
+        battleFinished ||
+        roundFinished
+    ) return;
 
 
     const rollingPlayer =
@@ -1908,92 +2436,112 @@ function rollDiceAutomatically(){
     let elapsed = 0;
 
 
-    diceTimer = setInterval(() => {
+    diceTimer =
+        setInterval(() => {
 
-        if(!gameStarted ||
-           battleFinished ||
-           roundFinished){
+            if(
+                !gameStarted ||
+                battleFinished ||
+                roundFinished
+            ){
 
-            clearInterval(
-                diceTimer
+                clearInterval(
+                    diceTimer
+                );
+
+                diceTimer = null;
+
+                return;
+            }
+
+
+            const temp1 =
+                Math.floor(
+                    Math.random()*6
+                ) + 1;
+
+
+            const temp2 =
+                Math.floor(
+                    Math.random()*6
+                ) + 1;
+
+
+            drawDice(
+                dice1,
+                temp1
             );
 
-            diceTimer = null;
 
-            return;
-        }
-
-
-        const temp1 =
-            Math.floor(Math.random()*6)+1;
-
-        const temp2 =
-            Math.floor(Math.random()*6)+1;
-
-
-        drawDice(
-            dice1,
-            temp1
-        );
-
-        drawDice(
-            dice2,
-            temp2
-        );
-
-
-        resultNumber.textContent =
-            `${temp1}${temp2}`;
-
-
-        elapsed += 90;
-
-
-        if(elapsed >= DICE_ANIMATION_TIME){
-
-            clearInterval(
-                diceTimer
+            drawDice(
+                dice2,
+                temp2
             );
 
-            diceTimer = null;
+
+            resultNumber.textContent =
+                `${temp1}${temp2}`;
 
 
-            finishDiceRoll(
-                rollingPlayer,
-                false
-            );
+            elapsed += 90;
 
-        }
 
-    },90);
+            if(
+                elapsed >=
+                DICE_ANIMATION_TIME
+            ){
+
+                clearInterval(
+                    diceTimer
+                );
+
+                diceTimer = null;
+
+
+                finishDiceRoll(
+                    rollingPlayer,
+                    "normal"
+                );
+
+            }
+
+        },90);
 }
 
 
 /* =========================
-   FINISH NORMAL ROLL
+   FINISH DICE ROLL
 ========================= */
 
 function finishDiceRoll(
     rollingPlayer,
-    criticalRoll
+    rollType
 ){
 
-    if(!gameStarted ||
-       battleFinished ||
-       roundFinished) return;
+    if(
+        !gameStarted ||
+        battleFinished ||
+        roundFinished
+    ) return;
 
 
     const die1 =
-        Math.floor(Math.random()*6)+1;
+        Math.floor(
+            Math.random()*6
+        ) + 1;
+
 
     const die2 =
-        Math.floor(Math.random()*6)+1;
+        Math.floor(
+            Math.random()*6
+        ) + 1;
 
 
     drawDice(
         dice1,
         die1
     );
+
 
     drawDice(
         dice2,
@@ -2014,48 +2562,53 @@ function finishDiceRoll(
 
 
     /*
-       АССАСИН + ДУБЛЬ
-       Дубль НЕ наносит обычный урон.
-       Вместо этого запускается критический
-       дополнительный бросок.
+       =========================
+       АССАСИН
+       =========================
+
+       Дубль не наносит урон.
+
+       Вместо этого появляется крит,
+       после чего идёт дополнительный
+       бросок ×2.
     */
 
     if(
+        rollType === "normal" &&
         isDouble &&
-        getPlayerClass(rollingPlayer) === "assassin" &&
-        !criticalRoll
+        getPlayerClass(rollingPlayer) === "assassin"
     ){
 
-        criticalText.classList.add(
-            "visible"
-        );
+        specialText.textContent =
+            "⚡ КРИТИЧЕСКИЙ УРОН!";
+
+        specialText.className =
+            "special-text critical visible";
+
 
         damageText.textContent =
-            "⚡ КРИТ! НОВЫЙ БРОСОК ×2";
+            "КРИТ! НОВЫЙ БРОСОК ×2";
+
 
         playCriticalSound();
 
 
         addLog(
-            `⚡ КРИТИЧЕСКИЙ УРОН! ${getPlayerName(rollingPlayer)} выбросил дубль ${result}. Этот бросок не наносит урон — следующий бросок будет удвоен.`
+            `⚡ КРИТИЧЕСКИЙ УРОН! ${getPlayerName(rollingPlayer)} выбросил дубль ${result}. Обычный урон отменён. Следующий бросок будет ×2.`
         );
 
 
         updateUI();
 
 
-        /*
-           Дополнительный бросок.
-           Он является частью текущего хода.
-        */
+        battleTimer =
+            setTimeout(() => {
 
-        battleTimer = setTimeout(() => {
+                criticalRollDice(
+                    rollingPlayer
+                );
 
-            criticalRollDice(
-                rollingPlayer
-            );
-
-        },750);
+            },750);
 
 
         return;
@@ -2063,42 +2616,142 @@ function finishDiceRoll(
 
 
     /*
-       ОБЫЧНЫЙ УРОН
-       Для варвара дубль наносит урон
-       и дополнительно оглушает.
-       Для критического броска ассасина
-       итог уже умножен заранее.
+       =========================
+       ВАМПИР
+       =========================
+
+       Дубль не наносит обычный урон.
+
+       Вместо этого активируется УКУС.
+    */
+
+    if(
+        rollType === "normal" &&
+        isDouble &&
+        getPlayerClass(rollingPlayer) === "vampire"
+    ){
+
+        specialText.textContent =
+            "🩸 УКУС!";
+
+        specialText.className =
+            "special-text bite visible";
+
+
+        damageText.textContent =
+            "УКУС! НОВЫЙ БРОСОК";
+
+
+        playBiteSound();
+
+
+        addLog(
+            `🩸 УКУС! ${getPlayerName(rollingPlayer)} выбросил дубль ${result}. Дубль не наносит урон. Вампир получает новый бросок.`
+        );
+
+
+        updateUI();
+
+
+        battleTimer =
+            setTimeout(() => {
+
+                vampireBiteRollDice(
+                    rollingPlayer
+                );
+
+            },750);
+
+
+        return;
+    }
+
+
+    /*
+       =========================
+       УРОН
+       =========================
     */
 
     let damage =
         result;
 
 
+    /*
+       КРИТИЧЕСКИЙ БРОСОК АССАСИНА
+    */
+
     if(
-        criticalRoll
+        rollType === "critical"
     ){
 
         damage =
             result * 2;
 
+
         addLog(
             `💥 КРИТИЧЕСКИЙ БРОСОК: ${result} × 2 = ${damage} урона!`
+        );
+
+
+        damageText.textContent =
+            `КРИТ: ${result} × 2 = ${damage}`;
+
+
+        playClick(
+            780,
+            .06,
+            .03
         );
 
     }
 
 
-    damageText.textContent =
-        `УРОН: ${damage}`;
+    /*
+       УКУС ВАМПИРА
+    */
+
+    if(
+        rollType === "vampire"
+    ){
+
+        damage =
+            result;
 
 
-    playClick(
-        criticalRoll
-            ? 780
-            : 560,
-        .06,
-        .03
-    );
+        damageText.textContent =
+            `УКУС: ${damage} УРОНА / +${damage} HP`;
+
+
+        playBiteSound();
+
+
+        addLog(
+            `🩸 УКУС: ${getPlayerName(rollingPlayer)} выбросил ${result} и наносит ${damage} урона, восстанавливая себе ${damage} HP.`
+        );
+
+    }
+
+
+    /*
+       Обычный бросок
+    */
+
+    if(
+        rollType === "normal"
+    ){
+
+        damageText.textContent =
+            `УРОН: ${damage}`;
+
+
+        playClick(
+            560,
+            .06,
+            .03
+        );
+
+    }
 
 
     const targetPlayer =
@@ -2106,6 +2759,10 @@ function finishDiceRoll(
             ? 2
             : 1;
 
+
+    /*
+       Наносим урон противнику
+    */
 
     if(targetPlayer === 1){
 
@@ -2126,19 +2783,104 @@ function finishDiceRoll(
     }
 
 
-    addLog(
-        `${getPlayerName(rollingPlayer)} выбросил ${result}${criticalRoll ? ` × 2 = ${damage}` : ""} и нанёс ${damage} урона ${getPlayerName(targetPlayer)}.`
-    );
-
-
     /*
-       Варварский дубль.
-       Критический бросок ассасина сюда
-       не попадает, потому что он уже был
-       обработан отдельно.
+       Вампир восстанавливает
+       столько же HP, сколько
+       нанёс урона.
     */
 
     if(
+        rollType === "vampire"
+    ){
+
+        if(rollingPlayer === 1){
+
+            const oldHp =
+                hp1;
+
+            hp1 =
+                Math.min(
+                    MAX_HP,
+                    hp1 + damage
+                );
+
+            const healed =
+                hp1 - oldHp;
+
+
+            addLog(
+                `❤️‍🩹 ${getPlayerName(rollingPlayer)} восстановил ${healed} HP.`
+            );
+
+        }else{
+
+            const oldHp =
+                hp2;
+
+            hp2 =
+                Math.min(
+                    MAX_HP,
+                    hp2 + damage
+                );
+
+            const healed =
+                hp2 - oldHp;
+
+
+            addLog(
+                `❤️‍🩹 ${getPlayerName(rollingPlayer)} восстановил ${healed} HP.`
+            );
+
+        }
+
+    }
+
+
+    /*
+       Обычный лог
+    */
+
+    if(
+        rollType !== "vampire" &&
+        rollType !== "critical"
+    ){
+
+        addLog(
+            `${getPlayerName(rollingPlayer)} выбросил ${result} и нанёс ${damage} урона ${getPlayerName(targetPlayer)}.`
+        );
+
+    }
+
+
+    /*
+       Критический лог
+    */
+
+    if(
+        rollType === "critical"
+    ){
+
+        addLog(
+            `${getPlayerName(rollingPlayer)} нанёс ${damage} урона ${getPlayerName(targetPlayer)}.`
+        );
+
+    }
+
+
+    /*
+       ВАМПИР:
+       дополнительный бросок не может
+       снова активировать укус.
+    */
+
+    /*
+       ВАРВАР:
+       дубль наносит обычный урон
+       и оглушает.
+    */
+
+    if(
+        rollType === "normal" &&
         isDouble &&
         getPlayerClass(rollingPlayer) === "barbar"
     ){
@@ -2157,16 +2899,27 @@ function finishDiceRoll(
         addLog(
             `🔥 ДУБЛЬ ${result}! ${getPlayerName(rollingPlayer)} оглушил ${getPlayerName(targetPlayer)}. Следующий ход будет пропущен.`
         );
+
     }
 
 
-    criticalText.classList.remove(
-        "visible"
+    /*
+       Убираем специальную надпись
+    */
+
+    specialText.classList.remove(
+        "visible",
+        "critical",
+        "bite"
     );
 
 
     updateUI();
 
+
+    /*
+       Проверка смерти
+    */
 
     if(
         hp1 <= 0 ||
@@ -2179,18 +2932,23 @@ function finishDiceRoll(
                 : 1;
 
 
-        battleTimer = setTimeout(() => {
+        battleTimer =
+            setTimeout(() => {
 
-            finishRound(
-                winner
-            );
+                finishRound(
+                    winner
+                );
 
-        },700);
+            },700);
 
 
         return;
     }
 
+
+    /*
+       Следующий игрок
+    */
 
     currentPlayer =
         currentPlayer === 1
@@ -2201,108 +2959,231 @@ function finishDiceRoll(
     updateUI();
 
 
-    battleTimer = setTimeout(() => {
+    battleTimer =
+        setTimeout(() => {
 
-        automaticTurn();
+            automaticTurn();
 
-    },TURN_DELAY);
+        },TURN_DELAY);
 }
 
 
 /* =========================
-   CRITICAL DICE
+   ASSASSIN CRITICAL ROLL
 ========================= */
 
 function criticalRollDice(
     rollingPlayer
 ){
 
-    if(!gameStarted ||
-       battleFinished ||
-       roundFinished) return;
+    if(
+        !gameStarted ||
+        battleFinished ||
+        roundFinished
+    ) return;
 
 
     let elapsed = 0;
 
 
-    criticalText.classList.add(
-        "visible"
-    );
+    specialText.textContent =
+        "⚡ КРИТИЧЕСКИЙ БРОСОК!";
+
+    specialText.className =
+        "special-text critical visible";
 
 
     damageText.textContent =
-        "КРИТИЧЕСКИЙ БРОСОК...";
+        "БРОСОК ×2...";
 
 
-    /*
-       Показываем анимацию нового
-       набора костей.
-    */
+    diceTimer =
+        setInterval(() => {
 
-    diceTimer = setInterval(() => {
+            if(
+                !gameStarted ||
+                battleFinished ||
+                roundFinished
+            ){
 
-        if(!gameStarted ||
-           battleFinished ||
-           roundFinished){
+                clearInterval(
+                    diceTimer
+                );
 
-            clearInterval(
-                diceTimer
+                diceTimer = null;
+
+                return;
+            }
+
+
+            const temp1 =
+                Math.floor(
+                    Math.random()*6
+                ) + 1;
+
+
+            const temp2 =
+                Math.floor(
+                    Math.random()*6
+                ) + 1;
+
+
+            drawDice(
+                dice1,
+                temp1
             );
 
-            diceTimer = null;
 
-            return;
-        }
-
-
-        const temp1 =
-            Math.floor(Math.random()*6)+1;
-
-        const temp2 =
-            Math.floor(Math.random()*6)+1;
-
-
-        drawDice(
-            dice1,
-            temp1
-        );
-
-        drawDice(
-            dice2,
-            temp2
-        );
-
-
-        resultNumber.textContent =
-            `${temp1}${temp2}`;
-
-
-        elapsed += 90;
-
-
-        if(elapsed >= DICE_ANIMATION_TIME){
-
-            clearInterval(
-                diceTimer
+            drawDice(
+                dice2,
+                temp2
             );
 
-            diceTimer = null;
+
+            resultNumber.textContent =
+                `${temp1}${temp2}`;
 
 
-            /*
-               ВАЖНО:
-               второй бросок не может снова
-               активировать крит.
-            */
+            elapsed += 90;
 
-            finishDiceRoll(
-                rollingPlayer,
-                true
+
+            if(
+                elapsed >=
+                DICE_ANIMATION_TIME
+            ){
+
+                clearInterval(
+                    diceTimer
+                );
+
+                diceTimer = null;
+
+
+                /*
+                   Важно:
+                   здесь передаём "critical",
+                   поэтому новый дубль НЕ
+                   запускает новый крит.
+                */
+
+                finishDiceRoll(
+                    rollingPlayer,
+                    "critical"
+                );
+
+            }
+
+        },90);
+}
+
+
+/* =========================
+   VAMPIRE BITE ROLL
+========================= */
+
+function vampireBiteRollDice(
+    rollingPlayer
+){
+
+    if(
+        !gameStarted ||
+        battleFinished ||
+        roundFinished
+    ) return;
+
+
+    let elapsed = 0;
+
+
+    specialText.textContent =
+        "🩸 УКУС!";
+
+
+    specialText.className =
+        "special-text bite visible";
+
+
+    damageText.textContent =
+        "НОВЫЙ БРОСОК ВАМПИРА...";
+
+
+    diceTimer =
+        setInterval(() => {
+
+            if(
+                !gameStarted ||
+                battleFinished ||
+                roundFinished
+            ){
+
+                clearInterval(
+                    diceTimer
+                );
+
+                diceTimer = null;
+
+                return;
+            }
+
+
+            const temp1 =
+                Math.floor(
+                    Math.random()*6
+                ) + 1;
+
+
+            const temp2 =
+                Math.floor(
+                    Math.random()*6
+                ) + 1;
+
+
+            drawDice(
+                dice1,
+                temp1
             );
 
-        }
 
-    },90);
+            drawDice(
+                dice2,
+                temp2
+            );
+
+
+            resultNumber.textContent =
+                `${temp1}${temp2}`;
+
+
+            elapsed += 90;
+
+
+            if(
+                elapsed >=
+                DICE_ANIMATION_TIME
+            ){
+
+                clearInterval(
+                    diceTimer
+                );
+
+                diceTimer = null;
+
+
+                /*
+                   Передаём "vampire".
+                   Поэтому даже если здесь
+                   выпадет дубль, новый укус
+                   не активируется.
+                */
+
+                finishDiceRoll(
+                    rollingPlayer,
+                    "vampire"
+                );
+
+            }
+
+        },90);
 }
 
 
@@ -2374,13 +3255,14 @@ function finishRound(
             `СЧЁТ СЕРИИ ${score1} : ${score2}`;
 
 
-        nextRoundTimer = setTimeout(() => {
+        nextRoundTimer =
+            setTimeout(() => {
 
-            winnerOverlay.classList.add(
-                "visible"
-            );
+                winnerOverlay.classList.add(
+                    "visible"
+                );
 
-        },800);
+            },800);
 
 
         return;
@@ -2392,7 +3274,6 @@ function finishRound(
 
     /*
        РАУНД 2
-       НАЧИНАЕТ ПРОИГРАВШИЙ
     */
 
     if(currentRound === 2){
@@ -2402,13 +3283,14 @@ function finishRound(
         );
 
 
-        nextRoundTimer = setTimeout(() => {
+        nextRoundTimer =
+            setTimeout(() => {
 
-            startRound(
-                "loser"
-            );
+                startRound(
+                    "loser"
+                );
 
-        },NEXT_ROUND_DELAY);
+            },NEXT_ROUND_DELAY);
 
 
         return;
@@ -2417,7 +3299,6 @@ function finishRound(
 
     /*
        РАУНД 3
-       АВТОМАТИЧЕСКАЯ ЖЕРЕБЬЁВКА
     */
 
     if(currentRound === 3){
@@ -2427,14 +3308,17 @@ function finishRound(
         );
 
 
-        nextRoundTimer = setTimeout(() => {
+        nextRoundTimer =
+            setTimeout(() => {
 
-            startRound(
-                "autoCoin"
-            );
+                startRound(
+                    "autoCoin"
+                );
 
-        },NEXT_ROUND_DELAY);
+            },NEXT_ROUND_DELAY);
+
     }
+
 }
 
 
@@ -2446,6 +3330,7 @@ function startNewGame(){
 
     const enteredName1 =
         name1Input.value.trim();
+
 
     const enteredName2 =
         name2Input.value.trim();
@@ -2464,6 +3349,7 @@ function startNewGame(){
     playerClass1 =
         class1Select.value;
 
+
     playerClass2 =
         class2Select.value;
 
@@ -2471,12 +3357,14 @@ function startNewGame(){
     player1Name.textContent =
         playerName1;
 
+
     player2Name.textContent =
         playerName2;
 
 
     class1Name.textContent =
         getClassName(1);
+
 
     class2Name.textContent =
         getClassName(2);
@@ -2487,9 +3375,22 @@ function startNewGame(){
         playerClass1 === "assassin"
     );
 
+
+    class1Name.classList.toggle(
+        "vampire",
+        playerClass1 === "vampire"
+    );
+
+
     class2Name.classList.toggle(
         "assassin",
         playerClass2 === "assassin"
+    );
+
+
+    class2Name.classList.toggle(
+        "vampire",
+        playerClass2 === "vampire"
     );
 
 
@@ -2498,17 +3399,23 @@ function startNewGame(){
 
 
     score1 = 0;
+
     score2 = 0;
 
     currentRound = 1;
 
     currentPlayer = 1;
 
+
     previousRoundWinner = null;
+
     previousRoundLoser = null;
 
+
     gameStarted = false;
+
     battleFinished = false;
+
     roundFinished = false;
 
 
@@ -2523,6 +3430,7 @@ function startNewGame(){
     addLog(
         `⚔️ ${playerName1} — ${getClassName(1)}.`
     );
+
 
     addLog(
         `⚔️ ${playerName2} — ${getClassName(2)}.`
@@ -2562,16 +3470,23 @@ function restartGame(){
 
 
     score1 = 0;
+
     score2 = 0;
 
     currentRound = 1;
+
     currentPlayer = 1;
 
+
     previousRoundWinner = null;
+
     previousRoundLoser = null;
 
+
     gameStarted = false;
+
     battleFinished = false;
+
     roundFinished = false;
 
 
@@ -2592,6 +3507,22 @@ function restartGame(){
 
     arenaTurn.textContent =
         "ОЖИДАНИЕ";
+
+
+    name1Input.value =
+        playerName1;
+
+
+    name2Input.value =
+        playerName2;
+
+
+    class1Select.value =
+        playerClass1;
+
+
+    class2Select.value =
+        playerClass2;
 
 
     updateUI();
@@ -2667,8 +3598,6 @@ coinButton.addEventListener(
 );
 
 
-/* ENTER */
-
 name1Input.addEventListener(
     "keydown",
     event => {
@@ -2697,7 +3626,9 @@ name2Input.addEventListener(
 );
 
 
-/* INITIAL */
+/* =========================
+   INITIAL
+========================= */
 
 drawDice(
     dice1,
