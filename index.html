@@ -348,7 +348,7 @@
 
 <script>
   var CLASSES = {
-    assassin:  { icon: '🗡', short: 'Ассасин',  label: '🗡 Ассасин',  css: 'assassin',  desc: 'Дубль → реролл ×2.' },
+    assassin:  { icon: '🗡', short: 'Ассасин',  label: '🗡 Ассасин',  css: 'assassin',  desc: 'Дубль → реролл ×1.8.' },
     barbarian: { icon: '⚔', short: 'Варвар',   label: '⚔ Варвар',   css: 'barbarian', desc: 'Дубль → стан. След. удар −20%.' },
     vampire:   { icon: '🧛', short: 'Вампир',   label: '🧛 Вампир',   css: 'vampire',   desc: 'Дубль → укус: урон + хил.' },
     joker:     { icon: '🎲', short: 'Джокер',   label: '🎲 Джокер',   css: 'joker',     desc: 'HP-триггер → ×2 или ×3.' },
@@ -365,7 +365,8 @@
     66: { type: 'bear', name: 'Медведь', icon: '🐻', hp: 132, mult: 1.0, canStun: true  }
   };
 
-  var BARB_WEAK_MULT = 0.8; // −20%
+  var BARB_WEAK_MULT = 0.8;  // −20%
+  var ASSASSIN_CRIT = 1.8;   // было ×2
 
   var classes = { 1: 'assassin', 2: 'barbarian' };
   var pendingClasses = { 1: 'assassin', 2: 'barbarian' };
@@ -401,7 +402,7 @@
   var stunned = { 1: false, 2: false };
   var jokerBuff = { 1: 0, 2: 0 };
   var summons = { 1: null, 2: null };
-  var barbWeak = { 1: false, 2: false }; // флаг: следующий удар Варвара ослаблен
+  var barbWeak = { 1: false, 2: false };
   var autoPlay = false, autoTimer = null;
 
   var pipPositions = {
@@ -498,11 +499,11 @@
 
       if (cls === 'assassin' && db) {
         var r1 = r6(), r2 = r6();
-        dmg = (r1 * 10 + r2) * 2;
+        dmg = Math.round((r1 * 10 + r2) * ASSASSIN_CRIT);
       } else if (cls === 'barbarian') {
         if (db) {
           stunCause = true;
-          weak[a] = true; // следующий удар −20%
+          weak[a] = true;
         }
         if (weak[a]) {
           dmg = Math.floor(base * BARB_WEAK_MULT);
@@ -828,7 +829,7 @@
 
     var suffix = '';
     if (isWeak) suffix = ' 💜 −20%';
-    else if (isCrit) suffix = ' 💥 КРИТ×2';
+    else if (isCrit) suffix = ' 💥 КРИТ×1.8';
     else if (jokerMult === 3) suffix = ' 🎲×3';
     else if (jokerMult === 2) suffix = ' 🎲×2';
     else if (heal) suffix = ' 🧛 +' + heal;
@@ -995,7 +996,7 @@
         setHint('🗡 Дубль! Переброс на крит...');
         setTimeout(function() {
           spinDice(function(r1, r2) {
-            var critDmg = (r1 * 10 + r2) * 2;
+            var critDmg = Math.round((r1 * 10 + r2) * ASSASSIN_CRIT);
             resultEl.textContent = critDmg + '';
             resultEl.className = 'result crit';
             setDieGlow('crit');
@@ -1047,11 +1048,9 @@
         }
       }
 
-      // ===== Варвар =====
       var stunCaused = false;
       var isWeak = false;
       if (cls === 'barbarian') {
-        // Сначала проверяем ослабление (если висит с прошлого хода)
         if (barbWeak[attacker]) {
           dmg = Math.floor(dmg * BARB_WEAK_MULT);
           isWeak = true;
@@ -1060,7 +1059,6 @@
           resultEl.className = 'result weak';
           setHint('💜 Удар ослаблен на 20%');
         }
-        // Если выпал дубль — стан + флаг на след. удар
         if (isDouble && hp1 > 0 && hp2 > 0) {
           stunned[defender] = true;
           stunCaused = true;
