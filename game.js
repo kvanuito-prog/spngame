@@ -1,5 +1,5 @@
 // ============ ВЕРСИЯ ============
-var GAME_VERSION = '1.05';
+var GAME_VERSION = '1.06';
 (function showVersion() {
   function set() {
     var el = document.getElementById('versionBadge');
@@ -160,6 +160,12 @@ function escapeHtml(s) {
     return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
   });
 }
+function shortenName(s, max) {
+  max = max || 7;
+  if (!s) return '';
+  if (s.length <= max) return s;
+  return s.slice(0, max - 1) + '…';
+}
 
 // ============ ЭЛЕМЕНТЫ ============
 var menuOverlay = document.getElementById('menuOverlay');
@@ -168,6 +174,7 @@ var playersOverlay = document.getElementById('playersOverlay');
 var simOverlay = document.getElementById('simOverlay');
 var championOverlay = document.getElementById('championOverlay');
 var matchResultOverlay = document.getElementById('matchResultOverlay');
+var bracketOverlay = document.getElementById('bracketOverlay');
 var selectOverlay = document.getElementById('selectOverlay');
 var playerCount = document.getElementById('playerCount');
 var playersList = document.getElementById('playersList');
@@ -183,8 +190,6 @@ var matchBanner = document.getElementById('matchBanner');
 var matchInfo = document.getElementById('matchInfo');
 var matchScore = document.getElementById('matchScore');
 
-// ============ РЕЖИМ ИГРЫ ============
-// 'quick' | 'tournament'
 var gameMode = 'quick';
 var tournamentNames = { 1: 'Игрок 1', 2: 'Игрок 2' };
 var tournamentGameCallback = null;
@@ -221,12 +226,13 @@ document.getElementById('btnSetupNext').addEventListener('click', function() {
 });
 
 // ============ СПИСОК ИГРОКОВ ============
+var tournamentPlayers = [];
+
 function buildPlayersList(n) {
   tournamentPlayers = [];
   for (var i = 0; i < n; i++) tournamentPlayers.push({ name: '', classKey: null });
   renderPlayersList();
 }
-var tournamentPlayers = [];
 
 function renderPlayersList() {
   var n = tournamentPlayers.length;
@@ -366,7 +372,6 @@ function getRoundName(playersInRound) {
   if (playersInRound === 1024) return '1/512 ФИНАЛА';
   return 'Раунд на ' + playersInRound;
 }
-
 function shortRoundName(name) {
   return name.replace('1/16 ФИНАЛА', '1/16')
              .replace('1/32 ФИНАЛА', '1/32')
@@ -380,7 +385,7 @@ function shortRoundName(name) {
              .replace('ФИНАЛ', 'ФИНАЛ');
 }
 
-// ============ СИМУЛЯЦИЯ ПАРТИИ (математически, без UI) ============
+// ============ МАТЕМАТИЧЕСКАЯ СИМУЛЯЦИЯ ПАРТИИ ============
 function simulateBattleMath(c1, c2) {
   var h1 = MAX_HP, h2 = MAX_HP;
   var t = Math.random() < 0.5 ? 1 : 2;
@@ -489,7 +494,7 @@ function simulateMatchMath(p1, p2, bo) {
   };
 }
 
-// ============ ТУРНИР ============
+// ============ СТАРТ ТУРНИРА ============
 document.getElementById('btnStartTournament').addEventListener('click', function() {
   for (var i = 0; i < tournamentPlayers.length; i++) {
     if (!tournamentPlayers[i].name) tournamentPlayers[i].name = randomName();
@@ -515,6 +520,8 @@ function startTournament() {
 
   tournamentRun = {
     currentRound: bracket,
+    currentRoundIdx: 0,
+    rounds: [],
     totalMatches: 0,
     totalGames: 0,
     semifinalLosers: [],
@@ -530,7 +537,6 @@ function processInstantRound() {
   if (cur.length <= 1) { finishTournament(); return; }
 
   if (cur.length <= 32) {
-    // Стоп. Дальше смотрим в анимации
     simStatus.textContent = 'Готово к просмотру';
     simCounter.textContent = 'Игроков: ' + cur.length + ' — можно смотреть бои';
     watchBtn.style.display = 'block';
@@ -544,13 +550,16 @@ function processInstantRound() {
   simStatus.textContent = roundName + ' · Bo' + bo;
   addRoundHeader(roundName, playersInRound);
 
+  var roundData = { name: roundName, bo: bo, matches: [] };
   var nextRound = [];
+
   for (var i = 0; i < cur.length; i += 2) {
     var p1 = cur[i], p2 = cur[i + 1];
     if (p1 && p2) {
       var res = simulateMatchMath(p1, p2, bo);
       tournamentRun.totalMatches++;
       tournamentRun.totalGames += res.gamesCount;
+      roundData.matches.push({ p1: p1, p2: p2, winner: res.winner, loser: res.loser, score: res.score });
       addSimLog(
         '<span class="round-tag">' + shortRoundName(roundName) + '</span>' +
         '<span class="p-win">' + CLASSES[res.winner.classKey].icon + ' ' + escapeHtml(res.winner.name) + '</span>' +
@@ -560,21 +569,16 @@ function processInstantRound() {
       );
       nextRound.push(res.winner);
     } else if (p1) {
+      roundData.matches.push({ p1: p1, p2: null, winner: p1, loser: null, score: [0, 0] });
       nextRound.push(p1);
-      addSimLog(
-        '<span class="round-tag">' + shortRoundName(roundName) + '</span>' +
-        '<span class="p-win">' + CLASSES[p1.classKey].icon + ' ' + escapeHtml(p1.name) + '</span>' +
-        '<span class="score">проход</span><span class="p-lose"></span>', 'match'
-      );
     } else if (p2) {
+      roundData.matches.push({ p1: null, p2: p2, winner: p2, loser: null, score: [0, 0] });
       nextRound.push(p2);
-      addSimLog(
-        '<span class="round-tag">' + shortRoundName(roundName) + '</span>' +
-        '<span class="p-win">' + CLASSES[p2.classKey].icon + ' ' + escapeHtml(p2.name) + '</span>' +
-        '<span class="score">проход</span><span class="p-lose"></span>', 'match'
-      );
     }
   }
+
+  tournamentRun.rounds.push(roundData);
+  tournamentRun.currentRoundIdx++;
 
   var N = tournamentPlayers.length;
   var progress = (1 - nextRound.length / N) * 100;
@@ -604,6 +608,7 @@ function processAnimatedRound() {
   simStatus.textContent = roundName + ' · Bo' + bo;
   addRoundHeader(roundName, playersInRound);
 
+  var roundData = { name: roundName, bo: bo, matches: [] };
   var matches = [];
   for (var i = 0; i < cur.length; i += 2) matches.push([cur[i], cur[i + 1]]);
 
@@ -612,12 +617,15 @@ function processAnimatedRound() {
 
   function playNext() {
     if (matchIdx >= matches.length) {
+      tournamentRun.rounds.push(roundData);
+      tournamentRun.currentRoundIdx++;
       tournamentRun.currentRound = nextRound;
+
       var N = tournamentPlayers.length;
       var progress = (1 - nextRound.length / N) * 100;
       simProgress.style.width = progress + '%';
       simCounter.textContent = 'Осталось игроков: ' + nextRound.length;
-      // Следующий раунд через 2 сек
+
       setTimeout(processAnimatedRound, 2000);
       return;
     }
@@ -627,6 +635,7 @@ function processAnimatedRound() {
         tournamentRun.totalMatches++;
         tournamentRun.totalGames += result.gamesCount;
         nextRound.push(result.winner);
+        roundData.matches.push({ p1: m[0], p2: m[1], winner: result.winner, loser: result.loser, score: result.score });
         if (playersInRound === 4) tournamentRun.semifinalLosers.push(result.loser);
         if (isFinal) tournamentRun.finalMatch = result;
 
@@ -638,7 +647,6 @@ function processAnimatedRound() {
           'match'
         );
 
-        // Показать результат матча
         document.getElementById('mrWinner').textContent = CLASSES[result.winner.classKey].icon + ' ' + result.winner.name;
         document.getElementById('mrScore').textContent = result.score[0] + ' : ' + result.score[1];
         document.getElementById('mrLoser').textContent = result.loser.name + ' ' + CLASSES[result.loser.classKey].icon;
@@ -652,10 +660,12 @@ function processAnimatedRound() {
       });
     } else if (m[0]) {
       nextRound.push(m[0]);
+      roundData.matches.push({ p1: m[0], p2: null, winner: m[0], loser: null, score: [0, 0] });
       matchIdx++;
       setTimeout(playNext, 300);
     } else if (m[1]) {
       nextRound.push(m[1]);
+      roundData.matches.push({ p1: null, p2: m[1], winner: m[1], loser: null, score: [0, 0] });
       matchIdx++;
       setTimeout(playNext, 300);
     } else {
@@ -667,7 +677,7 @@ function processAnimatedRound() {
   playNext();
 }
 
-// ============ ОДИН МАТЧ (Bo3 / Bo5) С АНИМАЦИЕЙ ============
+// ============ ОДИН МАТЧ С АНИМАЦИЕЙ ============
 function playMatch(pA, pB, bo, callback) {
   var need = Math.ceil(bo / 2);
   var score = { 1: 0, 2: 0 };
@@ -690,7 +700,6 @@ function playMatch(pA, pB, bo, callback) {
   function playGame() {
     gameNum++;
     resetGame();
-    // После resetGame autoPlay = false, включаем сами
     autoPlay = true;
     battleBtn.textContent = '⏸ ПАУЗА';
     battleBtn.className = 'control-btn stop';
@@ -702,7 +711,6 @@ function playMatch(pA, pB, bo, callback) {
       updateBanner();
 
       if (score[1] >= need || score[2] >= need) {
-        // Матч закончен
         var matchWinner = score[1] >= need ? pA : pB;
         var matchLoser = score[1] >= need ? pB : pA;
         var res = { winner: matchWinner, loser: matchLoser, score: [score[1], score[2]], gamesCount: gameNum };
@@ -711,7 +719,6 @@ function playMatch(pA, pB, bo, callback) {
         document.getElementById('exitBtn').classList.add('hidden');
         setTimeout(function() { callback(res); }, 800);
       } else {
-        // Ещё бой
         setTimeout(playGame, 1600);
       }
     };
@@ -768,6 +775,267 @@ function finishTournament() {
   }, 300);
 }
 
+// ============ СЕТКА ТУРНИРА ============
+var bracketZoomLevel = 1.0;
+var bracketBaseWidth = 0, bracketBaseHeight = 0;
+
+document.getElementById('btnShowBracket').addEventListener('click', function() {
+  championOverlay.classList.remove('show');
+  renderBracket();
+  bracketOverlay.classList.add('show');
+});
+
+document.getElementById('bracketBackBtn').addEventListener('click', function() {
+  bracketOverlay.classList.remove('show');
+  championOverlay.classList.add('show');
+});
+
+document.getElementById('bracketZoomIn').addEventListener('click', function() {
+  bracketZoomLevel = Math.min(2.5, bracketZoomLevel + 0.25);
+  applyBracketZoom();
+});
+document.getElementById('bracketZoomOut').addEventListener('click', function() {
+  bracketZoomLevel = Math.max(0.6, bracketZoomLevel - 0.25);
+  applyBracketZoom();
+});
+function applyBracketZoom() {
+  var grid = document.getElementById('bracketGrid');
+  grid.style.transform = 'scale(' + bracketZoomLevel + ')';
+  grid.style.transformOrigin = 'top left';
+  document.getElementById('bracketZoom').textContent = bracketZoomLevel.toFixed(1) + '×';
+  document.getElementById('bracketScroll').scrollTop = 0;
+  document.getElementById('bracketScroll').scrollLeft = 0;
+}
+
+function renderBracket() {
+  var N = tournamentPlayers.length;
+  var size = 1; while (size < N) size *= 2;
+  var numRounds = Math.log2(size);
+
+  var SLOT_H = 14;
+  var MATCH_H = SLOT_H * 2;
+  var MATCH_GAP = 6;
+  var COL_W = 68;
+  var COL_GAP = 12;
+  var LABEL_H = 20;
+
+  var totalMatchH = size / 2 * MATCH_H + (size / 2 - 1) * MATCH_GAP;
+  var totalH = totalMatchH + LABEL_H + 10;
+  var totalW = numRounds * COL_W + (numRounds - 1) * COL_GAP;
+
+  var grid = document.getElementById('bracketGrid');
+  grid.innerHTML = '';
+  grid.style.width = totalW + 'px';
+  grid.style.height = totalH + 'px';
+  grid.style.position = 'relative';
+
+  bracketBaseWidth = totalW;
+  bracketBaseHeight = totalH;
+  bracketZoomLevel = 1.0;
+  applyBracketZoom();
+
+  // Метки раундов сверху
+  for (var r = 0; r < numRounds; r++) {
+    var playersIn = size / Math.pow(2, r);
+    var label = document.createElement('div');
+    label.className = 'bracket-round-label';
+    label.textContent = getRoundName(playersIn).replace(' ФИНАЛА', '');
+    label.style.left = (r * (COL_W + COL_GAP)) + 'px';
+    label.style.top = '0px';
+    label.style.width = COL_W + 'px';
+    label.style.height = LABEL_H + 'px';
+    label.style.display = 'flex';
+    label.style.alignItems = 'center';
+    label.style.justifyContent = 'center';
+    grid.appendChild(label);
+  }
+
+  // Начальная сетка: список всех пар первого раунда
+  // Соберём список победителей/проигравших для каждой стадии
+  // Для каждой стадии r найдём данные о матче m
+
+  // Для каждого раунда r и каждого матча m:
+  // - если r === 0: участники — из начальной сетки
+  // - если r > 0: участники — победители матчей (2m, 2m+1) раунда r-1
+
+  function getMatchData(r, m) {
+    var roundData = tournamentRun.rounds[r];
+    if (roundData && roundData.matches && roundData.matches[m]) {
+      return roundData.matches[m];
+    }
+    // Если данных ещё нет — вычислим предполагаемых игроков
+    if (r === 0) {
+      // Первый раунд: игроки из начального bracket
+      // Но у нас нет bracket в tournamentRun, только currentRound и финальные данные
+      return null;
+    }
+    // Для r>0 — рекурсивно
+    var prev1 = getMatchData(r - 1, m * 2);
+    var prev2 = getMatchData(r - 1, m * 2 + 1);
+    var p1 = prev1 ? prev1.winner : null;
+    var p2 = prev2 ? prev2.winner : null;
+    return { p1: p1, p2: p2, winner: null, loser: null, score: [0, 0] };
+  }
+
+  // Проще: сначала построить полную структуру данных рекурсивно
+  // Соберём winner всех матчей из rounds
+  // Но rounds не содержит будущих матчей
+
+  // Другой подход: у нас есть только пройденные матчи. Восстановим структуру:
+  // - Найдём самую раннюю стадию, где у нас есть данные
+  // - Изначальный массив игроков = tournamentPlayers (перемешанные при старте)
+  // - Восстановим сетку по логу
+
+  // Получим изначальный порядок из первой стадии rounds
+  var allRounds = tournamentRun.rounds;
+
+  // Определим стартовый порядок игроков
+  var initialOrder = null;
+  if (allRounds.length > 0 && allRounds[0].matches.length > 0) {
+    initialOrder = [];
+    allRounds[0].matches.forEach(function(m) {
+      initialOrder.push(m.p1);
+      initialOrder.push(m.p2);
+    });
+    // дополним null'ами до size
+    while (initialOrder.length < size) initialOrder.push(null);
+  } else {
+    initialOrder = [];
+    for (var i = 0; i < size; i++) initialOrder.push(null);
+  }
+
+  // Функция: вернуть матч (r, m)
+  function getMatch(r, m) {
+    if (r < allRounds.length && allRounds[r].matches[m]) {
+      return allRounds[r].matches[m];
+    }
+    // Предполагаемый матч
+    if (r === 0) {
+      var p1 = initialOrder[m * 2];
+      var p2 = initialOrder[m * 2 + 1];
+      return { p1: p1, p2: p2, winner: null, loser: null, score: [0, 0] };
+    }
+    var prev1 = getMatch(r - 1, m * 2);
+    var prev2 = getMatch(r - 1, m * 2 + 1);
+    return {
+      p1: prev1.winner,
+      p2: prev2.winner,
+      winner: null, loser: null, score: [0, 0]
+    };
+  }
+
+  // Размер ячейки по вертикали для первого раунда
+  var firstRoundMatches = size / 2;
+  var stepFirst = (totalMatchH + MATCH_GAP) / firstRoundMatches;
+
+  // Сохраним центр каждого матча, чтобы рисовать связи
+  var matchCenters = []; // matchCenters[r][m] = {top, bottom, centerY}
+
+  // Отрисуем все матчи
+  for (var r = 0; r < numRounds; r++) {
+    var matchesInRound = size / Math.pow(2, r + 1);
+    matchCenters[r] = [];
+
+    for (var m = 0; m < matchesInRound; m++) {
+      // Y-координата верхнего края матча
+      var centerY;
+      if (r === 0) {
+        centerY = LABEL_H + m * stepFirst + stepFirst / 2;
+      } else {
+        var c1 = matchCenters[r - 1][m * 2].centerY;
+        var c2 = matchCenters[r - 1][m * 2 + 1].centerY;
+        centerY = (c1 + c2) / 2;
+      }
+      var matchTop = centerY - MATCH_H / 2;
+      var matchLeft = r * (COL_W + COL_GAP);
+
+      matchCenters[r][m] = { top: matchTop, bottom: matchTop + MATCH_H, centerY: centerY };
+
+      var matchData = getMatch(r, m);
+      var matchEl = document.createElement('div');
+      matchEl.className = 'bracket-match' + (r === allRounds.length ? ' round-current' : '');
+      matchEl.style.left = matchLeft + 'px';
+      matchEl.style.top = matchTop + 'px';
+      matchEl.style.width = COL_W + 'px';
+      matchEl.style.height = MATCH_H + 'px';
+
+      var p1 = matchData.p1;
+      var p2 = matchData.p2;
+      var winner = matchData.winner;
+
+      var slot1 = document.createElement('div');
+      slot1.className = 'bracket-slot';
+      if (p1) {
+        slot1.textContent = CLASSES[p1.classKey].icon + ' ' + shortenName(p1.name);
+        slot1.classList.add(p1.classKey);
+        if (winner === p1) slot1.classList.add('winner');
+        else if (winner) slot1.classList.add('loser');
+      } else {
+        slot1.classList.add('empty');
+        slot1.textContent = '—';
+      }
+      matchEl.appendChild(slot1);
+
+      var slot2 = document.createElement('div');
+      slot2.className = 'bracket-slot';
+      if (p2) {
+        slot2.textContent = CLASSES[p2.classKey].icon + ' ' + shortenName(p2.name);
+        slot2.classList.add(p2.classKey);
+        if (winner === p2) slot2.classList.add('winner');
+        else if (winner) slot2.classList.add('loser');
+      } else {
+        slot2.classList.add('empty');
+        slot2.textContent = '—';
+      }
+      matchEl.appendChild(slot2);
+
+      grid.appendChild(matchEl);
+    }
+  }
+
+  // Связи между раундами
+  for (var r = 1; r < numRounds; r++) {
+    var matchesInRound = size / Math.pow(2, r + 1);
+    var prevColRight = (r - 1) * (COL_W + COL_GAP) + COL_W;
+    var curColLeft = r * (COL_W + COL_GAP);
+    var midX = prevColRight + COL_GAP / 2;
+
+    for (var m = 0; m < matchesInRound; m++) {
+      var topCenter = matchCenters[r - 1][m * 2].centerY;
+      var botCenter = matchCenters[r - 1][m * 2 + 1].centerY;
+      var midY = matchCenters[r][m].centerY;
+
+      // Верхний горизонтальный отрезок
+      var hTop = document.createElement('div');
+      hTop.className = 'bracket-connector h-top';
+      hTop.style.left = prevColRight + 'px';
+      hTop.style.top = topCenter + 'px';
+      hTop.style.width = (midX - prevColRight) + 'px';
+      hTop.style.height = (midY - topCenter) + 'px';
+      grid.appendChild(hTop);
+
+      // Нижний горизонтальный отрезок
+      var hBot = document.createElement('div');
+      hBot.className = 'bracket-connector h-bot';
+      hBot.style.left = prevColRight + 'px';
+      hBot.style.top = midY + 'px';
+      hBot.style.width = (midX - prevColRight) + 'px';
+      hBot.style.height = (botCenter - midY) + 'px';
+      grid.appendChild(hBot);
+
+      // Средний горизонтальный
+      var hMid = document.createElement('div');
+      hMid.className = 'bracket-connector h-mid';
+      hMid.style.left = midX + 'px';
+      hMid.style.top = midY + 'px';
+      hMid.style.width = (curColLeft - midX) + 'px';
+      hMid.style.height = '0px';
+      grid.appendChild(hMid);
+    }
+  }
+}
+
+// ============ КНОПКИ ЭКРАНА ЧЕМПИОНА ============
 document.getElementById('btnNewTournament').addEventListener('click', function() {
   championOverlay.classList.remove('show');
   setupOverlay.classList.add('show');
@@ -1248,9 +1516,8 @@ function finishTurnAfterAction(attacker, defender, extraDelay) {
       stunned[skip] = false;
       turn = skip === 1 ? 2 : 1;
       updatePlayersUI();
-      if (!autoPlay) setHint('Тап — бросок');
     }, sp);
-  } else if (!autoPlay) setHint('Тап — бросок');
+  }
   rolling = false;
   if (autoPlay) {
     clearTimeout(autoTimer);
@@ -1268,230 +1535,4 @@ function applyHit(attacker, defender, dmg, isDouble, stunCaused, isCrit, heal, j
   if (isCrit) floatType = 'crit';
   else if (isWeak) floatType = 'weak';
   showFloatingDamage(defender, dmg, floatType);
-  if (heal > 0) setTimeout(function() { showFloatingDamage(attacker, heal, 'heal'); }, 150);
-
-  shakeCard(defender); flashHpBar(defender);
-  var defRect = document.getElementById('p' + defender).getBoundingClientRect();
-  var cx = defRect.left + defRect.width / 2;
-  var cy = defRect.top + defRect.height / 2;
-
-  var intensity = 0;
-  if (isCrit) intensity = 3;
-  else if (isWeak) intensity = 1;
-  else if (dmg >= 60) intensity = 2;
-  else if (dmg >= 40) intensity = 1;
-  if (rageBonus > 0 && dmg >= 70) intensity = Math.max(intensity, 2);
-  if (intensity >= 2) shakeScreen(intensity === 3);
-  if (intensity === 3) {
-    spawnSparks(cx, cy, 30, '#fbbf24', 6);
-    spawnSparks(cx, cy, 15, '#ef4444', 4);
-    spawnShockwave(cx, cy, '#fbbf24');
-  } else if (intensity === 2) spawnSparks(cx, cy, 15, '#f87171', 4);
-  else if (intensity === 1) spawnSparks(cx, cy, 8, '#f87171', 3);
-
-  if ((v1 === 6 && v2 === 6) || (isCrit && dmg >= 100)) {
-    dieEls.forEach(function(el) {
-      el.classList.remove('max-pulse'); void el.offsetWidth;
-      el.classList.add('max-pulse');
-      setTimeout(function() { el.classList.remove('max-pulse'); }, 650);
-    });
-  }
-
-  addAttackLog({
-    number: rollNumber, attacker: attacker, defender: defender, dmg: dmg,
-    v1: v1, v2: v2, formula: formula, isCrit: isCrit, isWeak: isWeak, heal: heal,
-    jokerMult: jokerMult, rageBonus: rageBonus, stunCaused: stunCaused,
-    summonInfo: summonInfo, isDouble: isDouble,
-    defHpBefore: defHpBefore, defHpAfter: defHpAfter
-  });
-
-  if (dr.summonDied) addSummonDeathLog(defender, dr.killed, dr.toPlayer);
-  if (heal > 0) {
-    if (attacker === 1) hp1 = Math.min(MAX_HP, hp1 + heal); else hp2 = Math.min(MAX_HP, hp2 + heal);
-  }
-  finishTurnAfterAction(attacker, defender, 0);
-}
-
-function showGameOver() {
-  var winner = hp1 <= 0 ? 2 : 1;
-
-  // Турнирный режим — не показываем overlay, вызываем колбэк
-  if (gameMode === 'tournament' && tournamentGameCallback) {
-    var cb = tournamentGameCallback;
-    tournamentGameCallback = null;
-    autoPlay = false;
-    clearTimeout(autoTimer);
-    var w = winner;
-    setTimeout(function() { cb(w); }, 900);
-    return;
-  }
-
-  overlayTitle.textContent = 'Игрок ' + winner + ' победил!';
-  overlayTitle.style.color = winner === 1 ? '#4ade80' : '#60a5fa';
-  overlaySub.textContent = CLASSES[classes[1]].label + ': ' + hp1 + ' HP  ·  ' + CLASSES[classes[2]].label + ': ' + hp2 + ' HP  ·  ' + speed + '×';
-  overlay.classList.add('show');
-  setHint('Игра окончена');
-  battleBtn.classList.add('hidden');
-  var card = document.getElementById('p' + winner);
-  if (card) {
-    var r = card.getBoundingClientRect();
-    spawnSparks(r.left + r.width / 2, r.top + r.height / 2, 40, '#4ade80', 6);
-  }
-}
-
-function startAuto() {
-  if (gameOver) return;
-  autoPlay = true;
-  battleBtn.textContent = '⏸ СТОП';
-  battleBtn.className = 'control-btn stop';
-  setHint('⚔ Бой идёт... (' + speed + '×)');
-  roll();
-}
-function stopAuto() {
-  autoPlay = false;
-  clearTimeout(autoTimer);
-  battleBtn.textContent = '▶ НАЧАТЬ БОЙ';
-  battleBtn.className = 'control-btn start';
-  if (!gameOver) setHint('Пауза. Нажми «Начать бой»');
-}
-
-function resetGame() {
-  hp1 = MAX_HP; hp2 = MAX_HP;
-  hpDisplay[1] = MAX_HP; hpDisplay[2] = MAX_HP;
-  hpTarget[1] = MAX_HP; hpTarget[2] = MAX_HP;
-  turn = 1; rollNumber = 0;
-  gameOver = false; rolling = false;
-  autoPlay = false; clearTimeout(autoTimer);
-  stunned[1] = false; stunned[2] = false;
-  jokerBuff[1] = 0; jokerBuff[2] = 0;
-  summons[1] = null; summons[2] = null;
-  barbWeak[1] = false; barbWeak[2] = false;
-  logList.innerHTML = '';
-  resultEl.textContent = '— —';
-  resultEl.className = 'result';
-  overlay.classList.remove('show');
-  if (gameMode === 'tournament') {
-    battleBtn.textContent = '⏸ ПАУЗА';
-    battleBtn.className = 'control-btn stop';
-  } else {
-    battleBtn.textContent = '▶ НАЧАТЬ БОЙ';
-    battleBtn.className = 'control-btn start';
-  }
-  battleBtn.classList.remove('hidden');
-  setDieGlow(null);
-  document.getElementById('hpVal1').textContent = MAX_HP;
-  document.getElementById('hpVal2').textContent = MAX_HP;
-  turn = coinFlip();
-  addCoinLog(turn);
-  dieEls.forEach(function(el) { renderDie(el, randomDie()); });
-  updatePlayersUI();
-  setHint('Тап — бросок Игрока ' + turn);
-}
-
-// ============ КНОПКИ #app ============
-document.getElementById('startGameBtn').addEventListener('click', function(e) {
-  e.stopPropagation();
-  gameMode = 'quick';
-  classes[1] = pendingClasses[1];
-  classes[2] = pendingClasses[2];
-  selectOverlay.classList.remove('show');
-  appEl.classList.add('show');
-  matchBanner.style.display = 'none';
-  exitBtn.classList.add('hidden');
-  resetGame();
-});
-
-exitBtn.addEventListener('click', function(e) {
-  e.stopPropagation();
-  // В турнире — выход из турнира в меню
-  if (gameMode === 'tournament') {
-    autoPlay = false;
-    clearTimeout(autoTimer);
-    appEl.classList.remove('show');
-    matchBanner.style.display = 'none';
-    exitBtn.classList.add('hidden');
-    matchResultOverlay.classList.remove('show');
-    simOverlay.classList.remove('show');
-    championOverlay.classList.remove('show');
-    menuOverlay.classList.add('show');
-    gameMode = 'quick';
-    tournamentRun = null;
-    tournamentGameCallback = null;
-    return;
-  }
-  // Быстрая игра
-  stopAuto();
-  appEl.classList.remove('show');
-  menuOverlay.classList.add('show');
-});
-
-document.getElementById('toMenuBtn').addEventListener('click', function(e) {
-  e.stopPropagation();
-  overlay.classList.remove('show');
-  appEl.classList.remove('show');
-  menuOverlay.classList.add('show');
-  gameMode = 'quick';
-});
-document.getElementById('restartBtn').addEventListener('click', function(e) { e.stopPropagation(); resetGame(); });
-document.getElementById('changeClassesBtn').addEventListener('click', function(e) {
-  e.stopPropagation();
-  overlay.classList.remove('show');
-  appEl.classList.remove('show');
-  selectOverlay.classList.add('show');
-  gameMode = 'quick';
-});
-
-// Клик по экрану — только в быстрой игре
-document.body.addEventListener('click', function(e) {
-  if (!appEl.classList.contains('show')) return;
-  if (gameMode !== 'quick') return;
-  if (e.target.closest('.log-wrap')) return;
-  if (e.target.closest('.controls')) return;
-  if (e.target.closest('.speed-box')) return;
-  if (e.target.closest('.overlay')) return;
-  if (autoPlay || gameOver) return;
-  roll();
-});
-document.body.addEventListener('touchstart', function(e) {
-  if (!appEl.classList.contains('show')) return;
-  if (gameMode !== 'quick') return;
-  if (e.target.closest('.log-wrap')) return;
-  if (e.target.closest('.controls')) return;
-  if (e.target.closest('.speed-box')) return;
-  if (e.target.closest('.overlay')) return;
-  e.preventDefault();
-  if (autoPlay || gameOver) return;
-  roll();
-}, { passive: false });
-
-battleBtn.addEventListener('click', function(e) {
-  e.stopPropagation();
-  if (gameMode === 'tournament') {
-    // В турнире — пауза/продолжение
-    if (autoPlay) {
-      autoPlay = false;
-      clearTimeout(autoTimer);
-      battleBtn.textContent = '▶ ПРОДОЛЖИТЬ';
-      battleBtn.className = 'control-btn start';
-    } else {
-      autoPlay = true;
-      battleBtn.textContent = '⏸ ПАУЗА';
-      battleBtn.className = 'control-btn stop';
-      if (!rolling && !gameOver) roll();
-    }
-    return;
-  }
-  // Быстрая игра
-  if (autoPlay) stopAuto(); else startAuto();
-});
-
-speedSlider.addEventListener('input', function(e) {
-  e.stopPropagation();
-  speed = parseInt(speedSlider.value, 10);
-  speedValue.textContent = speed;
-});
-
-// ============ ИНИЦИАЛИЗАЦИЯ ============
-renderSelectionUI();
-dieEls.forEach(function(el) { renderDie(el, randomDie()); });
-updatePlayersUI();
+  if (heal > 0) setTimeout(function() { showFloatingDamage(attacker, heal
