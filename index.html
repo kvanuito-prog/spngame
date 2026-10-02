@@ -16,33 +16,30 @@
 <div class="bg-gradient"></div>
 <div class="version-badge" id="versionBadge">v—</div>
 
-<!-- ============ ЭКРАН 1: ГЛАВНОЕ МЕНЮ ============ -->
+<!-- ГЛАВНОЕ МЕНЮ -->
 <div class="overlay show" id="menuOverlay">
   <div class="overlay-card">
     <div class="menu-logo">🎲</div>
     <div class="menu-title">КУБИКИ</div>
     <div class="menu-subtitle">Битва классов</div>
-
     <button class="btn" id="btnTournament">🏆 ТУРНИР</button>
     <button class="btn btn-secondary" id="btnQuickPlay">⚡ БЫСТРАЯ ИГРА</button>
   </div>
 </div>
 
-<!-- ============ ЭКРАН 2: НАСТРОЙКА ТУРНИРА ============ -->
+<!-- НАСТРОЙКА -->
 <div class="overlay" id="setupOverlay">
   <div class="overlay-card">
     <div class="select-title">Новый турнир</div>
     <div class="select-subtitle">Single elimination · Bo3 · финал Bo5</div>
-
     <div class="input-label">Количество игроков</div>
     <input type="number" class="num-input" id="playerCount" placeholder="2" min="2" max="10000" inputmode="numeric">
-
     <button class="btn" id="btnSetupNext" style="margin-top:20px;">ДАЛЕЕ</button>
     <button class="btn btn-secondary" id="btnSetupBack">Назад</button>
   </div>
 </div>
 
-<!-- ============ ЭКРАН 3: СПИСОК ИГРОКОВ ============ -->
+<!-- СПИСОК ИГРОКОВ -->
 <div class="overlay" id="playersOverlay">
   <div class="players-card">
     <div class="players-header">
@@ -50,37 +47,52 @@
       <div class="players-title" id="playersCount">Игроков: 2</div>
       <div style="width:36px"></div>
     </div>
-
     <div class="players-toolbar">
       <button class="tool-btn" id="btnFillRandom">🎲 Заполнить пустые</button>
       <button class="tool-btn" id="btnClearAll">✕ Очистить</button>
     </div>
-
     <div class="players-list" id="playersList"></div>
-
     <div class="players-footer">
       <button class="btn" id="btnStartTournament">▶ НАЧАТЬ ТУРНИР</button>
     </div>
   </div>
 </div>
 
-<!-- ============ ЭКРАН 4: МГНОВЕННАЯ СИМУЛЯЦИЯ ============ -->
+<!-- СИМУЛЯЦИЯ -->
 <div class="overlay" id="simOverlay">
   <div class="overlay-card">
-    <div class="select-title">Симуляция турнира</div>
+    <div class="select-title" id="simTitle">Симуляция</div>
     <div class="select-subtitle" id="simStatus">Раунд 1</div>
-
-    <div class="progress-track">
-      <div class="progress-fill" id="simProgress"></div>
-    </div>
-
-    <div class="sim-counter" id="simCounter">Осталось: 0</div>
-
+    <div class="progress-track"><div class="progress-fill" id="simProgress"></div></div>
+    <div class="sim-counter" id="simCounter">Осталось игроков: 0</div>
     <div class="sim-log" id="simLog"></div>
   </div>
 </div>
 
-<!-- ============ СТАРЫЙ ЭКРАН: БЫСТРАЯ ИГРА (1 на 1) ============ -->
+<!-- ЧЕМПИОН -->
+<div class="overlay" id="championOverlay">
+  <div class="overlay-card">
+    <div class="champion-crown">🏆</div>
+    <div class="champion-label">ЧЕМПИОН</div>
+    <div class="champion-name" id="championName">—</div>
+    <div class="champion-class" id="championClass">—</div>
+    <div class="podium">
+      <div class="podium-row" id="podiumSilver">
+        <span class="medal">🥈</span>
+        <span class="pname-txt">—</span>
+      </div>
+      <div class="podium-row" id="podiumBronze">
+        <span class="medal">🥉</span>
+        <span class="pname-txt">—</span>
+      </div>
+    </div>
+    <div class="tournament-stats" id="tournamentStats"></div>
+    <button class="btn" id="btnNewTournament">НОВЫЙ ТУРНИР</button>
+    <button class="btn btn-secondary" id="btnChampionMenu">В МЕНЮ</button>
+  </div>
+</div>
+
+<!-- БЫСТРАЯ ИГРА -->
 <div class="overlay" id="selectOverlay">
   <div class="overlay-card">
     <div class="select-title">Выбор классов</div>
@@ -160,7 +172,6 @@
   <div class="hint" id="hint">Выбери классы и начни бой</div>
 </div>
 
-<!-- ОКНО ПОБЕДЫ -->
 <div class="overlay" id="overlay">
   <div class="overlay-card">
     <div class="overlay-title" id="overlayTitle">Победа!</div>
@@ -168,16 +179,6 @@
     <button class="btn" id="restartBtn">Играть снова</button>
     <button class="btn btn-secondary" id="changeClassesBtn">Сменить классы</button>
     <button class="btn btn-secondary" id="toMenuBtn">В меню</button>
-  </div>
-</div>
-
-<!-- ОКНО ТЕСТА -->
-<div class="overlay" id="testOverlay">
-  <div class="test-result-card">
-    <div class="test-title">📊 Результаты баланса</div>
-    <div class="test-sub" id="testSub">100 000 боёв на каждую пару</div>
-    <div id="testResultBody"></div>
-    <button class="btn btn-secondary" id="testCloseBtn" style="margin-top:16px;">Закрыть</button>
   </div>
 </div>
 
