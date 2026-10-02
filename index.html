@@ -46,6 +46,8 @@
   .hp-val { font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; color: #e0e6f0; }
   .stun-badge { position: absolute; top: 4px; right: 4px; background: #fbbf24; color: #1a1a1a; font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 5px; letter-spacing: 1px; display: none; }
   .player.stunned .stun-badge { display: block; }
+  .weak-badge { position: absolute; top: 4px; right: 4px; background: #a855f7; color: #fff; font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 5px; letter-spacing: 1px; display: none; }
+  .player.has-weak .weak-badge { display: block; }
   .buff-badge { position: absolute; top: 4px; left: 4px; color: #0a0f1e; font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 5px; letter-spacing: 1px; display: none; animation: buffPulse 0.8s infinite; }
   .buff-badge.tier15 { background: #fbbf24; }
   .buff-badge.tier3 { background: #10b981; }
@@ -82,6 +84,7 @@
   .result.joker15 { color: #fbbf24; text-shadow: 0 0 40px rgba(251,191,36,1), 0 0 20px rgba(245,158,11,0.6); animation: critFlash 0.45s ease-out; }
   .result.summon { color: #f59e0b; text-shadow: 0 0 40px rgba(217,119,6,1), 0 0 20px rgba(251,191,36,0.6); animation: critFlash 0.45s ease-out; }
   .result.rage { color: #dc2626; text-shadow: 0 0 40px rgba(220,38,38,1), 0 0 20px rgba(239,68,68,0.6); animation: critFlash 0.45s ease-out; }
+  .result.weak { color: #c084fc; text-shadow: 0 0 40px rgba(168,85,247,1), 0 0 20px rgba(168,85,247,0.6); animation: critFlash 0.45s ease-out; }
   @keyframes critFlash { 0% { transform: scale(1.7); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
   .log-wrap { flex: 1 1 auto; min-height: 140px; display: flex; flex-direction: column; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden; }
   .log-title { padding: 5px 10px; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #8892b0; border-bottom: 1px solid rgba(255,255,255,0.06); background: rgba(0,0,0,0.15); flex-shrink: 0; }
@@ -95,6 +98,8 @@
   .log-entry .who.p1 { color: #4ade80; } .log-entry .who.p2 { color: #60a5fa; }
   .log-entry .dmg { margin-left: auto; font-weight: 700; color: #f87171; }
   .log-entry.double .dmg { color: #fbbf24; }
+  .log-entry.weak { background: rgba(168,85,247,0.14); border-left: 3px solid #a855f7; }
+  .log-entry.weak .dmg { color: #c084fc; text-shadow: 0 0 8px rgba(168,85,247,0.9); font-size: 13px; }
   .log-entry.crit { background: rgba(239,68,68,0.14); border-left: 3px solid #ef4444; }
   .log-entry.crit .dmg { color: #ef4444; text-shadow: 0 0 8px rgba(239,68,68,0.9); font-size: 13px; }
   .log-entry.vampire { background: rgba(168,85,247,0.14); border-left: 3px solid #a855f7; }
@@ -265,6 +270,7 @@
 <div id="app">
   <div class="players">
     <div class="player" id="p1">
+      <div class="weak-badge" id="weak1">💜 −20%</div>
       <div class="buff-badge" id="buff1">🎲 x3</div>
       <div class="rage-badge" id="rage1">🩸 +0</div>
       <div class="stun-badge">⚡ СТАН</div>
@@ -279,6 +285,7 @@
       </div>
     </div>
     <div class="player" id="p2">
+      <div class="weak-badge" id="weak2">💜 −20%</div>
       <div class="buff-badge" id="buff2">🎲 x3</div>
       <div class="rage-badge" id="rage2">🩸 +0</div>
       <div class="stun-badge">⚡ СТАН</div>
@@ -342,7 +349,7 @@
 <script>
   var CLASSES = {
     assassin:  { icon: '🗡', short: 'Ассасин',  label: '🗡 Ассасин',  css: 'assassin',  desc: 'Дубль → реролл ×2.' },
-    barbarian: { icon: '⚔', short: 'Варвар',   label: '⚔ Варвар',   css: 'barbarian', desc: 'Дубль → стан + слаб. урон.' },
+    barbarian: { icon: '⚔', short: 'Варвар',   label: '⚔ Варвар',   css: 'barbarian', desc: 'Дубль → стан. След. удар −20%.' },
     vampire:   { icon: '🧛', short: 'Вампир',   label: '🧛 Вампир',   css: 'vampire',   desc: 'Дубль → укус: урон + хил.' },
     joker:     { icon: '🎲', short: 'Джокер',   label: '🎲 Джокер',   css: 'joker',     desc: 'HP-триггер → ×2 или ×3.' },
     druid:     { icon: '🐉', short: 'Друид',    label: '🐉 Друид',    css: 'druid',     desc: 'Дубль → суммон.' },
@@ -358,15 +365,7 @@
     66: { type: 'bear', name: 'Медведь', icon: '🐻', hp: 132, mult: 1.0, canStun: true  }
   };
 
-  // ============ НОВОЕ: урон Варвара на дубль ============
-  var BARB_DOUBLE_DMG = {
-    11: 6,
-    22: 11,
-    33: 16,
-    44: 22,
-    55: 23,
-    66: 33
-  };
+  var BARB_WEAK_MULT = 0.8; // −20%
 
   var classes = { 1: 'assassin', 2: 'barbarian' };
   var pendingClasses = { 1: 'assassin', 2: 'barbarian' };
@@ -402,6 +401,7 @@
   var stunned = { 1: false, 2: false };
   var jokerBuff = { 1: 0, 2: 0 };
   var summons = { 1: null, 2: null };
+  var barbWeak = { 1: false, 2: false }; // флаг: следующий удар Варвара ослаблен
   var autoPlay = false, autoTimer = null;
 
   var pipPositions = {
@@ -445,6 +445,7 @@
     var st = { 1: false, 2: false };
     var jb = { 1: 0, 2: 0 };
     var sm = { 1: null, 2: null };
+    var weak = { 1: false, 2: false };
     var MAX_TURNS = 500;
 
     function r6() { return 1 + Math.floor(Math.random() * 6); }
@@ -498,9 +499,15 @@
       if (cls === 'assassin' && db) {
         var r1 = r6(), r2 = r6();
         dmg = (r1 * 10 + r2) * 2;
-      } else if (cls === 'barbarian' && db) {
-        dmg = BARB_DOUBLE_DMG[base] || base;
-        stunCause = true;
+      } else if (cls === 'barbarian') {
+        if (db) {
+          stunCause = true;
+          weak[a] = true; // следующий удар −20%
+        }
+        if (weak[a]) {
+          dmg = Math.floor(base * BARB_WEAK_MULT);
+          weak[a] = false;
+        }
       } else if (cls === 'vampire' && db) {
         var b1 = r6(), b2 = r6();
         dmg = b1 * 10 + b2;
@@ -749,6 +756,15 @@
     }
   }
 
+  function updateWeakBadge(p) {
+    var el = document.getElementById('p' + p);
+    if (barbWeak[p] && !gameOver && hp1 > 0 && hp2 > 0) {
+      el.classList.add('has-weak');
+    } else {
+      el.classList.remove('has-weak');
+    }
+  }
+
   function updatePlayersUI() {
     document.getElementById('hpVal1').textContent = hp1;
     document.getElementById('hpVal2').textContent = hp2;
@@ -784,16 +800,19 @@
     updateJokerBadge(2);
     updateRageBadge(1);
     updateRageBadge(2);
+    updateWeakBadge(1);
+    updateWeakBadge(2);
     updateSummonUI(1);
     updateSummonUI(2);
   }
 
   function setHint(text) { hintEl.textContent = text; }
 
-  function addLogEntry(number, attacker, dmg, isDouble, stunCaused, isCrit, heal, jokerMult, summonInfo, rageBonus) {
+  function addLogEntry(number, attacker, dmg, isDouble, stunCaused, isCrit, heal, jokerMult, summonInfo, rageBonus, isWeak) {
     var entry = document.createElement('div');
     var extraClass = '';
-    if (isCrit) extraClass = ' crit';
+    if (isWeak) extraClass = ' weak';
+    else if (isCrit) extraClass = ' crit';
     else if (heal) extraClass = ' vampire';
     else if (jokerMult === 3) extraClass = ' joker';
     else if (jokerMult === 2) extraClass = ' joker15';
@@ -808,7 +827,8 @@
     var dmgEl = document.createElement('span'); dmgEl.className = 'dmg';
 
     var suffix = '';
-    if (isCrit) suffix = ' 💥 КРИТ×2';
+    if (isWeak) suffix = ' 💜 −20%';
+    else if (isCrit) suffix = ' 💥 КРИТ×2';
     else if (jokerMult === 3) suffix = ' 🎲×3';
     else if (jokerMult === 2) suffix = ' 🎲×2';
     else if (heal) suffix = ' 🧛 +' + heal;
@@ -952,7 +972,7 @@
           setDieGlow('summon');
           setTimeout(function() { setDieGlow(null); }, 600);
           setHint(s.icon + ' ' + s.name + ' атакует!');
-          applyHit(attacker, defender, sd, isDouble, stunB, false, 0, 0, { icon: s.icon, name: s.name }, 0);
+          applyHit(attacker, defender, sd, isDouble, stunB, false, 0, 0, { icon: s.icon, name: s.name }, 0, false);
           return;
         }
         if (isDouble) {
@@ -967,7 +987,7 @@
             return;
           }
         }
-        applyHit(attacker, defender, baseDmg, isDouble, false, false, 0, 0, null, 0);
+        applyHit(attacker, defender, baseDmg, isDouble, false, false, 0, 0, null, 0, false);
         return;
       }
 
@@ -980,7 +1000,7 @@
             resultEl.className = 'result crit';
             setDieGlow('crit');
             setTimeout(function() { setDieGlow(null); }, 600);
-            applyHit(attacker, defender, critDmg, false, false, true, 0, 0, null, 0);
+            applyHit(attacker, defender, critDmg, false, false, true, 0, 0, null, 0, false);
           });
         }, getCritPause());
         return;
@@ -995,7 +1015,7 @@
             resultEl.className = 'result vampire';
             setDieGlow('vampire');
             setTimeout(function() { setDieGlow(null); }, 600);
-            applyHit(attacker, defender, bite, false, false, false, bite, 0, null, 0);
+            applyHit(attacker, defender, bite, false, false, false, bite, 0, null, 0, false);
           });
         }, getCritPause());
         return;
@@ -1027,16 +1047,28 @@
         }
       }
 
-      // ===== Варвар: дубль → слабый урон + стан =====
+      // ===== Варвар =====
       var stunCaused = false;
-      if (cls === 'barbarian' && isDouble && hp1 > 0 && hp2 > 0) {
-        dmg = BARB_DOUBLE_DMG[baseDmg] || baseDmg;
-        stunned[defender] = true;
-        stunCaused = true;
-        resultEl.textContent = String(dmg);
+      var isWeak = false;
+      if (cls === 'barbarian') {
+        // Сначала проверяем ослабление (если висит с прошлого хода)
+        if (barbWeak[attacker]) {
+          dmg = Math.floor(dmg * BARB_WEAK_MULT);
+          isWeak = true;
+          barbWeak[attacker] = false;
+          resultEl.textContent = dmg + '';
+          resultEl.className = 'result weak';
+          setHint('💜 Удар ослаблен на 20%');
+        }
+        // Если выпал дубль — стан + флаг на след. удар
+        if (isDouble && hp1 > 0 && hp2 > 0) {
+          stunned[defender] = true;
+          stunCaused = true;
+          barbWeak[attacker] = true;
+        }
       }
 
-      applyHit(attacker, defender, dmg, isDouble, stunCaused, false, 0, jokerMult, null, rageBonus);
+      applyHit(attacker, defender, dmg, isDouble, stunCaused, false, 0, jokerMult, null, rageBonus, isWeak);
     });
   }
 
@@ -1046,6 +1078,7 @@
       stunned[1] = false; stunned[2] = false;
       jokerBuff[1] = 0; jokerBuff[2] = 0;
       summons[1] = null; summons[2] = null;
+      barbWeak[1] = false; barbWeak[2] = false;
       updatePlayersUI(); showGameOver(); rolling = false; return;
     }
     checkJokerBuffs();
@@ -1076,10 +1109,10 @@
     }
   }
 
-  function applyHit(attacker, defender, dmg, isDouble, stunCaused, isCrit, heal, jokerMult, summonInfo, rageBonus) {
+  function applyHit(attacker, defender, dmg, isDouble, stunCaused, isCrit, heal, jokerMult, summonInfo, rageBonus, isWeak) {
     rollNumber++;
     var dr = dealDamage(defender, dmg);
-    addLogEntry(rollNumber, attacker, dmg, isDouble, stunCaused, isCrit, heal, jokerMult, summonInfo, rageBonus);
+    addLogEntry(rollNumber, attacker, dmg, isDouble, stunCaused, isCrit, heal, jokerMult, summonInfo, rageBonus, isWeak);
     if (dr.summonDied) addSummonDeathLog(defender, dr.killed, dr.toPlayer);
     if (heal > 0) {
       if (attacker === 1) hp1 = Math.min(MAX_HP, hp1 + heal);
@@ -1122,6 +1155,7 @@
     stunned[1] = false; stunned[2] = false;
     jokerBuff[1] = 0; jokerBuff[2] = 0;
     summons[1] = null; summons[2] = null;
+    barbWeak[1] = false; barbWeak[2] = false;
     logList.innerHTML = '';
     resultEl.textContent = '— —';
     resultEl.className = 'result';
