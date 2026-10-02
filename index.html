@@ -157,7 +157,7 @@
   .test-result-card { background: linear-gradient(160deg, #1e2a4a, #0f1729); border: 2px solid rgba(96,165,250,0.4); border-radius: 20px; padding: 20px 16px; text-align: center; max-width: 520px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.6); margin: auto; }
   .test-title { font-size: 18px; font-weight: 800; margin-bottom: 4px; color: #60a5fa; }
   .test-sub { font-size: 11px; color: #8892b0; margin-bottom: 14px; }
-  .test-loading { padding: 50px 0; color: #8892b0; font-size: 13px; }
+  .test-loading { padding: 50px 0; color: #8892b0; font-size: 13px; line-height: 1.5; }
   .test-table { width: 100%; border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; }
   .test-table th { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: #8892b0; padding: 6px 4px; border-bottom: 1px solid rgba(255,255,255,0.08); text-align: left; }
   .test-table th:last-child { text-align: right; }
@@ -199,7 +199,7 @@
       <div class="select-list" data-player="2"></div>
     </div>
     <button class="btn" id="startGameBtn">НАЧАТЬ БОЙ</button>
-    <button class="btn-test" id="testBtn">📊 Тест баланса · 150 000 боёв</button>
+    <button class="btn-test" id="testBtn">📊 Тест баланса · 1 500 000 боёв</button>
   </div>
 </div>
 
@@ -274,7 +274,7 @@
 <div class="overlay" id="testOverlay">
   <div class="test-result-card">
     <div class="test-title">📊 Результаты баланса</div>
-    <div class="test-sub" id="testSub">10 000 боёв на каждую пару</div>
+    <div class="test-sub" id="testSub">100 000 боёв на каждую пару</div>
     <div id="testResultBody"></div>
     <button class="btn btn-secondary" id="testCloseBtn" style="margin-top:14px;">Закрыть</button>
   </div>
@@ -355,17 +355,17 @@
     return false;
   }
 
-  // ============ БЕРСЕРК ============
+  // ============ БЕРСЕРК (новая сетка) ============
   function getBerserkerBonus(hp) {
     if (hp <= 0) return 0;
-    if (hp === 1) return 150;
-    if (hp < 5) return 100;
-    if (hp < 50) return 60;
-    if (hp < 100) return 50;
-    if (hp < 150) return 40;
-    if (hp < 200) return 35;
-    if (hp < 250) return 25;
-    if (hp < 300) return 15;
+    if (hp === 1) return 100;
+    if (hp < 5) return 70;
+    if (hp < 50) return 40;
+    if (hp < 100) return 30;
+    if (hp < 150) return 20;
+    if (hp < 200) return 12;
+    if (hp < 250) return 7;
+    if (hp < 300) return 3;
     return 0;
   }
   function getPlayerHp(p) { return p === 1 ? hp1 : hp2; }
@@ -394,14 +394,14 @@
       return false;
     }
     function bers(hp) {
-      if (hp === 1) return 150;
-      if (hp < 5) return 100;
-      if (hp < 50) return 60;
-      if (hp < 100) return 50;
-      if (hp < 150) return 40;
-      if (hp < 200) return 35;
-      if (hp < 250) return 25;
-      if (hp < 300) return 15;
+      if (hp === 1) return 100;
+      if (hp < 5) return 70;
+      if (hp < 50) return 40;
+      if (hp < 100) return 30;
+      if (hp < 150) return 20;
+      if (hp < 200) return 12;
+      if (hp < 250) return 7;
+      if (hp < 300) return 3;
       return 0;
     }
     function applyJoker(p) {
@@ -486,14 +486,15 @@
     return 0;
   }
 
+  // ============ ТЕСТ БАЛАНСА ============
   function runBalanceTest() {
-    testSub.textContent = '10 000 боёв на каждую пару · 150 000 боёв всего';
-    testResultBody.innerHTML = '<div class="test-loading">⏳ Выполняется 150 000 боёв...</div>';
+    var N = 100000;
+    testSub.textContent = '100 000 боёв на каждую пару · 1 500 000 боёв всего';
+    testResultBody.innerHTML = '<div class="test-loading">⏳ Выполняется 1 500 000 боёв...<br>Это займёт 20–60 секунд, подожди.</div>';
     testOverlay.classList.add('show');
 
     setTimeout(function() {
       var C = Object.keys(CLASSES);
-      var N = 10000;
       var R = {};
       C.forEach(function(c) { R[c] = { w: 0, l: 0, d: 0 }; });
 
@@ -536,7 +537,7 @@
 
       html += '</tbody></table>';
       testResultBody.innerHTML = html;
-    }, 50);
+    }, 100);
   }
 
   // ============ КУБИКИ ============
@@ -618,7 +619,7 @@
       if (bonus > 0) {
         el.classList.add('has-rage');
         badge.textContent = '🩸 +' + bonus;
-        if (bonus >= 100) el.classList.add('rage-max');
+        if (bonus >= 70) el.classList.add('rage-max');
         else el.classList.remove('rage-max');
       } else {
         el.classList.remove('has-rage');
