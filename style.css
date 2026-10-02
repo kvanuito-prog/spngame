@@ -1,21 +1,16 @@
-/* ============ ВЕРСИЯ ============ */
-.version-badge {
-  position: fixed;
-  top: 8px;
-  left: 8px;
-  z-index: 200;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  font-variant-numeric: tabular-nums;
-  color: rgba(148, 163, 184, 0.55);
-  background: rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  padding: 3px 8px;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  pointer-events: none;
-  user-select: none;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-}
+// ============ ВЕРСИЯ ИГРЫ ============
+// Меняй эту строку при каждом обновлении — она покажет, загрузился ли свежий game.js
+var GAME_VERSION = '1.01';
+
+// Показываем версию после загрузки DOM
+(function showVersion() {
+  function set() {
+    var el = document.getElementById('versionBadge');
+    if (el) el.textContent = 'v' + GAME_VERSION;
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', set);
+  } else {
+    set();
+  }
+})();
