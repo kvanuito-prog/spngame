@@ -9,7 +9,7 @@
   html, body {
     margin: 0; padding: 0;
     height: 100%;
-    background: radial-gradient(circle at 50% 40%, #1e2a4a 0%, #0a0f1e 100%);
+    background: radial-gradient(circle at 50% 30%, #1e2a4a 0%, #0a0f1e 100%);
     color: #fff;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     overflow: hidden;
@@ -21,21 +21,23 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     height: 100vh;
     height: 100dvh;
-    padding: 20px;
-    gap: 40px;
+    padding: 16px;
+    gap: 18px;
   }
+
+  /* --- Кубики --- */
   .dice-row {
     display: flex;
-    gap: 30px;
+    gap: 24px;
+    margin-top: 10px;
   }
   .die {
-    width: min(35vw, 140px);
-    height: min(35vw, 140px);
+    width: min(30vw, 120px);
+    height: min(30vw, 120px);
     background: linear-gradient(145deg, #ffffff, #d8d8d8);
-    border-radius: 18px;
+    border-radius: 16px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 -6px 12px rgba(0,0,0,0.15);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -58,30 +60,93 @@
   }
   .pip::after {
     content: "";
-    width: 62%;
-    height: 62%;
+    width: 62%; height: 62%;
     background: #1a1a1a;
     border-radius: 50%;
     box-shadow: inset 0 2px 3px rgba(0,0,0,0.6);
   }
+
+  /* --- Результат --- */
   .result {
-    font-size: clamp(48px, 14vw, 96px);
+    font-size: clamp(44px, 12vw, 80px);
     font-weight: 800;
     letter-spacing: 6px;
     color: #4ade80;
-    text-shadow: 0 0 30px rgba(74,222,128,0.6);
+    text-shadow: 0 0 30px rgba(74,222,128,0.5);
     font-variant-numeric: tabular-nums;
     min-height: 1.1em;
     transition: color 0.3s ease;
   }
-  .hint {
-    position: fixed;
-    bottom: 30px;
-    left: 0; right: 0;
-    text-align: center;
+
+  /* --- Лог --- */
+  .log-wrap {
+    width: 100%;
+    max-width: 420px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    overflow: hidden;
+    min-height: 0;
+  }
+  .log-title {
+    padding: 10px 14px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
     color: #8892b0;
-    font-size: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: rgba(0,0,0,0.15);
+  }
+  .log-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 6px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  .log-entry {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 14px;
+    font-size: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-variant-numeric: tabular-nums;
+    animation: slideIn 0.25s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .log-entry .idx {
+    color: #6b7a99;
+    font-size: 13px;
+    min-width: 44px;
+  }
+  .log-entry .val {
+    color: #e0e6f0;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: 2px;
+    margin-left: auto;
+    margin-right: 10px;
+  }
+  .log-entry .tag {
+    font-size: 12px;
+    color: #fbbf24;
+    min-width: 60px;
+    text-align: right;
+  }
+  .log-entry.double .val { color: #fbbf24; }
+  .log-entry.double { background: rgba(251,191,36,0.06); }
+
+  .hint {
+    color: #8892b0;
+    font-size: 12px;
     letter-spacing: 1px;
+    padding-bottom: 4px;
   }
 </style>
 </head>
@@ -92,16 +157,24 @@
     <div class="die" id="die2"></div>
   </div>
   <div class="result" id="result">— —</div>
+
+  <div class="log-wrap">
+    <div class="log-title">История бросков</div>
+    <div class="log-list" id="logList"></div>
+  </div>
+
+  <div class="hint">Тап по экрану — бросок</div>
 </div>
-<div class="hint">Тап по экрану — бросок</div>
 
 <script>
-  const dieEls = [document.getElementById('die1'), document.getElementById('die2')];
+  const dieEls  = [document.getElementById('die1'), document.getElementById('die2')];
   const resultEl = document.getElementById('result');
+  const logList  = document.getElementById('logList');
 
   let rolling = false;
+  let rollNumber = 0;
+  const MAX_LOG = 50; // максимум записей в логе
 
-  // Позиции точек в сетке 3x3 (индексы 0-8)
   const pipPositions = {
     1: [4],
     2: [0, 8],
@@ -124,6 +197,24 @@
 
   function randomDie() {
     return Math.floor(Math.random() * 6) + 1;
+  }
+
+  function addLogEntry(number, v1, v2) {
+    const isDouble = v1 === v2;
+    const entry = document.createElement('div');
+    entry.className = 'log-entry' + (isDouble ? ' double' : '');
+    entry.innerHTML = `
+      <span class="idx">#${number}</span>
+      <span class="val">${v1}${v2}</span>
+      <span class="tag">${isDouble ? '★ дубль' : ''}</span>
+    `;
+    // Новые — сверху
+    logList.prepend(entry);
+
+    // Обрезаем лишние
+    while (logList.children.length > MAX_LOG) {
+      logList.removeChild(logList.lastChild);
+    }
   }
 
   function roll() {
@@ -149,12 +240,16 @@
     function finish() {
       const v1 = randomDie();
       const v2 = randomDie();
+
       renderDie(dieEls[0], v1);
       renderDie(dieEls[1], v2);
       dieEls.forEach(el => el.classList.remove('spinning'));
 
+      rollNumber++;
       resultEl.textContent = `${v1}${v2}`;
-      resultEl.style.color = (v1 === v2) ? '#fbbf24' : '#4ade80'; // дубль — золотой
+      resultEl.style.color = (v1 === v2) ? '#fbbf24' : '#4ade80';
+
+      addLogEntry(rollNumber, v1, v2);
       rolling = false;
     }
   }
