@@ -348,7 +348,7 @@
 
 <script>
   var CLASSES = {
-    assassin:  { icon: '🗡', short: 'Ассасин',  label: '🗡 Ассасин',  css: 'assassin',  desc: 'Дубль → реролл ×1.8.' },
+    assassin:  { icon: '🗡', short: 'Ассасин',  label: '🗡 Ассасин',  css: 'assassin',  desc: 'Дубль → реролл ×1.9.' },
     barbarian: { icon: '⚔', short: 'Варвар',   label: '⚔ Варвар',   css: 'barbarian', desc: 'Дубль → стан. След. удар −20%.' },
     vampire:   { icon: '🧛', short: 'Вампир',   label: '🧛 Вампир',   css: 'vampire',   desc: 'Дубль → укус: урон + хил.' },
     joker:     { icon: '🎲', short: 'Джокер',   label: '🎲 Джокер',   css: 'joker',     desc: 'HP-триггер → ×2 или ×3.' },
@@ -829,7 +829,7 @@
 
     var suffix = '';
     if (isWeak) suffix = ' 💜 −20%';
-    else if (isCrit) suffix = ' 💥 КРИТ×1.8';
+    else if (isCrit) suffix = ' 💥 КРИТ×1.9';
     else if (jokerMult === 3) suffix = ' 🎲×3';
     else if (jokerMult === 2) suffix = ' 🎲×2';
     else if (heal) suffix = ' 🧛 +' + heal;
