@@ -10,141 +10,72 @@
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body {
-    margin: 0; padding: 0;
-    height: 100%;
+    margin: 0; padding: 0; height: 100%;
     background: radial-gradient(circle at 50% 30%, #1e2a4a 0%, #0a0f1e 100%);
     color: #fff;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     overflow: hidden;
     touch-action: manipulation;
-    user-select: none;
-    -webkit-user-select: none;
+    user-select: none; -webkit-user-select: none;
   }
   #app {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    height: 100dvh;
-    padding: 10px;
-    gap: 10px;
+    display: flex; flex-direction: column;
+    height: 100vh; height: 100dvh;
+    padding: 10px; gap: 10px;
   }
 
   /* --- Игроки --- */
-  .players {
-    display: flex;
-    gap: 8px;
-    flex-shrink: 0;
-  }
+  .players { display: flex; gap: 8px; flex-shrink: 0; }
   .player {
     flex: 1;
     background: rgba(255,255,255,0.05);
     border: 2px solid rgba(255,255,255,0.08);
-    border-radius: 10px;
-    padding: 8px 10px;
+    border-radius: 10px; padding: 8px 10px;
     transition: all 0.25s ease;
-    min-width: 0;
-    position: relative;
-    overflow: hidden;
+    min-width: 0; position: relative; overflow: hidden;
   }
-  .player.active {
-    border-color: #4ade80;
-    box-shadow: 0 0 16px rgba(74,222,128,0.35);
-    background: rgba(74,222,128,0.08);
-  }
-  .player.active.p2-active {
-    border-color: #60a5fa;
-    box-shadow: 0 0 16px rgba(96,165,250,0.35);
-    background: rgba(96,165,250,0.08);
-  }
+  .player.active { border-color: #4ade80; box-shadow: 0 0 16px rgba(74,222,128,0.35); background: rgba(74,222,128,0.08); }
+  .player.active.p2-active { border-color: #60a5fa; box-shadow: 0 0 16px rgba(96,165,250,0.35); background: rgba(96,165,250,0.08); }
   .player.stunned {
     border-color: #fbbf24 !important;
     background: rgba(251,191,36,0.12) !important;
     animation: stunPulse 0.7s infinite;
   }
   @keyframes stunPulse {
-    0%, 100% { box-shadow: 0 0 10px rgba(251,191,36,0.4); }
-    50%      { box-shadow: 0 0 26px rgba(251,191,36,0.95); }
+    0%,100% { box-shadow: 0 0 10px rgba(251,191,36,0.4); }
+    50%     { box-shadow: 0 0 26px rgba(251,191,36,0.95); }
   }
-  .player.dead {
-    border-color: #ef4444;
-    opacity: 0.5;
-    filter: grayscale(0.7);
-  }
+  .player.dead { border-color: #ef4444; opacity: 0.5; filter: grayscale(0.7); }
   .pname {
-    font-size: 11px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: #8892b0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: #8892b0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .player.active .pname { color: #4ade80; }
   .player.active.p2-active .pname { color: #60a5fa; }
   .player.stunned .pname { color: #fbbf24 !important; }
-
-  .pclass {
-    font-size: 10px;
-    color: #f59e0b;
-    letter-spacing: 1px;
-    margin: 2px 0 6px;
-    font-weight: 700;
-    opacity: 0.85;
-  }
-
-  .hp-bar {
-    width: 100%;
-    height: 8px;
-    background: rgba(0,0,0,0.4);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 4px;
-  }
+  .pclass { font-size: 10px; color: #f59e0b; letter-spacing: 1px; margin: 2px 0 6px; font-weight: 700; opacity: 0.85; }
+  .hp-bar { width: 100%; height: 8px; background: rgba(0,0,0,0.4); border-radius: 4px; overflow: hidden; margin-bottom: 4px; }
   .hp-fill {
-    height: 100%;
-    width: 100%;
+    height: 100%; width: 100%;
     background: linear-gradient(90deg, #22c55e, #4ade80);
-    border-radius: 4px;
-    transition: width 0.4s ease, background 0.4s ease;
+    border-radius: 4px; transition: width 0.4s ease, background 0.4s ease;
   }
-  .hp-fill.low {
-    background: linear-gradient(90deg, #ef4444, #f87171);
-  }
-  .hp-val {
-    font-size: 16px;
-    font-weight: 800;
-    font-variant-numeric: tabular-nums;
-    color: #e0e6f0;
-  }
-
+  .hp-fill.low { background: linear-gradient(90deg, #ef4444, #f87171); }
+  .hp-val { font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; color: #e0e6f0; }
   .stun-badge {
-    position: absolute;
-    top: 6px;
-    right: 6px;
-    background: #fbbf24;
-    color: #1a1a1a;
-    font-size: 10px;
-    font-weight: 800;
-    padding: 2px 6px;
-    border-radius: 6px;
-    letter-spacing: 1px;
+    position: absolute; top: 6px; right: 6px;
+    background: #fbbf24; color: #1a1a1a;
+    font-size: 10px; font-weight: 800;
+    padding: 2px 6px; border-radius: 6px; letter-spacing: 1px;
     display: none;
   }
   .player.stunned .stun-badge { display: block; }
 
   /* --- Кубики --- */
-  .dice-row {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-shrink: 0;
-    margin: 4px 0;
-  }
+  .dice-row { display: flex; gap: 16px; justify-content: center; flex-shrink: 0; margin: 4px 0; }
   .die {
-    width: 80px;
-    height: 80px;
-    background: #ffffff;
-    border-radius: 12px;
+    width: 80px; height: 80px;
+    background: #ffffff; border-radius: 12px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.5), inset 0 -4px 8px rgba(0,0,0,0.15);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -158,26 +89,16 @@
     100% { transform: rotate(-5deg) scale(1.03); }
   }
   .pip { display: flex; align-items: center; justify-content: center; }
-  .pip::after {
-    content: "";
-    display: block;
-    width: 14px; height: 14px;
-    background: #1a1a1a;
-    border-radius: 50%;
-  }
+  .pip::after { content: ""; display: block; width: 14px; height: 14px; background: #1a1a1a; border-radius: 50%; }
   .pip.hidden-pip::after { display: none; }
 
   /* --- Результат --- */
   .result {
-    text-align: center;
-    font-size: 44px;
-    font-weight: 800;
-    letter-spacing: 6px;
-    color: #4ade80;
+    text-align: center; font-size: 44px; font-weight: 800;
+    letter-spacing: 6px; color: #4ade80;
     text-shadow: 0 0 25px rgba(74,222,128,0.5);
     font-variant-numeric: tabular-nums;
-    min-height: 52px;
-    line-height: 52px;
+    min-height: 52px; line-height: 52px;
     transition: color 0.3s ease;
     flex-shrink: 0;
   }
@@ -186,38 +107,21 @@
 
   /* --- Лог --- */
   .log-wrap {
-    flex: 1 1 auto;
-    min-height: 80px;
-    display: flex;
-    flex-direction: column;
+    flex: 1 1 auto; min-height: 80px;
+    display: flex; flex-direction: column;
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 10px;
-    overflow: hidden;
+    border-radius: 10px; overflow: hidden;
   }
   .log-title {
-    padding: 6px 10px;
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #8892b0;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    background: rgba(0,0,0,0.15);
-    flex-shrink: 0;
+    padding: 6px 10px; font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    color: #8892b0; border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: rgba(0,0,0,0.15); flex-shrink: 0;
   }
-  .log-list {
-    flex: 1 1 auto;
-    overflow-y: auto;
-    padding: 2px 0;
-    -webkit-overflow-scrolling: touch;
-    min-height: 0;
-  }
+  .log-list { flex: 1 1 auto; overflow-y: auto; padding: 2px 0; -webkit-overflow-scrolling: touch; min-height: 0; }
   .log-entry {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 10px;
-    font-size: 13px;
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 10px; font-size: 13px;
     border-bottom: 1px solid rgba(255,255,255,0.04);
     animation: slideIn 0.25s ease;
     font-variant-numeric: tabular-nums;
@@ -232,65 +136,55 @@
   .log-entry .who.p2 { color: #60a5fa; }
   .log-entry .dmg { margin-left: auto; font-weight: 700; color: #f87171; }
   .log-entry.double .dmg { color: #fbbf24; }
-  .log-entry.stun {
-    background: rgba(251,191,36,0.10);
-  }
+  .log-entry.stun { background: rgba(251,191,36,0.10); }
   .log-entry.stun .who { color: #fbbf24; }
   .log-entry.stun .dmg { color: #fbbf24; letter-spacing: 2px; }
 
+  /* --- Кнопки управления --- */
+  .controls { display: flex; gap: 8px; flex-shrink: 0; }
+  .control-btn {
+    flex: 1;
+    padding: 15px;
+    font-size: 15px; font-weight: 800;
+    border: none; border-radius: 12px;
+    cursor: pointer; letter-spacing: 1.5px;
+    font-family: inherit;
+    color: #0a0f1e;
+    transition: transform 0.1s ease;
+  }
+  .control-btn:active { transform: scale(0.97); }
+  .control-btn.start { background: linear-gradient(145deg, #4ade80, #22c55e); }
+  .control-btn.stop  { background: linear-gradient(145deg, #f87171, #ef4444); color: #fff; }
+  .control-btn.hidden { display: none; }
+
   .hint {
-    text-align: center;
-    color: #8892b0;
-    font-size: 11px;
-    letter-spacing: 1px;
-    flex-shrink: 0;
-    min-height: 14px;
+    text-align: center; color: #8892b0; font-size: 11px;
+    letter-spacing: 1px; flex-shrink: 0; min-height: 14px;
   }
 
   /* --- Game Over --- */
   .overlay {
     position: fixed; inset: 0;
     background: rgba(0,0,0,0.85);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-    padding: 20px;
+    display: none; align-items: center; justify-content: center;
+    z-index: 100; padding: 20px;
   }
   .overlay.show { display: flex; }
   .overlay-card {
     background: linear-gradient(160deg, #1e2a4a, #0f1729);
     border: 2px solid rgba(74,222,128,0.4);
-    border-radius: 20px;
-    padding: 28px 24px;
-    text-align: center;
-    max-width: 360px;
-    width: 100%;
+    border-radius: 20px; padding: 28px 24px;
+    text-align: center; max-width: 360px; width: 100%;
     box-shadow: 0 20px 60px rgba(0,0,0,0.6);
   }
-  .overlay-title {
-    font-size: 24px;
-    font-weight: 800;
-    margin-bottom: 10px;
-    color: #4ade80;
-  }
-  .overlay-sub {
-    font-size: 13px;
-    color: #8892b0;
-    margin-bottom: 20px;
-  }
+  .overlay-title { font-size: 24px; font-weight: 800; margin-bottom: 10px; color: #4ade80; }
+  .overlay-sub { font-size: 13px; color: #8892b0; margin-bottom: 20px; }
   .btn {
     background: linear-gradient(145deg, #4ade80, #22c55e);
-    color: #0a0f1e;
-    border: none;
-    padding: 14px 28px;
-    font-size: 15px;
-    font-weight: 800;
-    border-radius: 12px;
-    cursor: pointer;
-    letter-spacing: 1px;
-    width: 100%;
-    font-family: inherit;
+    color: #0a0f1e; border: none;
+    padding: 14px 28px; font-size: 15px; font-weight: 800;
+    border-radius: 12px; cursor: pointer; letter-spacing: 1px;
+    width: 100%; font-family: inherit;
     transition: transform 0.1s ease;
   }
   .btn:active { transform: scale(0.97); }
@@ -338,7 +232,11 @@
     <div class="log-list" id="logList"></div>
   </div>
 
-  <div class="hint" id="hint">Тап — бросок Игрока 1</div>
+  <div class="controls">
+    <button class="control-btn start" id="battleBtn">▶ НАЧАТЬ БОЙ · 4×</button>
+  </div>
+
+  <div class="hint" id="hint">Нажми «Начать бой»</div>
 </div>
 
 <div class="overlay" id="overlay">
@@ -357,9 +255,15 @@
   var overlay = document.getElementById('overlay');
   var overlayTitle = document.getElementById('overlayTitle');
   var overlaySub = document.getElementById('overlaySub');
+  var battleBtn = document.getElementById('battleBtn');
 
   var MAX_HP = 1000;
   var MAX_LOG = 60;
+  var SPEED = 4; // множитель скорости
+  var SPIN_DURATION = 900 / SPEED;    // 225 мс
+  var FRAME_INTERVAL = 40;            // кадры анимации
+  var PAUSE_BETWEEN  = 30;            // пауза между бросками
+  var STUN_PAUSE     = 1500 / SPEED;  // 375 мс
 
   var rolling = false;
   var rollNumber = 0;
@@ -368,14 +272,12 @@
   var hp2 = MAX_HP;
   var gameOver = false;
   var stunned = { 1: false, 2: false };
+  var autoPlay = false;
+  var autoTimer = null;
 
   var pipPositions = {
-    1: [4],
-    2: [0, 8],
-    3: [0, 4, 8],
-    4: [0, 2, 6, 8],
-    5: [0, 2, 4, 6, 8],
-    6: [0, 2, 3, 5, 6, 8]
+    1: [4], 2: [0, 8], 3: [0, 4, 8],
+    4: [0, 2, 6, 8], 5: [0, 2, 4, 6, 8], 6: [0, 2, 3, 5, 6, 8]
   };
 
   function renderDie(el, value) {
@@ -385,17 +287,13 @@
       var cell = document.createElement('div');
       cell.className = 'pip';
       var show = false;
-      for (var j = 0; j < pips.length; j++) {
-        if (pips[j] === i) { show = true; break; }
-      }
+      for (var j = 0; j < pips.length; j++) { if (pips[j] === i) { show = true; break; } }
       if (!show) cell.className += ' hidden-pip';
       el.appendChild(cell);
     }
   }
 
-  function randomDie() {
-    return Math.floor(Math.random() * 6) + 1;
-  }
+  function randomDie() { return Math.floor(Math.random() * 6) + 1; }
 
   function updatePlayersUI() {
     document.getElementById('hpVal1').textContent = hp1;
@@ -424,25 +322,16 @@
     p2.className = cls2;
   }
 
-  function setHint(text) {
-    hintEl.textContent = text;
-  }
+  function setHint(text) { hintEl.textContent = text; }
 
   function addLogEntry(number, attacker, dmg, isDouble, stunCaused) {
     var entry = document.createElement('div');
     entry.className = 'log-entry' + (isDouble ? ' double' : '');
-    var idx = document.createElement('span');
-    idx.className = 'idx';
-    idx.textContent = '#' + number;
-    var who = document.createElement('span');
-    who.className = 'who p' + attacker;
-    who.textContent = 'Игрок ' + attacker;
-    var dmgEl = document.createElement('span');
-    dmgEl.className = 'dmg';
+    var idx = document.createElement('span'); idx.className = 'idx'; idx.textContent = '#' + number;
+    var who = document.createElement('span'); who.className = 'who p' + attacker; who.textContent = 'Игрок ' + attacker;
+    var dmgEl = document.createElement('span'); dmgEl.className = 'dmg';
     dmgEl.textContent = '−' + dmg + (isDouble ? ' ★' : '') + (stunCaused ? ' ⚡' : '');
-    entry.appendChild(idx);
-    entry.appendChild(who);
-    entry.appendChild(dmgEl);
+    entry.appendChild(idx); entry.appendChild(who); entry.appendChild(dmgEl);
     logList.insertBefore(entry, logList.firstChild);
     trimLog();
   }
@@ -450,26 +339,16 @@
   function addStunSkipLog(playerNum) {
     var entry = document.createElement('div');
     entry.className = 'log-entry stun';
-    var idx = document.createElement('span');
-    idx.className = 'idx';
-    idx.textContent = '⚡';
-    var who = document.createElement('span');
-    who.className = 'who';
-    who.textContent = 'Игрок ' + playerNum + ' оглушён';
-    var dmgEl = document.createElement('span');
-    dmgEl.className = 'dmg';
-    dmgEl.textContent = 'ПРОПУСК';
-    entry.appendChild(idx);
-    entry.appendChild(who);
-    entry.appendChild(dmgEl);
+    var idx = document.createElement('span'); idx.className = 'idx'; idx.textContent = '⚡';
+    var who = document.createElement('span'); who.className = 'who'; who.textContent = 'Игрок ' + playerNum + ' оглушён';
+    var dmgEl = document.createElement('span'); dmgEl.className = 'dmg'; dmgEl.textContent = 'ПРОПУСК';
+    entry.appendChild(idx); entry.appendChild(who); entry.appendChild(dmgEl);
     logList.insertBefore(entry, logList.firstChild);
     trimLog();
   }
 
   function trimLog() {
-    while (logList.children.length > MAX_LOG) {
-      logList.removeChild(logList.lastChild);
-    }
+    while (logList.children.length > MAX_LOG) logList.removeChild(logList.lastChild);
   }
 
   function roll() {
@@ -480,17 +359,15 @@
     resultEl.textContent = '— —';
     resultEl.className = 'result';
 
-    var spinDuration = 900;
-    var interval = 70;
     var start = performance.now();
 
     var timer = setInterval(function() {
       dieEls.forEach(function(el) { renderDie(el, randomDie()); });
-      if (performance.now() - start >= spinDuration) {
+      if (performance.now() - start >= SPIN_DURATION) {
         clearInterval(timer);
         finish();
       }
-    }, interval);
+    }, FRAME_INTERVAL);
 
     function finish() {
       var v1 = randomDie();
@@ -509,20 +386,18 @@
       var attacker = turn;
       var defender = turn === 1 ? 2 : 1;
 
-      // Урон
       if (attacker === 1) hp2 = Math.max(0, hp2 - dmg);
       else hp1 = Math.max(0, hp1 - dmg);
 
-      // Оглушение при дубле
       var stunCaused = false;
-      if (isDouble && (hp1 > 0 && hp2 > 0)) {
+      if (isDouble && hp1 > 0 && hp2 > 0) {
         stunned[defender] = true;
         stunCaused = true;
       }
 
       addLogEntry(rollNumber, attacker, dmg, isDouble, stunCaused);
 
-      // Проверка победы
+      // Конец игры
       if (hp1 <= 0 || hp2 <= 0) {
         gameOver = true;
         stunned[1] = false;
@@ -537,21 +412,32 @@
       turn = defender;
       updatePlayersUI();
 
-      // Если новый активный игрок оглушён — пропуск
+      var extraDelay = 0;
+
       if (stunned[turn]) {
         var skipPlayer = turn;
-        setHint('⚡ Игрок ' + skipPlayer + ' оглушён! Пропуск хода...');
+        setHint('⚡ Игрок ' + skipPlayer + ' оглушён!');
         addStunSkipLog(skipPlayer);
+        extraDelay = STUN_PAUSE;
+
         setTimeout(function() {
           stunned[skipPlayer] = false;
           turn = skipPlayer === 1 ? 2 : 1;
           updatePlayersUI();
-          setHint('Тап — бросок Игрока ' + turn);
-          rolling = false;
-        }, 1500);
-      } else {
+          if (!autoPlay) setHint('Тап — бросок Игрока ' + turn);
+        }, STUN_PAUSE);
+      } else if (!autoPlay) {
         setHint('Тап — бросок Игрока ' + turn);
-        rolling = false;
+      }
+
+      rolling = false;
+
+      // Автоследующий бросок
+      if (autoPlay) {
+        clearTimeout(autoTimer);
+        autoTimer = setTimeout(function() {
+          if (autoPlay && !gameOver) roll();
+        }, PAUSE_BETWEEN + extraDelay);
       }
     }
   }
@@ -563,40 +449,67 @@
     overlaySub.textContent = 'Игрок 1: ' + hp1 + ' HP  ·  Игрок 2: ' + hp2 + ' HP';
     overlay.classList.add('show');
     setHint('Игра окончена');
+    battleBtn.classList.add('hidden');
+  }
+
+  function startAuto() {
+    if (gameOver) return;
+    autoPlay = true;
+    battleBtn.textContent = '⏸ СТОП';
+    battleBtn.className = 'control-btn stop';
+    setHint('⚔ Бой идёт...');
+    roll();
+  }
+
+  function stopAuto() {
+    autoPlay = false;
+    clearTimeout(autoTimer);
+    battleBtn.textContent = '▶ НАЧАТЬ БОЙ · 4×';
+    battleBtn.className = 'control-btn start';
+    if (!gameOver) setHint('Пауза. Нажми «Начать бой»');
   }
 
   function resetGame() {
-    hp1 = MAX_HP;
-    hp2 = MAX_HP;
-    turn = 1;
-    rollNumber = 0;
-    gameOver = false;
-    rolling = false;
-    stunned[1] = false;
-    stunned[2] = false;
+    hp1 = MAX_HP; hp2 = MAX_HP;
+    turn = 1; rollNumber = 0;
+    gameOver = false; rolling = false;
+    autoPlay = false;
+    clearTimeout(autoTimer);
+    stunned[1] = false; stunned[2] = false;
     logList.innerHTML = '';
     resultEl.textContent = '— —';
     resultEl.className = 'result';
     overlay.classList.remove('show');
+    battleBtn.textContent = '▶ НАЧАТЬ БОЙ · 4×';
+    battleBtn.className = 'control-btn start';
+    battleBtn.classList.remove('hidden');
     dieEls.forEach(function(el) { renderDie(el, randomDie()); });
     updatePlayersUI();
-    setHint('Тап — бросок Игрока 1');
+    setHint('Нажми «Начать бой»');
   }
 
-  // Обработчики
+  // Управление: тап по экрану работает только вне автобоя
   document.body.addEventListener('click', function(e) {
     if (e.target.closest('.log-wrap')) return;
-    if (e.target.closest('.btn')) return;
+    if (e.target.closest('.controls')) return;
     if (e.target.closest('.overlay')) return;
+    if (autoPlay || gameOver) return;
     roll();
   });
   document.body.addEventListener('touchstart', function(e) {
     if (e.target.closest('.log-wrap')) return;
-    if (e.target.closest('.btn')) return;
+    if (e.target.closest('.controls')) return;
     if (e.target.closest('.overlay')) return;
     e.preventDefault();
+    if (autoPlay || gameOver) return;
     roll();
   }, { passive: false });
+
+  battleBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (autoPlay) stopAuto();
+    else startAuto();
+  });
 
   document.getElementById('restartBtn').addEventListener('click', function(e) {
     e.stopPropagation();
