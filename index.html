@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -34,14 +34,18 @@ html,body{
 
 body{
     background:
-        radial-gradient(circle at 50% 20%, rgba(0,168,255,.08), transparent 35%),
+        radial-gradient(circle at 50% 20%,rgba(0,168,255,.08),transparent 35%),
         linear-gradient(135deg,#03050a,#07101a 50%,#03050a);
     color:var(--text);
     font-family:Arial,Helvetica,sans-serif;
 }
 
-button{
+button,input{
     font-family:inherit;
+}
+
+button{
+    cursor:pointer;
 }
 
 .page{
@@ -52,6 +56,8 @@ button{
     flex-direction:column;
     gap:8px;
 }
+
+/* HEADER */
 
 .header{
     min-height:58px;
@@ -94,7 +100,7 @@ button{
 }
 
 .status{
-    min-width:150px;
+    min-width:170px;
     text-align:right;
     font-size:12px;
     color:var(--green);
@@ -102,8 +108,61 @@ button{
     letter-spacing:.8px;
 }
 
+/* NAMES */
+
+.names-panel{
+    background:var(--panel);
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:12px;
+    padding:8px 12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+}
+
+.name-input{
+    width:220px;
+    height:38px;
+    background:#060a10;
+    border:1px solid rgba(0,168,255,.25);
+    border-radius:8px;
+    outline:none;
+    color:white;
+    padding:0 12px;
+    font-size:13px;
+    font-weight:800;
+    text-align:center;
+}
+
+.name-input:focus{
+    border-color:var(--cyan);
+    box-shadow:0 0 15px rgba(0,168,255,.12);
+}
+
+.name-input::placeholder{
+    color:#667384;
+}
+
+.start-button{
+    height:38px;
+    padding:0 18px;
+    border:0;
+    border-radius:8px;
+    color:white;
+    font-weight:900;
+    background:linear-gradient(135deg,#087cb5,#00a8ff);
+    box-shadow:0 5px 18px rgba(0,168,255,.18);
+}
+
+.start-button:hover{
+    filter:brightness(1.12);
+}
+
+/* COIN */
+
 .coin-panel{
-    min-height:54px;
+    min-height:50px;
     background:var(--panel);
     border:1px solid rgba(255,255,255,.07);
     border-radius:12px;
@@ -118,11 +177,9 @@ button{
     background:linear-gradient(135deg,#087cb5,#00a8ff);
     color:white;
     font-weight:900;
-    padding:10px 20px;
+    padding:9px 20px;
     border-radius:9px;
-    cursor:pointer;
     transition:.2s;
-    box-shadow:0 5px 18px rgba(0,168,255,.18);
 }
 
 .coin-button:hover:not(:disabled){
@@ -131,18 +188,20 @@ button{
 }
 
 .coin-button:disabled{
-    opacity:.35;
+    opacity:.3;
     cursor:not-allowed;
 }
 
 .coin-result{
-    min-width:170px;
+    min-width:220px;
     text-align:center;
-    font-size:13px;
+    font-size:12px;
     font-weight:900;
     color:var(--yellow);
     letter-spacing:1px;
 }
+
+/* BATTLE */
 
 .battle{
     flex:1;
@@ -177,20 +236,23 @@ button{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:10px;
+    margin-bottom:8px;
 }
 
 .player-number{
-    font-size:12px;
+    font-size:11px;
     color:var(--muted);
     font-weight:900;
     letter-spacing:1px;
 }
 
 .player-name{
-    font-size:23px;
+    font-size:22px;
     font-weight:900;
     margin-bottom:4px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
 .class-name{
@@ -235,7 +297,6 @@ button{
 
 .turn-label,
 .stun-label{
-    margin-top:auto;
     min-height:30px;
     display:flex;
     align-items:center;
@@ -247,6 +308,7 @@ button{
 }
 
 .turn-label{
+    margin-top:auto;
     background:rgba(0,168,255,.08);
     color:#6b7a8b;
 }
@@ -266,6 +328,23 @@ button{
     color:var(--yellow);
     background:rgba(255,211,77,.14);
 }
+
+.controls{
+    margin-top:7px;
+}
+
+.kick-button{
+    width:100%;
+    padding:7px;
+    border-radius:7px;
+    border:1px solid rgba(255,61,88,.3);
+    background:rgba(255,61,88,.07);
+    color:#ff6b7d;
+    font-size:10px;
+    font-weight:900;
+}
+
+/* ARENA */
 
 .arena{
     display:flex;
@@ -335,7 +414,6 @@ button{
     line-height:42px;
     font-weight:1000;
     color:white;
-    text-shadow:0 0 20px rgba(0,168,255,.25);
 }
 
 .damage-text{
@@ -369,23 +447,7 @@ button{
     background:rgba(255,255,255,.015);
 }
 
-.controls{
-    position:absolute;
-    bottom:12px;
-    left:14px;
-    right:14px;
-}
-
-.kick-button{
-    width:100%;
-    padding:8px;
-    border-radius:7px;
-    border:1px solid rgba(255,61,88,.3);
-    background:rgba(255,61,88,.07);
-    color:#ff6b7d;
-    font-size:10px;
-    font-weight:900;
-}
+/* OVERLAY */
 
 .overlay{
     position:fixed;
@@ -436,8 +498,9 @@ button{
     background:linear-gradient(135deg,#087cb5,#00a8ff);
     color:white;
     font-weight:900;
-    cursor:pointer;
 }
+
+/* MOBILE / TABLET */
 
 @media (orientation:portrait){
     html,body{
@@ -452,33 +515,38 @@ button{
     .battle{
         grid-template-columns:1fr;
     }
-
-    .arena{
-        min-height:400px;
-    }
 }
 
 @media (max-height:650px) and (orientation:landscape){
     .page{
         padding:7px;
-        gap:6px;
+        gap:5px;
     }
 
     .header{
-        min-height:48px;
-        padding:6px 12px;
+        min-height:45px;
+        padding:5px 12px;
     }
 
     .logo{
         font-size:20px;
     }
 
+    .names-panel{
+        padding:5px 10px;
+    }
+
+    .name-input,
+    .start-button{
+        height:32px;
+    }
+
     .coin-panel{
-        min-height:45px;
+        min-height:40px;
     }
 
     .coin-button{
-        padding:7px 16px;
+        padding:6px 15px;
     }
 
     .player-card{
@@ -486,11 +554,11 @@ button{
     }
 
     .player-name{
-        font-size:19px;
+        font-size:18px;
     }
 
     .class-name{
-        margin-bottom:10px;
+        margin-bottom:9px;
     }
 
     .dice{
@@ -529,22 +597,53 @@ button{
             <div class="score" id="score">0 : 0</div>
         </div>
 
-        <div class="status" id="status">ОЖИДАНИЕ</div>
+        <div class="status" id="status">ВВЕДИТЕ НИКИ</div>
     </header>
 
+    <!-- ВВОД НИКОВ -->
+    <section class="names-panel" id="namesPanel">
+        <input
+            class="name-input"
+            id="name1Input"
+            type="text"
+            maxlength="20"
+            placeholder="НИК ИГРОКА 1"
+            autocomplete="off"
+        >
+
+        <button class="start-button" id="startGameButton">
+            НАЧАТЬ БОЙ
+        </button>
+
+        <input
+            class="name-input"
+            id="name2Input"
+            type="text"
+            maxlength="20"
+            placeholder="НИК ИГРОКА 2"
+            autocomplete="off"
+        >
+    </section>
+
+    <!-- ОРЕЛ / РЕШКА -->
     <section class="coin-panel">
-        <button class="coin-button" id="coinButton">ОРЕЛ / РЕШКА</button>
-        <div class="coin-result" id="coinResult">—</div>
+        <button class="coin-button" id="coinButton" disabled>
+            ОРЕЛ / РЕШКА
+        </button>
+
+        <div class="coin-result" id="coinResult">СНАЧАЛА ВВЕДИТЕ НИКИ</div>
     </section>
 
     <main class="battle">
 
+        <!-- ИГРОК 1 -->
         <section class="player-card" id="player1">
+
             <div class="player-top">
                 <div class="player-number">ИГРОК 1</div>
             </div>
 
-            <div class="player-name">ИГРОК 1</div>
+            <div class="player-name" id="player1Name">ИГРОК 1</div>
             <div class="class-name">ВАРВАР</div>
 
             <div class="hp-row">
@@ -560,13 +659,19 @@ button{
             <div class="stun-label" id="stun1">НЕ ОГЛУШЁН</div>
 
             <div class="controls">
-                <button class="kick-button" onclick="kickMessage()">КИК / ЗАНЯТЬ СЛОТ</button>
+                <button class="kick-button" onclick="kickMessage()">
+                    КИК / ЗАНЯТЬ СЛОТ
+                </button>
             </div>
+
         </section>
 
+        <!-- ЦЕНТР -->
         <section class="arena">
 
-            <div class="arena-turn" id="arenaTurn">ОЖИДАНИЕ</div>
+            <div class="arena-turn" id="arenaTurn">
+                ОЖИДАНИЕ
+            </div>
 
             <div class="dice-area">
                 <div class="dice" id="dice1"></div>
@@ -574,18 +679,23 @@ button{
             </div>
 
             <div class="result-number" id="resultNumber">—</div>
-            <div class="damage-text" id="damageText">ОЖИДАНИЕ БРОСКА</div>
+
+            <div class="damage-text" id="damageText">
+                ОЖИДАНИЕ БРОСКА
+            </div>
 
             <div class="log" id="log"></div>
 
         </section>
 
+        <!-- ИГРОК 2 -->
         <section class="player-card" id="player2">
+
             <div class="player-top">
                 <div class="player-number">ИГРОК 2</div>
             </div>
 
-            <div class="player-name">ИГРОК 2</div>
+            <div class="player-name" id="player2Name">ИГРОК 2</div>
             <div class="class-name">ВАРВАР</div>
 
             <div class="hp-row">
@@ -601,23 +711,40 @@ button{
             <div class="stun-label" id="stun2">НЕ ОГЛУШЁН</div>
 
             <div class="controls">
-                <button class="kick-button" onclick="kickMessage()">КИК / ЗАНЯТЬ СЛОТ</button>
+                <button class="kick-button" onclick="kickMessage()">
+                    КИК / ЗАНЯТЬ СЛОТ
+                </button>
             </div>
+
         </section>
 
     </main>
 </div>
 
+<!-- ПОБЕДИТЕЛЬ -->
 <div class="overlay" id="winnerOverlay">
+
     <div class="winner-box">
-        <div class="winner-title" id="winnerTitle">ПОБЕДА</div>
-        <div class="winner-score" id="winnerScore">2 : 0</div>
-        <button class="restart" id="winnerClose">НОВЫЙ БОЙ</button>
+
+        <div class="winner-title" id="winnerTitle">
+            ПОБЕДИТЕЛЬ
+        </div>
+
+        <div class="winner-score" id="winnerScore">
+            2 : 0
+        </div>
+
+        <button class="restart" id="winnerClose">
+            НОВЫЙ БОЙ
+        </button>
+
     </div>
+
 </div>
 
 <script>
 const MAX_HP = 1000;
+
 const TURN_DELAY = 900;
 const DICE_ANIMATION_TIME = 550;
 const NEXT_ROUND_DELAY = 1800;
@@ -641,6 +768,9 @@ let roundFinished = false;
 let previousRoundWinner = null;
 let previousRoundLoser = null;
 
+let playerName1 = "ИГРОК 1";
+let playerName2 = "ИГРОК 2";
+
 let battleTimer = null;
 let diceTimer = null;
 let nextRoundTimer = null;
@@ -648,6 +778,14 @@ let coinTimer = null;
 
 let audioContext = null;
 let soundEnabled = true;
+
+/* ELEMENTS */
+
+const namesPanel = document.getElementById("namesPanel");
+
+const name1Input = document.getElementById("name1Input");
+const name2Input = document.getElementById("name2Input");
+const startGameButton = document.getElementById("startGameButton");
 
 const coinButton = document.getElementById("coinButton");
 const coinResult = document.getElementById("coinResult");
@@ -666,6 +804,9 @@ const hp2Bar = document.getElementById("hp2Bar");
 
 const player1 = document.getElementById("player1");
 const player2 = document.getElementById("player2");
+
+const player1Name = document.getElementById("player1Name");
+const player2Name = document.getElementById("player2Name");
 
 const turn1 = document.getElementById("turn1");
 const turn2 = document.getElementById("turn2");
@@ -686,6 +827,8 @@ const winnerTitle = document.getElementById("winnerTitle");
 const winnerScore = document.getElementById("winnerScore");
 const winnerClose = document.getElementById("winnerClose");
 
+/* DICE */
+
 const dicePatterns = {
     1:[5],
     2:[1,9],
@@ -696,22 +839,31 @@ const dicePatterns = {
 };
 
 function drawDice(element, number){
+
     element.innerHTML = "";
 
     if(!number) return;
 
-    dicePatterns[number].forEach(position=>{
+    dicePatterns[number].forEach(position => {
+
         const dot = document.createElement("span");
+
         dot.className = `dot pos${position}`;
+
         element.appendChild(dot);
     });
 }
 
+/* SOUND */
+
 function initAudio(){
+
     if(!soundEnabled) return;
 
     if(!audioContext){
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        audioContext =
+            new (window.AudioContext || window.webkitAudioContext)();
     }
 
     if(audioContext.state === "suspended"){
@@ -719,7 +871,12 @@ function initAudio(){
     }
 }
 
-function playClick(frequency=520,duration=.045,volume=.035){
+function playClick(
+    frequency = 520,
+    duration = .045,
+    volume = .035
+){
+
     if(!soundEnabled) return;
 
     initAudio();
@@ -730,7 +887,11 @@ function playClick(frequency=520,duration=.045,volume=.035){
     oscillator.frequency.value = frequency;
     oscillator.type = "sine";
 
-    gain.gain.setValueAtTime(volume,audioContext.currentTime);
+    gain.gain.setValueAtTime(
+        volume,
+        audioContext.currentTime
+    );
+
     gain.gain.exponentialRampToValueAtTime(
         .001,
         audioContext.currentTime + duration
@@ -740,7 +901,10 @@ function playClick(frequency=520,duration=.045,volume=.035){
     gain.connect(audioContext.destination);
 
     oscillator.start();
-    oscillator.stop(audioContext.currentTime + duration);
+
+    oscillator.stop(
+        audioContext.currentTime + duration
+    );
 }
 
 function playButtonSound(){
@@ -751,35 +915,8 @@ function playHoverSound(){
     playClick(720,.025,.012);
 }
 
-function playScreenshotSound(){
-    if(!soundEnabled) return;
-
-    initAudio();
-
-    const oscillator = audioContext.createOscillator();
-    const gain = audioContext.createGain();
-
-    oscillator.type = "sine";
-    oscillator.frequency.setValueAtTime(650,audioContext.currentTime);
-    oscillator.frequency.linearRampToValueAtTime(
-        950,
-        audioContext.currentTime + .12
-    );
-
-    gain.gain.setValueAtTime(.025,audioContext.currentTime);
-    gain.gain.exponentialRampToValueAtTime(
-        .001,
-        audioContext.currentTime + .14
-    );
-
-    oscillator.connect(gain);
-    gain.connect(audioContext.destination);
-
-    oscillator.start();
-    oscillator.stop(audioContext.currentTime + .14);
-}
-
 function playOpenSound(){
+
     if(!soundEnabled) return;
 
     initAudio();
@@ -788,13 +925,22 @@ function playOpenSound(){
     const gain = audioContext.createGain();
 
     oscillator.type = "sine";
-    oscillator.frequency.setValueAtTime(420,audioContext.currentTime);
+
+    oscillator.frequency.setValueAtTime(
+        420,
+        audioContext.currentTime
+    );
+
     oscillator.frequency.linearRampToValueAtTime(
         760,
         audioContext.currentTime + .15
     );
 
-    gain.gain.setValueAtTime(.025,audioContext.currentTime);
+    gain.gain.setValueAtTime(
+        .025,
+        audioContext.currentTime
+    );
+
     gain.gain.exponentialRampToValueAtTime(
         .001,
         audioContext.currentTime + .18
@@ -804,15 +950,29 @@ function playOpenSound(){
     gain.connect(audioContext.destination);
 
     oscillator.start();
-    oscillator.stop(audioContext.currentTime + .18);
+
+    oscillator.stop(
+        audioContext.currentTime + .18
+    );
 }
 
 function playCloseSound(){
     playClick(330,.06,.025);
 }
 
+/* HELPERS */
+
+function getPlayerName(player){
+
+    return player === 1
+        ? playerName1
+        : playerName2;
+}
+
 function addLog(message){
+
     const entry = document.createElement("div");
+
     entry.className = "log-entry";
     entry.textContent = message;
 
@@ -824,6 +984,7 @@ function addLog(message){
 }
 
 function clearTimers(){
+
     clearTimeout(battleTimer);
     clearTimeout(diceTimer);
     clearTimeout(nextRoundTimer);
@@ -835,15 +996,24 @@ function clearTimers(){
     coinTimer = null;
 }
 
+/* UI */
+
 function updateUI(){
+
     hp1Text.textContent = Math.max(0,hp1);
     hp2Text.textContent = Math.max(0,hp2);
 
-    hp1Bar.style.width = `${Math.max(0,hp1 / MAX_HP * 100)}%`;
-    hp2Bar.style.width = `${Math.max(0,hp2 / MAX_HP * 100)}%`;
+    hp1Bar.style.width =
+        `${Math.max(0,hp1 / MAX_HP * 100)}%`;
 
-    score.textContent = `${score1} : ${score2}`;
-    roundTitle.textContent = `РАУНД ${currentRound} / 3`;
+    hp2Bar.style.width =
+        `${Math.max(0,hp2 / MAX_HP * 100)}%`;
+
+    score.textContent =
+        `${score1} : ${score2}`;
+
+    roundTitle.textContent =
+        `РАУНД ${currentRound} / 3`;
 
     player1.classList.toggle(
         "active",
@@ -857,27 +1027,48 @@ function updateUI(){
 
     turn1.textContent =
         gameStarted && currentPlayer === 1
-        ? "ХОД ИГРОКА 1"
-        : "НЕ В ХОДУ";
+            ? `ХОД: ${playerName1}`
+            : "НЕ В ХОДУ";
 
     turn2.textContent =
         gameStarted && currentPlayer === 2
-        ? "ХОД ИГРОКА 2"
-        : "НЕ В ХОДУ";
+            ? `ХОД: ${playerName2}`
+            : "НЕ В ХОДУ";
 
-    stun1.textContent = stunned1 ? "ОГЛУШЁН • ХОД ПРОПУСКАЕТ" : "НЕ ОГЛУШЁН";
-    stun2.textContent = stunned2 ? "ОГЛУШЁН • ХОД ПРОПУСКАЕТ" : "НЕ ОГЛУШЁН";
+    stun1.textContent =
+        stunned1
+            ? "ОГЛУШЁН • ХОД ПРОПУСКАЕТ"
+            : "НЕ ОГЛУШЁН";
 
-    stun1.classList.toggle("visible",stunned1);
-    stun2.classList.toggle("visible",stunned2);
+    stun2.textContent =
+        stunned2
+            ? "ОГЛУШЁН • ХОД ПРОПУСКАЕТ"
+            : "НЕ ОГЛУШЁН";
+
+    stun1.classList.toggle(
+        "visible",
+        stunned1
+    );
+
+    stun2.classList.toggle(
+        "visible",
+        stunned2
+    );
 
     if(gameStarted){
-        status.textContent = `ХОД ИГРОКА ${currentPlayer}`;
-        arenaTurn.textContent = `ХОД ИГРОКА ${currentPlayer}`;
+
+        status.textContent =
+            `ХОД: ${getPlayerName(currentPlayer)}`;
+
+        arenaTurn.textContent =
+            `ХОД: ${getPlayerName(currentPlayer)}`;
     }
 }
 
+/* RESET ROUND */
+
 function resetRoundState(){
+
     hp1 = MAX_HP;
     hp2 = MAX_HP;
 
@@ -893,62 +1084,125 @@ function resetRoundState(){
     drawDice(dice2,0);
 
     resultNumber.textContent = "—";
-    damageText.textContent = "ОЖИДАНИЕ БРОСКА";
+
+    damageText.textContent =
+        "ОЖИДАНИЕ БРОСКА";
 }
 
-function startRound(mode="manual"){
+/* START ROUND */
+
+function startRound(mode = "manual"){
+
     clearTimers();
 
     resetRoundState();
 
     updateUI();
 
-    addLog(`⚔️ Начинается раунд ${currentRound}. HP восстановлены до 1000.`);
+    addLog(
+        `⚔️ Начинается раунд ${currentRound}. HP ${playerName1} и ${playerName2} восстановлены до 1000.`
+    );
+
+    /* ROUND 1 */
 
     if(mode === "manual"){
+
         coinButton.disabled = false;
-        coinResult.textContent = "—";
 
-        status.textContent = "ОЖИДАНИЕ";
-        arenaTurn.textContent = "ОЖИДАНИЕ";
+        coinResult.textContent =
+            "ОРЕЛ / РЕШКА";
 
-        addLog("🪙 Выберите ОРЕЛ / РЕШКА, чтобы определить первого игрока.");
+        status.textContent =
+            "ВЫБЕРИТЕ ПЕРВОГО";
+
+        arenaTurn.textContent =
+            "ОЖИДАНИЕ";
+
+        addLog(
+            `🪙 Нажмите «ОРЕЛ / РЕШКА», чтобы определить, кто начинает.`
+        );
+
         return;
     }
 
+    /* ROUND 2 */
+
     if(mode === "loser"){
+
         coinButton.disabled = true;
 
-        currentPlayer = previousRoundLoser;
+        currentPlayer =
+            previousRoundLoser;
 
-        coinResult.textContent = "ПРАВО НЕУДАЧНИКА";
+        /*
+          ВАЖНО:
+          Эта надпись показывается только
+          во время перехода к началу раунда.
+          После старта первого броска UI
+          снова показывает обычный ход.
+        */
+
+        coinResult.textContent =
+            "ПРАВО НЕУДАЧНИКА";
+
+        status.textContent =
+            `ПЕРВЫМ ХОДИТ ${getPlayerName(currentPlayer)}`;
+
+        arenaTurn.textContent =
+            `ПРАВО НЕУДАЧНИКА`;
+
+        addLog(
+            `⚔️ Право неудачника: ${getPlayerName(currentPlayer)} проиграл прошлый раунд и начинает этот раунд.`
+        );
 
         gameStarted = true;
 
-        status.textContent = `ХОД ИГРОКА ${currentPlayer}`;
-        arenaTurn.textContent = `ХОД ИГРОКА ${currentPlayer}`;
-
-        addLog(
-            `⚔️ Право неудачника: игрок ${currentPlayer} проиграл прошлый раунд и начинает этот раунд.`
-        );
-
         updateUI();
 
-        battleTimer = setTimeout(()=>{
-            automaticTurn();
-        },TURN_DELAY);
+        /*
+          Через небольшую паузу надпись
+          «ПРАВО НЕУДАЧНИКА» исчезнет.
+        */
+
+        battleTimer = setTimeout(() => {
+
+            coinResult.textContent =
+                "БОЙ ПРОДОЛЖАЕТСЯ";
+
+            damageText.textContent =
+                `Первым бросает ${getPlayerName(currentPlayer)}`;
+
+            updateUI();
+
+            battleTimer = setTimeout(() => {
+
+                automaticTurn();
+
+            },450);
+
+        },1100);
 
         return;
     }
 
+    /* ROUND 3 */
+
     if(mode === "autoCoin"){
+
         coinButton.disabled = true;
 
-        coinResult.textContent = "КРУТИМ...";
-        status.textContent = "ЖЕРЕБЬЁВКА";
-        arenaTurn.textContent = "ЖЕРЕБЬЁВКА";
+        coinResult.textContent =
+            "КРУТИМ...";
 
-        addLog("🎲 Решающий раунд: автоматическая жеребьёвка определяет первого игрока.");
+        status.textContent =
+            "ЖЕРЕБЬЁВКА";
+
+        arenaTurn.textContent =
+            "АВТОМАТИЧЕСКАЯ ЖЕРЕБЬЁВКА";
+
+        addLog(
+            "🎲 Счёт 1 : 1. Автоматическая жеребьёвка решит, кто начнёт третий раунд."
+        );
 
         runAutomaticCoinToss();
 
@@ -956,48 +1210,72 @@ function startRound(mode="manual"){
     }
 }
 
+/* ROUND 1 COIN */
+
 function determineFirstPlayer(){
-    if(gameStarted || battleFinished || roundFinished) return;
+
+    if(gameStarted ||
+       battleFinished ||
+       roundFinished) return;
+
     if(currentRound !== 1) return;
 
     initAudio();
+
     playButtonSound();
 
-    const result = Math.random() < .5 ? "ОРЕЛ" : "РЕШКА";
+    const result =
+        Math.random() < .5
+            ? "ОРЕЛ"
+            : "РЕШКА";
 
-    currentPlayer = result === "ОРЕЛ" ? 1 : 2;
+    currentPlayer =
+        result === "ОРЕЛ"
+            ? 1
+            : 2;
 
-    coinResult.textContent = result;
+    coinResult.textContent =
+        result;
 
     gameStarted = true;
 
     coinButton.disabled = true;
 
-    status.textContent = `ХОД ИГРОКА ${currentPlayer}`;
-    arenaTurn.textContent = `ХОД ИГРОКА ${currentPlayer}`;
-
     addLog(
-        `🪙 Выпало ${result}. Игрок ${currentPlayer} получает право первого броска.`
+        `🪙 Выпало ${result}. ${getPlayerName(currentPlayer)} получает право первого броска.`
     );
 
     updateUI();
 
-    battleTimer = setTimeout(()=>{
+    battleTimer = setTimeout(() => {
+
         automaticTurn();
+
     },TURN_DELAY);
 }
 
+/* ROUND 3 AUTO COIN */
+
 function runAutomaticCoinToss(){
+
     let flips = 0;
+
     const totalFlips = 12;
 
-    coinTimer = setInterval(()=>{
-        const visualResult = flips % 2 === 0 ? "ОРЕЛ" : "РЕШКА";
+    coinTimer = setInterval(() => {
 
-        coinResult.textContent = visualResult;
+        const visualResult =
+            flips % 2 === 0
+                ? "ОРЕЛ"
+                : "РЕШКА";
+
+        coinResult.textContent =
+            visualResult;
 
         playClick(
-            visualResult === "ОРЕЛ" ? 620 : 470,
+            visualResult === "ОРЕЛ"
+                ? 620
+                : 470,
             .035,
             .018
         );
@@ -1005,63 +1283,87 @@ function runAutomaticCoinToss(){
         flips++;
 
         if(flips >= totalFlips){
+
             clearInterval(coinTimer);
+
             coinTimer = null;
 
-            const result = Math.random() < .5 ? "ОРЕЛ" : "РЕШКА";
+            const result =
+                Math.random() < .5
+                    ? "ОРЕЛ"
+                    : "РЕШКА";
 
-            currentPlayer = result === "ОРЕЛ" ? 1 : 2;
+            currentPlayer =
+                result === "ОРЕЛ"
+                    ? 1
+                    : 2;
 
-            coinResult.textContent = result;
+            coinResult.textContent =
+                result;
 
             gameStarted = true;
-
-            status.textContent = `ХОД ИГРОКА ${currentPlayer}`;
-            arenaTurn.textContent = `ХОД ИГРОКА ${currentPlayer}`;
 
             playOpenSound();
 
             addLog(
-                `🎲 Автоматическая жеребьёвка: выпало ${result}. Игрок ${currentPlayer} начинает решающий раунд.`
+                `🎲 Автоматическая жеребьёвка: выпало ${result}. ${getPlayerName(currentPlayer)} начинает решающий раунд.`
             );
 
             updateUI();
 
-            battleTimer = setTimeout(()=>{
+            battleTimer = setTimeout(() => {
+
                 automaticTurn();
+
             },TURN_DELAY);
         }
+
     },120);
 }
 
+/* AUTOMATIC TURN */
+
 function automaticTurn(){
-    if(!gameStarted || battleFinished || roundFinished) return;
+
+    if(!gameStarted ||
+       battleFinished ||
+       roundFinished) return;
 
     const stunned =
         currentPlayer === 1
-        ? stunned1
-        : stunned2;
+            ? stunned1
+            : stunned2;
 
     if(stunned){
+
         addLog(
-            `💫 Игрок ${currentPlayer} оглушён и пропускает ход.`
+            `💫 ${getPlayerName(currentPlayer)} оглушён и пропускает ход.`
         );
 
         if(currentPlayer === 1){
+
             stunned1 = false;
+
         }else{
+
             stunned2 = false;
         }
 
         updateUI();
 
-        battleTimer = setTimeout(()=>{
-            currentPlayer = currentPlayer === 1 ? 2 : 1;
+        battleTimer = setTimeout(() => {
+
+            currentPlayer =
+                currentPlayer === 1
+                    ? 2
+                    : 1;
 
             updateUI();
 
-            battleTimer = setTimeout(()=>{
+            battleTimer = setTimeout(() => {
+
                 automaticTurn();
+
             },450);
 
         },650);
@@ -1072,131 +1374,219 @@ function automaticTurn(){
     rollDiceAutomatically();
 }
 
-function rollDiceAutomatically(){
-    if(!gameStarted || battleFinished || roundFinished) return;
+/* DICE */
 
-    const rollingPlayer = currentPlayer;
+function rollDiceAutomatically(){
+
+    if(!gameStarted ||
+       battleFinished ||
+       roundFinished) return;
+
+    const rollingPlayer =
+        currentPlayer;
 
     let elapsed = 0;
 
-    diceTimer = setInterval(()=>{
-        if(!gameStarted || battleFinished || roundFinished){
+    diceTimer = setInterval(() => {
+
+        if(!gameStarted ||
+           battleFinished ||
+           roundFinished){
+
             clearInterval(diceTimer);
+
             diceTimer = null;
+
             return;
         }
 
-        const temp1 = Math.floor(Math.random()*6)+1;
-        const temp2 = Math.floor(Math.random()*6)+1;
+        const temp1 =
+            Math.floor(Math.random()*6)+1;
+
+        const temp2 =
+            Math.floor(Math.random()*6)+1;
 
         drawDice(dice1,temp1);
         drawDice(dice2,temp2);
 
-        resultNumber.textContent = `${temp1}${temp2}`;
+        resultNumber.textContent =
+            `${temp1}${temp2}`;
 
         elapsed += 90;
 
         if(elapsed >= DICE_ANIMATION_TIME){
+
             clearInterval(diceTimer);
+
             diceTimer = null;
 
             finishDiceRoll(rollingPlayer);
         }
+
     },90);
 }
 
-function finishDiceRoll(rollingPlayer){
-    if(!gameStarted || battleFinished || roundFinished) return;
+/* FINISH DICE */
 
-    const die1 = Math.floor(Math.random()*6)+1;
-    const die2 = Math.floor(Math.random()*6)+1;
+function finishDiceRoll(rollingPlayer){
+
+    if(!gameStarted ||
+       battleFinished ||
+       roundFinished) return;
+
+    const die1 =
+        Math.floor(Math.random()*6)+1;
+
+    const die2 =
+        Math.floor(Math.random()*6)+1;
 
     drawDice(dice1,die1);
     drawDice(dice2,die2);
 
-    const result = die1 * 10 + die2;
+    const result =
+        die1 * 10 + die2;
 
-    resultNumber.textContent = result;
-    damageText.textContent = `УРОН: ${result}`;
+    resultNumber.textContent =
+        result;
+
+    damageText.textContent =
+        `УРОН: ${result}`;
 
     playClick(560,.06,.03);
 
-    const targetPlayer = rollingPlayer === 1 ? 2 : 1;
+    const targetPlayer =
+        rollingPlayer === 1
+            ? 2
+            : 1;
 
     if(targetPlayer === 1){
-        hp1 = Math.max(0,hp1 - result);
+
+        hp1 =
+            Math.max(
+                0,
+                hp1 - result
+            );
+
     }else{
-        hp2 = Math.max(0,hp2 - result);
+
+        hp2 =
+            Math.max(
+                0,
+                hp2 - result
+            );
     }
 
     addLog(
-        `Игрок ${rollingPlayer} выбросил ${result} и нанёс ${result} урона игроку ${targetPlayer}.`
+        `${getPlayerName(rollingPlayer)} выбросил ${result} и нанёс ${result} урона ${getPlayerName(targetPlayer)}.`
     );
 
-    const isDouble = die1 === die2;
+    /* DOUBLE / STUN */
+
+    const isDouble =
+        die1 === die2;
 
     if(isDouble){
+
         if(targetPlayer === 1){
+
             stunned1 = true;
+
         }else{
+
             stunned2 = true;
         }
 
         addLog(
-            `🔥 ДУБЛЬ ${result}! Варвар оглушил игрока ${targetPlayer}. Следующий ход игрока ${targetPlayer} будет пропущен.`
+            `🔥 ДУБЛЬ ${result}! ${getPlayerName(rollingPlayer)} оглушил ${getPlayerName(targetPlayer)}. Следующий ход будет пропущен.`
         );
     }
 
     updateUI();
 
-    if(hp1 <= 0 || hp2 <= 0){
-        const winner = hp1 <= 0 ? 2 : 1;
+    /* ROUND END */
 
-        battleTimer = setTimeout(()=>{
+    if(hp1 <= 0 || hp2 <= 0){
+
+        const winner =
+            hp1 <= 0
+                ? 2
+                : 1;
+
+        battleTimer = setTimeout(() => {
+
             finishRound(winner);
+
         },700);
 
         return;
     }
 
-    currentPlayer = currentPlayer === 1 ? 2 : 1;
+    /* NEXT PLAYER */
+
+    currentPlayer =
+        currentPlayer === 1
+            ? 2
+            : 1;
 
     updateUI();
 
-    battleTimer = setTimeout(()=>{
+    battleTimer = setTimeout(() => {
+
         automaticTurn();
+
     },TURN_DELAY);
 }
 
+/* FINISH ROUND */
+
 function finishRound(roundWinner){
-    if(roundFinished || battleFinished) return;
+
+    if(roundFinished ||
+       battleFinished) return;
 
     roundFinished = true;
+
     gameStarted = false;
 
-    previousRoundWinner = roundWinner;
-    previousRoundLoser = roundWinner === 1 ? 2 : 1;
+    previousRoundWinner =
+        roundWinner;
+
+    previousRoundLoser =
+        roundWinner === 1
+            ? 2
+            : 1;
 
     if(roundWinner === 1){
+
         score1++;
+
     }else{
+
         score2++;
     }
 
     addLog(
-        `🏆 Раунд ${currentRound} завершён. Победил игрок ${roundWinner}. Счёт серии: ${score1} : ${score2}.`
+        `🏆 Раунд ${currentRound} завершён. Победил ${getPlayerName(roundWinner)}. Счёт серии: ${score1} : ${score2}.`
     );
 
     updateUI();
 
+    /* SERIES WIN */
+
     if(score1 >= 2 || score2 >= 2){
+
         battleFinished = true;
 
-        winnerTitle.textContent = `ПОБЕДИТЕЛЬ: ИГРОК ${roundWinner}`;
-        winnerScore.textContent = `СЧЁТ СЕРИИ ${score1} : ${score2}`;
+        winnerTitle.textContent =
+            `ПОБЕДИТЕЛЬ: ${getPlayerName(roundWinner)}`;
 
-        nextRoundTimer = setTimeout(()=>{
+        winnerScore.textContent =
+            `СЧЁТ СЕРИИ ${score1} : ${score2}`;
+
+        nextRoundTimer = setTimeout(() => {
+
             winnerOverlay.classList.add("visible");
+
         },800);
 
         return;
@@ -1204,33 +1594,104 @@ function finishRound(roundWinner){
 
     currentRound++;
 
+    /* ROUND 2 */
+
     if(currentRound === 2){
+
         addLog(
-            `⚔️ Следующий раунд начнётся с права неудачника — игрок ${previousRoundLoser} начинает первым.`
+            `⚔️ Следующий раунд начнётся с права неудачника — ${getPlayerName(previousRoundLoser)} начнёт первым.`
         );
 
-        nextRoundTimer = setTimeout(()=>{
+        nextRoundTimer = setTimeout(() => {
+
             startRound("loser");
+
         },NEXT_ROUND_DELAY);
 
         return;
     }
 
+    /* ROUND 3 */
+
     if(currentRound === 3){
+
         addLog(
-            "🎲 Счёт 1 : 1. Начинается решающий третий раунд с автоматической жеребьёвкой."
+            "🎲 Счёт 1 : 1. Начинается решающий третий раунд."
         );
 
-        nextRoundTimer = setTimeout(()=>{
+        nextRoundTimer = setTimeout(() => {
+
             startRound("autoCoin");
+
         },NEXT_ROUND_DELAY);
     }
 }
 
+/* NEW GAME */
+
+function startNewGame(){
+
+    const enteredName1 =
+        name1Input.value.trim();
+
+    const enteredName2 =
+        name2Input.value.trim();
+
+    playerName1 =
+        enteredName1 || "ИГРОК 1";
+
+    playerName2 =
+        enteredName2 || "ИГРОК 2";
+
+    player1Name.textContent =
+        playerName1;
+
+    player2Name.textContent =
+        playerName2;
+
+    namesPanel.style.display =
+        "none";
+
+    score1 = 0;
+    score2 = 0;
+
+    currentRound = 1;
+
+    currentPlayer = 1;
+
+    previousRoundWinner = null;
+    previousRoundLoser = null;
+
+    gameStarted = false;
+    battleFinished = false;
+    roundFinished = false;
+
+    winnerOverlay.classList.remove(
+        "visible"
+    );
+
+    log.innerHTML = "";
+
+    status.textContent =
+        "ГОТОВНОСТЬ";
+
+    coinButton.disabled = false;
+
+    startRound("manual");
+}
+
+/* RESTART */
+
 function restartGame(){
+
     clearTimers();
 
-    winnerOverlay.classList.remove("visible");
+    winnerOverlay.classList.remove(
+        "visible"
+    );
+
+    namesPanel.style.display =
+        "flex";
 
     score1 = 0;
     score2 = 0;
@@ -1247,38 +1708,108 @@ function restartGame(){
 
     log.innerHTML = "";
 
-    coinButton.disabled = false;
-    coinResult.textContent = "—";
+    coinButton.disabled = true;
 
-    status.textContent = "ОЖИДАНИЕ";
-    arenaTurn.textContent = "ОЖИДАНИЕ";
+    coinResult.textContent =
+        "СНАЧАЛА ВВЕДИТЕ НИКИ";
 
-    startRound("manual");
+    status.textContent =
+        "ВВЕДИТЕ НИКИ";
+
+    arenaTurn.textContent =
+        "ОЖИДАНИЕ";
+
+    name1Input.value =
+        playerName1;
+
+    name2Input.value =
+        playerName2;
+
+    updateUI();
 }
 
+/* KICK */
+
 function kickMessage(){
+
     initAudio();
+
     playButtonSound();
 
     alert(
-        "Хотите кикнуть команду и занять этот слот?\n\nОбращайтесь в ТГ @VankKingX\nЦена слота: 100 рублей."
+        "Хотите кикнуть команду и занять этот слот?\n\n" +
+        "Обращайтесь в ТГ @VankKingX\n" +
+        "Цена слота: 100 рублей."
     );
 }
 
-coinButton.addEventListener("click",determineFirstPlayer);
+/* EVENTS */
 
-winnerClose.addEventListener("click",()=>{
-    playCloseSound();
-    restartGame();
-});
+startGameButton.addEventListener(
+    "click",
+    () => {
 
-coinButton.addEventListener("mouseenter",()=>{
-    if(!coinButton.disabled){
-        playHoverSound();
+        initAudio();
+
+        playButtonSound();
+
+        startNewGame();
     }
-});
+);
 
-startRound("manual");
+coinButton.addEventListener(
+    "click",
+    determineFirstPlayer
+);
+
+winnerClose.addEventListener(
+    "click",
+    () => {
+
+        playCloseSound();
+
+        restartGame();
+    }
+);
+
+coinButton.addEventListener(
+    "mouseenter",
+    () => {
+
+        if(!coinButton.disabled){
+            playHoverSound();
+        }
+    }
+);
+
+/* ENTER IN NAME */
+
+name1Input.addEventListener(
+    "keydown",
+    event => {
+
+        if(event.key === "Enter"){
+            name2Input.focus();
+        }
+    }
+);
+
+name2Input.addEventListener(
+    "keydown",
+    event => {
+
+        if(event.key === "Enter"){
+            startNewGame();
+        }
+    }
+);
+
+/* INITIAL */
+
+drawDice(dice1,1);
+drawDice(dice2,1);
+
+updateUI();
 </script>
 
 </body>
