@@ -809,3 +809,74 @@ input[type="range"].speed-slider::-moz-range-thumb { width: 26px; height: 26px; 
   .podium-row { padding: 5px 10px; font-size: 12px; }
   .sim-log { max-height: 120px; }
 }
+/* ============ КНОПКА "СМОТРЕТЬ БОИ" ============ */
+#watchBtn {
+  background: linear-gradient(180deg, #a5b4fc 0%, #6366f1 45%, #4f46e5 100%);
+  box-shadow: 0 6px 0 #3730a3, 0 8px 20px rgba(99,102,241,0.45), inset 0 1px 0 rgba(255,255,255,0.4);
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+#watchBtn:active { transform: translateY(2px); }
+
+/* ============ МАТЧ-БАННЕР В #app ============ */
+.match-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 14px;
+  background: linear-gradient(180deg, rgba(99,102,241,0.22), rgba(99,102,241,0.05));
+  border: 1px solid rgba(99,102,241,0.35);
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  flex-shrink: 0;
+  color: #c7d2fe;
+}
+.match-banner .mb-info { color: #a5b4fc; }
+.match-banner .mb-score {
+  color: #fbbf24;
+  font-size: 15px;
+  letter-spacing: 2px;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 10px rgba(251,191,36,0.5);
+}
+
+/* ============ РЕЗУЛЬТАТ МАТЧА ============ */
+.match-result-card {
+  background: linear-gradient(160deg, rgba(30,42,74,0.98), rgba(15,23,41,0.98));
+  border: 2px solid rgba(251,191,36,0.5);
+  border-radius: 22px;
+  padding: 22px 26px;
+  text-align: center;
+  max-width: 340px;
+  width: 100%;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 60px rgba(251,191,36,0.25);
+  margin: auto;
+  animation: cardIn 0.3s cubic-bezier(.2,.8,.3,1);
+}
+.match-result-card .mr-title {
+  font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+  color: #8892b0; font-weight: 800; margin-bottom: 14px;
+}
+.match-result-card .mr-winner {
+  font-size: 22px; font-weight: 900; color: #4ade80;
+  letter-spacing: 1px; margin-bottom: 4px;
+  text-shadow: 0 0 16px rgba(74,222,128,0.6);
+  word-break: break-word;
+}
+.match-result-card .mr-score {
+  font-size: 30px; font-weight: 900;
+  color: #fbbf24;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 4px;
+  margin: 8px 0;
+  text-shadow: 0 0 16px rgba(251,191,36,0.7);
+}
+.match-result-card .mr-loser {
+  font-size: 14px; font-weight: 700; color: #94a3b8;
+  letter-spacing: 1px; opacity: 0.8;
+  word-break: break-word;
+}
+
+#matchResultOverlay { background: rgba(0,0,0,0.7); }
