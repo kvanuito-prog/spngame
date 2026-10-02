@@ -216,7 +216,7 @@
       <div class="summon-line" id="summon1">
         <span class="summon-icon" id="summonIcon1">🐗</span>
         <span class="summon-name" id="summonName1">Кабан</span>
-        <span class="summon-hp" id="summonHp1">22/22</span>
+        <span class="summon-hp" id="summonHp1">33/33</span>
       </div>
     </div>
     <div class="player" id="p2">
@@ -230,7 +230,7 @@
       <div class="summon-line" id="summon2">
         <span class="summon-icon" id="summonIcon2">🐗</span>
         <span class="summon-name" id="summonName2">Кабан</span>
-        <span class="summon-hp" id="summonHp2">22/22</span>
+        <span class="summon-hp" id="summonHp2">33/33</span>
       </div>
     </div>
   </div>
@@ -331,7 +331,7 @@
   var hp1 = MAX_HP, hp2 = MAX_HP;
   var gameOver = false;
   var stunned = { 1: false, 2: false };
-  var jokerBuff = { 1: 0, 2: 0 };   // 0 = нет, 2 = круглое, 3 = красивое
+  var jokerBuff = { 1: 0, 2: 0 };
   var summons = { 1: null, 2: null };
   var autoPlay = false, autoTimer = null;
 
@@ -355,14 +355,17 @@
     return false;
   }
 
+  // ============ БЕРСЕРК ============
   function getBerserkerBonus(hp) {
     if (hp <= 0) return 0;
-    if (hp === 1) return 100;
-    if (hp < 5) return 50;
-    if (hp < 10) return 45;
-    if (hp < 50) return 40;
-    if (hp < 100) return 30;
-    if (hp < 150) return 10;
+    if (hp === 1) return 150;
+    if (hp < 5) return 100;
+    if (hp < 50) return 60;
+    if (hp < 100) return 50;
+    if (hp < 150) return 40;
+    if (hp < 200) return 35;
+    if (hp < 250) return 25;
+    if (hp < 300) return 15;
     return 0;
   }
   function getPlayerHp(p) { return p === 1 ? hp1 : hp2; }
@@ -391,12 +394,14 @@
       return false;
     }
     function bers(hp) {
-      if (hp === 1) return 100;
-      if (hp < 5) return 50;
-      if (hp < 10) return 45;
-      if (hp < 50) return 40;
-      if (hp < 100) return 30;
-      if (hp < 150) return 10;
+      if (hp === 1) return 150;
+      if (hp < 5) return 100;
+      if (hp < 50) return 60;
+      if (hp < 100) return 50;
+      if (hp < 150) return 40;
+      if (hp < 200) return 35;
+      if (hp < 250) return 25;
+      if (hp < 300) return 15;
       return 0;
     }
     function applyJoker(p) {
@@ -613,7 +618,7 @@
       if (bonus > 0) {
         el.classList.add('has-rage');
         badge.textContent = '🩸 +' + bonus;
-        if (bonus === 100) el.classList.add('rage-max');
+        if (bonus >= 100) el.classList.add('rage-max');
         else el.classList.remove('rage-max');
       } else {
         el.classList.remove('has-rage');
