@@ -1535,4 +1535,223 @@ function applyHit(attacker, defender, dmg, isDouble, stunCaused, isCrit, heal, j
   if (isCrit) floatType = 'crit';
   else if (isWeak) floatType = 'weak';
   showFloatingDamage(defender, dmg, floatType);
-  if (heal > 0) setTimeout(function() { showFloatingDamage(attacker, heal
+  if (heal > 0) setTimeout(function() { showFloatingDamage(attacker, heal, 'heal'); }, 150);
+
+  shakeCard(defender); flashHpBar(defender);
+  var defRect = document.getElementById('p' + defender).getBoundingClientRect();
+  var cx = defRect.left + defRect.width / 2;
+  var cy = defRect.top + defRect.height / 2;
+
+  var intensity = 0;
+  if (isCrit) intensity = 3;
+  else if (isWeak) intensity = 1;
+  else if (dmg >= 60) intensity = 2;
+  else if (dmg >= 40) intensity = 1;
+  if (rageBonus > 0 && dmg >= 70) intensity = Math.max(intensity, 2);
+  if (intensity >= 2) shakeScreen(intensity === 3);
+  if (intensity === 3) {
+    spawnSparks(cx, cy, 30, '#fbbf24', 6);
+    spawnSparks(cx, cy, 15, '#ef4444', 4);
+    spawnShockwave(cx, cy, '#fbbf24');
+  } else if (intensity === 2) spawnSparks(cx, cy, 15, '#f87171', 4);
+  else if (intensity === 1) spawnSparks(cx, cy, 8, '#f87171', 3);
+
+  if ((v1 === 6 && v2 === 6) || (isCrit && dmg >= 100)) {
+    dieEls.forEach(function(el) {
+      el.classList.remove('max-pulse'); void el.offsetWidth;
+      el.classList.add('max-pulse');
+      setTimeout(function() { el.classList.remove('max-pulse'); }, 650);
+    });
+  }
+
+  addAttackLog({
+    number: rollNumber, attacker: attacker, defender: defender, dmg: dmg,
+    v1: v1, v2: v2, formula: formula, isCrit: isCrit, isWeak: isWeak, heal: heal,
+    jokerMult: jokerMult, rageBonus: rageBonus, stunCaused: stunCaused,
+    summonInfo: summonInfo, isDouble: isDouble,
+    defHpBefore: defHpBefore, defHpAfter: defHpAfter
+  });
+
+  if (dr.summonDied) addSummonDeathLog(defender, dr.killed, dr.toPlayer);
+  if (heal > 0) {
+    if (attacker === 1) hp1 = Math.min(MAX_HP, hp1 + heal); else hp2 = Math.min(MAX_HP, hp2 + heal);
+  }
+  finishTurnAfterAction(attacker, defender, 0);
+}
+
+function showGameOver() {
+  var winner = hp1 <= 0 ? 2 : 1;
+
+  if (gameMode === 'tournament' && tournamentGameCallback) {
+    var cb = tournamentGameCallback;
+    tournamentGameCallback = null;
+    autoPlay = false;
+    clearTimeout(autoTimer);
+    var w = winner;
+    setTimeout(function() { cb(w); }, 900);
+    return;
+  }
+
+  overlayTitle.textContent = 'Игрок ' + winner + ' победил!';
+  overlayTitle.style.color = winner === 1 ? '#4ade80' : '#60a5fa';
+  overlaySub.textContent = CLASSES[classes[1]].label + ': ' + hp1 + ' HP  ·  ' + CLASSES[classes[2]].label + ': ' + hp2 + ' HP  ·  ' + speed + '×';
+  overlay.classList.add('show');
+  setHint('Игра окончена');
+  battleBtn.classList.add('hidden');
+  var card = document.getElementById('p' + winner);
+  if (card) {
+    var r = card.getBoundingClientRect();
+    spawnSparks(r.left + r.width / 2, r.top + r.height / 2, 40, '#4ade80', 6);
+  }
+}
+
+function startAuto() {
+  if (gameOver) return;
+  autoPlay = true;
+  battleBtn.textContent = '⏸ СТОП';
+  battleBtn.className = 'control-btn stop';
+  setHint('⚔ Бой идёт... (' + speed + '×)');
+  roll();
+}
+function stopAuto() {
+  autoPlay = false;
+  clearTimeout(autoTimer);
+  battleBtn.textContent = '▶ НАЧАТЬ БОЙ';
+  battleBtn.className = 'control-btn start';
+  if (!gameOver) setHint('Пауза. Нажми «Начать бой»');
+}
+
+function resetGame() {
+  hp1 = MAX_HP; hp2 = MAX_HP;
+  hpDisplay[1] = MAX_HP; hpDisplay[2] = MAX_HP;
+  hpTarget[1] = MAX_HP; hpTarget[2] = MAX_HP;
+  turn = 1; rollNumber = 0;
+  gameOver = false; rolling = false;
+  autoPlay = false; clearTimeout(autoTimer);
+  stunned[1] = false; stunned[2] = false;
+  jokerBuff[1] = 0; jokerBuff[2] = 0;
+  summons[1] = null; summons[2] = null;
+  barbWeak[1] = false; barbWeak[2] = false;
+  logList.innerHTML = '';
+  resultEl.textContent = '— —';
+  resultEl.className = 'result';
+  overlay.classList.remove('show');
+  if (gameMode === 'tournament') {
+    battleBtn.textContent = '⏸ ПАУЗА';
+    battleBtn.className = 'control-btn stop';
+  } else {
+    battleBtn.textContent = '▶ НАЧАТЬ БОЙ';
+    battleBtn.className = 'control-btn start';
+  }
+  battleBtn.classList.remove('hidden');
+  setDieGlow(null);
+  document.getElementById('hpVal1').textContent = MAX_HP;
+  document.getElementById('hpVal2').textContent = MAX_HP;
+  turn = coinFlip();
+  addCoinLog(turn);
+  dieEls.forEach(function(el) { renderDie(el, randomDie()); });
+  updatePlayersUI();
+}
+
+document.getElementById('startGameBtn').addEventListener('click', function(e) {
+  e.stopPropagation();
+  gameMode = 'quick';
+  classes[1] = pendingClasses[1];
+  classes[2] = pendingClasses[2];
+  selectOverlay.classList.remove('show');
+  appEl.classList.add('show');
+  matchBanner.style.display = 'none';
+  exitBtn.classList.add('hidden');
+  resetGame();
+});
+
+exitBtn.addEventListener('click', function(e) {
+  e.stopPropagation();
+  if (gameMode === 'tournament') {
+    autoPlay = false;
+    clearTimeout(autoTimer);
+    appEl.classList.remove('show');
+    matchBanner.style.display = 'none';
+    exitBtn.classList.add('hidden');
+    matchResultOverlay.classList.remove('show');
+    simOverlay.classList.remove('show');
+    championOverlay.classList.remove('show');
+    bracketOverlay.classList.remove('show');
+    menuOverlay.classList.add('show');
+    gameMode = 'quick';
+    tournamentRun = null;
+    tournamentGameCallback = null;
+    return;
+  }
+  stopAuto();
+  appEl.classList.remove('show');
+  menuOverlay.classList.add('show');
+});
+
+document.getElementById('toMenuBtn').addEventListener('click', function(e) {
+  e.stopPropagation();
+  overlay.classList.remove('show');
+  appEl.classList.remove('show');
+  menuOverlay.classList.add('show');
+  gameMode = 'quick';
+});
+document.getElementById('restartBtn').addEventListener('click', function(e) { e.stopPropagation(); resetGame(); });
+document.getElementById('changeClassesBtn').addEventListener('click', function(e) {
+  e.stopPropagation();
+  overlay.classList.remove('show');
+  appEl.classList.remove('show');
+  selectOverlay.classList.add('show');
+  gameMode = 'quick';
+});
+
+document.body.addEventListener('click', function(e) {
+  if (!appEl.classList.contains('show')) return;
+  if (gameMode !== 'quick') return;
+  if (e.target.closest('.log-wrap')) return;
+  if (e.target.closest('.controls')) return;
+  if (e.target.closest('.speed-box')) return;
+  if (e.target.closest('.overlay')) return;
+  if (autoPlay || gameOver) return;
+  roll();
+});
+document.body.addEventListener('touchstart', function(e) {
+  if (!appEl.classList.contains('show')) return;
+  if (gameMode !== 'quick') return;
+  if (e.target.closest('.log-wrap')) return;
+  if (e.target.closest('.controls')) return;
+  if (e.target.closest('.speed-box')) return;
+  if (e.target.closest('.overlay')) return;
+  e.preventDefault();
+  if (autoPlay || gameOver) return;
+  roll();
+}, { passive: false });
+
+battleBtn.addEventListener('click', function(e) {
+  e.stopPropagation();
+  if (gameMode === 'tournament') {
+    if (autoPlay) {
+      autoPlay = false;
+      clearTimeout(autoTimer);
+      battleBtn.textContent = '▶ ПРОДОЛЖИТЬ';
+      battleBtn.className = 'control-btn start';
+    } else {
+      autoPlay = true;
+      battleBtn.textContent = '⏸ ПАУЗА';
+      battleBtn.className = 'control-btn stop';
+      if (!rolling && !gameOver) roll();
+    }
+    return;
+  }
+  if (autoPlay) stopAuto(); else startAuto();
+});
+
+speedSlider.addEventListener('input', function(e) {
+  e.stopPropagation();
+  speed = parseInt(speedSlider.value, 10);
+  speedValue.textContent = speed;
+});
+
+// ============ ИНИЦИАЛИЗАЦИЯ ============
+renderSelectionUI();
+dieEls.forEach(function(el) { renderDie(el, randomDie()); });
+updatePlayersUI();
