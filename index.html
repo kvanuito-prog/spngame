@@ -59,6 +59,7 @@
   .pclass.vampire { color: #a855f7; }
   .pclass.joker { color: #10b981; }
   .pclass.druid { color: #22c55e; }
+  .pclass.berserker { color: #dc2626; }
   .hp-bar { width: 100%; height: 7px; background: rgba(0,0,0,0.4); border-radius: 4px; overflow: hidden; margin-bottom: 2px; }
   .hp-fill {
     height: 100%; width: 100%;
@@ -88,6 +89,27 @@
   @keyframes buffPulse {
     0%,100% { box-shadow: 0 0 6px rgba(16,185,129,0.6); }
     50%     { box-shadow: 0 0 18px rgba(16,185,129,1); }
+  }
+
+  /* Значок ярости (капелька крови) */
+  .rage-badge {
+    position: absolute; top: 4px; left: 4px;
+    background: linear-gradient(145deg, #dc2626, #991b1b);
+    color: #fff;
+    font-size: 9px; font-weight: 800;
+    padding: 2px 6px; border-radius: 5px; letter-spacing: 0.5px;
+    display: none;
+    border: 1px solid #fca5a5;
+  }
+  .player.has-rage .rage-badge { display: block; }
+  .player.has-rage.rage-max {
+    border-color: #dc2626 !important;
+    background: rgba(220,38,38,0.15) !important;
+    animation: rageMaxPulse 0.9s infinite;
+  }
+  @keyframes rageMaxPulse {
+    0%,100% { box-shadow: 0 0 10px rgba(220,38,38,0.5); }
+    50%     { box-shadow: 0 0 28px rgba(220,38,38,1); }
   }
 
   /* Суммон */
@@ -135,6 +157,10 @@
     box-shadow: 0 0 30px rgba(217,119,6,0.95), 0 0 60px rgba(251,191,36,0.6), inset 0 -3px 6px rgba(0,0,0,0.15);
     background: #fff7ed;
   }
+  .die.rage-glow {
+    box-shadow: 0 0 30px rgba(220,38,38,0.95), 0 0 60px rgba(239,68,68,0.6), inset 0 -3px 6px rgba(0,0,0,0.15);
+    background: #ffe6e6;
+  }
   @keyframes shake {
     0%   { transform: rotate(-5deg) scale(1.03); }
     50%  { transform: rotate(5deg) scale(0.97); }
@@ -173,6 +199,11 @@
   .result.summon {
     color: #f59e0b;
     text-shadow: 0 0 40px rgba(217,119,6,1), 0 0 20px rgba(251,191,36,0.6);
+    animation: critFlash 0.45s ease-out;
+  }
+  .result.rage {
+    color: #dc2626;
+    text-shadow: 0 0 40px rgba(220,38,38,1), 0 0 20px rgba(239,68,68,0.6);
     animation: critFlash 0.45s ease-out;
   }
   @keyframes critFlash {
@@ -224,6 +255,8 @@
   .log-entry.vampire .dmg { color: #a855f7; text-shadow: 0 0 8px rgba(168,85,247,0.9); font-size: 13px; }
   .log-entry.joker { background: rgba(16,185,129,0.14); border-left: 3px solid #10b981; }
   .log-entry.joker .dmg { color: #10b981; text-shadow: 0 0 8px rgba(16,185,129,0.9); font-size: 13px; }
+  .log-entry.rage { background: rgba(220,38,38,0.14); border-left: 3px solid #dc2626; }
+  .log-entry.rage .dmg { color: #dc2626; text-shadow: 0 0 8px rgba(220,38,38,0.9); font-size: 13px; }
   .log-entry.summon-attack { background: rgba(217,119,6,0.10); border-left: 3px solid #d97706; }
   .log-entry.summon-attack .who { color: #fbbf24; }
   .log-entry.summon-attack .dmg { color: #fbbf24; }
@@ -340,7 +373,7 @@
   .select-pname.p2 { color: #60a5fa; }
   .select-list { display: flex; gap: 4px; flex-wrap: wrap; }
   .class-card {
-    flex: 1 1 calc(20% - 4px); min-width: 0;
+    flex: 1 1 calc(33.33% - 4px); min-width: 0;
     padding: 7px 3px;
     border: 2px solid rgba(255,255,255,0.1);
     border-radius: 10px; text-align: center;
@@ -397,6 +430,7 @@
   <div class="players">
     <div class="player" id="p1">
       <div class="buff-badge">🎲 x3</div>
+      <div class="rage-badge" id="rage1">🩸 +0</div>
       <div class="stun-badge">⚡ СТАН</div>
       <div class="pname">Игрок 1</div>
       <div class="pclass" id="pclass1">—</div>
@@ -410,6 +444,7 @@
     </div>
     <div class="player" id="p2">
       <div class="buff-badge">🎲 x3</div>
+      <div class="rage-badge" id="rage2">🩸 +0</div>
       <div class="stun-badge">⚡ СТАН</div>
       <div class="pname">Игрок 2</div>
       <div class="pclass" id="pclass2">—</div>
@@ -486,6 +521,11 @@
       icon: '🐉', short: 'Друид',
       label: '🐉 Друид', css: 'druid',
       desc: 'Дубль → суммон. Он бьёт.'
+    },
+    berserker: {
+      icon: '🔥', short: 'Берсерк',
+      label: '🔥 Берсерк', css: 'berserker',
+      desc: 'Мало HP → бонус к урону.'
     }
   };
 
@@ -553,6 +593,22 @@
     return true;
   }
 
+  // ============ БЕРСЕРК ============
+  function getBerserkerBonus(hp) {
+    if (hp <= 0) return 0;
+    if (hp === 1) return 100;
+    if (hp < 5) return 50;
+    if (hp < 10) return 45;
+    if (hp < 50) return 40;
+    if (hp < 100) return 30;
+    if (hp < 150) return 10;
+    return 0;
+  }
+
+  function getPlayerHp(p) {
+    return p === 1 ? hp1 : hp2;
+  }
+
   // ============ КУБИКИ ============
   function renderDie(el, value) {
     el.innerHTML = '';
@@ -570,11 +626,12 @@
 
   function setDieGlow(type) {
     dieEls.forEach(function(el) {
-      el.classList.remove('crit-glow', 'vampire-glow', 'joker-glow', 'summon-glow');
+      el.classList.remove('crit-glow', 'vampire-glow', 'joker-glow', 'summon-glow', 'rage-glow');
       if (type === 'crit') el.classList.add('crit-glow');
       else if (type === 'vampire') el.classList.add('vampire-glow');
       else if (type === 'joker') el.classList.add('joker-glow');
       else if (type === 'summon') el.classList.add('summon-glow');
+      else if (type === 'rage') el.classList.add('rage-glow');
     });
   }
 
@@ -667,36 +724,60 @@
     p1.className = cls1;
     p2.className = cls2;
 
+    // Берсерк: значок ярости
+    updateRageBadge(1);
+    updateRageBadge(2);
+
     updateSummonUI(1);
     updateSummonUI(2);
+  }
+
+  function updateRageBadge(p) {
+    var el = document.getElementById('p' + p);
+    var badge = document.getElementById('rage' + p);
+    if (classes[p] === 'berserker' && !gameOver && hp1 > 0 && hp2 > 0) {
+      var hp = getPlayerHp(p);
+      var bonus = getBerserkerBonus(hp);
+      if (bonus > 0) {
+        el.classList.add('has-rage');
+        badge.textContent = '🩸 +' + bonus;
+        if (bonus === 100) el.classList.add('rage-max');
+        else el.classList.remove('rage-max');
+      } else {
+        el.classList.remove('has-rage');
+        el.classList.remove('rage-max');
+      }
+    } else {
+      el.classList.remove('has-rage');
+      el.classList.remove('rage-max');
+    }
   }
 
   function setHint(text) { hintEl.textContent = text; }
 
   // ============ ЛОГ ============
-  function addLogEntry(number, attacker, dmg, isDouble, stunCaused, isCrit, heal, isJokerHit, summonInfo) {
+  function addLogEntry(number, attacker, dmg, isDouble, stunCaused, isCrit, heal, isJokerHit, summonInfo, rageBonus) {
     var entry = document.createElement('div');
     var extraClass = '';
     if (isCrit) extraClass = ' crit';
     else if (heal) extraClass = ' vampire';
     else if (isJokerHit) extraClass = ' joker';
+    else if (rageBonus > 0) extraClass = ' rage';
     else if (summonInfo) extraClass = ' summon-attack';
     else if (isDouble) extraClass = ' double';
     entry.className = 'log-entry' + extraClass;
 
     var idx = document.createElement('span'); idx.className = 'idx'; idx.textContent = '#' + number;
     var who = document.createElement('span'); who.className = 'who p' + attacker;
-    if (summonInfo) {
-      who.textContent = summonInfo.icon + ' И' + attacker;
-    } else {
-      who.textContent = 'Игрок ' + attacker;
-    }
+    if (summonInfo) who.textContent = summonInfo.icon + ' И' + attacker;
+    else who.textContent = 'Игрок ' + attacker;
     var dmgEl = document.createElement('span'); dmgEl.className = 'dmg';
 
     var suffix = '';
     if (isCrit) suffix = ' 💥 КРИТ×2';
     else if (isJokerHit) suffix = ' 🎲×3';
     else if (heal) suffix = ' 🧛 +' + heal;
+    if (rageBonus > 0) suffix += ' 🩸+' + rageBonus;
     if (stunCaused) suffix += ' ⚡';
 
     dmgEl.textContent = '−' + dmg + suffix;
@@ -771,8 +852,6 @@
   }
 
   // ============ РАСПРЕДЕЛЕНИЕ УРОНА ============
-  // Если у защитника есть суммон — сначала бьём суммона.
-  // Переполнение идёт в игрока.
   function dealDamage(defender, dmg) {
     var s = summons[defender];
     if (s) {
@@ -835,7 +914,6 @@
 
       // ===== ДРУИД =====
       if (cls === 'druid') {
-        // Если есть суммон — бьёт суммон
         if (summons[attacker]) {
           var s = summons[attacker];
           var summonDmg = Math.floor(baseDmg * s.mult);
@@ -845,10 +923,9 @@
           setDieGlow('summon');
           setTimeout(function() { setDieGlow(null); }, 600);
           setHint(s.icon + ' ' + s.name + ' атакует!');
-          applyHit(attacker, defender, summonDmg, isDouble, stunFromBear, false, 0, false, { icon: s.icon, name: s.name });
+          applyHit(attacker, defender, summonDmg, isDouble, stunFromBear, false, 0, false, { icon: s.icon, name: s.name }, 0);
           return;
         }
-        // Суммона нет, дубль — призыв
         if (isDouble) {
           var info = SUMMON_TABLE[baseDmg];
           if (info) {
@@ -864,8 +941,7 @@
             return;
           }
         }
-        // Обычный удар без суммона
-        applyHit(attacker, defender, baseDmg, isDouble, false, false, 0, false, null);
+        applyHit(attacker, defender, baseDmg, isDouble, false, false, 0, false, null, 0);
         return;
       }
 
@@ -879,7 +955,7 @@
             resultEl.className = 'result crit';
             setDieGlow('crit');
             setTimeout(function() { setDieGlow(null); }, 600);
-            applyHit(attacker, defender, critDmg, false, false, true, 0, false, null);
+            applyHit(attacker, defender, critDmg, false, false, true, 0, false, null, 0);
           });
         }, getCritPause());
         return;
@@ -895,7 +971,7 @@
             resultEl.className = 'result vampire';
             setDieGlow('vampire');
             setTimeout(function() { setDieGlow(null); }, 600);
-            applyHit(attacker, defender, biteDmg, false, false, false, biteDmg, false, null);
+            applyHit(attacker, defender, biteDmg, false, false, false, biteDmg, false, null, 0);
           });
         }, getCritPause());
         return;
@@ -915,6 +991,20 @@
         setHint('🎲 Джокер активировал ×3!');
       }
 
+      // ===== Берсерк: бонус ярости =====
+      var rageBonus = 0;
+      if (cls === 'berserker') {
+        rageBonus = getBerserkerBonus(getPlayerHp(attacker));
+        if (rageBonus > 0) {
+          dmg = baseDmg + rageBonus;
+          resultEl.textContent = dmg + '';
+          resultEl.className = 'result rage';
+          setDieGlow('rage');
+          setTimeout(function() { setDieGlow(null); }, 600);
+          setHint('🔥 Ярость +' + rageBonus + '!');
+        }
+      }
+
       // ===== Варвар =====
       var stunCaused = false;
       if (cls === 'barbarian' && isDouble && hp1 > 0 && hp2 > 0) {
@@ -922,7 +1012,7 @@
         stunCaused = true;
       }
 
-      applyHit(attacker, defender, dmg, isDouble, stunCaused, false, 0, isJokerHit, null);
+      applyHit(attacker, defender, dmg, isDouble, stunCaused, false, 0, isJokerHit, null, rageBonus);
     });
   }
 
@@ -976,11 +1066,11 @@
   }
 
   // ============ УРОН ============
-  function applyHit(attacker, defender, dmg, isDouble, stunCaused, isCrit, heal, isJokerHit, summonInfo) {
+  function applyHit(attacker, defender, dmg, isDouble, stunCaused, isCrit, heal, isJokerHit, summonInfo, rageBonus) {
     rollNumber++;
     var dr = dealDamage(defender, dmg);
 
-    addLogEntry(rollNumber, attacker, dmg, isDouble, stunCaused, isCrit, heal, isJokerHit, summonInfo);
+    addLogEntry(rollNumber, attacker, dmg, isDouble, stunCaused, isCrit, heal, isJokerHit, summonInfo, rageBonus);
 
     if (dr.summonDied) {
       addSummonDeathLog(defender, dr.killed, dr.toPlayer);
