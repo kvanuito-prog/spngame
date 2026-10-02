@@ -1,3 +1,17 @@
+// ============ ВЕРСИЯ ИГРЫ ============
+var GAME_VERSION = '1.01';
+(function showVersion() {
+  function set() {
+    var el = document.getElementById('versionBadge');
+    if (el) el.textContent = 'v' + GAME_VERSION;
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', set);
+  } else {
+    set();
+  }
+})();
+
 // ============ ЧАСТИЦЫ ФОНА ============
 (function initParticles() {
   var canvas = document.getElementById('bg-canvas');
