@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -7,591 +8,729 @@
 <title>SPN BATTLE</title>
 
 <style>
-    * {
-        box-sizing: border-box;
-        -webkit-tap-highlight-color: transparent;
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #05070b;
+    color: #f3f7fb;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+}
+
+button {
+    font: inherit;
+}
+
+.game {
+    width: 100%;
+    height: 100vh;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 14px;
+    overflow: hidden;
+}
+
+/* ================= HEADER ================= */
+
+.header {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    height: 54px;
+    padding: 0 18px;
+    border: 1px solid #172231;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #0c131d, #080d15);
+    box-shadow: 0 8px 30px rgba(0,0,0,.3);
+}
+
+.logo {
+    font-size: clamp(22px, 2.2vw, 34px);
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #24d8ff;
+    text-shadow: 0 0 18px rgba(36,216,255,.25);
+}
+
+.round-info {
+    text-align: center;
+    line-height: 1.1;
+}
+
+.round-title {
+    font-size: clamp(13px, 1.3vw, 19px);
+    font-weight: 800;
+    color: #8ea5bb;
+}
+
+.score {
+    margin-top: 3px;
+    font-size: clamp(18px, 1.8vw, 27px);
+    font-weight: 900;
+    color: #fff;
+}
+
+.status {
+    min-width: 150px;
+    text-align: right;
+    font-size: clamp(11px, 1.1vw, 15px);
+    font-weight: 800;
+    color: #647b91;
+}
+
+/* ================= COIN ================= */
+
+.coin-panel {
+    flex: 0 0 auto;
+    height: 82px;
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    border: 1px solid #172231;
+    border-radius: 14px;
+    background: #080d15;
+}
+
+.coin-label {
+    font-size: clamp(11px, 1.1vw, 15px);
+    color: #7890a7;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.coin-button {
+    min-width: 150px;
+    height: 52px;
+    padding: 0 24px;
+    border: 1px solid #008acb;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #008dcc, #006a9d);
+    color: white;
+    font-size: clamp(15px, 1.4vw, 20px);
+    font-weight: 900;
+    letter-spacing: .8px;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(0,168,255,.16);
+    transition: .15s ease;
+}
+
+.coin-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 26px rgba(0,168,255,.28);
+}
+
+.coin-button:active {
+    transform: scale(.97);
+}
+
+.coin-button:disabled {
+    opacity: .5;
+    cursor: default;
+    transform: none;
+}
+
+.coin-result {
+    min-width: 110px;
+    text-align: center;
+    font-size: clamp(13px, 1.3vw, 18px);
+    font-weight: 900;
+    color: #24d8ff;
+}
+
+/* ================= BATTLE ================= */
+
+.battle {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, .7fr) minmax(0, 1fr);
+    gap: 10px;
+}
+
+.player {
+    min-width: 0;
+    min-height: 0;
+    padding: clamp(10px, 1.2vw, 18px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid #172231;
+    border-radius: 16px;
+    background:
+        radial-gradient(circle at top, rgba(0,168,255,.07), transparent 50%),
+        #090e16;
+    box-shadow: 0 10px 35px rgba(0,0,0,.28);
+    position: relative;
+    overflow: hidden;
+}
+
+.player.active {
+    border-color: #00a8ff;
+    box-shadow:
+        0 0 25px rgba(0,168,255,.15),
+        inset 0 0 30px rgba(0,168,255,.035);
+}
+
+.player.stunned {
+    border-color: #ff9f1c;
+}
+
+.player-name {
+    text-align: center;
+    font-size: clamp(18px, 2vw, 29px);
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.class-name {
+    margin-top: 3px;
+    text-align: center;
+    font-size: clamp(11px, 1vw, 15px);
+    color: #778da4;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.hp-number {
+    margin-top: clamp(8px, 1vw, 15px);
+    text-align: center;
+    font-size: clamp(28px, 3.3vw, 52px);
+    font-weight: 900;
+    line-height: 1;
+}
+
+.hp-label {
+    margin-top: 4px;
+    text-align: center;
+    font-size: 11px;
+    color: #667c92;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.hp-bar {
+    width: 100%;
+    height: clamp(10px, 1vw, 14px);
+    margin-top: 9px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: #151e29;
+    border: 1px solid #1e2b3a;
+}
+
+.hp-fill {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #00a8ff, #24d8ff);
+    transition: width .25s ease;
+}
+
+.player-right .hp-fill {
+    background: linear-gradient(90deg, #ff3d58, #ff7183);
+}
+
+.turn {
+    min-height: 28px;
+    margin-top: 12px;
+    text-align: center;
+    font-size: clamp(11px, 1.1vw, 15px);
+    font-weight: 900;
+    color: #24d8ff;
+}
+
+.player-right .turn {
+    color: #ff7183;
+}
+
+.stun-text {
+    min-height: 20px;
+    margin-top: 3px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 900;
+    color: #ffb02e;
+}
+
+/* ================= CENTER ================= */
+
+.arena {
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #172231;
+    border-radius: 16px;
+    background:
+        radial-gradient(circle, rgba(0,168,255,.08), transparent 65%),
+        #080d14;
+    overflow: hidden;
+}
+
+/* Информация о том, чей ход — НАД КУБИКАМИ */
+
+.arena-turn {
+    min-height: 32px;
+    margin-bottom: 12px;
+    text-align: center;
+    font-size: clamp(15px, 1.5vw, 22px);
+    font-weight: 900;
+    letter-spacing: .5px;
+    color: #24d8ff;
+    text-transform: uppercase;
+}
+
+/* ================= CLASSIC DICE ================= */
+
+.dice-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(12px, 1.4vw, 22px);
+}
+
+.dice {
+    width: clamp(62px, 6.5vw, 94px);
+    height: clamp(62px, 6.5vw, 94px);
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+
+    padding: clamp(8px, .8vw, 12px);
+
+    border: 2px solid #cfd5dc;
+    border-radius: 13px;
+
+    background: linear-gradient(
+        145deg,
+        #ffffff,
+        #e9edf1
+    );
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,.35),
+        inset 0 1px 2px rgba(255,255,255,.9);
+
+    transition: transform .12s ease;
+}
+
+.dice.rolling {
+    animation: diceShake .16s linear infinite;
+}
+
+@keyframes diceShake {
+    0% {
+        transform: rotate(0deg) scale(1);
     }
 
-    html,
-    body {
-        margin: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background: #05070b;
-        color: #f3f7fb;
-        font-family: Arial, Helvetica, sans-serif;
+    25% {
+        transform: rotate(-5deg) scale(1.04);
     }
 
-    body {
-        min-height: 100vh;
+    50% {
+        transform: rotate(5deg) scale(1.07);
     }
 
-    button {
-        font: inherit;
+    75% {
+        transform: rotate(-4deg) scale(1.04);
     }
+
+    100% {
+        transform: rotate(0deg) scale(1);
+    }
+}
+
+/* Точки кубика */
+
+.dot {
+    width: clamp(8px, 1vw, 13px);
+    height: clamp(8px, 1vw, 13px);
+
+    align-self: center;
+    justify-self: center;
+
+    border-radius: 50%;
+    background: #111820;
+
+    box-shadow:
+        inset 0 1px 1px rgba(255,255,255,.15);
+}
+
+/* Сетка позиций */
+
+.pos1 {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.pos2 {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.pos3 {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+.pos4 {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.pos5 {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.pos6 {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+.pos7 {
+    grid-column: 1;
+    grid-row: 3;
+}
+
+.pos8 {
+    grid-column: 2;
+    grid-row: 3;
+}
+
+.pos9 {
+    grid-column: 3;
+    grid-row: 3;
+}
+
+/* ================= RESULT ================= */
+
+.result-number {
+    min-height: 55px;
+    margin-top: 13px;
+    text-align: center;
+
+    font-size: clamp(34px, 4vw, 58px);
+    line-height: 1;
+    font-weight: 900;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 0 18px rgba(36,216,255,.3);
+}
+
+.damage-text {
+    min-height: 23px;
+    margin-top: 5px;
+    text-align: center;
+    font-size: clamp(10px, 1vw, 14px);
+    color: #8298ad;
+    font-weight: 800;
+}
+
+/* ================= LOG ================= */
+
+.log {
+    width: 92%;
+    height: clamp(105px, 16vh, 180px);
+    margin-top: 12px;
+    padding: 8px;
+
+    border: 1px solid #182535;
+    border-radius: 10px;
+
+    background: rgba(4,7,11,.75);
+
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.log-entry {
+    padding: 5px 6px;
+    border-bottom: 1px solid #111b26;
+
+    font-size: clamp(9px, .85vw, 12px);
+    line-height: 1.25;
+
+    color: #8da2b6;
+}
+
+.log-entry:first-child {
+    color: #d9e7f3;
+}
+
+/* ================= BOTTOM ================= */
+
+.bottom {
+    flex: 0 0 auto;
+    height: 38px;
+    margin-top: 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.restart-button {
+    height: 34px;
+    padding: 0 18px;
+
+    border: 1px solid #26384c;
+    border-radius: 9px;
+
+    background: #0b121b;
+    color: #9bb0c4;
+
+    font-size: 11px;
+    font-weight: 900;
+
+    cursor: pointer;
+}
+
+.restart-button:hover {
+    color: white;
+    border-color: #00a8ff;
+}
+
+/* ================= WINNER ================= */
+
+.winner-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(0,0,0,.72);
+    backdrop-filter: blur(8px);
+}
+
+.winner-overlay.show {
+    display: flex;
+}
+
+.winner-box {
+    width: min(500px, 90vw);
+    padding: 30px 25px;
+
+    text-align: center;
+
+    border: 1px solid #00a8ff;
+    border-radius: 18px;
+
+    background: #0b121b;
+
+    box-shadow:
+        0 0 50px rgba(0,168,255,.2);
+}
+
+.winner-small {
+    color: #728aa0;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.winner-title {
+    margin-top: 8px;
+
+    font-size: clamp(28px, 5vw, 50px);
+    font-weight: 900;
+
+    color: #24d8ff;
+}
+
+.winner-score {
+    margin-top: 8px;
+    font-size: 20px;
+    font-weight: 900;
+}
+
+.winner-close {
+    margin-top: 20px;
+
+    height: 42px;
+    padding: 0 25px;
+
+    border: 0;
+    border-radius: 9px;
+
+    background: #00a8ff;
+    color: white;
+
+    font-weight: 900;
+    cursor: pointer;
+}
+
+/* ================= TABLET LANDSCAPE ================= */
+
+@media (orientation: landscape) and (min-width: 700px) {
 
     .game {
-        width: 100%;
-        height: 100vh;
-        min-height: 0;
-        display: flex;
-        flex-direction: column;
-        padding: 10px 14px;
-        overflow: hidden;
+        padding: 7px 10px;
     }
-
-    /* ================= HEADER ================= */
 
     .header {
-        flex: 0 0 auto;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 15px;
-        height: 54px;
-        padding: 0 18px;
-        border: 1px solid #172231;
-        border-radius: 14px;
-        background:
-            linear-gradient(135deg, #0c131d, #080d15);
-        box-shadow: 0 8px 30px rgba(0,0,0,.3);
+        height: 46px;
+        border-radius: 11px;
     }
-
-    .logo {
-        font-size: clamp(22px, 2.2vw, 34px);
-        font-weight: 900;
-        letter-spacing: 2px;
-        color: #24d8ff;
-        text-shadow: 0 0 18px rgba(36,216,255,.25);
-    }
-
-    .round-info {
-        text-align: center;
-        line-height: 1.1;
-    }
-
-    .round-title {
-        font-size: clamp(13px, 1.3vw, 19px);
-        font-weight: 800;
-        color: #8ea5bb;
-    }
-
-    .score {
-        margin-top: 3px;
-        font-size: clamp(18px, 1.8vw, 27px);
-        font-weight: 900;
-        color: #fff;
-    }
-
-    .status {
-        min-width: 150px;
-        text-align: right;
-        font-size: clamp(11px, 1.1vw, 15px);
-        font-weight: 800;
-        color: #647b91;
-    }
-
-    /* ================= COIN ================= */
 
     .coin-panel {
-        flex: 0 0 auto;
-        height: 82px;
-        margin: 8px 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 12px;
-        border: 1px solid #172231;
-        border-radius: 14px;
-        background: #080d15;
-    }
-
-    .coin-label {
-        font-size: clamp(11px, 1.1vw, 15px);
-        color: #7890a7;
-        font-weight: 800;
-        text-transform: uppercase;
+        height: 62px;
+        margin: 6px 0;
+        border-radius: 11px;
     }
 
     .coin-button {
-        min-width: 150px;
-        height: 52px;
-        padding: 0 24px;
-        border: 1px solid #008acb;
-        border-radius: 11px;
-        background:
-            linear-gradient(135deg, #008dcc, #006a9d);
-        color: white;
-        font-size: clamp(15px, 1.4vw, 20px);
-        font-weight: 900;
-        letter-spacing: .8px;
-        cursor: pointer;
-        box-shadow: 0 0 20px rgba(0,168,255,.16);
-        transition: .15s ease;
+        height: 42px;
+        min-width: 130px;
     }
-
-    .coin-button:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 0 26px rgba(0,168,255,.28);
-    }
-
-    .coin-button:active {
-        transform: scale(.97);
-    }
-
-    .coin-button:disabled {
-        opacity: .5;
-        cursor: default;
-        transform: none;
-    }
-
-    .coin-result {
-        min-width: 110px;
-        text-align: center;
-        font-size: clamp(13px, 1.3vw, 18px);
-        font-weight: 900;
-        color: #24d8ff;
-    }
-
-    /* ================= BATTLE ================= */
 
     .battle {
-        flex: 1 1 auto;
-        min-height: 0;
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(280px, .7fr) minmax(0, 1fr);
-        gap: 10px;
+        gap: 8px;
     }
 
-    .player {
-        min-width: 0;
-        min-height: 0;
-        padding: clamp(10px, 1.2vw, 18px);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        border: 1px solid #172231;
-        border-radius: 16px;
-        background:
-            radial-gradient(circle at top, rgba(0,168,255,.07), transparent 50%),
-            #090e16;
-        box-shadow: 0 10px 35px rgba(0,0,0,.28);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .player.active {
-        border-color: #00a8ff;
-        box-shadow:
-            0 0 25px rgba(0,168,255,.15),
-            inset 0 0 30px rgba(0,168,255,.035);
-    }
-
-    .player.stunned {
-        border-color: #ff9f1c;
-    }
-
-    .player-name {
-        text-align: center;
-        font-size: clamp(18px, 2vw, 29px);
-        font-weight: 900;
-        letter-spacing: 1px;
-    }
-
-    .class-name {
-        margin-top: 3px;
-        text-align: center;
-        font-size: clamp(11px, 1vw, 15px);
-        color: #778da4;
-        font-weight: 800;
-        text-transform: uppercase;
-    }
-
-    .hp-number {
-        margin-top: clamp(8px, 1vw, 15px);
-        text-align: center;
-        font-size: clamp(28px, 3.3vw, 52px);
-        font-weight: 900;
-        line-height: 1;
-    }
-
-    .hp-label {
-        margin-top: 4px;
-        text-align: center;
-        font-size: 11px;
-        color: #667c92;
-        font-weight: 800;
-        letter-spacing: 1px;
-    }
-
-    .hp-bar {
-        width: 100%;
-        height: clamp(10px, 1vw, 14px);
-        margin-top: 9px;
-        border-radius: 999px;
-        overflow: hidden;
-        background: #151e29;
-        border: 1px solid #1e2b3a;
-    }
-
-    .hp-fill {
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, #00a8ff, #24d8ff);
-        transition: width .25s ease;
-    }
-
-    .player-right .hp-fill {
-        background: linear-gradient(90deg, #ff3d58, #ff7183);
-    }
-
-    .turn {
-        min-height: 28px;
-        margin-top: 12px;
-        text-align: center;
-        font-size: clamp(11px, 1.1vw, 15px);
-        font-weight: 900;
-        color: #24d8ff;
-    }
-
-    .player-right .turn {
-        color: #ff7183;
-    }
-
-    .stun-text {
-        min-height: 20px;
-        margin-top: 3px;
-        text-align: center;
-        font-size: 12px;
-        font-weight: 900;
-        color: #ffb02e;
-    }
-
-    /* ================= CENTER ================= */
-
+    .player,
     .arena {
-        min-width: 0;
-        min-height: 0;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        border: 1px solid #172231;
-        border-radius: 16px;
-        background:
-            radial-gradient(circle, rgba(0,168,255,.08), transparent 65%),
-            #080d14;
-        overflow: hidden;
+        border-radius: 12px;
     }
-
-    .arena-title {
-        font-size: clamp(11px, 1.1vw, 15px);
-        font-weight: 900;
-        color: #657c93;
-        letter-spacing: 1px;
-        margin-bottom: 10px;
-    }
-
-    .dice-area {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: clamp(8px, 1vw, 15px);
-    }
-
-    .dice {
-        width: clamp(55px, 6vw, 88px);
-        height: clamp(55px, 6vw, 88px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid #26384c;
-        border-radius: 13px;
-        background: linear-gradient(145deg, #111b27, #080e16);
-        font-size: clamp(28px, 3.3vw, 50px);
-        font-weight: 900;
-        color: white;
-        box-shadow: 0 8px 20px rgba(0,0,0,.3);
-    }
-
-    .dice.rolling {
-        animation: diceShake .16s linear infinite;
-    }
-
-    @keyframes diceShake {
-        0% { transform: rotate(0deg) scale(1); }
-        25% { transform: rotate(-5deg) scale(1.03); }
-        50% { transform: rotate(5deg) scale(1.05); }
-        75% { transform: rotate(-4deg) scale(1.03); }
-        100% { transform: rotate(0deg) scale(1); }
-    }
-
-    .result-number {
-        margin-top: 10px;
-        min-height: 45px;
-        text-align: center;
-        font-size: clamp(26px, 3vw, 44px);
-        font-weight: 900;
-        color: #24d8ff;
-    }
-
-    .damage-text {
-        min-height: 23px;
-        margin-top: 2px;
-        text-align: center;
-        font-size: clamp(11px, 1vw, 14px);
-        color: #8298ad;
-        font-weight: 800;
-    }
-
-    .log {
-        width: 92%;
-        height: clamp(105px, 16vh, 180px);
-        margin-top: 12px;
-        padding: 8px;
-        border: 1px solid #182535;
-        border-radius: 10px;
-        background: rgba(4,7,11,.75);
-        overflow-y: auto;
-        scrollbar-width: thin;
-    }
-
-    .log-entry {
-        padding: 5px 6px;
-        border-bottom: 1px solid #111b26;
-        font-size: clamp(9px, .85vw, 12px);
-        line-height: 1.25;
-        color: #8da2b6;
-    }
-
-    .log-entry:first-child {
-        color: #d9e7f3;
-    }
-
-    /* ================= BOTTOM ================= */
 
     .bottom {
-        flex: 0 0 auto;
-        height: 38px;
-        margin-top: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
+        height: 32px;
+        margin-top: 5px;
     }
 
     .restart-button {
-        height: 34px;
-        padding: 0 18px;
-        border: 1px solid #26384c;
-        border-radius: 9px;
-        background: #0b121b;
-        color: #9bb0c4;
-        font-size: 11px;
-        font-weight: 900;
-        cursor: pointer;
+        height: 29px;
+    }
+}
+
+/* ================= SHORT LANDSCAPE ================= */
+
+@media (orientation: landscape) and (max-height: 750px) {
+
+    .game {
+        padding: 5px 8px;
     }
 
-    .restart-button:hover {
-        color: white;
-        border-color: #00a8ff;
+    .header {
+        height: 40px;
     }
 
-    /* ================= WINNER ================= */
+    .coin-panel {
+        height: 52px;
+        margin: 4px 0;
+    }
 
-    .winner-overlay {
-        position: fixed;
-        inset: 0;
-        z-index: 100;
+    .coin-button {
+        height: 36px;
+        min-width: 115px;
+    }
+
+    .player {
+        padding: 7px;
+    }
+
+    .hp-number {
+        margin-top: 5px;
+    }
+
+    .hp-bar {
+        margin-top: 5px;
+    }
+
+    .turn {
+        margin-top: 5px;
+    }
+
+    .arena-turn {
+        margin-bottom: 7px;
+    }
+
+    .result-number {
+        margin-top: 8px;
+    }
+
+    .log {
+        height: 100px;
+        margin-top: 7px;
+    }
+
+    .bottom {
         display: none;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        background: rgba(0,0,0,.72);
-        backdrop-filter: blur(8px);
+    }
+}
+
+/* ================= PORTRAIT ================= */
+
+@media (orientation: portrait) {
+
+    body {
+        overflow: auto;
     }
 
-    .winner-overlay.show {
-        display: flex;
+    .game {
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
     }
 
-    .winner-box {
-        width: min(500px, 90vw);
-        padding: 30px 25px;
-        text-align: center;
-        border: 1px solid #00a8ff;
-        border-radius: 18px;
-        background: #0b121b;
-        box-shadow: 0 0 50px rgba(0,168,255,.2);
+    .header {
+        height: 58px;
     }
 
-    .winner-small {
-        color: #728aa0;
-        font-size: 12px;
-        font-weight: 900;
-        letter-spacing: 2px;
+    .coin-panel {
+        height: auto;
+        min-height: 100px;
+        flex-wrap: wrap;
+        padding: 12px;
     }
 
-    .winner-title {
-        margin-top: 8px;
-        font-size: clamp(28px, 5vw, 50px);
-        font-weight: 900;
-        color: #24d8ff;
+    .battle {
+        grid-template-columns: 1fr;
+        min-height: auto;
     }
 
-    .winner-score {
-        margin-top: 8px;
-        font-size: 20px;
-        font-weight: 900;
+    .player {
+        min-height: 170px;
     }
 
-    .winner-close {
-        margin-top: 20px;
-        height: 42px;
-        padding: 0 25px;
-        border: 0;
-        border-radius: 9px;
-        background: #00a8ff;
-        color: white;
-        font-weight: 900;
-        cursor: pointer;
+    .arena {
+        min-height: 380px;
     }
 
-    /* ================= TABLET LANDSCAPE ================= */
-
-    @media (orientation: landscape) and (min-width: 700px) {
-        .game {
-            padding: 7px 10px;
-        }
-
-        .header {
-            height: 46px;
-            border-radius: 11px;
-        }
-
-        .coin-panel {
-            height: 62px;
-            margin: 6px 0;
-            border-radius: 11px;
-        }
-
-        .coin-button {
-            height: 42px;
-            min-width: 130px;
-        }
-
-        .battle {
-            gap: 8px;
-        }
-
-        .player,
-        .arena {
-            border-radius: 12px;
-        }
-
-        .bottom {
-            height: 32px;
-            margin-top: 5px;
-        }
-
-        .restart-button {
-            height: 29px;
-        }
+    .log {
+        height: 150px;
     }
 
-    /* Short landscape screens */
-
-    @media (orientation: landscape) and (max-height: 750px) {
-        .game {
-            padding: 5px 8px;
-        }
-
-        .header {
-            height: 40px;
-        }
-
-        .coin-panel {
-            height: 52px;
-            margin: 4px 0;
-        }
-
-        .coin-button {
-            height: 36px;
-            min-width: 115px;
-        }
-
-        .player {
-            padding: 7px;
-        }
-
-        .hp-number {
-            margin-top: 5px;
-        }
-
-        .hp-bar {
-            margin-top: 5px;
-        }
-
-        .turn {
-            margin-top: 5px;
-        }
-
-        .log {
-            height: 100px;
-            margin-top: 7px;
-        }
-
-        .bottom {
-            display: none;
-        }
+    .bottom {
+        margin-bottom: 10px;
     }
-
-    /* Phone portrait fallback */
-
-    @media (orientation: portrait) {
-        body {
-            overflow: auto;
-        }
-
-        .game {
-            height: auto;
-            min-height: 100vh;
-            overflow: visible;
-        }
-
-        .header {
-            height: 58px;
-        }
-
-        .coin-panel {
-            height: auto;
-            min-height: 100px;
-            flex-wrap: wrap;
-            padding: 12px;
-        }
-
-        .battle {
-            grid-template-columns: 1fr;
-            min-height: auto;
-        }
-
-        .player {
-            min-height: 170px;
-        }
-
-        .arena {
-            min-height: 380px;
-        }
-
-        .log {
-            height: 150px;
-        }
-
-        .bottom {
-            margin-bottom: 10px;
-        }
-    }
+}
 </style>
 </head>
 
@@ -600,41 +739,67 @@
 <div class="game">
 
     <!-- HEADER -->
+
     <header class="header">
-        <div class="logo">SPN BATTLE</div>
+
+        <div class="logo">
+            SPN BATTLE
+        </div>
 
         <div class="round-info">
-            <div class="round-title" id="roundTitle">РАУНД 1 / 3</div>
-            <div class="score" id="score">0 : 0</div>
+
+            <div class="round-title" id="roundTitle">
+                РАУНД 1 / 3
+            </div>
+
+            <div class="score" id="score">
+                0 : 0
+            </div>
+
         </div>
 
         <div class="status" id="status">
             ОЖИДАНИЕ
         </div>
+
     </header>
 
+
     <!-- COIN -->
+
     <section class="coin-panel">
 
         <div class="coin-label">
             Кто начинает?
         </div>
 
-        <button class="coin-button" id="coinButton">
+        <button
+            class="coin-button"
+            id="coinButton"
+        >
             ОРЕЛ / РЕШКА
         </button>
 
-        <div class="coin-result" id="coinResult">
+        <div
+            class="coin-result"
+            id="coinResult"
+        >
             —
         </div>
 
     </section>
 
+
     <!-- BATTLE -->
+
     <main class="battle">
 
         <!-- PLAYER 1 -->
-        <section class="player player-left" id="player1">
+
+        <section
+            class="player player-left"
+            id="player1"
+        >
 
             <div class="player-name">
                 ИГРОК 1
@@ -644,7 +809,10 @@
                 ВАРВАР
             </div>
 
-            <div class="hp-number" id="hp1Text">
+            <div
+                class="hp-number"
+                id="hp1Text"
+            >
                 1000
             </div>
 
@@ -653,48 +821,92 @@
             </div>
 
             <div class="hp-bar">
-                <div class="hp-fill" id="hp1Bar"></div>
+
+                <div
+                    class="hp-fill"
+                    id="hp1Bar"
+                ></div>
+
             </div>
 
-            <div class="turn" id="turn1"></div>
+            <div
+                class="turn"
+                id="turn1"
+            ></div>
 
-            <div class="stun-text" id="stun1"></div>
+            <div
+                class="stun-text"
+                id="stun1"
+            ></div>
 
         </section>
 
-        <!-- ARENA -->
+
+        <!-- CENTER ARENA -->
+
         <section class="arena">
 
-            <div class="arena-title">
-                АРЕНА
+            <!-- ХОД НАД КУБИКАМИ -->
+
+            <div
+                class="arena-turn"
+                id="arenaTurn"
+            >
+                ОЖИДАНИЕ
             </div>
+
+
+            <!-- КУБИКИ -->
 
             <div class="dice-area">
 
-                <div class="dice" id="dice1">
-                    —
-                </div>
+                <div
+                    class="dice"
+                    id="dice1"
+                ></div>
 
-                <div class="dice" id="dice2">
-                    —
-                </div>
+                <div
+                    class="dice"
+                    id="dice2"
+                ></div>
 
             </div>
 
-            <div class="result-number" id="resultNumber">
+
+            <!-- ЧИСЛО ПОД КУБИКАМИ -->
+
+            <div
+                class="result-number"
+                id="resultNumber"
+            >
                 —
             </div>
 
-            <div class="damage-text" id="damageText">
+
+            <div
+                class="damage-text"
+                id="damageText"
+            >
                 Ожидание начала
             </div>
 
-            <div class="log" id="log"></div>
+
+            <!-- LOG -->
+
+            <div
+                class="log"
+                id="log"
+            ></div>
 
         </section>
 
+
         <!-- PLAYER 2 -->
-        <section class="player player-right" id="player2">
+
+        <section
+            class="player player-right"
+            id="player2"
+        >
 
             <div class="player-name">
                 ИГРОК 2
@@ -704,7 +916,10 @@
                 ВАРВАР
             </div>
 
-            <div class="hp-number" id="hp2Text">
+            <div
+                class="hp-number"
+                id="hp2Text"
+            >
                 1000
             </div>
 
@@ -713,27 +928,51 @@
             </div>
 
             <div class="hp-bar">
-                <div class="hp-fill" id="hp2Bar"></div>
+
+                <div
+                    class="hp-fill"
+                    id="hp2Bar"
+                ></div>
+
             </div>
 
-            <div class="turn" id="turn2"></div>
+            <div
+                class="turn"
+                id="turn2"
+            ></div>
 
-            <div class="stun-text" id="stun2"></div>
+            <div
+                class="stun-text"
+                id="stun2"
+            ></div>
 
         </section>
 
     </main>
 
+
+    <!-- BOTTOM -->
+
     <div class="bottom">
-        <button class="restart-button" id="restartButton">
+
+        <button
+            class="restart-button"
+            id="restartButton"
+        >
             НАЧАТЬ ЗАНОВО
         </button>
+
     </div>
 
 </div>
 
+
 <!-- WINNER -->
-<div class="winner-overlay" id="winnerOverlay">
+
+<div
+    class="winner-overlay"
+    id="winnerOverlay"
+>
 
     <div class="winner-box">
 
@@ -741,15 +980,24 @@
             SPN BATTLE • ПОБЕДИТЕЛЬ
         </div>
 
-        <div class="winner-title" id="winnerTitle">
+        <div
+            class="winner-title"
+            id="winnerTitle"
+        >
             ИГРОК 1
         </div>
 
-        <div class="winner-score" id="winnerScore">
-            Счёт: 2 : 0
+        <div
+            class="winner-score"
+            id="winnerScore"
+        >
+            Счёт серии: 2 : 0
         </div>
 
-        <button class="winner-close" id="winnerClose">
+        <button
+            class="winner-close"
+            id="winnerClose"
+        >
             НОВАЯ БИТВА
         </button>
 
@@ -757,16 +1005,22 @@
 
 </div>
 
+
 <script>
+
 /* =========================================================
    SPN BATTLE
    BEST OF 3
    ========================================================= */
 
 const MAX_HP = 1000;
+
 const TURN_DELAY = 900;
+
 const DICE_ANIMATION_TIME = 550;
+
 const NEXT_ROUND_DELAY = 1800;
+
 
 let hp1 = MAX_HP;
 let hp2 = MAX_HP;
@@ -775,97 +1029,219 @@ let score1 = 0;
 let score2 = 0;
 
 let currentRound = 1;
+
 let currentPlayer = 1;
 
 let stunned1 = false;
 let stunned2 = false;
 
 let gameStarted = false;
+
 let battleFinished = false;
+
 let roundFinished = false;
 
 let battleTimer = null;
+
 let diceTimer = null;
+
 let nextRoundTimer = null;
 
 let audioContext = null;
+
 let soundEnabled = true;
+
 
 /* =========================================================
    ELEMENTS
    ========================================================= */
 
-const coinButton = document.getElementById("coinButton");
-const coinResult = document.getElementById("coinResult");
+const coinButton =
+    document.getElementById("coinButton");
 
-const roundTitle = document.getElementById("roundTitle");
-const score = document.getElementById("score");
-const status = document.getElementById("status");
+const coinResult =
+    document.getElementById("coinResult");
 
-const hp1Text = document.getElementById("hp1Text");
-const hp2Text = document.getElementById("hp2Text");
+const roundTitle =
+    document.getElementById("roundTitle");
 
-const hp1Bar = document.getElementById("hp1Bar");
-const hp2Bar = document.getElementById("hp2Bar");
+const score =
+    document.getElementById("score");
 
-const player1 = document.getElementById("player1");
-const player2 = document.getElementById("player2");
+const status =
+    document.getElementById("status");
 
-const turn1 = document.getElementById("turn1");
-const turn2 = document.getElementById("turn2");
+const arenaTurn =
+    document.getElementById("arenaTurn");
 
-const stun1 = document.getElementById("stun1");
-const stun2 = document.getElementById("stun2");
+const hp1Text =
+    document.getElementById("hp1Text");
 
-const dice1 = document.getElementById("dice1");
-const dice2 = document.getElementById("dice2");
+const hp2Text =
+    document.getElementById("hp2Text");
 
-const resultNumber = document.getElementById("resultNumber");
-const damageText = document.getElementById("damageText");
+const hp1Bar =
+    document.getElementById("hp1Bar");
 
-const log = document.getElementById("log");
+const hp2Bar =
+    document.getElementById("hp2Bar");
 
-const restartButton = document.getElementById("restartButton");
+const player1 =
+    document.getElementById("player1");
 
-const winnerOverlay = document.getElementById("winnerOverlay");
-const winnerTitle = document.getElementById("winnerTitle");
-const winnerScore = document.getElementById("winnerScore");
-const winnerClose = document.getElementById("winnerClose");
+const player2 =
+    document.getElementById("player2");
+
+const turn1 =
+    document.getElementById("turn1");
+
+const turn2 =
+    document.getElementById("turn2");
+
+const stun1 =
+    document.getElementById("stun1");
+
+const stun2 =
+    document.getElementById("stun2");
+
+const dice1 =
+    document.getElementById("dice1");
+
+const dice2 =
+    document.getElementById("dice2");
+
+const resultNumber =
+    document.getElementById("resultNumber");
+
+const damageText =
+    document.getElementById("damageText");
+
+const log =
+    document.getElementById("log");
+
+const restartButton =
+    document.getElementById("restartButton");
+
+const winnerOverlay =
+    document.getElementById("winnerOverlay");
+
+const winnerTitle =
+    document.getElementById("winnerTitle");
+
+const winnerScore =
+    document.getElementById("winnerScore");
+
+const winnerClose =
+    document.getElementById("winnerClose");
+
+
+/* =========================================================
+   CLASSIC DICE
+   ========================================================= */
+
+const dicePatterns = {
+
+    1: [5],
+
+    2: [1, 9],
+
+    3: [1, 5, 9],
+
+    4: [1, 3, 7, 9],
+
+    5: [1, 3, 5, 7, 9],
+
+    6: [1, 3, 4, 6, 7, 9]
+
+};
+
+
+function drawDice(element, number) {
+
+    element.innerHTML = "";
+
+    if (!number) {
+        return;
+    }
+
+    const positions =
+        dicePatterns[number];
+
+    positions.forEach(position => {
+
+        const dot =
+            document.createElement("span");
+
+        dot.className =
+            `dot pos${position}`;
+
+        element.appendChild(dot);
+
+    });
+}
+
 
 /* =========================================================
    SOUND
    ========================================================= */
 
 function initAudio() {
-    if (!soundEnabled) return;
+
+    if (!soundEnabled) {
+        return;
+    }
 
     if (!audioContext) {
+
         try {
-            audioContext = new (
-                window.AudioContext ||
-                window.webkitAudioContext
-            )();
+
+            audioContext =
+                new (
+                    window.AudioContext ||
+                    window.webkitAudioContext
+                )();
+
         } catch (error) {
+
             soundEnabled = false;
+
         }
+
     }
 
-    if (audioContext && audioContext.state === "suspended") {
+    if (
+        audioContext &&
+        audioContext.state === "suspended"
+    ) {
+
         audioContext.resume();
+
     }
+
 }
+
 
 function playClick(
     frequency = 520,
     duration = 0.045,
     volume = 0.035
 ) {
-    if (!soundEnabled || !audioContext) return;
 
-    const oscillator = audioContext.createOscillator();
-    const gain = audioContext.createGain();
+    if (
+        !soundEnabled ||
+        !audioContext
+    ) {
+        return;
+    }
+
+    const oscillator =
+        audioContext.createOscillator();
+
+    const gain =
+        audioContext.createGain();
 
     oscillator.type = "sine";
+
     oscillator.frequency.setValueAtTime(
         frequency,
         audioContext.currentTime
@@ -882,84 +1258,186 @@ function playClick(
     );
 
     oscillator.connect(gain);
-    gain.connect(audioContext.destination);
+
+    gain.connect(
+        audioContext.destination
+    );
 
     oscillator.start();
+
     oscillator.stop(
         audioContext.currentTime + duration
     );
+
 }
+
 
 function playButtonSound() {
-    playClick(520, 0.045, 0.035);
+
+    playClick(
+        520,
+        0.045,
+        0.035
+    );
+
 }
+
 
 function playDiceSound() {
-    playClick(300, 0.035, 0.018);
+
+    playClick(
+        300,
+        0.035,
+        0.018
+    );
+
 }
+
 
 function playHitSound() {
-    playClick(180, 0.08, 0.035);
+
+    playClick(
+        180,
+        0.08,
+        0.035
+    );
+
 }
+
 
 function playStunSound() {
-    playClick(720, 0.08, 0.035);
+
+    playClick(
+        720,
+        0.08,
+        0.035
+    );
 
     setTimeout(() => {
-        playClick(950, 0.1, 0.025);
+
+        playClick(
+            950,
+            0.1,
+            0.025
+        );
+
     }, 70);
+
 }
 
+
 function playWinSound() {
-    playClick(520, 0.08, 0.035);
+
+    playClick(
+        520,
+        0.08,
+        0.035
+    );
 
     setTimeout(() => {
-        playClick(720, 0.1, 0.035);
+
+        playClick(
+            720,
+            0.1,
+            0.035
+        );
+
     }, 90);
 
     setTimeout(() => {
-        playClick(950, 0.15, 0.04);
+
+        playClick(
+            950,
+            0.15,
+            0.04
+        );
+
     }, 190);
+
 }
+
 
 /* =========================================================
    HELPERS
    ========================================================= */
 
 function randomDice() {
-    return Math.floor(Math.random() * 6) + 1;
+
+    return Math.floor(
+        Math.random() * 6
+    ) + 1;
+
 }
 
-function isDouble(die1, die2) {
+
+function isDouble(
+    die1,
+    die2
+) {
+
     return die1 === die2;
+
 }
+
 
 function clearTimers() {
-    clearTimeout(battleTimer);
-    clearTimeout(diceTimer);
-    clearTimeout(nextRoundTimer);
+
+    clearTimeout(
+        battleTimer
+    );
+
+    clearInterval(
+        diceTimer
+    );
+
+    clearTimeout(
+        nextRoundTimer
+    );
 
     battleTimer = null;
+
     diceTimer = null;
+
     nextRoundTimer = null;
+
 }
+
 
 function addLog(message) {
-    const entry = document.createElement("div");
 
-    entry.className = "log-entry";
-    entry.textContent = message;
+    const entry =
+        document.createElement("div");
+
+    entry.className =
+        "log-entry";
+
+    entry.textContent =
+        message;
 
     log.prepend(entry);
+
 }
+
+
+/* =========================================================
+   UI
+   ========================================================= */
 
 function updateUI() {
 
-    hp1 = Math.max(0, hp1);
-    hp2 = Math.max(0, hp2);
+    hp1 =
+        Math.max(0, hp1);
 
-    hp1Text.textContent = hp1;
-    hp2Text.textContent = hp2;
+    hp2 =
+        Math.max(0, hp2);
+
+
+    hp1Text.textContent =
+        hp1;
+
+    hp2Text.textContent =
+        hp2;
+
 
     hp1Bar.style.width =
         `${(hp1 / MAX_HP) * 100}%`;
@@ -967,11 +1445,14 @@ function updateUI() {
     hp2Bar.style.width =
         `${(hp2 / MAX_HP) * 100}%`;
 
+
     roundTitle.textContent =
         `РАУНД ${currentRound} / 3`;
 
+
     score.textContent =
         `${score1} : ${score2}`;
+
 
     player1.classList.toggle(
         "active",
@@ -981,6 +1462,7 @@ function updateUI() {
         !roundFinished
     );
 
+
     player2.classList.toggle(
         "active",
         gameStarted &&
@@ -989,15 +1471,18 @@ function updateUI() {
         !roundFinished
     );
 
+
     player1.classList.toggle(
         "stunned",
         stunned1
     );
 
+
     player2.classList.toggle(
         "stunned",
         stunned2
     );
+
 
     if (
         gameStarted &&
@@ -1005,70 +1490,150 @@ function updateUI() {
         !battleFinished &&
         !roundFinished
     ) {
-        turn1.textContent = "▶ ХОД ИГРОКА 1";
+
+        turn1.textContent =
+            "▶ ХОД ИГРОКА 1";
+
         turn2.textContent = "";
+
+        arenaTurn.textContent =
+            "ХОД ИГРОКА 1";
+
+        arenaTurn.style.color =
+            "#24d8ff";
+
     }
+
     else if (
         gameStarted &&
         currentPlayer === 2 &&
         !battleFinished &&
         !roundFinished
     ) {
+
         turn1.textContent = "";
-        turn2.textContent = "◀ ХОД ИГРОКА 2";
+
+        turn2.textContent =
+            "◀ ХОД ИГРОКА 2";
+
+        arenaTurn.textContent =
+            "ХОД ИГРОКА 2";
+
+        arenaTurn.style.color =
+            "#ff7183";
+
     }
+
     else {
+
         turn1.textContent = "";
+
         turn2.textContent = "";
+
+        if (!gameStarted) {
+
+            arenaTurn.textContent =
+                "ОЖИДАНИЕ";
+
+            arenaTurn.style.color =
+                "#647b91";
+
+        }
+
     }
+
 
     stun1.textContent =
-        stunned1 ? "🔥 ОГЛУШЁН" : "";
+        stunned1
+            ? "🔥 ОГЛУШЁН"
+            : "";
+
 
     stun2.textContent =
-        stunned2 ? "🔥 ОГЛУШЁН" : "";
+        stunned2
+            ? "🔥 ОГЛУШЁН"
+            : "";
+
 }
 
+
 /* =========================================================
-   ROUND START
+   START ROUND
    ========================================================= */
 
 function startRound() {
 
     clearTimers();
 
+
     hp1 = MAX_HP;
+
     hp2 = MAX_HP;
 
+
     stunned1 = false;
+
     stunned2 = false;
 
+
     gameStarted = false;
+
     battleFinished = false;
+
     roundFinished = false;
+
 
     currentPlayer = 1;
 
-    dice1.textContent = "—";
-    dice2.textContent = "—";
 
-    resultNumber.textContent = "—";
+    drawDice(
+        dice1,
+        null
+    );
+
+    drawDice(
+        dice2,
+        null
+    );
+
+
+    resultNumber.textContent =
+        "—";
+
+
     damageText.textContent =
         "Кто начнёт раунд?";
 
-    coinResult.textContent = "—";
 
-    coinButton.disabled = false;
+    coinResult.textContent =
+        "—";
+
+
+    coinButton.disabled =
+        false;
+
 
     status.textContent =
         "ОЖИДАНИЕ";
 
+
+    arenaTurn.textContent =
+        "ОЖИДАНИЕ";
+
+
+    arenaTurn.style.color =
+        "#647b91";
+
+
     updateUI();
+
 
     addLog(
         `⚔️ Начинается раунд ${currentRound}. HP восстановлены до 1000.`
     );
+
 }
+
 
 /* =========================================================
    COIN
@@ -1076,46 +1641,73 @@ function startRound() {
 
 function determineFirstPlayer() {
 
-    if (gameStarted || roundFinished || battleFinished) {
+    if (
+        gameStarted ||
+        roundFinished ||
+        battleFinished
+    ) {
         return;
     }
 
+
     initAudio();
+
     playButtonSound();
+
 
     const result =
         Math.random() < 0.5
             ? "ОРЕЛ"
             : "РЕШКА";
 
+
     if (result === "ОРЕЛ") {
+
         currentPlayer = 1;
+
     } else {
+
         currentPlayer = 2;
+
     }
 
-    coinResult.textContent = result;
+
+    coinResult.textContent =
+        result;
+
 
     gameStarted = true;
 
-    coinButton.disabled = true;
+
+    coinButton.disabled =
+        true;
+
 
     status.textContent =
         `ХОД ИГРОКА ${currentPlayer}`;
+
 
     addLog(
         `Выпало ${result}. Игрок ${currentPlayer} получает право первого броска.`
     );
 
+
     damageText.textContent =
         `Первым бросает игрок ${currentPlayer}`;
 
+
     updateUI();
 
-    battleTimer = setTimeout(() => {
-        automaticTurn();
-    }, 800);
+
+    battleTimer =
+        setTimeout(() => {
+
+            automaticTurn();
+
+        }, 800);
+
 }
+
 
 /* =========================================================
    AUTOMATIC TURN
@@ -1131,61 +1723,94 @@ function automaticTurn() {
         return;
     }
 
-    /* Проверяем оглушение */
 
-    if (currentPlayer === 1 && stunned1) {
+    /* Игрок 1 оглушён */
+
+    if (
+        currentPlayer === 1 &&
+        stunned1
+    ) {
 
         stunned1 = false;
+
 
         addLog(
             "Игрок 1 оглушён и пропускает этот ход."
         );
 
+
         damageText.textContent =
             "Игрок 1 пропускает ход";
 
+
         playStunSound();
+
 
         updateUI();
 
+
         currentPlayer = 2;
 
-        battleTimer = setTimeout(() => {
-            automaticTurn();
-        }, TURN_DELAY);
+
+        battleTimer =
+            setTimeout(() => {
+
+                automaticTurn();
+
+            }, TURN_DELAY);
+
 
         return;
     }
 
-    if (currentPlayer === 2 && stunned2) {
+
+    /* Игрок 2 оглушён */
+
+    if (
+        currentPlayer === 2 &&
+        stunned2
+    ) {
 
         stunned2 = false;
+
 
         addLog(
             "Игрок 2 оглушён и пропускает этот ход."
         );
 
+
         damageText.textContent =
             "Игрок 2 пропускает ход";
 
+
         playStunSound();
+
 
         updateUI();
 
+
         currentPlayer = 1;
 
-        battleTimer = setTimeout(() => {
-            automaticTurn();
-        }, TURN_DELAY);
+
+        battleTimer =
+            setTimeout(() => {
+
+                automaticTurn();
+
+            }, TURN_DELAY);
+
 
         return;
     }
 
+
     rollDiceAutomatically();
+
 }
 
+
 /* =========================================================
-   DICE ROLL
+   AUTOMATIC DICE
    ========================================================= */
 
 function rollDiceAutomatically() {
@@ -1198,36 +1823,76 @@ function rollDiceAutomatically() {
         return;
     }
 
-    dice1.classList.add("rolling");
-    dice2.classList.add("rolling");
 
-    resultNumber.textContent = "••";
-    damageText.textContent = "БРОСОК...";
+    dice1.classList.add(
+        "rolling"
+    );
+
+    dice2.classList.add(
+        "rolling"
+    );
+
+
+    resultNumber.textContent =
+        "••";
+
+
+    damageText.textContent =
+        "БРОСОК...";
+
 
     playDiceSound();
 
-    const animationStart = Date.now();
 
-    diceTimer = setInterval(() => {
+    const animationStart =
+        Date.now();
 
-        dice1.textContent = randomDice();
-        dice2.textContent = randomDice();
 
-        playDiceSound();
+    diceTimer =
+        setInterval(() => {
 
-        if (
-            Date.now() - animationStart >=
-            DICE_ANIMATION_TIME
-        ) {
+            const temp1 =
+                randomDice();
 
-            clearInterval(diceTimer);
-            diceTimer = null;
+            const temp2 =
+                randomDice();
 
-            finishDiceRoll();
-        }
 
-    }, 80);
+            drawDice(
+                dice1,
+                temp1
+            );
+
+            drawDice(
+                dice2,
+                temp2
+            );
+
+
+            playDiceSound();
+
+
+            if (
+                Date.now() -
+                animationStart >=
+                DICE_ANIMATION_TIME
+            ) {
+
+                clearInterval(
+                    diceTimer
+                );
+
+                diceTimer = null;
+
+
+                finishDiceRoll();
+
+            }
+
+        }, 80);
+
 }
+
 
 /* =========================================================
    FINISH DICE
@@ -1235,167 +1900,295 @@ function rollDiceAutomatically() {
 
 function finishDiceRoll() {
 
-    dice1.classList.remove("rolling");
-    dice2.classList.remove("rolling");
+    dice1.classList.remove(
+        "rolling"
+    );
 
-    const die1 = randomDice();
-    const die2 = randomDice();
+    dice2.classList.remove(
+        "rolling"
+    );
+
+
+    const die1 =
+        randomDice();
+
+    const die2 =
+        randomDice();
+
 
     const number =
         die1 * 10 + die2;
 
-    dice1.textContent = die1;
-    dice2.textContent = die2;
 
-    resultNumber.textContent = number;
+    drawDice(
+        dice1,
+        die1
+    );
 
-    const attacker = currentPlayer;
-    const defender = currentPlayer === 1 ? 2 : 1;
+    drawDice(
+        dice2,
+        die2
+    );
+
+
+    resultNumber.textContent =
+        number;
+
+
+    const attacker =
+        currentPlayer;
+
+    const defender =
+        currentPlayer === 1
+            ? 2
+            : 1;
+
 
     if (attacker === 1) {
+
         hp2 -= number;
+
     } else {
+
         hp1 -= number;
+
     }
 
-    hp1 = Math.max(0, hp1);
-    hp2 = Math.max(0, hp2);
+
+    hp1 =
+        Math.max(
+            0,
+            hp1
+        );
+
+    hp2 =
+        Math.max(
+            0,
+            hp2
+        );
+
 
     damageText.textContent =
         `УРОН: ${number}`;
 
+
     playHitSound();
+
 
     addLog(
         `Игрок ${attacker} выбросил ${number} и нанёс ${number} урона игроку ${defender}.`
     );
 
+
     /* Дубль */
 
-    if (isDouble(die1, die2)) {
+    if (
+        isDouble(
+            die1,
+            die2
+        )
+    ) {
 
         if (defender === 1) {
+
             stunned1 = true;
+
         } else {
+
             stunned2 = true;
+
         }
+
 
         addLog(
             `🔥 ДУБЛЬ ${number}! Варвар оглушил игрока ${defender}. Следующий ход игрока ${defender} будет пропущен.`
         );
 
+
         playStunSound();
+
     }
+
 
     updateUI();
 
+
     /* Проверяем конец раунда */
 
-    if (hp1 <= 0 || hp2 <= 0) {
+    if (
+        hp1 <= 0 ||
+        hp2 <= 0
+    ) {
 
         const roundWinner =
-            hp1 <= 0 ? 2 : 1;
+            hp1 <= 0
+                ? 2
+                : 1;
 
-        finishRound(roundWinner);
+
+        finishRound(
+            roundWinner
+        );
+
 
         return;
+
     }
+
 
     /* Следующий игрок */
 
     currentPlayer =
-        currentPlayer === 1 ? 2 : 1;
+        currentPlayer === 1
+            ? 2
+            : 1;
+
 
     status.textContent =
         `ХОД ИГРОКА ${currentPlayer}`;
 
+
     updateUI();
 
-    battleTimer = setTimeout(() => {
-        automaticTurn();
-    }, TURN_DELAY);
+
+    battleTimer =
+        setTimeout(() => {
+
+            automaticTurn();
+
+        }, TURN_DELAY);
+
 }
 
+
 /* =========================================================
-   ROUND FINISH
+   FINISH ROUND
    ========================================================= */
 
-function finishRound(roundWinner) {
+function finishRound(
+    roundWinner
+) {
 
     roundFinished = true;
+
     gameStarted = false;
 
-    clearTimeout(battleTimer);
+
+    clearTimeout(
+        battleTimer
+    );
+
     battleTimer = null;
 
-    if (roundWinner === 1) {
+
+    if (
+        roundWinner === 1
+    ) {
+
         score1++;
+
     } else {
+
         score2++;
+
     }
 
+
     updateUI();
+
 
     addLog(
         `🏆 Игрок ${roundWinner} победил в раунде ${currentRound}! Счёт серии: ${score1} : ${score2}.`
     );
 
+
     status.textContent =
         `ПОБЕДА ИГРОКА ${roundWinner}`;
+
+
+    arenaTurn.textContent =
+        `РАУНД ${currentRound} ЗАВЕРШЁН`;
+
 
     damageText.textContent =
         `РАУНД ${currentRound} ЗАВЕРШЁН`;
 
-    /* Кто-то уже выиграл 2 раунда */
 
-    if (score1 >= 2 || score2 >= 2) {
+    /* Кто-то выиграл два раунда */
+
+    if (
+        score1 >= 2 ||
+        score2 >= 2
+    ) {
 
         battleFinished = true;
 
+
         const overallWinner =
-            score1 >= 2 ? 1 : 2;
+            score1 >= 2
+                ? 1
+                : 2;
+
 
         addLog(
             `👑 Игрок ${overallWinner} выиграл серию со счётом ${score1} : ${score2}!`
         );
 
+
         status.textContent =
             "СЕРИЯ ЗАВЕРШЕНА";
 
+
         playWinSound();
 
-        nextRoundTimer = setTimeout(() => {
 
-            winnerTitle.textContent =
-                `ИГРОК ${overallWinner}`;
+        nextRoundTimer =
+            setTimeout(() => {
 
-            winnerScore.textContent =
-                `Счёт серии: ${score1} : ${score2}`;
+                winnerTitle.textContent =
+                    `ИГРОК ${overallWinner}`;
 
-            winnerOverlay.classList.add("show");
 
-        }, 1000);
+                winnerScore.textContent =
+                    `Счёт серии: ${score1} : ${score2}`;
+
+
+                winnerOverlay.classList.add(
+                    "show"
+                );
+
+
+            }, 1000);
+
 
         return;
+
     }
 
+
     /*
-       Если 1:1 — автоматически третий раунд.
-       Если после первого раунда 1:0 — следующий раунд.
+       Если 1 : 1 —
+       автоматически начинается третий раунд.
     */
 
     currentRound++;
 
-    nextRoundTimer = setTimeout(() => {
 
-        startRound();
+    nextRoundTimer =
+        setTimeout(() => {
 
-        addLog(
-            `⚔️ Раунд ${currentRound}. Серия продолжается.`
-        );
+            startRound();
 
-    }, NEXT_ROUND_DELAY);
+
+            addLog(
+                `⚔️ Раунд ${currentRound}. Серия продолжается.`
+            );
+
+
+        }, NEXT_ROUND_DELAY);
+
 }
+
 
 /* =========================================================
    RESTART
@@ -1404,51 +2197,96 @@ function finishRound(roundWinner) {
 function restartGame() {
 
     initAudio();
+
     playButtonSound();
+
 
     clearTimers();
 
+
     hp1 = MAX_HP;
+
     hp2 = MAX_HP;
 
+
     score1 = 0;
+
     score2 = 0;
 
+
     currentRound = 1;
+
     currentPlayer = 1;
 
+
     stunned1 = false;
+
     stunned2 = false;
 
+
     gameStarted = false;
+
     battleFinished = false;
+
     roundFinished = false;
 
-    winnerOverlay.classList.remove("show");
+
+    winnerOverlay.classList.remove(
+        "show"
+    );
+
 
     log.innerHTML = "";
+
 
     addLog(
         "⚔️ Новая серия best-of-3 готова."
     );
 
-    dice1.textContent = "—";
-    dice2.textContent = "—";
 
-    resultNumber.textContent = "—";
+    drawDice(
+        dice1,
+        null
+    );
+
+    drawDice(
+        dice2,
+        null
+    );
+
+
+    resultNumber.textContent =
+        "—";
+
 
     damageText.textContent =
         "Ожидание начала";
 
-    coinResult.textContent = "—";
 
-    coinButton.disabled = false;
+    coinResult.textContent =
+        "—";
+
+
+    coinButton.disabled =
+        false;
+
 
     status.textContent =
         "ОЖИДАНИЕ";
 
+
+    arenaTurn.textContent =
+        "ОЖИДАНИЕ";
+
+
+    arenaTurn.style.color =
+        "#647b91";
+
+
     updateUI();
+
 }
+
 
 /* =========================================================
    EVENTS
@@ -1459,22 +2297,27 @@ coinButton.addEventListener(
     determineFirstPlayer
 );
 
+
 restartButton.addEventListener(
     "click",
     restartGame
 );
+
 
 winnerClose.addEventListener(
     "click",
     restartGame
 );
 
+
 /* =========================================================
    INITIAL
    ========================================================= */
 
 startRound();
+
 </script>
 
 </body>
 </html>
+```
