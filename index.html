@@ -1,1 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loot Cases</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="logo">🎁 Loot Cases</div>
+  <div class="user">
+    <span id="balance" class="balance" style="display:none">0 💰</span>
+    <button id="login-btn" class="btn btn-primary">Войти через Google</button>
+    <div id="user-info" style="display:none">
+      <img id="avatar" class="avatar" alt="">
+      <button id="logout-btn" class="btn btn-ghost">Выйти</button>
+    </div>
+  </div>
+</header>
 
+<main>
+  <section id="cases-section">
+    <h2>Кейсы</h2>
+    <div id="cases-list" class="cases-grid"></div>
+  </section>
+
+  <section id="inventory-section" style="display:none">
+    <h2>Инвентарь</h2>
+    <div id="inventory-list" class="cases-grid"></div>
+  </section>
+
+  <section id="promo-section" style="display:none">
+    <h2>Промокод</h2>
+    <div class="promo-row">
+      <input id="promo-input" type="text" placeholder="Введи код...">
+      <button id="promo-btn" class="btn btn-primary">Активировать</button>
+    </div>
+    <p id="promo-msg"></p>
+  </section>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="cases">Кейсы</button>
+    <button class="tab" data-tab="inventory">Инвентарь</button>
+    <button class="tab" data-tab="promo">Промокод</button>
+  </nav>
+</main>
+
+<div id="case-modal" class="modal" style="display:none">
+  <div class="modal-content">
+    <button class="close-modal" id="close-modal">✕</button>
+    <div class="roulette-window">
+      <div class="roulette-marker">▼</div>
+      <div id="roulette-strip" class="roulette-strip"></div>
+    </div>
+    <div id="case-result" class="case-result"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
+</body>
+</html>
