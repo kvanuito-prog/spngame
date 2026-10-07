@@ -99,48 +99,33 @@ h2 { margin-bottom: 16px; font-size: 22px; }
 .castle-pin {
   position: absolute;
   transform: translate(-50%, -50%);
-  background: linear-gradient(180deg, rgba(20,22,35,.92), rgba(30,33,48,.92));
-  backdrop-filter: blur(6px);
+  background: linear-gradient(180deg, rgba(20,22,35,.95), rgba(30,33,48,.95));
   border: 2px solid #7c5cff;
-  border-radius: 10px;
-  padding: 8px 14px;
-  text-align: center;
+  border-radius: 6px;
+  padding: 4px 12px;
   cursor: pointer;
-  min-width: 150px;
-  box-shadow: 0 4px 20px rgba(0,0,0,.6);
-  transition: transform .15s, border-color .15s, box-shadow .15s;
+  box-shadow: 0 3px 14px rgba(0,0,0,.7);
+  transition: transform .15s, border-color .15s, box-shadow .15s, background .15s;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 600;
+  color: #8b90a8;
+  letter-spacing: .3px;
 }
 .castle-pin:hover {
-  transform: translate(-50%, -50%) scale(1.06);
+  transform: translate(-50%, -50%) scale(1.08);
   border-color: #a78bfa;
-  box-shadow: 0 6px 28px rgba(124,92,255,.5);
+  box-shadow: 0 4px 20px rgba(124,92,255,.55);
   z-index: 10;
 }
-.castle-pin.owned { border-color: var(--accent2); }
-.castle-pin.owned:hover { border-color: #6ee7a0; box-shadow: 0 6px 28px rgba(74,222,128,.5); }
-
-.castle-pin .castle-name {
-  font-weight: 700;
-  font-size: 14px;
-  color: #e8e9f0;
-  white-space: nowrap;
+.castle-pin.owned {
+  border-color: var(--accent2);
+  color: var(--accent2);
 }
-.castle-pin .castle-level {
-  font-size: 12px;
-  color: #f59e0b;
-  margin-top: 2px;
-  font-weight: 600;
+.castle-pin.owned:hover {
+  border-color: #6ee7a0;
+  box-shadow: 0 4px 20px rgba(74,222,128,.55);
 }
-.castle-pin .castle-owner {
-  font-size: 11px;
-  color: #8b90a8;
-  margin-top: 3px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 160px;
-}
-.castle-pin.owned .castle-owner { color: var(--accent2); font-weight: 600; }
 
 /* ---- КЕЙСЫ / ИНВЕНТАРЬ ---- */
 .cases-grid {
@@ -205,11 +190,10 @@ h2 { margin-bottom: 16px; font-size: 22px; }
   position: relative;
   border: 1px solid #2f3348;
 }
-.castle-modal-content { width: min(90vw, 480px); text-align: center; }
-.castle-modal-content h2 { font-size: 26px; margin-bottom: 8px; }
-.castle-modal-content .c-level { color: var(--legendary); font-weight: 700; font-size: 16px; margin-bottom: 16px; }
-.castle-modal-content .c-owner { color: var(--muted); font-size: 15px; padding: 14px; background: var(--card); border-radius: 10px; }
-.castle-modal-content .c-owner b { color: var(--accent2); }
+.castle-modal-content { width: min(90vw, 420px); text-align: center; }
+.castle-modal-content h2 { font-size: 24px; margin-bottom: 6px; color: var(--accent); }
+.castle-modal-content .c-owner-line { color: var(--muted); font-size: 16px; padding: 16px; background: var(--card); border-radius: 10px; }
+.castle-modal-content .c-owner-line b { color: var(--accent2); font-size: 18px; }
 
 .close-modal {
   position: absolute; top: 12px; right: 12px;
@@ -261,12 +245,8 @@ h2 { margin-bottom: 16px; font-size: 22px; }
   min-height: 30px;
 }
 
-/* ---- МОБИЛЬНАЯ АДАПТАЦИЯ ---- */
 @media (max-width: 700px) {
-  .castle-pin { min-width: 100px; padding: 5px 8px; }
-  .castle-pin .castle-name { font-size: 11px; }
-  .castle-pin .castle-level { font-size: 10px; }
-  .castle-pin .castle-owner { font-size: 9px; max-width: 100px; }
+  .castle-pin { font-size: 10px; padding: 3px 8px; }
   main { padding: 12px; }
   .tab { padding: 8px 10px; font-size: 13px; }
 }
