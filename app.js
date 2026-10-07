@@ -17,7 +17,7 @@ const casesList = $('cases-list');
 const inventoryList = $('inventory-list');
 const castlesOverlay = $('castles-overlay');
 
-// ---- КАРТА ЗАМКОВ (грузится сразу, до входа) ----
+// ---- КАРТА ЗАМКОВ ----
 async function loadCastles() {
   const { data, error } = await sb.from('castles').select('*, owner:profiles(username)');
   if (error) { console.error('castles error', error); return; }
@@ -28,11 +28,7 @@ async function loadCastles() {
     pin.style.left = c.pos_x + '%';
     pin.style.top = c.pos_y + '%';
     const ownerName = c.owner?.username || '—';
-    pin.innerHTML = `
-      <div class="castle-name">${c.name}</div>
-      <div class="castle-level">${c.level} уровень</div>
-      <div class="castle-owner">Владелец: ${ownerName}</div>
-    `;
+    pin.textContent = `Владелец: ${ownerName}`;
     pin.onclick = () => openCastleModal(c);
     castlesOverlay.appendChild(pin);
   });
@@ -42,8 +38,7 @@ function openCastleModal(c) {
   const ownerName = c.owner?.username || 'Никто не владеет';
   $('castle-modal-body').innerHTML = `
     <h2>${c.name}</h2>
-    <div class="c-level">${c.level} уровень</div>
-    <div class="c-owner">Владелец: <b>${ownerName}</b></div>
+    <div class="c-owner-line">Владелец: <b>${ownerName}</b></div>
   `;
   $('castle-modal').style.display = 'flex';
 }
@@ -201,7 +196,6 @@ async function openCase(c) {
 
 $('close-modal').onclick = () => { $('case-modal').style.display = 'none'; };
 
-// ---- ПРОМОКОД ----
 $('promo-btn').onclick = async () => {
   const code = $('promo-input').value.trim();
   if (!code) return;
@@ -215,7 +209,6 @@ $('promo-btn').onclick = async () => {
   $('promo-input').value = '';
 };
 
-// ---- ВКЛАДКИ ----
 document.querySelectorAll('.tab').forEach(t => {
   t.onclick = () => {
     document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
@@ -228,5 +221,4 @@ document.querySelectorAll('.tab').forEach(t => {
   };
 });
 
-// ---- СТАРТ ----
 loadCastles();
