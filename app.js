@@ -15,7 +15,42 @@ const logoutBtn = $('logout-btn');
 const avatarEl = $('avatar');
 const casesList = $('cases-list');
 const inventoryList = $('inventory-list');
+const castlesOverlay = $('castles-overlay');
 
+// ---- КАРТА ЗАМКОВ (грузится сразу, до входа) ----
+async function loadCastles() {
+  const { data, error } = await sb.from('castles').select('*, owner:profiles(username)');
+  if (error) { console.error('castles error', error); return; }
+  castlesOverlay.innerHTML = '';
+  (data || []).forEach(c => {
+    const pin = document.createElement('div');
+    pin.className = 'castle-pin' + (c.owner_id ? ' owned' : '');
+    pin.style.left = c.pos_x + '%';
+    pin.style.top = c.pos_y + '%';
+    const ownerName = c.owner?.username || '—';
+    pin.innerHTML = `
+      <div class="castle-name">${c.name}</div>
+      <div class="castle-level">${c.level} уровень</div>
+      <div class="castle-owner">Владелец: ${ownerName}</div>
+    `;
+    pin.onclick = () => openCastleModal(c);
+    castlesOverlay.appendChild(pin);
+  });
+}
+
+function openCastleModal(c) {
+  const ownerName = c.owner?.username || 'Никто не владеет';
+  $('castle-modal-body').innerHTML = `
+    <h2>${c.name}</h2>
+    <div class="c-level">${c.level} уровень</div>
+    <div class="c-owner">Владелец: <b>${ownerName}</b></div>
+  `;
+  $('castle-modal').style.display = 'flex';
+}
+
+$('close-castle-modal').onclick = () => { $('castle-modal').style.display = 'none'; };
+
+// ---- АВТОРИЗАЦИЯ ----
 loginBtn.onclick = () => {
   sb.auth.signInWithOAuth({
     provider: 'google',
@@ -70,13 +105,17 @@ async function loadAll() {
 
 function renderCases() {
   casesList.innerHTML = '';
+  if (!cases.length) {
+    casesList.innerHTML = '<p style="color:#8b90a8">Кейсов пока нет.</p>';
+    return;
+  }
   cases.forEach(c => {
     const card = document.createElement('div');
     card.className = 'case-card';
     card.innerHTML = `
       <h3>${c.name}</h3>
       <div class="price">${c.price} 💰</div>
-      <button class="btn btn-primary" data-id="${c.id}">Открыть</button>
+      <button class="btn btn-primary">Открыть</button>
     `;
     card.querySelector('button').onclick = () => openCase(c);
     casesList.appendChild(card);
@@ -162,6 +201,7 @@ async function openCase(c) {
 
 $('close-modal').onclick = () => { $('case-modal').style.display = 'none'; };
 
+// ---- ПРОМОКОД ----
 $('promo-btn').onclick = async () => {
   const code = $('promo-input').value.trim();
   if (!code) return;
@@ -175,13 +215,18 @@ $('promo-btn').onclick = async () => {
   $('promo-input').value = '';
 };
 
+// ---- ВКЛАДКИ ----
 document.querySelectorAll('.tab').forEach(t => {
   t.onclick = () => {
     document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
     t.classList.add('active');
     const tab = t.dataset.tab;
+    $('map-section').style.display = tab === 'map' ? 'block' : 'none';
     $('cases-section').style.display = tab === 'cases' ? 'block' : 'none';
     $('inventory-section').style.display = tab === 'inventory' ? 'block' : 'none';
     $('promo-section').style.display = tab === 'promo' ? 'block' : 'none';
   };
 });
+
+// ---- СТАРТ ----
+loadCastles();
