@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SPN Battle</title>
+<title>SPN Battle: РВСН</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header>
   <div class="logo">⚔️ SPN Battle</div>
   <div class="user">
+    <!-- Старый баланс скрыт, так как теперь он в кабинете -->
     <span id="balance" class="balance" style="display:none">0 💰</span>
     <button id="login-btn" class="btn btn-primary">Войти через Google</button>
     <div id="user-info" style="display:none">
@@ -20,14 +21,61 @@
 </header>
 
 <main>
-  <nav class="tabs">
-    <button class="tab active" data-tab="map">Карта мира</button>
+  <nav class="tabs" id="main-tabs" style="display:none">
+    <button class="tab active" data-tab="cabinet">Кабинет</button>
+    <button class="tab" data-tab="map">Карта мира</button>
     <button class="tab" data-tab="cases">Кейсы</button>
-    <button class="tab" data-tab="inventory">Инвентарь</button>
+    <button class="tab" data-tab="inventory">Арсенал</button>
     <button class="tab" data-tab="promo">Промокод</button>
   </nav>
 
-  <section id="map-section">
+  <!-- ЛИЧНЫЙ КАБИНЕТ (ДОСЬЕ) -->
+  <section id="cabinet-section" style="display:none">
+    <div class="dossier">
+      <div class="dossier-header">
+        <h2>ЛИЧНОЕ ДЕЛО КОМАНДИРА</h2>
+        <span class="status-badge">ДОПУСК: СОВЕРШЕННО СЕКРЕТНО</span>
+      </div>
+      
+      <div class="dossier-body">
+        <div class="dossier-left">
+          <img id="cabinet-avatar" src="" alt="Командир" class="dossier-avatar">
+          <h3 id="cabinet-name">Загрузка...</h3>
+          <div class="rank-box">
+            <span class="label">ЗВАНИЕ:</span>
+            <span id="cabinet-rank" class="value">Рядовой</span>
+          </div>
+          <div class="rank-box">
+            <span class="label">УРОВЕНЬ:</span>
+            <span id="cabinet-level" class="value">1</span>
+          </div>
+        </div>
+
+        <div class="dossier-right">
+          <div class="info-row">
+            <span class="label">КРЕДИТЫ МО:</span>
+            <span id="cabinet-credits" class="value text-green">0 💰</span>
+          </div>
+          <div class="info-row">
+            <span class="label">ПОЗЫВНОЙ ШАХТЫ:</span>
+            <span id="cabinet-silo-name" class="value">Не назначен</span>
+          </div>
+          <div class="info-row">
+            <span class="label">КООРДИНАТЫ:</span>
+            <span id="cabinet-coords" class="value">Ш: -- | Д: --</span>
+          </div>
+          <div class="info-row">
+            <span class="label">СТАТУС:</span>
+            <span class="value text-green">В сети</span>
+          </div>
+          
+          <button class="btn btn-primary btn-bunker" id="go-to-bunker">СПУСТИТЬСЯ В БУНКЕР</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map-section" style="display:none">
     <div class="map-wrapper">
       <img src="map.png" alt="SPN Battle — карта мира" class="map-image">
       <div id="castles-overlay" class="castles-overlay"></div>
@@ -52,6 +100,7 @@
   </section>
 </main>
 
+<!-- МОДАЛКИ -->
 <div id="case-modal" class="modal" style="display:none">
   <div class="modal-content">
     <button class="close-modal" id="close-modal">✕</button>
