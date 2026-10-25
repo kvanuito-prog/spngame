@@ -12,6 +12,14 @@ const logoutBtn = $('logout-btn');
 const avatarEl = $('avatar');
 const balanceEl = $('balance');
 
+// ---- ПРИНУДИТЕЛЬНАЯ ПРОВЕРКА СЕССИИ ПРИ ЗАГРУЗКЕ ----
+// Это помогает, если после редиректа с Google страница не видит токен
+sb.auth.getSession().then(({ data: { session } }) => {
+  if (session) {
+    console.log('Сессия успешно найдена при загрузке!');
+  }
+});
+
 // ---- АВТОРИЗАЦИЯ ----
 loginBtn.onclick = () => {
   sb.auth.signInWithOAuth({
@@ -20,15 +28,21 @@ loginBtn.onclick = () => {
   });
 };
 
-logoutBtn.onclick = async () => { await sb.auth.signOut(); };
+logoutBtn.onclick = async () => { 
+  await sb.auth.signOut(); 
+};
 
-sb.auth.onAuthStateChange(async (_event, session) => {
+// Слушатель изменений состояния авторизации
+sb.auth.onAuthStateChange(async (event, session) => {
+  console.log('Auth Event:', event); // Для отладки в консоли
+  
   if (session?.user) {
     currentUser = session.user;
     await loadProfile();
     showLoggedIn();
   } else {
-    currentUser = null; currentProfile = null;
+    currentUser = null; 
+    currentProfile = null;
     showLoggedOut();
   }
 });
@@ -37,13 +51,13 @@ function showLoggedIn() {
   loginBtn.style.display = 'none';
   $('user-info').style.display = 'flex';
   $('main-tabs').style.display = 'flex'; 
-  balanceEl.style.display = 'none'; 
+  balanceEl.style.display = 'none'; // Прячем старый баланс из шапки
   
   avatarEl.src = currentUser.user_metadata?.avatar_url || '';
   
   renderCabinet();
   
-  // Всегда показываем кабинет, скрываем бункер при входе
+  // При входе всегда показываем кабинет, а бункер прячем
   $('bunker-section').style.display = 'none';
   $('cabinet-section').style.display = 'block';
 }
@@ -54,14 +68,18 @@ function showLoggedOut() {
   $('main-tabs').style.display = 'none';
   balanceEl.style.display = 'none';
   
+  // Скрываем игровые экраны
   $('cabinet-section').style.display = 'none';
   $('bunker-section').style.display = 'none';
 }
 
 async function loadProfile() {
   const { data, error } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
+  
   if (error) {
     console.error('Ошибка загрузки профиля:', error.message);
+    // Если профиля нет (например, новый пользователь), можно создать его здесь
+    // Но пока просто выводим в консоль
   }
   currentProfile = data;
 }
@@ -72,6 +90,7 @@ function renderCabinet() {
   $('cabinet-avatar').src = currentUser.user_metadata?.avatar_url || 'https://via.placeholder.com/150';
   $('cabinet-name').textContent = currentUser.user_metadata?.full_name || 'Безымянный командир';
   
+  // Подтягиваем данные из БД
   $('cabinet-rank').textContent = currentProfile.rank || 'Рядовой';
   $('cabinet-level').textContent = currentProfile.level || '1';
   $('cabinet-credits').textContent = `${currentProfile.credits || 0} 💰`;
@@ -86,24 +105,18 @@ function renderCabinet() {
 
 // ---- ЛОГИКА ПЕРЕХОДА В БУНКЕР ----
 $('go-to-bunker').onclick = () => {
-  // Скрываем вкладки и кабинет
   $('main-tabs').style.display = 'none';
   $('cabinet-section').style.display = 'none';
-  
-  // Показываем бункер
   $('bunker-section').style.display = 'block';
   
-  // Обновляем данные в бункере
+  // Синхронизируем данные в бункере
   if (currentProfile) {
     $('bunker-credits').textContent = `${currentProfile.credits || 0} 💰`;
   }
 };
 
 $('btn-exit-bunker').onclick = () => {
-  // Скрываем бункер
   $('bunker-section').style.display = 'none';
-  
-  // Возвращаем вкладки и кабинет
   $('main-tabs').style.display = 'flex';
   $('cabinet-section').style.display = 'block';
 };
