@@ -9,7 +9,6 @@ let cases = [];
 let itemsMap = {};
 
 const $ = (id) => document.getElementById(id);
-const balanceEl = $('balance');
 const loginBtn = $('login-btn');
 const logoutBtn = $('logout-btn');
 const avatarEl = $('avatar');
@@ -70,20 +69,48 @@ sb.auth.onAuthStateChange(async (_event, session) => {
 function showLoggedIn() {
   loginBtn.style.display = 'none';
   $('user-info').style.display = 'flex';
-  balanceEl.style.display = 'inline';
+  $('main-tabs').style.display = 'flex';
   avatarEl.src = currentUser.user_metadata?.avatar_url || '';
-  balanceEl.textContent = (currentProfile?.balance ?? 0) + ' 💰';
+  
+  renderCabinet();
+  // По умолчанию открываем кабинет
+  document.querySelector('.tab[data-tab="cabinet"]').click();
 }
+
 function showLoggedOut() {
   loginBtn.style.display = 'inline-block';
   $('user-info').style.display = 'none';
-  balanceEl.style.display = 'none';
-  casesList.innerHTML = '<p style="color:#8b90a8">Войди, чтобы увидеть кейсы.</p>';
+  $('main-tabs').style.display = 'none';
+  
+  // Скрываем все секции
+  $('cabinet-section').style.display = 'none';
+  $('map-section').style.display = 'none';
+  $('cases-section').style.display = 'none';
+  $('inventory-section').style.display = 'none';
+  $('promo-section').style.display = 'none';
 }
 
 async function loadProfile() {
   const { data } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
   currentProfile = data;
+}
+
+function renderCabinet() {
+  if (!currentProfile) return;
+
+  $('cabinet-avatar').src = currentUser.user_metadata?.avatar_url || 'https://via.placeholder.com/150';
+  $('cabinet-name').textContent = currentUser.user_metadata?.full_name || 'Безымянный командир';
+  
+  $('cabinet-rank').textContent = currentProfile.rank || 'Рядовой';
+  $('cabinet-level').textContent = currentProfile.level || '1';
+  $('cabinet-credits').textContent = `${currentProfile.credits || 0} 💰`;
+  $('cabinet-silo-name').textContent = currentProfile.silo_name || 'Не назначен';
+  
+  if (currentProfile.lat && currentProfile.lng) {
+    $('cabinet-coords').textContent = `Ш: ${currentProfile.lat.toFixed(2)} | Д: ${currentProfile.lng.toFixed(2)}`;
+  } else {
+    $('cabinet-coords').textContent = 'Ш: -- | Д: --';
+  }
 }
 
 async function loadAll() {
@@ -125,7 +152,7 @@ async function loadInventory() {
 
   inventoryList.innerHTML = '';
   if (!data || data.length === 0) {
-    inventoryList.innerHTML = '<p style="color:#8b90a8">Пока пусто. Открой первый кейс!</p>';
+    inventoryList.innerHTML = '<p style="color:#8b90a8">Пока пусто. Открой первый ящик снабжения!</p>';
     return;
   }
   data.forEach(row => {
@@ -134,7 +161,7 @@ async function loadInventory() {
     const el = document.createElement('div');
     el.className = `item-card rarity-${it.rarity}`;
     el.innerHTML = `
-      <div style="font-size:40px">🎁</div>
+      <div style="font-size:40px">🚀</div>
       <div class="item-name">${it.name}</div>
       <div class="item-rarity" style="color:var(--${it.rarity})">${it.rarity}</div>
     `;
@@ -143,8 +170,8 @@ async function loadInventory() {
 }
 
 async function openCase(c) {
-  if ((currentProfile?.balance ?? 0) < c.price) {
-    alert('Недостаточно монет');
+  if ((currentProfile?.credits ?? 0) < c.price) {
+    alert('Недостаточно кредитов МО');
     return;
   }
 
@@ -153,7 +180,7 @@ async function openCase(c) {
 
   const wonItem = itemsMap[itemId];
   await loadProfile();
-  balanceEl.textContent = currentProfile.balance + ' 💰';
+  renderCabinet(); // Обновляем кредиты в досье
 
   const { data: caseItems } = await sb.from('case_items').select('item_id, chance').eq('case_id', c.id);
   const pool = caseItems.map(ci => ({
@@ -203,22 +230,30 @@ $('promo-btn').onclick = async () => {
   const msg = $('promo-msg');
   if (error) { msg.style.color = '#f87171'; msg.textContent = 'Ошибка: ' + error.message; return; }
   msg.style.color = '#4ade80';
-  msg.textContent = `+${data} монет!`;
+  msg.textContent = `+${data} кредитов!`;
   await loadProfile();
-  balanceEl.textContent = currentProfile.balance + ' 💰';
+  renderCabinet(); // Обновляем кредиты
   $('promo-input').value = '';
 };
 
+// ---- ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ----
 document.querySelectorAll('.tab').forEach(t => {
   t.onclick = () => {
     document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
     t.classList.add('active');
     const tab = t.dataset.tab;
+    
+    $('cabinet-section').style.display = tab === 'cabinet' ? 'block' : 'none';
     $('map-section').style.display = tab === 'map' ? 'block' : 'none';
     $('cases-section').style.display = tab === 'cases' ? 'block' : 'none';
     $('inventory-section').style.display = tab === 'inventory' ? 'block' : 'none';
     $('promo-section').style.display = tab === 'promo' ? 'block' : 'none';
   };
 });
+
+// ---- КНОПКА БУНКЕРА ----
+$('go-to-bunker').onclick = () => {
+  alert('Инициализация терминала... Спуск в бункер запланирован на следующее обновление!');
+};
 
 loadCastles();
