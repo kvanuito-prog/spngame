@@ -10,7 +10,6 @@
 <header>
   <div class="logo">⚔️ SPN Battle</div>
   <div class="user">
-    <!-- Старый баланс скрыт, так как теперь он в кабинете -->
     <span id="balance" class="balance" style="display:none">0 💰</span>
     <button id="login-btn" class="btn btn-primary">Войти через Google</button>
     <div id="user-info" style="display:none">
@@ -21,12 +20,9 @@
 </header>
 
 <main>
+  <!-- Оставили только одну вкладку -->
   <nav class="tabs" id="main-tabs" style="display:none">
     <button class="tab active" data-tab="cabinet">Кабинет</button>
-    <button class="tab" data-tab="map">Карта мира</button>
-    <button class="tab" data-tab="cases">Кейсы</button>
-    <button class="tab" data-tab="inventory">Арсенал</button>
-    <button class="tab" data-tab="promo">Промокод</button>
   </nav>
 
   <!-- ЛИЧНЫЙ КАБИНЕТ (ДОСЬЕ) -->
@@ -75,51 +71,70 @@
     </div>
   </section>
 
-  <section id="map-section" style="display:none">
-    <div class="map-wrapper">
-      <img src="map.png" alt="SPN Battle — карта мира" class="map-image">
-      <div id="castles-overlay" class="castles-overlay"></div>
+  <!-- БУНКЕР -->
+  <section id="bunker-section" style="display:none">
+    <div class="bunker-layout">
+      
+      <!-- Левая панель: Ресурсы -->
+      <div class="bunker-panel left-panel">
+        <h3>СИСТЕМЫ СНАБЖЕНИЯ</h3>
+        <div class="gauge">
+          <span>КРЕДИТЫ МО</span>
+          <span id="bunker-credits" class="val">0</span>
+        </div>
+        <div class="gauge">
+          <span>ТОПЛИВО</span>
+          <span class="val text-warning">0 / 100</span>
+        </div>
+        <div class="gauge">
+          <span>УРАН</span>
+          <span class="val text-danger">0 / 50</span>
+        </div>
+        <div class="sys-status">
+          <p><span class="dot green"></span> Связь с Генштабом: ОК</p>
+          <p><span class="dot green"></span> Энергосистема: ОК</p>
+          <p><span class="dot red"></span> Уровень угрозы: НИЗКИЙ</p>
+        </div>
+      </div>
+
+      <!-- Центральная панель: Радар -->
+      <div class="bunker-main">
+        <div class="radar-container">
+          <div class="radar-grid"></div>
+          <div class="radar-sweep"></div>
+          <div class="radar-center">ШАХТА №1</div>
+        </div>
+        <div class="bunker-controls">
+          <button class="btn btn-ghost" id="btn-exit-bunker">ВЫЙТИ НА ПОВЕРХНОСТЬ</button>
+          <button class="btn btn-danger" id="btn-launch-missile">ЗАПУСК РАКЕТЫ</button>
+        </div>
+      </div>
+
+      <!-- Правая панель: Шахта -->
+      <div class="bunker-panel right-panel">
+        <h3>СОСТОЯНИЕ ШАХТЫ</h3>
+        <div class="silo-info">
+          <p>Позывной: <b>Шахта №1</b></p>
+          <p>Статус: <b class="text-green">ОНЛАЙН</b></p>
+          <p>Боеготовность: <b class="text-green">100%</b></p>
+        </div>
+        <h3 style="margin-top:20px">АРСЕНАЛ</h3>
+        <div class="arsenal-slot">
+          <span>Ракета:</span>
+          <b>Не собрана</b>
+        </div>
+        <div class="arsenal-slot">
+          <span>БЧ:</span>
+          <b>Не установлена</b>
+        </div>
+      </div>
+
     </div>
-  </section>
-
-  <section id="cases-section" style="display:none">
-    <div id="cases-list" class="cases-grid"></div>
-  </section>
-
-  <section id="inventory-section" style="display:none">
-    <div id="inventory-list" class="cases-grid"></div>
-  </section>
-
-  <section id="promo-section" style="display:none">
-    <h2>Промокод</h2>
-    <div class="promo-row">
-      <input id="promo-input" type="text" placeholder="Введи код...">
-      <button id="promo-btn" class="btn btn-primary">Активировать</button>
-    </div>
-    <p id="promo-msg"></p>
   </section>
 </main>
 
-<!-- МОДАЛКИ -->
-<div id="case-modal" class="modal" style="display:none">
-  <div class="modal-content">
-    <button class="close-modal" id="close-modal">✕</button>
-    <div class="roulette-window">
-      <div class="roulette-marker">▼</div>
-      <div id="roulette-strip" class="roulette-strip"></div>
-    </div>
-    <div id="case-result" class="case-result"></div>
-  </div>
-</div>
-
-<div id="castle-modal" class="modal" style="display:none">
-  <div class="modal-content castle-modal-content">
-    <button class="close-modal" id="close-castle-modal">✕</button>
-    <div id="castle-modal-body"></div>
-  </div>
-</div>
-
+<!-- Подключаем скрипт с параметром v=5, чтобы сбросить кеш планшета! -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="app.js"></script>
+<script src="app.js?v=5"></script>
 </body>
 </html>
