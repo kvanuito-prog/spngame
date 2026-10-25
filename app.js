@@ -12,6 +12,7 @@ const $ = (id) => document.getElementById(id);
 const loginBtn = $('login-btn');
 const logoutBtn = $('logout-btn');
 const avatarEl = $('avatar');
+const balanceEl = $('balance');
 const casesList = $('cases-list');
 const inventoryList = $('inventory-list');
 const castlesOverlay = $('castles-overlay');
@@ -69,18 +70,24 @@ sb.auth.onAuthStateChange(async (_event, session) => {
 function showLoggedIn() {
   loginBtn.style.display = 'none';
   $('user-info').style.display = 'flex';
+  
+  // Показываем вкладки и скрываем старый баланс в шапке
   $('main-tabs').style.display = 'flex';
+  balanceEl.style.display = 'none'; 
+  
   avatarEl.src = currentUser.user_metadata?.avatar_url || '';
   
   renderCabinet();
   // По умолчанию открываем кабинет
-  document.querySelector('.tab[data-tab="cabinet"]').click();
+  const cabTab = document.querySelector('.tab[data-tab="cabinet"]');
+  if (cabTab) cabTab.click();
 }
 
 function showLoggedOut() {
   loginBtn.style.display = 'inline-block';
   $('user-info').style.display = 'none';
   $('main-tabs').style.display = 'none';
+  balanceEl.style.display = 'none';
   
   // Скрываем все секции
   $('cabinet-section').style.display = 'none';
@@ -91,7 +98,10 @@ function showLoggedOut() {
 }
 
 async function loadProfile() {
-  const { data } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
+  const { data, error } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
+  if (error) {
+    console.error('Ошибка загрузки профиля:', error.message);
+  }
   currentProfile = data;
 }
 
@@ -180,7 +190,7 @@ async function openCase(c) {
 
   const wonItem = itemsMap[itemId];
   await loadProfile();
-  renderCabinet(); // Обновляем кредиты в досье
+  renderCabinet(); 
 
   const { data: caseItems } = await sb.from('case_items').select('item_id, chance').eq('case_id', c.id);
   const pool = caseItems.map(ci => ({
@@ -232,11 +242,10 @@ $('promo-btn').onclick = async () => {
   msg.style.color = '#4ade80';
   msg.textContent = `+${data} кредитов!`;
   await loadProfile();
-  renderCabinet(); // Обновляем кредиты
+  renderCabinet();
   $('promo-input').value = '';
 };
 
-// ---- ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ----
 document.querySelectorAll('.tab').forEach(t => {
   t.onclick = () => {
     document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
@@ -251,7 +260,6 @@ document.querySelectorAll('.tab').forEach(t => {
   };
 });
 
-// ---- КНОПКА БУНКЕРА ----
 $('go-to-bunker').onclick = () => {
   alert('Инициализация терминала... Спуск в бункер запланирован на следующее обновление!');
 };
